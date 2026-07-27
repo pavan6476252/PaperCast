@@ -6,13 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64 libpango-1.0-0 libcairo2 libnss3 libnspr4 libx11-xcb1 libxss1 fonts-liberation libgtk-3-0t64 xdg-utils && npx puppeteer browsers install chrome"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@sparticuz/chromium": "^149.0.0",
     "lucide-react": "^1.27.0",
     "next": "16.2.12",
-    "puppeteer": "^25.3.0",
+    "puppeteer": "^25.4.0",
+    "puppeteer-core": "^25.3.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "zustand": "^5.0.14"

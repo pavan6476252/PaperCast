@@ -1,6 +1,5 @@
-import { DocumentSchema, BaseNode } from "../types/schema";
+import { DocumentSchema, BaseNode, Measurements } from "../types/schema";
 import { resolveHeader, resolveFooter } from "./resolver";
-import { Measurements } from "./OffscreenMeasurer";
 import { NodeRegistry } from "../registry/NodeRegistry";
 
 export interface PageData {
