@@ -62,7 +62,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       if (!parsed.meta) parsed.meta = {};
       parsed.meta = { ...parsed.meta, ...updates };
       setJsonString(JSON.stringify(parsed, null, 2));
-    } catch  {
+    } catch (e) {
       // ignore JSON parse error while typing
     }
   };
@@ -325,7 +325,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       <div id="preview-scroll-container" className="flex-1 overflow-auto p-8 relative flex flex-col items-center print:p-0 print:bg-white print:block">
         {activeTab === "content" && (
           <div
-            className="flex flex-col items-center gap-8 transition-transform origin-top print-scale-none print:block print:w-full print:h-full print:m-0 print:p-0"
+            className="flex flex-col items-center gap-8 transition-transform origin-top print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"
             style={{ transform: `scale(${zoom})` }}
           >
             {pages && pages.map((page, idx) => {

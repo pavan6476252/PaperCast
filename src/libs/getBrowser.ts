@@ -8,8 +8,9 @@ export async function getBrowser(): Promise<Browser> {
     const chromium = (await import('@sparticuz/chromium')).default;
     const puppeteer = await import('puppeteer-core');
 
+    // Configure chromium options for Vercel / serverless environments
     return puppeteer.launch({
-      args: chromium.args,
+      args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
       executablePath: await chromium.executablePath(),
       headless: true,
     }) as unknown as Browser;

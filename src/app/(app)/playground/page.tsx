@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { JsonEditor } from "../../../components/editor/JsonEditor";
+import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
 import { PropertyPanel } from "../../../components/editor/PropertyPanel";
 import { WidgetsPanel } from "../../../components/editor/WidgetsPanel";
-import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
 import { useDocumentStore } from "../../../store/documentStore";
 
 export default function Home() {

@@ -68,6 +68,32 @@ body {
     margin: 0;
     size: auto;
   }
+  
+  /* Reset height/overflow constraints on wrapper containers for printing */
+  html,
+  body,
+  main,
+  #__next,
+  .h-screen,
+  .h-full,
+  .overflow-hidden,
+  .overflow-auto,
+  div[class*="h-screen"],
+  div[class*="h-full"],
+  div[class*="w-screen"],
+  div[class*="w-full"],
+  div[class*="overflow-hidden"],
+  div[class*="overflow-auto"] {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+
   body {
     background-color: white !important;
     margin: 0 !important;
@@ -85,6 +111,12 @@ body {
   .print-page {
     box-shadow: none !important;
     margin: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .print-break-after-page {
+    page-break-after: always !important;
+    break-after: page !important;
   }
   .empty-widget {
     background: none !important;

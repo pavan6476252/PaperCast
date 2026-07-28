@@ -18,10 +18,15 @@ export async function POST(req: Request) {
     }, jsonString);
 
     const url = new URL(req.url);
-    const printUrl = `${url.protocol}//${url.host}/print`;
+    // Vercel/proxies might route internally via http, force https in production
+    const isLocal = url.host.includes('localhost') || url.host.includes('127.0.0.1');
+    const protocol = isLocal ? url.protocol : 'https:';
+    const printUrl = `${protocol}//${url.host}/print`;
 
-    await page.goto(printUrl, { waitUntil: 'networkidle0' });
-    await page.waitForSelector('.print-page', { timeout: 10000 });
+    console.log(`Generating PDF. Navigation target: ${printUrl}`);
+
+    await page.goto(printUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await page.waitForSelector('.print-page', { timeout: 15000 });
 
     const parsed = JSON.parse(jsonString);
     const pageSize = parsed.meta?.pageSize;
@@ -41,7 +46,12 @@ export async function POST(req: Request) {
       },
     });
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 });
+    console.error('Error generating PDF in API route:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : '';
+    return NextResponse.json(
+      { error: 'Failed to generate PDF', details: errorMessage, stack: errorStack },
+      { status: 500 }
+    );
   }
 }

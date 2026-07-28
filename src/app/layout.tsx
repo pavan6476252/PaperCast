@@ -27,7 +27,25 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="m-0 p-0 antialiased">{children}</body>
+      <body className="m-0 p-0 antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('unhandledrejection', function(event) {
+                if (event.reason && (
+                  event.reason.name === 'CancelationError' ||
+                  event.reason.type === 'cancelation' ||
+                  event.reason.message === 'Canceled' ||
+                  (event.reason.msg && typeof event.reason.msg === 'string' && event.reason.msg.includes('manually canceled'))
+                )) {
+                  event.preventDefault();
+                }
+              });
+            `
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

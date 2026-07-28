@@ -1,5 +1,5 @@
-import { table } from "@/store/test.data";
 import { WidgetRegistryItem, wrap } from "../utils";
+import { table, column, text } from "@/store/test.data";
 
 export const tables: WidgetRegistryItem[] = [
   {

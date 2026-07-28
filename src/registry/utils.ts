@@ -1,4 +1,5 @@
-import { BaseNode, DocumentSchema } from "@/types/schema";
+import { DocumentSchema, BaseNode } from "@/types/schema";
+import { nextId, column } from "@/store/test.data";
 
 export interface WidgetRegistryItem {
   id: string;
