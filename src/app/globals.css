@@ -76,13 +76,13 @@ body {
   #__next,
   .h-screen,
   .h-full,
-  .overflow-hidden,
+  .overflow-hidden:not(.print-page),
   .overflow-auto,
   div[class*="h-screen"],
-  div[class*="h-full"],
+  div[class*="h-full"]:not(.print-page),
   div[class*="w-screen"],
   div[class*="w-full"],
-  div[class*="overflow-hidden"],
+  div[class*="overflow-hidden"]:not(.print-page),
   div[class*="overflow-auto"] {
     height: auto !important;
     min-height: 0 !important;
@@ -111,8 +111,9 @@ body {
   .print-page {
     box-shadow: none !important;
     margin: 0 !important;
-    page-break-after: always !important;
-    break-after: page !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
   .print-break-after-page {
     page-break-after: always !important;
