@@ -5,7 +5,7 @@ export function getStyle(node: BaseNode): CSSProperties {
   const layout = node.layout || {};
   const style = node.style || {};
 
-  return {
+  const css: CSSProperties = {
     // Sizing
     width: layout.width,
     height: layout.height,
@@ -45,9 +45,10 @@ export function getStyle(node: BaseNode): CSSProperties {
     alignItems: layout.alignItems,
     rowGap: layout.rowGap,
     columnGap: layout.columnGap,
-    flexGrow: layout.flexGrow,
-    flexShrink: layout.flexShrink,
-    flexBasis: layout.flexBasis,
+    flex: layout.flex,
+    flexGrow: layout.flex !== undefined ? undefined : layout.flexGrow,
+    flexShrink: layout.flex !== undefined ? undefined : layout.flexShrink,
+    flexBasis: layout.flex !== undefined ? undefined : layout.flexBasis,
 
     // Typography & Color
     fontFamily: style.fontFamily,
@@ -62,4 +63,13 @@ export function getStyle(node: BaseNode): CSSProperties {
 
     // Pagination hints are omitted from CSS, used during pagination computation
   };
+
+  // Remove undefined properties to prevent React warnings about mixing shorthand/non-shorthand
+  Object.keys(css).forEach(key => {
+    if ((css as any)[key] === undefined) {
+      delete (css as any)[key];
+    }
+  });
+
+  return css;
 }

@@ -11,6 +11,199 @@ export interface PageData {
   bodyNodes: BaseNode[];
 }
 
+function splitContainerNode(
+  node: BaseNode,
+  remainingHeight: number,
+  ctx: { measurements: Measurements; data: any }
+): [BaseNode, BaseNode | null, number] | null {
+  if (!node.children || node.children.length === 0) return null;
+
+  const originalId = node.id.split('-part')[0];
+  const children = node.children;
+
+  let currentHeight = 0;
+  let splitIndex = 0;
+  let fitsAtLeastOne = false;
+
+  const layout = node.layout || {};
+  const rowGap = layout.rowGap || 0;
+  
+  let splitChildChunk1: BaseNode | null = null;
+  let splitChildChunk2: BaseNode | null = null;
+  let splitChildHeight = 0;
+
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    let childHeight = getNodeHeight(child, ctx.measurements);
+
+    const addedHeight = i > 0 ? rowGap + childHeight : childHeight;
+
+    if (currentHeight + addedHeight <= remainingHeight) {
+      currentHeight += addedHeight;
+      splitIndex = i + 1;
+      fitsAtLeastOne = true;
+    } else {
+      // Try to split the child itself recursively
+      const def = NodeRegistry.get(child.type);
+      const childSplitFn = def?.split || (child.children && child.children.length > 0 ? splitContainerNode : undefined);
+      
+      if (childSplitFn) {
+        const childRemaining = remainingHeight - currentHeight - (i > 0 ? rowGap : 0);
+        // Only try to split if we have reasonable space left
+        if (childRemaining > 0) {
+           const childSplitResult = childSplitFn(child, childRemaining, ctx);
+           if (childSplitResult) {
+              const [cChunk1, cChunk2, cChunk1Height] = childSplitResult;
+              splitChildChunk1 = cChunk1;
+              splitChildChunk2 = cChunk2;
+              splitChildHeight = cChunk1Height ?? 0;
+              
+              currentHeight += (i > 0 ? rowGap : 0) + (cChunk1Height ?? 0);
+              splitIndex = i; // The boundary is AT this child
+              fitsAtLeastOne = true;
+           }
+        }
+      }
+      break;
+    }
+  }
+
+  if (!fitsAtLeastOne) {
+    return null;
+  }
+
+  if (splitIndex === children.length && !splitChildChunk1) {
+    return [node, null, currentHeight];
+  }
+
+  const partNumber = (parseInt(node.id.split('-part')[1]) || 1) + 1;
+  const chunk1Children = children.slice(0, splitIndex);
+  const chunk2Children = children.slice(splitIndex);
+
+  if (splitChildChunk1 && splitChildChunk2) {
+    chunk1Children.push(splitChildChunk1);
+    chunk2Children[0] = splitChildChunk2; // Replace the split child with its chunk2 part
+  }
+
+  const chunk1: BaseNode = {
+    ...node,
+    id: `${originalId}-part${partNumber - 1}`,
+    children: chunk1Children,
+  };
+
+  const chunk2: BaseNode = {
+    ...node,
+    id: `${originalId}-part${partNumber}`,
+    children: chunk2Children,
+  };
+
+  // Adjust margins/padding to keep flow clean
+  if (chunk2.layout) {
+    chunk2.layout = {
+      ...chunk2.layout,
+      marginTop: 0,
+      paddingTop: 0,
+    };
+  }
+  if (chunk1.layout) {
+    chunk1.layout = {
+      ...chunk1.layout,
+      marginBottom: 0,
+      paddingBottom: 0,
+    };
+  }
+
+  return [chunk1, chunk2, currentHeight];
+}
+
+function getTableNodeHeight(node: BaseNode, measurements: Measurements): number {
+  const originalId = node.id.split('-part')[0];
+  const rowHeights = measurements.tableRows?.[originalId];
+  
+  let headerHeight = 38;
+  if (measurements.tableHeaders?.[originalId] !== undefined) {
+    headerHeight = measurements.tableHeaders[originalId];
+  }
+  
+  if ((node.props as any)?.hideHeaderOnSplit && ((node.props as any)?.splitIndex || 0) > 0) {
+    headerHeight = 0;
+  }
+
+  const marginTop = node.layout?.marginTop || 0;
+  const marginBottom = node.layout?.marginBottom || 0;
+  const paddingTop = node.layout?.paddingTop || 0;
+  const paddingBottom = node.layout?.paddingBottom || 0;
+
+  let rowSum = 0;
+  const startIndex = (node.props as any)?.splitIndex || 0;
+  const totalRows = rowHeights ? rowHeights.length : 0;
+  const endIndex = (node.props as any)?.endIndex !== undefined ? (node.props as any).endIndex : totalRows;
+
+  if (rowHeights) {
+    const end = Math.min(endIndex, rowHeights.length);
+    for (let i = startIndex; i < end; i++) {
+      rowSum += rowHeights[i] || 0;
+    }
+  } else {
+    const count = endIndex - startIndex;
+    rowSum = Math.max(0, count) * 38;
+  }
+
+  return headerHeight + rowSum + marginTop + marginBottom + paddingTop + paddingBottom;
+}
+
+function getContainerNodeHeight(node: BaseNode, measurements: Measurements): number {
+  if (!node.children || node.children.length === 0) return 0;
+  
+  const layout = node.layout || {};
+  const rowGap = layout.rowGap || 0;
+  const marginTop = layout.marginTop || 0;
+  const marginBottom = layout.marginBottom || 0;
+  const paddingTop = layout.paddingTop || 0;
+  const paddingBottom = layout.paddingBottom || 0;
+  
+  const isHorizontal = node.type === "row";
+
+  if (isHorizontal) {
+    let maxHeight = 0;
+    for (let i = 0; i < node.children.length; i++) {
+      maxHeight = Math.max(maxHeight, getNodeHeight(node.children[i], measurements));
+    }
+    return maxHeight + marginTop + marginBottom + paddingTop + paddingBottom;
+  } else {
+    let heightSum = 0;
+    for (let i = 0; i < node.children.length; i++) {
+      const child = node.children[i];
+      const childHeight = getNodeHeight(child, measurements);
+      heightSum += (i > 0 ? rowGap : 0) + childHeight;
+    }
+    return heightSum + marginTop + marginBottom + paddingTop + paddingBottom;
+  }
+}
+
+function getNodeHeight(node: BaseNode, measurements: Measurements): number {
+  const nodeId = node.id || "unnamed";
+  
+  if (node.type === "table") {
+    return getTableNodeHeight(node, measurements);
+  }
+  
+  if (measurements.blocks[nodeId] !== undefined) {
+    return measurements.blocks[nodeId];
+  }
+  
+  if (node.children && node.children.length > 0) {
+    return getContainerNodeHeight(node, measurements);
+  }
+  
+  const originalId = nodeId.split('-part')[0];
+  if (measurements.blocks[originalId] !== undefined) {
+    return measurements.blocks[originalId];
+  }
+  
+  return 0;
+}
+
 export function paginateDocument(
   doc: DocumentSchema,
   pageHeight: number,
@@ -47,12 +240,8 @@ export function paginateDocument(
 
     const forcePageBreak = block.layout?.pageBreakBefore && currentNodes.length > 0;
     
-    // If the block was split in a previous pass, it might not be in measurements.
-    let blockHeight = measurements.blocks[blockId] || 0;
-    if (!measurements.blocks[blockId]) {
-      const originalId = blockId.split('-part')[0];
-      blockHeight = measurements.blocks[originalId] || 0;
-    }
+    // Calculate accurate block height based on exact split parts / contents
+    const blockHeight = getNodeHeight(block, measurements);
 
     const addedHeight = currentNodes.length > 0 ? rowGap + blockHeight : blockHeight;
     // Add 1px subpixel safety margin to available height comparison
@@ -63,9 +252,11 @@ export function paginateDocument(
 
       if (!forcePageBreak) {
         const def = NodeRegistry.get(block.type);
-        if (def && def.split) {
+        const splitFn = def?.split || (block.children && block.children.length > 0 ? splitContainerNode : undefined);
+
+        if (splitFn) {
           const remaining = availableHeight - currentHeight - (currentNodes.length > 0 ? rowGap : 0);
-          const splitResult = def.split(block, remaining, { data: doc.data, measurements });
+          const splitResult = splitFn(block, remaining, { data: doc.data, measurements });
           
           if (splitResult) {
             const [chunk1, chunk2, chunk1Height] = splitResult;

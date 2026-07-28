@@ -48,4 +48,28 @@ body {
     box-shadow: none !important;
     margin: 0 !important;
   }
+  .empty-widget {
+    background: none !important;
+    border: none !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    color: transparent !important;
+  }
 }
+
+.empty-widget {
+  min-height: 24px;
+  min-width: 24px;
+  background: repeating-linear-gradient(45deg, #f9fafb, #f9fafb 10px, #ffffff 10px, #ffffff 20px);
+  border: 1px dashed #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty-widget::after {
+  content: 'Empty';
+  font-size: 10px;
+  color: #9ca3af;
+  font-family: monospace;
+}
+

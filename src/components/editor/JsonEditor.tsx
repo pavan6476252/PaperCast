@@ -3,6 +3,7 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import { useDocumentStore } from "../../store/documentStore";
 import docframeSchema from "../../schema/docframe.schema.json";
 import { Save, RefreshCw } from "lucide-react";
+import { getNodeContextPaths } from "../../utils/dataBinding";
 
 export const JsonEditor: React.FC = () => {
   const monaco = useMonaco();
@@ -14,6 +15,7 @@ export const JsonEditor: React.FC = () => {
   const toggleAutoSync = useDocumentStore((state) => state.toggleAutoSync);
   const triggerManualSync = useDocumentStore((state) => state.triggerManualSync);
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
+  const lastVisualEdit = useDocumentStore((state) => state.lastVisualEdit);
   
   const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
   const setSelectedNodeId = useDocumentStore((state) => state.setSelectedNodeId);
@@ -116,12 +118,84 @@ export const JsonEditor: React.FC = () => {
     isEditorInitiatedSelection.current = false;
   }, [selectedNodeId, monaco]);
 
+  // Handle visual edits (sync from PropertyPanel -> Editor)
+  useEffect(() => {
+    if (lastVisualEdit && editorRef.current) {
+      const editor = editorRef.current;
+      const model = editor.getModel();
+      if (model && model.getValue() !== lastVisualEdit.newString) {
+        // Save view state to prevent cursor/scroll jumping
+        const viewState = editor.saveViewState();
+        
+        // Push to undo stack
+        editor.pushUndoStop();
+        editor.executeEdits("visual-panel", [
+          {
+            range: model.getFullModelRange(),
+            text: lastVisualEdit.newString,
+          },
+        ]);
+        editor.pushUndoStop();
+        
+        if (viewState) {
+          editor.restoreViewState(viewState);
+        }
+      }
+    }
+  }, [lastVisualEdit]);
+
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor;
 
     // Add Ctrl+S / Cmd+S shortcut
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       triggerManualSync();
+    });
+
+    // Register Autocomplete for srcBind and path
+    monaco.languages.registerCompletionItemProvider('json', {
+      triggerCharacters: ['"'],
+      provideCompletionItems: (model: any, position: any) => {
+        const lineContent = model.getLineContent(position.lineNumber);
+        const textUntilPosition = lineContent.substring(0, position.column - 1);
+        
+        // Check if we are inside a "srcBind" or "path" value string
+        const match = textUntilPosition.match(/"(srcBind|path)"\s*:\s*"([^"]*)$/);
+        if (!match) return { suggestions: [] };
+
+        // Heuristic: search upwards to find the closest "id"
+        let foundId = null;
+        for (let i = position.lineNumber; i >= Math.max(1, position.lineNumber - 50); i--) {
+          const content = model.getLineContent(i);
+          const idMatch = content.match(/"id"\s*:\s*"([^"]+)"/);
+          if (idMatch) {
+            foundId = idMatch[1];
+            break;
+          }
+        }
+
+        const parsedDocument = useDocumentStore.getState().parsedDocument;
+        if (!parsedDocument || !foundId) return { suggestions: [] };
+
+        const paths = getNodeContextPaths(parsedDocument, foundId);
+        
+        const word = model.getWordUntilPosition(position);
+        const range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn,
+        };
+
+        const suggestions = paths.map(p => ({
+          label: p,
+          kind: monaco.languages.CompletionItemKind.Variable,
+          insertText: p,
+          range
+        }));
+
+        return { suggestions };
+      }
     });
 
     // Listen for cursor changes to sync Editor -> Preview

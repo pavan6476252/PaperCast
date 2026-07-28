@@ -1,26 +1,52 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useDocumentStore } from "../../store/documentStore";
 import { NodeRenderer } from "./NodeRenderer";
 import { getStyle } from "./utils/styleUtils";
 import { OffscreenMeasurer } from "../../engine/OffscreenMeasurer";
 import { paginateDocument, PageData } from "../../engine/PaginationEngine";
-import { ZoomIn, ZoomOut, Printer, Download } from "lucide-react";
+import { ZoomIn, ZoomOut, Printer, Download, PanelLeftClose, PanelLeftOpen, Settings, ChevronDown } from "lucide-react";
 import { RendererProvider } from "./RendererContext";
 import "./nodes/basicNodes"; // Register basic nodes
 import "./nodes/TableNode";  // Register table node
+import "./nodes/formNodes";  // Register form nodes
 import { Measurements } from "@/types/schema";
 
 type PreviewTab = "content" | "headers" | "footers";
 
-export const DocumentPreview: React.FC = () => {
+interface DocumentPreviewProps {
+  isEditorVisible?: boolean;
+  onToggleEditor?: () => void;
+}
+
+export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
+  isEditorVisible = true,
+  onToggleEditor,
+}) => {
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
   const isValid = useDocumentStore((state) => state.isValid);
   const setJsonString = useDocumentStore((state) => state.setJsonString);
   const jsonString = useDocumentStore((state) => state.jsonString);
 
-  const [zoom, setZoom] = useState(1);
+  const zoom = useDocumentStore((state) => state.zoom);
+  const setZoom = useDocumentStore((state) => state.setZoom);
+  const allowHeaderFooterEditing = useDocumentStore((state) => state.allowHeaderFooterEditing);
+  const setAllowHeaderFooterEditing = useDocumentStore((state) => state.setAllowHeaderFooterEditing);
   const [activeTab, setActiveTab] = useState<PreviewTab>("content");
   const [pages, setPages] = useState<PageData[] | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   const updateMeta = (updates: any) => {
     try {
@@ -69,8 +95,8 @@ export const DocumentPreview: React.FC = () => {
     window.print();
   };
 
-  const handleDownload = async () => {
-    if (!isValid || !jsonString) return;
+  const handleDownload = useCallback(async () => {
+    if (!isValid || !jsonString || isSaving) return;
     
     try {
       setIsSaving(true);
@@ -101,7 +127,17 @@ export const DocumentPreview: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [isValid, jsonString, isSaving]);
+
+  useEffect(() => {
+    const handleGlobalDownload = () => {
+      handleDownload();
+    };
+    window.addEventListener("formcast-download-pdf", handleGlobalDownload);
+    return () => {
+      window.removeEventListener("formcast-download-pdf", handleGlobalDownload);
+    };
+  }, [handleDownload]);
 
   return (
     <div className="flex flex-col h-full bg-gray-100 overflow-hidden">
@@ -122,13 +158,23 @@ export const DocumentPreview: React.FC = () => {
       {/* Top Toolbar */}
       <div className="h-14 border-b bg-white flex items-center px-4 justify-between shrink-0 print-hidden shadow-sm z-10 relative">
         {/* Left: View Modes */}
-        <div className="flex items-center space-x-3">
-          <div className="flex space-x-1 bg-gray-100/80 p-1 rounded-lg border border-gray-200/50">
+        <div className="flex items-center space-x-2 shrink-0">
+          {onToggleEditor && (
+            <button
+              onClick={onToggleEditor}
+              className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+              title={isEditorVisible ? "Hide Schema Editor (Cmd+\\)" : "Show Schema Editor (Cmd+\\)"}
+              aria-label={isEditorVisible ? "Hide Schema Editor" : "Show Schema Editor"}
+            >
+              {isEditorVisible ? <PanelLeftClose size={16} /> : <PanelLeftOpen size={16} />}
+            </button>
+          )}
+          <div className="flex space-x-0.5 bg-gray-100 p-0.5 rounded-lg border border-gray-200/50">
             {(["content", "headers", "footers"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1.5 text-sm rounded-md capitalize transition-all duration-200 ${activeTab === tab ? "bg-white shadow-sm font-semibold text-blue-600" : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
+                className={`px-2.5 py-1 text-xs font-semibold rounded-md capitalize transition-all duration-200 ${activeTab === tab ? "bg-white shadow-sm text-blue-600 font-bold" : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
                   }`}
               >
                 {tab}
@@ -136,90 +182,137 @@ export const DocumentPreview: React.FC = () => {
             ))}
           </div>
           {!isValid && (
-            <div className="flex items-center px-2.5 py-1 rounded-full bg-red-50 border border-red-100">
-              <span className="text-xs font-medium text-red-600">Syntax Error (Showing last valid)</span>
+            <div className="flex items-center px-2 py-0.5 rounded-full bg-red-50 border border-red-100 text-[10px] font-bold text-red-600 uppercase tracking-wider">
+              Error
             </div>
           )}
         </div>
 
-        {/* Center: Document Settings */}
-        {activeTab === "content" && (
-          <div className="flex items-center space-x-3 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200/50 hidden md:flex">
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Size</span>
-              <select
-                value={typeof pageSize === 'object' ? 'custom' : pageSize}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val !== 'custom') {
-                    updateMeta({ pageSize: val });
-                  }
-                }}
-                className="text-sm bg-white border border-gray-200 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-gray-700 font-medium cursor-pointer"
-              >
-                <option value="A4">A4</option>
-                <option value="A3">A3</option>
-                <option value="Letter">Letter</option>
-                <option value="custom" disabled>Custom</option>
-              </select>
-            </div>
-
-            <div className="w-px h-4 bg-gray-300 mx-1"></div>
-
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Orient</span>
-              <select
-                value={orientation}
-                onChange={(e) => updateMeta({ orientation: e.target.value })}
-                className="text-sm bg-white border border-gray-200 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-gray-700 font-medium cursor-pointer"
-              >
-                <option value="portrait">Portrait</option>
-                <option value="landscape">Landscape</option>
-              </select>
-            </div>
-          </div>
-        )}
-
-        {/* Right: Actions & Zoom */}
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-1 bg-gray-50 rounded-lg border border-gray-200/50 p-1">
-            <button onClick={() => setZoom(z => Math.max(0.25, z - 0.25))} className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-md transition-colors" title="Zoom Out">
-              <ZoomOut size={16} />
+        {/* Right: Actions, Zoom & Settings Popover */}
+        <div className="flex items-center space-x-2.5 shrink-0">
+          {/* Settings & Zoom Dropdown */}
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setIsMenuOpen(s => !s)}
+              className="flex items-center space-x-1 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-900 focus:outline-none transition-colors cursor-pointer"
+              title="Page Setup & Zoom"
+            >
+              <Settings size={14} />
+              <span className="hidden sm:inline">Page Setup</span>
+              <ChevronDown size={12} className={`transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
             </button>
-            <span className="w-12 text-center text-sm font-medium text-gray-700">{Math.round(zoom * 100)}%</span>
-            <button onClick={() => setZoom(z => Math.min(2, z + 0.25))} className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-md transition-colors" title="Zoom In">
-              <ZoomIn size={16} />
-            </button>
+            {isMenuOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-30 p-3 space-y-3.5 origin-top-right">
+                {activeTab === "content" && (
+                  <div className="space-y-2">
+                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Page Settings</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex flex-col space-y-1">
+                        <label htmlFor="pageSize" className="text-[10px] font-medium text-gray-500">Size</label>
+                        <select
+                          id="pageSize"
+                          value={typeof pageSize === 'object' ? 'custom' : pageSize}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val !== 'custom') {
+                              updateMeta({ pageSize: val });
+                            }
+                          }}
+                          className="text-xs bg-gray-50 border border-gray-200 rounded-md p-1 outline-none focus:ring-1 focus:ring-blue-500 text-gray-700 font-medium cursor-pointer"
+                        >
+                          <option value="A4">A4</option>
+                          <option value="A3">A3</option>
+                          <option value="Letter">Letter</option>
+                          <option value="custom" disabled>Custom</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col space-y-1">
+                        <label htmlFor="orientation" className="text-[10px] font-medium text-gray-500">Orient</label>
+                        <select
+                          id="orientation"
+                          value={orientation}
+                          onChange={(e) => updateMeta({ orientation: e.target.value })}
+                          className="text-xs bg-gray-50 border border-gray-200 rounded-md p-1 outline-none focus:ring-1 focus:ring-blue-500 text-gray-700 font-medium cursor-pointer"
+                        >
+                          <option value="portrait">Portrait</option>
+                          <option value="landscape">Landscape</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="border-t border-gray-100 my-2 pt-2" />
+                    <div className="flex flex-col space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="toggleEditHeaderFooter" className="text-xs text-gray-600 font-medium">Edit Header/Footer</label>
+                        <input
+                          id="toggleEditHeaderFooter"
+                          type="checkbox"
+                          checked={allowHeaderFooterEditing}
+                          onChange={(e) => setAllowHeaderFooterEditing(e.target.checked)}
+                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          useDocumentStore.getState().deconstructAllRichText();
+                          setIsMenuOpen(false);
+                        }}
+                        className="w-full text-xs font-semibold px-2 py-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 transition-colors border border-blue-200 cursor-pointer"
+                        title="Programmatically convert all Rich Text blocks in the document to FormCast widgets"
+                      >
+                        Convert All Rich Text
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                {activeTab === "content" && <div className="border-t border-gray-100" />}
+
+                <div className="space-y-2">
+                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Zoom Preview</div>
+                  <div className="flex items-center justify-between bg-gray-50 rounded-lg border border-gray-200/50 p-1">
+                    <button aria-label="Zoom Out" onClick={() => setZoom(z => Math.max(0.25, z - 0.1))} className="p-1 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-md transition-colors" title="Zoom Out (Cmd-)">
+                      <ZoomOut size={14} />
+                    </button>
+                    <span className="text-xs font-semibold text-gray-700">{Math.round(zoom * 100)}%</span>
+                    <button aria-label="Zoom In" onClick={() => setZoom(z => Math.min(2, z + 0.1))} className="p-1 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-md transition-colors" title="Zoom In (Cmd+)">
+                      <ZoomIn size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center space-x-2 border-l border-gray-200 pl-4">
+          <div className="flex items-center space-x-1.5 pl-2.5 border-l border-gray-200">
             <button
               onClick={handlePrint}
-              className="flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="flex items-center justify-center space-x-1 p-1.5 sm:px-2.5 sm:py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+              title="Print Document (Cmd+P)"
             >
-              <Printer size={16} />
-              <span>Print</span>
+              <Printer size={14} />
+              <span className="hidden sm:inline">Print</span>
             </button>
             <button
               onClick={handleDownload}
               disabled={isSaving || !isValid}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 text-sm font-medium text-white border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all ${
+              className={`flex items-center justify-center space-x-1 p-1.5 sm:px-2.5 sm:py-1 text-xs font-medium text-white border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer ${
                 isSaving || !isValid ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
               }`}
+              title="Save PDF (Cmd+S)"
             >
               {isSaving ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                <Download size={16} />
+                <Download size={14} />
               )}
-              <span>{isSaving ? "Saving..." : "Save"}</span>
+              <span className="hidden sm:inline">{isSaving ? "Saving..." : "Save"}</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Canvas Area */}
-      <div className="flex-1 overflow-auto p-8 relative flex flex-col items-center print:p-0 print:bg-white print:block">
+      <div id="preview-scroll-container" className="flex-1 overflow-auto p-8 relative flex flex-col items-center print:p-0 print:bg-white print:block">
         {activeTab === "content" && (
           <div
             className="flex flex-col items-center gap-8 transition-transform origin-top print-scale-none print:block print:w-full print:h-full print:m-0 print:p-0"
@@ -236,28 +329,34 @@ export const DocumentPreview: React.FC = () => {
                     className="bg-white shadow-xl flex flex-col relative shrink-0 overflow-hidden print-page"
                     style={{ width, height }}
                   >
-                    <RendererProvider data={parsedDocument.data} pageContext={{ pageNumber: page.pageNumber, pageCount: pages.length }}>
+                    <RendererProvider data={parsedDocument.data} pageContext={{ pageNumber: page.pageNumber, pageCount: pages.length }} activeTab="content">
                       {/* Header */}
                       {header && header.root && (
-                        <div className="shrink-0" style={{ height: header.heightPx !== undefined ? header.heightPx : "auto" }}>
-                          <NodeRenderer node={header.root} />
-                        </div>
+                        <RendererProvider data={parsedDocument.data} pageContext={{ pageNumber: page.pageNumber, pageCount: pages.length }} activeTab="content" location="header">
+                          <div className="shrink-0" style={{ height: header.heightPx !== undefined ? header.heightPx : "auto" }}>
+                            <NodeRenderer node={header.root} />
+                          </div>
+                        </RendererProvider>
                       )}
                       {/* Body */}
-                      <div
-                        className="flex-1 overflow-hidden"
-                        style={{ ...getStyle(parsedDocument.document.body) }}
-                      >
-                        {page.bodyNodes.map((node, i) => (
-                          <NodeRenderer key={`body-${node.id || i}`} node={node} />
-                        ))}
-                      </div>
+                      <RendererProvider data={parsedDocument.data} pageContext={{ pageNumber: page.pageNumber, pageCount: pages.length }} activeTab="content" location="body">
+                        <div
+                          className="flex-1 overflow-hidden"
+                          style={{ ...getStyle(parsedDocument.document.body) }}
+                        >
+                          {page.bodyNodes.map((node, i) => (
+                            <NodeRenderer key={`body-${node.id || i}`} node={node} />
+                          ))}
+                        </div>
+                      </RendererProvider>
 
                       {/* Footer */}
                       {footer && footer.root && (
-                        <div className="shrink-0" style={{ height: footer.heightPx !== undefined ? footer.heightPx : "auto" }}>
-                          <NodeRenderer node={footer.root} />
-                        </div>
+                        <RendererProvider data={parsedDocument.data} pageContext={{ pageNumber: page.pageNumber, pageCount: pages.length }} activeTab="content" location="footer">
+                          <div className="shrink-0" style={{ height: footer.heightPx !== undefined ? footer.heightPx : "auto" }}>
+                            <NodeRenderer node={footer.root} />
+                          </div>
+                        </RendererProvider>
                       )}
                     </RendererProvider>
                   </div>
@@ -278,7 +377,7 @@ export const DocumentPreview: React.FC = () => {
                   style={{ width, height: header.heightPx !== undefined ? header.heightPx : "auto", minHeight: header.heightPx !== undefined ? undefined : 60 }}
                 >
                   {header.root ? (
-                    <RendererProvider data={parsedDocument.data}>
+                    <RendererProvider data={parsedDocument.data} activeTab="headers" location="header">
                       <NodeRenderer node={header.root} />
                     </RendererProvider>
                   ) : (
@@ -303,7 +402,7 @@ export const DocumentPreview: React.FC = () => {
                   style={{ width, height: footer.heightPx !== undefined ? footer.heightPx : "auto", minHeight: footer.heightPx !== undefined ? undefined : 40 }}
                 >
                   {footer.root ? (
-                    <RendererProvider data={parsedDocument.data}>
+                    <RendererProvider data={parsedDocument.data} activeTab="footers" location="footer">
                       <NodeRenderer node={footer.root} />
                     </RendererProvider>
                   ) : (

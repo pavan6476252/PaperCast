@@ -8,6 +8,8 @@ export interface PageContextType {
 export interface RendererContextType {
   data: any;
   pageContext?: PageContextType;
+  activeTab?: "content" | "headers" | "footers";
+  location?: "body" | "header" | "footer";
 }
 
 const RendererContext = createContext<RendererContextType | undefined>(undefined);
@@ -15,10 +17,12 @@ const RendererContext = createContext<RendererContextType | undefined>(undefined
 export const RendererProvider: React.FC<{
   data: any;
   pageContext?: PageContextType;
+  activeTab?: "content" | "headers" | "footers";
+  location?: "body" | "header" | "footer";
   children: React.ReactNode;
-}> = ({ data, pageContext, children }) => {
+}> = ({ data, pageContext, activeTab, location, children }) => {
   return (
-    <RendererContext.Provider value={{ data, pageContext }}>
+    <RendererContext.Provider value={{ data, pageContext, activeTab, location }}>
       {children}
     </RendererContext.Provider>
   );

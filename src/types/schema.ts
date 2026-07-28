@@ -1,7 +1,7 @@
 export interface BoxModel {
   // sizing
-  width?: number | "auto";
-  height?: number | "auto";
+  width?: number | string;
+  height?: number | string;
   minHeight?: number;
 
   // margin
@@ -39,7 +39,8 @@ export interface BoxModel {
   columnGap?: number;
   flexGrow?: number;
   flexShrink?: number;
-  flexBasis?: number | "auto";
+  flexBasis?: number | string;
+  flex?: number | string;
 
   // pagination hints
   breakInside?: "auto" | "avoid";
@@ -71,7 +72,9 @@ export interface TableColumnConfig {
   bindPath?: string;
   headerText?: string;
   widthPx?: number;
+  flex?: number;
   align?: "left" | "center" | "right";
+  hidden?: boolean;
 }
 
 export interface CustomTableRow {
@@ -100,13 +103,80 @@ export interface BaseNodeCommon {
 export interface RootNode extends BaseNodeCommon { type: "root"; props?: undefined; }
 export interface RowNode extends BaseNodeCommon { type: "row"; props?: undefined; }
 export interface ColumnNode extends BaseNodeCommon { type: "column"; props?: undefined; }
-export interface TextNode extends BaseNodeCommon { type: "text"; props?: { literal?: string }; }
+export interface TextNode extends BaseNodeCommon { 
+  type: "text"; 
+  props?: { 
+    literal?: string;
+    isAnchor?: boolean;
+    hrefLiteral?: string;
+    hrefBind?: string;
+  }; 
+}
 export interface ImageNode extends BaseNodeCommon { type: "image"; props?: { srcBind?: string; srcLiteral?: string; fit?: "contain" | "cover" | "stretch" }; }
 export interface SpacerNode extends BaseNodeCommon { type: "spacer"; props?: { sizePx?: number }; }
 export interface TableNode extends BaseNodeCommon { type: "table"; props?: TableProps; }
 export interface WidgetInstanceNode extends BaseNodeCommon { type: "widgetInstance"; props?: { definitionId: string }; }
 
-export type BaseNode = RootNode | RowNode | ColumnNode | TextNode | ImageNode | SpacerNode | TableNode | WidgetInstanceNode | (BaseNodeCommon & { type: string; props?: Record<string, any> });
+export interface ListTileNode extends BaseNodeCommon { 
+  type: "listTile"; 
+  props?: { 
+    titleLiteral?: string; 
+    titleBind?: string; 
+    subtitleLiteral?: string; 
+    subtitleBind?: string; 
+  }; 
+}
+
+export interface RichTextNode extends BaseNodeCommon { 
+  type: "richText"; 
+  props?: { 
+    htmlLiteral?: string; 
+    htmlBind?: string; 
+  }; 
+}
+
+export interface UnorderedListNode extends BaseNodeCommon {
+  type: "ul";
+  props?: undefined;
+}
+
+export interface OrderedListNode extends BaseNodeCommon {
+  type: "ol";
+  props?: undefined;
+}
+
+export interface CheckboxNode extends BaseNodeCommon {
+  type: "checkbox";
+  props?: {
+    labelLiteral?: string;
+    labelBind?: string;
+    checkedLiteral?: boolean;
+    checkedBind?: string;
+  };
+}
+
+export interface RadioNode extends BaseNodeCommon {
+  type: "radio";
+  props?: {
+    labelLiteral?: string;
+    labelBind?: string;
+    checkedLiteral?: boolean;
+    checkedBind?: string;
+    value?: string;
+    name?: string; // fallback if not in group
+  };
+}
+
+export interface RadioGroupNode extends BaseNodeCommon {
+  type: "radioGroup";
+  props?: {
+    name?: string;
+    valueLiteral?: string;
+    valueBind?: string;
+  };
+}
+
+export type BaseNode = RootNode | RowNode | ColumnNode | TextNode | ImageNode | SpacerNode | TableNode | WidgetInstanceNode | ListTileNode | RichTextNode | UnorderedListNode | OrderedListNode | CheckboxNode | RadioNode | RadioGroupNode | (BaseNodeCommon & { type: string; props?: Record<string, any> });
 
 export interface Theme {
   defaults: {
@@ -130,6 +200,14 @@ export interface DocumentSection {
   root: BaseNode;
 }
 
+export interface RichTextPreferences {
+  autoDeconstruct?: boolean;
+  tagStyles?: Record<string, {
+    style?: TypographyAndColor;
+    layout?: BoxModel;
+  }>;
+}
+
 export interface DocumentSchema {
   version: number;
   meta: {
@@ -137,6 +215,7 @@ export interface DocumentSchema {
     orientation: "portrait" | "landscape";
     baseUnit: "px";
     dpi: number;
+    richTextPreferences?: RichTextPreferences;
   };
   theme: Theme;
   data: Record<string, any>;

@@ -43,6 +43,12 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({ document: 
       if (id) blocks[id] = node.getBoundingClientRect().height;
     });
 
+    const allNodeElements = containerRef.current.querySelectorAll("[data-node-id]");
+    allNodeElements.forEach((node) => {
+      const id = node.getAttribute("data-node-id");
+      if (id) blocks[id] = node.getBoundingClientRect().height;
+    });
+
     const tables = containerRef.current.querySelectorAll("table[data-table-id]");
     tables.forEach((table) => {
       const id = table.getAttribute("data-table-id");

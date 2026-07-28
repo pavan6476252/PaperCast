@@ -29,6 +29,27 @@
           "$ref": "#/definitions/WidgetInstanceNode"
         },
         {
+          "$ref": "#/definitions/ListTileNode"
+        },
+        {
+          "$ref": "#/definitions/RichTextNode"
+        },
+        {
+          "$ref": "#/definitions/UnorderedListNode"
+        },
+        {
+          "$ref": "#/definitions/OrderedListNode"
+        },
+        {
+          "$ref": "#/definitions/CheckboxNode"
+        },
+        {
+          "$ref": "#/definitions/RadioNode"
+        },
+        {
+          "$ref": "#/definitions/RadioGroupNode"
+        },
+        {
           "additionalProperties": false,
           "properties": {
             "bind": {
@@ -157,15 +178,16 @@
           ],
           "type": "string"
         },
+        "flex": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
         "flexBasis": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "const": "auto",
-              "type": "string"
-            }
+          "type": [
+            "number",
+            "string"
           ]
         },
         "flexGrow": {
@@ -175,14 +197,9 @@
           "type": "number"
         },
         "height": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "const": "auto",
-              "type": "string"
-            }
+          "type": [
+            "number",
+            "string"
           ]
         },
         "justifyContent": {
@@ -232,20 +249,73 @@
           "type": "number"
         },
         "width": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "const": "auto",
-              "type": "string"
-            }
+          "type": [
+            "number",
+            "string"
           ]
         },
         "wrap": {
           "type": "boolean"
         }
       },
+      "type": "object"
+    },
+    "CheckboxNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "checkedBind": {
+              "type": "string"
+            },
+            "checkedLiteral": {
+              "type": "boolean"
+            },
+            "labelBind": {
+              "type": "string"
+            },
+            "labelLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "checkbox",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
       "type": "object"
     },
     "ColumnNode": {
@@ -469,6 +539,9 @@
                   "type": "object"
                 }
               ]
+            },
+            "richTextPreferences": {
+              "$ref": "#/definitions/RichTextPreferences"
             }
           },
           "required": [
@@ -585,6 +658,302 @@
         "layout",
         "type"
       ],
+      "type": "object"
+    },
+    "ListTileNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "subtitleBind": {
+              "type": "string"
+            },
+            "subtitleLiteral": {
+              "type": "string"
+            },
+            "titleBind": {
+              "type": "string"
+            },
+            "titleLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "listTile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
+      "type": "object"
+    },
+    "OrderedListNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "ol",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
+      "type": "object"
+    },
+    "RadioGroupNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "valueBind": {
+              "type": "string"
+            },
+            "valueLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "radioGroup",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
+      "type": "object"
+    },
+    "RadioNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "checkedBind": {
+              "type": "string"
+            },
+            "checkedLiteral": {
+              "type": "boolean"
+            },
+            "labelBind": {
+              "type": "string"
+            },
+            "labelLiteral": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "radio",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
+      "type": "object"
+    },
+    "RichTextNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "htmlBind": {
+              "type": "string"
+            },
+            "htmlLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "richText",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
+      "type": "object"
+    },
+    "RichTextPreferences": {
+      "additionalProperties": false,
+      "properties": {
+        "autoDeconstruct": {
+          "type": "boolean"
+        },
+        "tagStyles": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "properties": {
+              "style": {
+                "$ref": "#/definitions/TypographyAndColor"
+              },
+              "layout": {
+                "$ref": "#/definitions/BoxModel"
+              }
+            },
+            "type": "object"
+          },
+          "type": "object"
+        }
+      },
       "type": "object"
     },
     "RootNode": {
@@ -736,8 +1105,14 @@
         "bindPath": {
           "type": "string"
         },
+        "flex": {
+          "type": "number"
+        },
         "headerText": {
           "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
         },
         "widthPx": {
           "type": "number"
@@ -850,6 +1225,15 @@
         "props": {
           "additionalProperties": false,
           "properties": {
+            "hrefBind": {
+              "type": "string"
+            },
+            "hrefLiteral": {
+              "type": "string"
+            },
+            "isAnchor": {
+              "type": "boolean"
+            },
             "literal": {
               "type": "string"
             }
@@ -968,15 +1352,16 @@
                     ],
                     "type": "string"
                   },
+                  "flex": {
+                    "type": [
+                      "number",
+                      "string"
+                    ]
+                  },
                   "flexBasis": {
-                    "anyOf": [
-                      {
-                        "type": "number"
-                      },
-                      {
-                        "const": "auto",
-                        "type": "string"
-                      }
+                    "type": [
+                      "number",
+                      "string"
                     ]
                   },
                   "flexGrow": {
@@ -1014,14 +1399,9 @@
                     ]
                   },
                   "height": {
-                    "anyOf": [
-                      {
-                        "type": "number"
-                      },
-                      {
-                        "const": "auto",
-                        "type": "string"
-                      }
+                    "type": [
+                      "number",
+                      "string"
                     ]
                   },
                   "justifyContent": {
@@ -1090,14 +1470,9 @@
                     "type": "string"
                   },
                   "width": {
-                    "anyOf": [
-                      {
-                        "type": "number"
-                      },
-                      {
-                        "const": "auto",
-                        "type": "string"
-                      }
+                    "type": [
+                      "number",
+                      "string"
                     ]
                   },
                   "wrap": {
@@ -1203,15 +1578,16 @@
                   ],
                   "type": "string"
                 },
+                "flex": {
+                  "type": [
+                    "number",
+                    "string"
+                  ]
+                },
                 "flexBasis": {
-                  "anyOf": [
-                    {
-                      "type": "number"
-                    },
-                    {
-                      "const": "auto",
-                      "type": "string"
-                    }
+                  "type": [
+                    "number",
+                    "string"
                   ]
                 },
                 "flexGrow": {
@@ -1249,14 +1625,9 @@
                   ]
                 },
                 "height": {
-                  "anyOf": [
-                    {
-                      "type": "number"
-                    },
-                    {
-                      "const": "auto",
-                      "type": "string"
-                    }
+                  "type": [
+                    "number",
+                    "string"
                   ]
                 },
                 "justifyContent": {
@@ -1325,14 +1696,9 @@
                   "type": "string"
                 },
                 "width": {
-                  "anyOf": [
-                    {
-                      "type": "number"
-                    },
-                    {
-                      "const": "auto",
-                      "type": "string"
-                    }
+                  "type": [
+                    "number",
+                    "string"
                   ]
                 },
                 "wrap": {
@@ -1407,6 +1773,49 @@
           "type": "string"
         }
       },
+      "type": "object"
+    },
+    "UnorderedListNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/BaseNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "ul",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "layout",
+        "type"
+      ],
       "type": "object"
     },
     "WidgetDefinition": {
