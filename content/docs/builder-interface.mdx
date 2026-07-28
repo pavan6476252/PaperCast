@@ -1,0 +1,31 @@
+# The Builder Interface
+
+Welcome to the FormCast visual builder! This tool is designed to give you pixel-perfect control over your document templates while maintaining a strict, developer-friendly JSON schema underneath.
+
+![Visual Builder Interface Placeholder](/images/builder-interface.png)
+
+## The Three Pillars
+
+The interface is divided into three primary sections:
+
+### 1. The Left Panel (Widgets & Code)
+This section acts as your toolkit. It contains two tabs:
+- **Widgets**: A categorized list of all available elements (Text, Images, Rows, Columns, Tables) that you can drag and drop into your document.
+- **JSON Editor**: For advanced users, this tab exposes the raw JSON AST (Abstract Syntax Tree) powering the document. It features Monaco Editor integration, meaning you get real-time schema validation and autocomplete (Ctrl+Space).
+
+### 2. The Canvas (Center)
+This is the live preview of your paginated document. 
+- FormCast automatically calculates where page breaks should occur based on your `PageSetup` (A4, Letter, etc.).
+- When you click on any element in the canvas, it becomes highlighted with a blue border, indicating it is currently **selected**.
+
+### 3. The Property Panel (Right)
+When an element is selected on the canvas, this panel populates with its properties.
+It is organized into four tabs:
+- **Layout**: Margins, padding, sizing, and Flexbox controls.
+- **Style**: Typography, colors, and background settings.
+- **Props**: Node-specific settings (e.g., Image URL, Table Columns).
+- **Bind**: Data injection settings for variables.
+
+<Callout type="info" title="Top Toolbar">
+At the top of the interface, you will find global controls to change the zoom level, toggle Headers/Footers visibility, and trigger manual JSON syncs.
+</Callout>

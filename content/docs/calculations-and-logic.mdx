@@ -1,0 +1,84 @@
+# Calculations and Logic
+
+FormCast supports dynamic logic injection using the `resolver.ts` module. The schema is static JSON, but it can describe dynamic conditions—such as which header to show on the last page.
+
+## Dynamic Headers and Footers
+
+The `resolveHeader` and `resolveFooter` functions evaluate the current page number against conditions defined in the JSON schema (`"first"`, `"last"`, `"even"`, `"odd"`, `"all"`).
+
+Here is the exact API reference pulled from `src/engine/resolver.ts`:
+
+```typescript
+export function resolveHeader(
+  pageNumber: number,
+  totalPages: number, 
+  doc: DocumentSchema["document"]
+): string | undefined {
+  
+  // 1. Check strict page overrides first
+  const override = doc.pageOverrides?.[pageNumber.toString()]?.headerId;
+  if (override !== undefined) {
+    if (override === null) return undefined;
+    return override;
+  }
+
+  const entries = Object.entries(doc.headers || {});
+  
+  // 2. Evaluate conditions by priority: first/last > even/odd > all
+  let matchedKey: string | undefined = undefined;
+  
+  if (pageNumber === 1) {
+    matchedKey = entries.find(([_, h]) => h.condition === "first")?.[0];
+  } else if (pageNumber === totalPages) {
+    matchedKey = entries.find(([_, h]) => h.condition === "last")?.[0];
+  }
+
+  if (!matchedKey) {
+    const isEven = pageNumber % 2 === 0;
+    matchedKey = entries.find(([_, h]) => h.condition === (isEven ? "even" : "odd"))?.[0];
+  }
+
+  if (!matchedKey) {
+    matchedKey = entries.find(([_, h]) => h.condition === "all" || !h.condition)?.[0];
+  }
+
+  // 3. Fallback to default
+  if (!matchedKey && doc.headerDefaultId) {
+    return doc.headerDefaultId;
+  }
+
+  return matchedKey;
+}
+```
+
+<Callout type="success" title="Two-Pass Pagination">
+Notice the `totalPages` argument. Because we don't know the total number of pages until pagination finishes, FormCast performs a **Two-Pass** pagination. It paginates once to find `totalPages`, then paginates a second time to inject the correct `"last"` page headers and footers.
+</Callout>
+
+## Data Binding & Variable Injection
+
+FormCast allows you to inject dynamic data from a JSON payload into your document using the `bind` property on a `DocNode`.
+
+The `DataBinding` interface defines how this works:
+
+```typescript
+export interface DataBinding {
+  path: string; // e.g. "invoice.total"
+  mode?: "single" | "repeat";
+  itemAlias?: string; // used when iterating over arrays
+}
+```
+
+### Resolution Logic
+
+During the rendering phase, components like the `TextNode` look for the `bind` property. If it exists, they call a data resolver utility that uses `lodash.get` (or similar path resolution logic) to query the `DocumentSchema["data"]` object.
+
+For example, if the AST contains:
+```json
+{
+  "type": "text",
+  "content": "Total: ",
+  "bind": { "path": "invoice.totalAmount" }
+}
+```
+And the root document data is `{"invoice": {"totalAmount": "$1,200.00"}}`, the engine will render "Total: $1,200.00".

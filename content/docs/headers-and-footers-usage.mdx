@@ -1,0 +1,89 @@
+# Headers and Footers Usage
+
+Professional documents usually require repeating headers (like a logo) and footers (like page numbers) on every page.
+
+![Headers and Footers UI](/images/headers-footers.png)
+
+## Enabling Header Editing
+
+Headers and footers live outside the normal document flow. To edit them:
+1. Look at the top toolbar in the FormCast interface.
+2. Toggle the **"Edit Headers/Footers"** switch.
+3. The main body content will dim, and empty dropzones will appear at the top and bottom of every page.
+
+## Adding Content
+
+You can drag and drop widgets into the Header and Footer zones exactly like you do with the main body. 
+
+Common use cases:
+- Drag an `Image` widget into the header and set its URL to your company logo.
+- Drag a `Text` widget into the footer to display legal disclaimers.
+
+### Page Numbers
+
+You can use string interpolation to inject page numbers directly into Text nodes!
+
+1. Add a `Text` widget to your footer.
+2. In the Property Panel, under the **Props** tab, look for the `literal` text field (or edit the JSON directly).
+3. You can use the special `{{pageNumber}}` and `{{pageCount}}` variables inside the text.
+
+For example, set the literal text to:
+`Page {{pageNumber}} of {{pageCount}}`
+
+When the document is rendered, FormCast will automatically replace these placeholders with the correct numbers for each page!
+
+## Conditional Headers (Cover Pages)
+
+Sometimes you don't want the header to show up on the very first page (e.g., a Cover Page).
+
+While the visual builder is still adding full support for conditional toggles, you can achieve this today using the JSON editor:
+
+```json
+"headers": {
+  "main-header": {
+    "condition": "all",
+    "root": { /* your normal header here */ }
+  },
+  "first-page": {
+    "condition": "first",
+    "root": null
+  }
+}
+```
+By mapping the `"first"` condition to `null`, you are telling the engine to render an empty header on page 1.
+
+### Full-Scale Headers Dictionary Example
+Here is the JSON representation of a complex document that uses a different header for the first page, even pages, odd pages, and a fallback for everything else.
+
+```json
+{
+  "document": {
+    "headers": {
+      "cover-page": {
+        "condition": "first",
+        "root": { "type": "image", "props": { "urlLiteral": "massive-cover-logo.png" } }
+      },
+      "left-facing": {
+        "condition": "even",
+        "root": {
+          "type": "row",
+          "layout": { "justifyContent": "flex-start" },
+          "children": [{ "type": "text", "props": { "literal": "Chapter Title" } }]
+        }
+      },
+      "right-facing": {
+        "condition": "odd",
+        "root": {
+          "type": "row",
+          "layout": { "justifyContent": "flex-end" },
+          "children": [{ "type": "text", "props": { "literal": "Book Title" } }]
+        }
+      },
+      "fallback": {
+        "condition": "all",
+        "root": { "type": "text", "props": { "literal": "Default Header" } }
+      }
+    }
+  }
+}
+```

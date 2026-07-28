@@ -1,0 +1,85 @@
+# Pagination Engine
+
+The Pagination Engine is the heart of FormCast's dynamic document generation. It ensures that content flows naturally from one page to the next without awkward cuts in the middle of text or images.
+
+## How it works
+
+1. **Measurement**: We use `OffscreenMeasurer.tsx` to get the height of every node.
+2. **Space Calculation**: The engine takes the `PageSetup` configuration (width, height, margins) and calculates the `remainingHeight` for the body content.
+3. **Splitting**: When a node exceeds the `remainingHeight`, the engine attempts to split the node.
+
+### The Splitting Logic
+
+The engine iterates through the children of a container. If a child overflows, it recursively attempts to split the child itself. 
+
+Here is the core recursive splitting logic from `src/engine/PaginationEngine.ts`:
+
+```typescript
+function splitContainerNode(
+  node: BaseNode,
+  remainingHeight: number,
+  ctx: { measurements: Measurements; data: any }
+): [BaseNode, BaseNode | null, number] | null {
+  if (!node.children || node.children.length === 0) return null;
+
+  const originalId = node.id.split('-part')[0];
+  const children = node.children;
+
+  let currentHeight = 0;
+  let splitIndex = 0;
+  let fitsAtLeastOne = false;
+
+  const layout = node.layout || {};
+  const rowGap = layout.rowGap || 0;
+  
+  let splitChildChunk1: BaseNode | null = null;
+  let splitChildChunk2: BaseNode | null = null;
+  let splitChildHeight = 0;
+
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    let childHeight = getNodeHeight(child, ctx.measurements);
+    const addedHeight = i > 0 ? rowGap + childHeight : childHeight;
+
+    if (currentHeight + addedHeight <= remainingHeight) {
+      currentHeight += addedHeight;
+      splitIndex = i + 1;
+      fitsAtLeastOne = true;
+    } else {
+      // Try to split the child itself recursively
+      const def = NodeRegistry.get(child.type);
+      const childSplitFn = def?.split || (child.children && child.children.length > 0 ? splitContainerNode : undefined);
+      // ... proceeds to split the child
+      break;
+    }
+  }
+  // ... constructs chunk1 and chunk2 based on splitIndex
+}
+```
+
+### Calculating rowGap
+
+When splitting a layout node (like a `column`), the engine must account for the `rowGap`. As you can see in the `addedHeight` calculation:
+
+```typescript
+const addedHeight = i > 0 ? rowGap + childHeight : childHeight;
+```
+
+This ensures that the space *between* elements is accurately measured. If a node is pushed to the next page, the `rowGap` before it is ignored on the new page, exactly matching how CSS Flexbox behaves.
+
+<Callout type="warning" title="Atomic Nodes">
+If a node does not define a `split` function and has no children (e.g., an Image node), the Pagination Engine treats it as "Atomic". If it overflows, it will push the entire node to the next page.
+</Callout>
+
+## Deep Dive: The OffscreenMeasurer Trick
+
+Because FormCast renders standard React components, we cannot know how tall a paragraph of text will be until the browser actually renders it with the current font and width constraints.
+
+To solve this, `PaginationEngine` relies on `OffscreenMeasurer.tsx`.
+
+1. **The Invisible DOM**: `OffscreenMeasurer` mounts a visually hidden div (`absolute`, `opacity-0`, `pointer-events-none`) into the DOM.
+2. **Synchronous Render**: When pagination begins, it passes the entire AST into this hidden div.
+3. **ResizeObserver**: It waits for a layout tick, then uses `getBoundingClientRect()` on every node to capture its exact pixel height.
+4. **Caching**: These measurements are cached in a `Measurements` dictionary, keyed by the node's `id`.
+
+Once the `Measurements` object is fully populated, the actual `PaginationEngine` runs its math using these cached pixel values, ensuring pixel-perfect page breaks without any jank or flickering on the screen.

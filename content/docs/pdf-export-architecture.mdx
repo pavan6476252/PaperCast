@@ -1,0 +1,62 @@
+# PDF Export & Print Workflow
+
+FormCast generates high-quality, print-ready PDFs directly from the rendered React components using **Puppeteer** in a serverless environment.
+
+## The Architecture
+
+When a user clicks "Save as PDF", the JSON schema is sent to a Next.js API route (`src/app/api/pdf/route.ts`). This route spins up a headless browser (Puppeteer) and navigates to a dedicated print page.
+
+### 1. The API Route (`/api/pdf`)
+
+```typescript
+export const runtime = 'nodejs';   // Must NOT be 'edge' for Puppeteer
+export const maxDuration = 60;     // PDF generation often needs more time
+```
+
+Because Puppeteer spins up a real Chromium instance, it **cannot** run on the Edge runtime. It must run in a standard Node.js environment. We also increase the `maxDuration` to 60 seconds because booting Chromium and rendering complex documents can exceed the default 10-second serverless timeout.
+
+### 2. Passing Data to the Headless Browser
+
+To render the document, the headless browser needs the JSON schema. Instead of making a network request from the headless browser back to our database (which can cause auth issues or race conditions), we inject the JSON directly into the `window` object:
+
+```typescript
+await page.evaluateOnNewDocument((data) => {
+  (window as any).__PRINT_DATA__ = data;
+}, jsonString);
+```
+
+### 3. The Print Route (`/print`)
+
+The headless browser navigates to `${host}/print`. 
+
+The `src/app/print/page.tsx` file is optimized strictly for printing. It reads the injected `window.__PRINT_DATA__`, parses it into the `DocumentSchema`, and renders it using the `NodeRenderer`.
+
+```tsx
+const dataString = typeof window !== 'undefined' ? (window as any).__PRINT_DATA__ : null;
+```
+
+### 4. Waiting for Rendering
+
+The API route waits for a specific CSS selector to appear before taking the PDF snapshot:
+
+```typescript
+await page.waitForSelector('.print-page', { timeout: 10000 });
+```
+
+This guarantees that the React tree has finished rendering, fonts have loaded, and the Pagination Engine has successfully measured and split the document across pages.
+
+## Layout Configuration
+
+The API route reads the user's `pageSize` and `orientation` settings from the AST metadata to configure Puppeteer correctly:
+
+```typescript
+const pdf = await page.pdf({ 
+  printBackground: true, 
+  format: format ?? 'A4', 
+  landscape 
+});
+```
+
+<Callout type="warning" title="Background Colors">
+`printBackground: true` is essential! Without it, any background colors, images, or dark themes you applied to your layout elements will be completely white in the final PDF.
+</Callout>

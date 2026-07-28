@@ -1,0 +1,44 @@
+# Documentation Site Architecture
+
+The FormCast documentation is integrated directly into the Next.js application under the `(marketing)` route group. 
+
+## Structure
+
+The documentation relies on two main components:
+1. **MDX Files**: Content is written in Markdown with React components (`.mdx`). These files live in the `/content/docs` directory.
+2. **Docs App Router**: The Next.js catch-all route at `src/app/(marketing)/docs/[slug]/page.tsx` dynamically imports and renders the requested `.mdx` file.
+
+## The Sidebar and Config
+
+Navigation is driven by a central configuration file.
+
+### `src/app/(marketing)/docs/config.ts`
+
+This file exports a `DOC_CATEGORIES` array. It dictates exactly what appears in the `DocsSidebar` and in what order.
+
+```typescript
+export const DOC_CATEGORIES: DocCategory[] = [
+  {
+    title: "Getting Started",
+    pages: [
+      { id: "getting-started", title: "Getting Started", description: "Learn the basics." },
+    ]
+  },
+  // ...
+];
+```
+
+### Adding a New Documentation Page
+
+If you create a new feature and need to document it:
+
+1. Create a new file (e.g., `my-feature.mdx`) in the `content/docs` directory.
+2. Write your content using standard Markdown. You can include React components like `<Callout>`.
+3. Open `src/app/(marketing)/docs/config.ts`.
+4. Locate the appropriate category in the `DOC_CATEGORIES` array.
+5. Add an entry matching your filename (without the `.mdx` extension):
+   `{ id: "my-feature", title: "My Feature", description: "A brief summary." }`
+
+<Callout type="success" title="Auto-Navigation">
+By adding your page to `config.ts`, the Next and Previous buttons at the bottom of the documentation pages will automatically link to your new page in the correct flow!
+</Callout>

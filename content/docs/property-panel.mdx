@@ -1,0 +1,38 @@
+# Property Panel and AST Manipulation
+
+The Property Panel in FormCast allows users to edit a document's layout, styles, and data bindings visually, without touching the raw JSON. 
+
+However, because the JSON string in the editor is the single source of truth, the Property Panel does not update the `DocumentSchema` directly. Instead, it mutates the JSON string using the AST Manipulators.
+
+## `astManipulators.ts`
+
+These utilities parse the JSON structure and perform targeted injections or deletions, ensuring the document remains valid.
+
+### Structural Edits
+
+The Property Panel (and drag-and-drop system) relies on these functions for moving and deleting nodes:
+
+```typescript
+// Find a node anywhere in the document (including headers/footers)
+export function findNodeGlobal(
+  doc: DocumentSchema, 
+  targetId: string
+): { node: BaseNode; parentInfo?: ParentInfo } | null;
+
+// Delete a node
+export function deleteNodeFromAst(doc: DocumentSchema, targetId: string): DocumentSchema;
+
+// Move a node up, down, or pop it out to a grandparent
+export function moveNodeInAst(doc: DocumentSchema, targetId: string, direction: 'up' | 'down' | 'out'): DocumentSchema;
+
+// Insert a brand new node (used when dropping a widget)
+export function insertNodeIntoAst(doc: DocumentSchema, parentId: string, newNode: BaseNode, insertIndex?: number): DocumentSchema;
+```
+
+### Property Edits
+
+When a user changes a color or padding value in the Property Panel, `documentStore` calls `updateJsonNodeProperty` which does a string-based or localized AST update to modify a specific key (e.g. `node.style.color`).
+
+<Callout type="success" title="Reactive Sync">
+Because the visual property changes immediately update the `jsonString`, the Monaco Editor immediately reflects the new code. The auto-sync system then parses the new JSON, validates it, and triggers a visual re-render. 
+</Callout>

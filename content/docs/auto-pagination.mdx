@@ -1,0 +1,58 @@
+# Auto-Pagination
+
+One of the most powerful features of FormCast is its ability to take a continuous stream of content and perfectly slice it into pages, exactly as it will appear when printed or downloaded as a PDF.
+
+![Auto-pagination preview](/images/auto-pagination.png)
+
+While the engine handles most of the math for you, there are times when you want manual control over how content breaks across pages.
+
+## Pagination Controls
+
+When you select an element and open the **Layout** tab in the Property Panel, you will find three advanced pagination controls at the bottom:
+
+### 1. Page Break Before
+If you toggle `pageBreakBefore: true`, FormCast will force a page break immediately *before* this element renders.
+- **Use Case**: You have a "Chapter 2" heading and you always want it to start at the top of a fresh page, regardless of how much space is left on the previous page.
+
+### 2. Keep With Next
+If you toggle `keepWithNext: true`, FormCast will ensure that this element is never isolated at the bottom of a page without the element immediately following it.
+- **Use Case**: You have a heading (e.g., "Summary"), but there isn't enough room on the page for the paragraph below it. Instead of leaving the heading orphaned at the bottom of page 1, FormCast will push *both* the heading and the paragraph to page 2.
+
+### 3. Break Inside Avoid
+By default, FormCast will try to split large containers (like a multi-line paragraph or a table) perfectly in half when it crosses a page boundary. If you set `breakInside: avoid`, FormCast will refuse to split the element. If it doesn't fit on the current page, the *entire* element is pushed to the next page.
+- **Use Case**: You have an image or a small pricing card that looks terrible if cut in half.
+
+### Full-Scale Pagination Example
+Here is how you would configure an "Invoice Total Card" that must never be split across pages, and must always stay connected to the "Thank You" note that follows it:
+
+```json
+{
+  "type": "column",
+  "layout": {
+    "breakInside": "avoid",
+    "keepWithNext": true,
+    "paddingTop": 16,
+    "paddingBottom": 16,
+    "borderTopWidth": 2,
+    "borderTopStyle": "solid"
+  },
+  "children": [
+    {
+      "type": "row",
+      "layout": { "justifyContent": "space-between" },
+      "children": [
+        { "type": "text", "props": { "literal": "Total Due:" }, "style": { "fontWeight": "bold" } },
+        { "type": "text", "props": { "literal": "$1,250.00" }, "style": { "fontWeight": "bold" } }
+      ]
+    }
+  ]
+}
+```
+
+## Deep Dive: Text Node Splitting
+
+A really powerful feature of FormCast is that **Text nodes are not atomic**. 
+
+If you have a massive paragraph of text that reaches the end of the page, the engine's `splitTextNode` function will mathematically calculate exactly how much of that text fits in the `remainingHeight`, backtrack to the nearest space character (so words aren't cut in half), and split the string into two chunks across the pages!
+
+If you don't want this behavior, you must explicitly set `breakInside: avoid` on the Text widget or its parent container.

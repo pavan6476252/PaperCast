@@ -6,22 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier --write .",
-    "prepare": "husky install",
+    "lint": "eslint",
     "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64 libpango-1.0-0 libcairo2 libnss3 libnspr4 libx11-xcb1 libxss1 fonts-liberation libgtk-3-0t64 xdg-utils && npx puppeteer browsers install chrome"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@sparticuz/chromium": "^149.0.0",
+    "framer-motion": "^12.42.2",
     "json-source-map": "^0.6.1",
     "lucide-react": "^1.27.0",
     "next": "16.2.12",
+    "next-mdx-remote": "^6.0.0",
     "puppeteer": "25.3.0",
     "puppeteer-core": "25.3.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "shiki": "^4.3.1",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
@@ -32,11 +32,19 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
-    "husky": "^9",
-    "lint-staged": "^14",
-    "prettier": "^3",
+    "lint-staged": "^17.2.0",
+    "prettier": "^3.0.0",
     "tailwindcss": "^4",
     "ts-json-schema-generator": "^2.9.0",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md,mdx}": [
+      "prettier --write"
+    ]
   }
 }

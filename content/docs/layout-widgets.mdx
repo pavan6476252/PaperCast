@@ -1,0 +1,98 @@
+# Layout Widgets
+
+Layout widgets are the invisible backbone of any FormCast document. They do not render any text or graphics themselves, but rather act as containers that position and align the actual content widgets (like Text and Images).
+
+FormCast's layout engine is heavily inspired by CSS Flexbox.
+
+## Row Node
+
+A `Row` container forces its children to line up side-by-side horizontally.
+
+### Key Layout Properties:
+- **Direction**: `row` (Default) or `row-reverse`.
+- **Justify Content**: Controls how children are distributed horizontally. 
+  - `flex-start`: Pack elements to the left.
+  - `space-between`: Pushes the first element to the far left, and the last to the far right.
+- **Align Items**: Controls how children align vertically within the row.
+  - `center`: Vertically centers all items.
+- **Column Gap**: The pixel spacing inserted *between* each child.
+
+```json
+{
+  "type": "row",
+  "layout": {
+    "direction": "row",
+    "justifyContent": "space-between",
+    "alignItems": "center",
+    "columnGap": 16
+  },
+  "children": [
+    { "type": "text", "props": { "literal": "Left side" } },
+    { "type": "text", "props": { "literal": "Right side" } }
+  ]
+}
+```
+
+## Column Node
+
+A `Column` container forces its children to stack vertically, one on top of the other.
+
+### Key Layout Properties:
+- **Direction**: `column` (Default) or `column-reverse`.
+- **Row Gap**: The pixel spacing inserted *between* each vertically stacked child. This gap is mathematically respected by the Pagination Engine when calculating page breaks!
+
+```json
+{
+  "type": "column",
+  "layout": {
+    "direction": "column",
+    "rowGap": 8
+  },
+  "children": [
+    { "type": "text", "props": { "literal": "Header" } },
+    { "type": "text", "props": { "literal": "Sub-header" } }
+  ]
+}
+```
+
+## Spacer Node
+
+Sometimes you need to push elements apart without relying on Margins or Padding.
+
+### Usage
+- **Fixed Space**: Set the `height` or `width` of a spacer (e.g., `height: 24px`) to create an exact, unyielding gap.
+- **Flexible Space**: If you are inside a Row or Column, you can leave the height/width blank and set `flexGrow: 1` on the Spacer. This will cause the spacer to expand and consume all available empty space, pushing the other elements to the edges of the container.
+
+```json
+{
+  "type": "spacer",
+  "layout": {
+    "height": 24,
+    "flexGrow": 1
+  }
+}
+```
+
+## Divider Node
+
+A `Divider` is a simple horizontal line used to visually separate sections of a document.
+
+### Customization
+By default, a Divider is a 1px solid black line with some vertical margin. You can customize this by wrapping it in a container or overriding its inline styles:
+- **Color**: Change the line color (e.g., `#E5E7EB`).
+- **Thickness**: Change the height of the divider (e.g., `2px`).
+- **Style**: Change it to `dashed` or `dotted` via border properties.
+
+```json
+{
+  "type": "divider",
+  "layout": {
+    "height": 2,
+    "marginTop": 16,
+    "marginBottom": 16,
+    "borderTopWidth": 2,
+    "borderTopStyle": "dashed",
+    "borderTopColor": "#E5E7EB"
+  }
+}
+```

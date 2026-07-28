@@ -1,0 +1,44 @@
+# Templates & Test Data
+
+To facilitate development, testing, and the showcase gallery, FormCast includes a robust set of predefined JSON document templates.
+
+## `src/store/test.data.ts`
+
+This file contains large, complex `DocumentSchema` objects that demonstrate the capabilities of the engine.
+
+### Included Templates:
+
+1. **Invoice Template**: Demonstrates tables, calculations, auto-pagination for long item lists, and data-binding for customer information.
+2. **Report Template**: Highlights rich text, images, complex multi-column layouts, and styled headers.
+3. **Blank Canvas**: A minimal starter schema.
+
+## Adding a New Template
+
+To add a new template for the showcase or for testing a specific bug:
+
+1. Open `src/store/test.data.ts`.
+2. Export a new constant typed as `DocumentSchema`.
+3. (Optional) Add your template to a central array if the UI needs to map over available templates.
+
+```typescript
+export const MY_NEW_TEMPLATE: DocumentSchema = {
+  version: 1,
+  meta: { pageSize: 'A4', orientation: 'portrait' },
+  theme: { defaults: { base: { fontFamily: 'Inter' } } },
+  document: {
+    headers: {},
+    footers: {},
+    body: {
+      id: 'root-column',
+      type: 'column',
+      children: [
+        { id: 'text-1', type: 'text', props: { literal: 'Hello World' } }
+      ]
+    }
+  }
+};
+```
+
+<Callout type="tip" title="Data Injection">
+When designing a template, make sure to utilize the `data` block. This allows you to showcase how `{{ variable }}` interpolation works beautifully for dynamic document generation!
+</Callout>

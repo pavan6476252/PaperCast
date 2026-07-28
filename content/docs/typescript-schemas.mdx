@@ -1,0 +1,69 @@
+# TypeScript Schemas
+
+Because FormCast relies heavily on JSON for its document definition, maintaining strict TypeScript types is critical for ensuring the builder, engine, and JSON editor stay in sync.
+
+The core type definitions live in `src/types/schema.ts`.
+
+## BoxModel and Styling
+
+Every node in the document AST supports a standard Box Model and styling configuration.
+
+```typescript
+export interface BoxModel {
+  width?: number | string;
+  height?: number | string;
+  minHeight?: number;
+
+  marginTop?: number;
+  marginRight?: number;
+  marginBottom?: number;
+  marginLeft?: number;
+
+  paddingTop?: number;
+  // ... right, bottom, left
+
+  // flex/flow controls
+  direction?: "row" | "column";
+  wrap?: boolean;
+  justifyContent?: "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
+  alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
+  rowGap?: number;
+  columnGap?: number;
+
+  // pagination hints
+  breakInside?: "auto" | "avoid";
+  keepWithNext?: boolean;
+  pageBreakBefore?: boolean;
+}
+
+export interface TypographyAndColor {
+  fontFamily?: string;
+  fontSizePx?: number;
+  fontWeight?: "normal" | "bold" | number;
+  fontStyle?: "normal" | "italic";
+  textDecoration?: "none" | "underline";
+  textAlign?: "left" | "center" | "right" | "justify";
+  color?: string;
+  backgroundColor?: string;
+  lineHeight?: number;
+}
+```
+
+<Callout type="warning" title="Validation">
+While TypeScript enforces types at compile time, the visual builder uses a Monaco Editor that enforces the JSON Schema (`docframe.schema.json`) at runtime. It is critical that any changes to `schema.ts` are reflected in the JSON schema file.
+</Callout>
+
+## The BaseNode
+
+Every widget dropped into the canvas extends the `BaseNodeCommon` interface:
+
+```typescript
+export interface BaseNodeCommon {
+  id: string; // Must be uniquely generated when added to AST
+  layout: BoxModel;
+  style?: TypographyAndColor;
+  bind?: DataBinding; // For variable injection
+  children?: BaseNode[];
+  overrides?: Record<string, Partial<BaseNode>>;
+}
+```

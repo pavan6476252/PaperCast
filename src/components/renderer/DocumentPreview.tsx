@@ -9,23 +9,31 @@ import { RendererProvider } from "./RendererContext";
 import "./nodes/basicNodes"; // Register basic nodes
 import "./nodes/TableNode";  // Register table node
 import "./nodes/formNodes";  // Register form nodes
-import { Measurements } from "@/types/schema";
+import { Measurements, DocumentSchema } from "@/types/schema";
 
 type PreviewTab = "content" | "headers" | "footers";
 
 interface DocumentPreviewProps {
   isEditorVisible?: boolean;
   onToggleEditor?: () => void;
+  schemaData?: DocumentSchema | null;
+  hideToolbar?: boolean;
 }
 
 export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   isEditorVisible = true,
   onToggleEditor,
+  schemaData,
+  hideToolbar = false,
 }) => {
-  const parsedDocument = useDocumentStore((state) => state.parsedDocument);
-  const isValid = useDocumentStore((state) => state.isValid);
+  const storeParsedDocument = useDocumentStore((state) => state.parsedDocument);
+  const storeIsValid = useDocumentStore((state) => state.isValid);
   const setJsonString = useDocumentStore((state) => state.setJsonString);
-  const jsonString = useDocumentStore((state) => state.jsonString);
+  const storeJsonString = useDocumentStore((state) => state.jsonString);
+
+  const parsedDocument = schemaData || storeParsedDocument;
+  const isValid = schemaData ? true : storeIsValid;
+  const jsonString = schemaData ? JSON.stringify(schemaData, null, 2) : storeJsonString;
 
   const zoom = useDocumentStore((state) => state.zoom);
   const setZoom = useDocumentStore((state) => state.setZoom);
@@ -54,7 +62,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       if (!parsed.meta) parsed.meta = {};
       parsed.meta = { ...parsed.meta, ...updates };
       setJsonString(JSON.stringify(parsed, null, 2));
-    } catch (e) {
+    } catch  {
       // ignore JSON parse error while typing
     }
   };
@@ -156,6 +164,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       <OffscreenMeasurer document={parsedDocument} pageWidth={width} onMeasure={handleMeasure} />
 
       {/* Top Toolbar */}
+      {!hideToolbar && (
       <div className="h-14 border-b bg-white flex items-center px-4 justify-between shrink-0 print-hidden shadow-sm z-10 relative">
         {/* Left: View Modes */}
         <div className="flex items-center space-x-2 shrink-0">
@@ -310,6 +319,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           </div>
         </div>
       </div>
+      )}
 
       {/* Canvas Area */}
       <div id="preview-scroll-container" className="flex-1 overflow-auto p-8 relative flex flex-col items-center print:p-0 print:bg-white print:block">

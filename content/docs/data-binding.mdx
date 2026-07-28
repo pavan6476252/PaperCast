@@ -1,0 +1,101 @@
+# Data Binding
+
+Templates are only useful if you can fill them with dynamic data. FormCast allows you to bind elements in your document to a JSON data payload.
+
+![Data Binding interface](/images/data-binding.gif)
+
+## How to Bind a Text Node
+
+1. Select a `Text` widget on the canvas.
+2. Open the **Bind** tab in the right Property Panel.
+3. In the `Path` input, type the JSON path to your data variable.
+
+For example, if your root data looks like this:
+```json
+{
+  "customer": {
+    "firstName": "John",
+    "lastName": "Doe"
+  }
+}
+```
+You would type `customer.firstName` into the Path field. The text node will instantly update to say "John".
+
+### Dynamic Hyperlinks (Anchors)
+
+Did you know Text widgets can act as clickable links? 
+If you toggle a Text node to be an **Anchor**, you can bind its destination URL dynamically!
+
+1. Select a Text widget and enable `isAnchor` in its Props.
+2. You can either hardcode a URL in `hrefLiteral` (e.g. `https://google.com`), OR you can bind it to a variable using `hrefBind`.
+3. If your JSON data has `{"company": {"website": "https://acme.com"}}`, you can set `hrefBind` to `company.website`.
+
+## String Interpolation (Literal Templates)
+
+Sometimes you want to mix static text with dynamic data. Instead of using the `bind` tab, you can use string interpolation inside a Text node's **Literal** property (found in the Props tab).
+
+Using the same `customer` data above, you can write:
+`Hello {{customer.firstName}} {{customer.lastName}}, welcome back!`
+
+The `TextNode` renderer uses a regex (`/\{\{\s*([^}]+)\s*\}\}/g`) to find these tags and resolve them against your data payload dynamically.
+
+## Repeating Elements (Iterating over Arrays)
+
+If you have a list of items (like products in an invoice), you can use the **Repeat** mode.
+
+1. Select a container (like a `Column` or `Stack`).
+2. Go to the **Bind** tab.
+3. Change the mode to **Repeat**.
+4. Set the `Path` to your array (e.g., `invoice.items`).
+5. Set an `Item Alias` (e.g., `item`).
+
+Now, whatever you place inside this container will be duplicated for every item in the array! 
+
+Inside the repeating container, you can add a Text node and set its bind path to `item.name` or `item.price`. FormCast will dynamically render a list.
+
+### Full-Scale Data Binding Example
+Imagine you are passing the following eCommerce data payload to FormCast:
+
+```json
+{
+  "invoice": {
+    "id": "INV-001",
+    "customer": { "name": "Jane Doe", "email": "jane@example.com" },
+    "items": [
+      { "desc": "Web Hosting (1yr)", "price": "$120.00" },
+      { "desc": "Domain Registration", "price": "$15.00" }
+    ],
+    "total": "$135.00"
+  }
+}
+```
+
+Here is the AST required to render the repeating items array using string interpolation and data binding:
+
+```json
+{
+  "type": "column",
+  "bind": {
+    "path": "invoice.items",
+    "mode": "repeat",
+    "itemAlias": "item"
+  },
+  "children": [
+    {
+      "type": "row",
+      "layout": { "justifyContent": "space-between", "paddingBottom": 8 },
+      "children": [
+        {
+          "type": "text",
+          "props": { "literal": "Product: {{item.desc}}" }
+        },
+        {
+          "type": "text",
+          "bind": { "path": "item.price" },
+          "style": { "fontWeight": "bold" }
+        }
+      ]
+    }
+  ]
+}
+```

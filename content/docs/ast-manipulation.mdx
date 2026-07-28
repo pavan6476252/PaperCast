@@ -1,0 +1,48 @@
+# Advanced AST Manipulation
+
+FormCast stores the entire document state as a JSON string. While the Monaco editor allows direct manipulation of this string, the visual builder (Property Panel, Drag-and-Drop) requires a way to safely edit the AST without breaking the JSON validity or dropping user content.
+
+This is handled by the **AST Manipulators** (`src/store/astManipulators.ts`).
+
+## Structural Operations
+
+When interacting with the canvas visually, elements can be added, moved, or deleted. 
+
+### 1. `findNodeGlobal`
+Locating a node in a deeply nested JSON tree (where headers and footers are stored in separate branches from the body) requires a global traversal mechanism.
+
+```typescript
+export function findNodeGlobal(
+  doc: DocumentSchema, 
+  targetId: string
+): { node: BaseNode; parentInfo?: ParentInfo } | null;
+```
+This returns not just the target node, but a `parentInfo` object containing a reference to the parent array, making it easy to splice arrays during deletion or movement.
+
+### 2. `insertNodeIntoAst`
+Used by the Drag-and-Drop system when dropping a new widget onto the canvas. It locates the `parentId`, accesses its `children` array, and splices the `newNode` at the requested `insertIndex`.
+
+### 3. `moveNodeInAst`
+Used to move nodes up, down, or pop them out to their grandparent. This handles edge cases like preventing a node from moving out of the `document.body` root.
+
+### 4. `deleteNodeFromAst`
+Removes a node and cleans up any dangling references.
+
+## Property Edits
+
+When a user tweaks a color, font size, or alignment in the Property Panel, we need to update the JSON string without losing the user's cursor position or formatting in the Monaco editor (if possible).
+
+```typescript
+export function updateJsonNodeProperty(
+  jsonString: string, 
+  nodeId: string, 
+  path: string[], 
+  value: any
+): string;
+```
+
+If the JSON is beautifully formatted, doing a simple `JSON.parse` and `JSON.stringify` would destroy the user's custom formatting, comments (if any were allowed), and collapse empty lines. While FormCast generally overwrites the string, these manipulators aim to keep updates localized and reactive.
+
+<Callout type="info" title="Why not just modify the object?">
+In React/Zustand, state is immutable. To trigger a re-render in the preview, we must produce a new `DocumentSchema` object. By serializing the changes back to a JSON string and piping it through our standard parser, we guarantee that the visual UI and the Monaco Editor stay in perfect 1:1 synchronization.
+</Callout>

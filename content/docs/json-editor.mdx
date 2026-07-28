@@ -1,0 +1,48 @@
+# Monaco JSON Editor
+
+FormCast features an embedded Monaco Editor for users who prefer to write code or need pixel-perfect control over their schemas. 
+
+## JSON Schema Integration
+
+The true power of the editor comes from its native integration with the JSON Schema standard. When the editor initializes, we bind `docframe.schema.json` to the Monaco instance:
+
+```typescript
+// from src/components/editor/JsonEditor.tsx
+monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+  validate: true,
+  schemas: [
+    {
+      uri: "http://internal/docframe-schema.json",
+      fileMatch: ["*"],
+      schema: docframeSchema,
+    },
+  ],
+});
+```
+
+Because of this, the editor provides:
+1. **Real-time squiggly lines** if you use an invalid property (like spelling `font-size` instead of `fontSizePx`).
+2. **Autocomplete (Ctrl+Space)** for all valid widget types, style properties, and box model constraints.
+3. **Hover documentation** (if `description` fields are defined in the schema).
+
+## Bidirectional Selection Sync
+
+When a user clicks a node in the visual preview on the right, the editor automatically finds that node's `id` in the JSON string and scrolls to it:
+
+```typescript
+const matches = model.findMatches(
+  `"id"\\s*:\\s*"${selectedNodeId}"`,
+  false, // searchString
+  true,  // isRegex
+  false, // matchCase
+  null,  // wordSeparators
+  true   // captureMatches
+);
+
+if (matches && matches.length > 0) {
+  editor.revealLineInCenter(matches[0].range.startLineNumber);
+  // A yellow background flash is applied to the line
+}
+```
+
+Conversely, if a user clicks inside the JSON editor, `JsonEditor.tsx` parses the line they clicked on, walks up the AST to find the closest `id`, and updates the global `selectedNodeId`, causing the preview to highlight the corresponding visual element.

@@ -1,0 +1,63 @@
+# State Management
+
+The core state of the FormCast application is managed by Zustand in `src/store/documentStore.ts`. 
+
+## The Dual State System
+
+FormCast operates on two representations of the document simultaneously:
+
+1. `jsonString`: The raw, stringified JSON representing what the user sees in the Monaco code editor.
+2. `parsedDocument`: The validated, parsed JavaScript object (`DocumentSchema`) that the engines and React components actually render.
+
+### The Store Interface
+
+```typescript
+interface DocumentStore {
+  // State
+  jsonString: string;
+  parsedDocument: DocumentSchema | null;
+  isValid: boolean;
+  parseError: string | null;
+  
+  // Editor State
+  isAutoSync: boolean;
+  selectedNodeId: string | null;
+  rightPanelMode: 'widgets' | 'properties';
+  zoom: number;
+
+  // Actions
+  setJsonString: (value: string) => void;
+  updateNodeProperty: (nodeId: string, propertyGroup: 'layout' | 'style' | 'props' | 'bind', propertyKey: string, newValue: any) => void;
+  
+  // Structural Edits (Drag and Drop)
+  deleteNode: (id: string) => void;
+  moveNode: (id: string, direction: 'up' | 'down' | 'out') => void;
+  insertNode: (parentId: string, index: number | undefined, node: BaseNode) => void;
+  moveNodeToParent: (id: string, newParentId: string, index?: number) => void;
+}
+```
+
+## Syncing Strategy
+
+When `isAutoSync` is true, every keystroke in the Monaco editor attempts to parse the `jsonString`. If it passes validation against the JSON Schema, the `parsedDocument` is updated, which triggers the React rendering tree.
+
+If validation fails, `isValid` becomes false, `parseError` is set, and the `parsedDocument` remains at its last known good state to prevent the preview from crashing.
+
+<Callout type="info" title="Visual Edits">
+When a user uses the Property Panel or Drag-and-Drop, the action first updates the JSON *string* under the hood using an AST Manipulator, which then triggers the standard sync flow. This ensures the Monaco editor always reflects visual changes instantly.
+</Callout>
+
+## HTML to AST Conversion
+
+One of the most complex state management tasks is handling Rich Text input from the user (e.g., when they paste formatted text from Word or Google Docs). 
+
+FormCast cannot simply store raw HTML strings because the Pagination Engine would not be able to split them across pages.
+
+Instead, we use a utility `autoDeconstructRichTextAst` (located in `src/utils/htmlParser.ts`). 
+
+1. **Interception**: When a user pastes rich text into a `RichTextNode`, the editor captures the raw HTML.
+2. **Parsing**: The utility traverses the DOM of the pasted HTML.
+3. **Deconstruction**: It converts `<p>`, `<strong>`, `<em>`, and `<a>` tags into discrete FormCast AST nodes (`text`, `row`, `column`).
+4. **Injection**: These new nodes replace the original single text node in the `parsedDocument`.
+
+Because the rich text is now represented as individual standard AST nodes, the `PaginationEngine` can seamlessly split paragraphs or wrap lines across multiple PDF pages!

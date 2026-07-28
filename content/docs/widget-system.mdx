@@ -1,0 +1,24 @@
+# Widget System
+
+FormCast features a modular widget system. Widgets are predefined `Node` structures that users can drag and drop into the visual builder.
+
+## Basic vs Advanced Nodes
+
+In `src/registry/categories/`, widgets are grouped into categories:
+
+1. **Basic Nodes**: Core primitives like `text`, `image`, and `divider`. These are usually atomic (they do not split across pages).
+2. **Layout Nodes**: Containers like `row`, `column`, and `stack`. These nodes often implement custom `split` functions to allow their children to paginate seamlessly.
+3. **Advanced Nodes**: Complex components like `table` or rich text components.
+
+## Drag and Drop
+
+The visual builder uses a DnD system to allow users to pull from the widget registry and drop them into the document. 
+
+When a widget is dropped:
+1. The builder reads the default JSON schema defined for that widget (e.g., a basic Text widget drops with `{ type: "text", content: "New Text" }`).
+2. The `astManipulators` inject this new node into the active AST.
+3. The store updates, triggering a re-render and re-pagination.
+
+<Callout type="warning" title="Widget IDs">
+Every node requires a universally unique `id`. When a widget is dropped from the registry, FormCast automatically generates a new UUID for that node to ensure the AST remains strictly valid.
+</Callout>
