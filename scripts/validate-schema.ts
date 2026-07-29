@@ -2,9 +2,12 @@ import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import * as fs from "fs";
 import * as path from "path";
-import { TEST_DOCUMENT } from "../src/store/test.data";
+import { TEST_DOCUMENT } from "../apps/web/src/store/test.data";
 
-const schemaPath = path.join(__dirname, "../src/schema/docframe.schema.json");
+const schemaPath = path.join(
+  __dirname,
+  "../apps/web/src/schema/docframe.schema.json"
+);
 
 if (!fs.existsSync(schemaPath)) {
   console.error(

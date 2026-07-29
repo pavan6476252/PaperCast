@@ -15,10 +15,13 @@ import {
   insertNodeIntoAst,
   deleteNodeFromAst,
   findNodeGlobal,
-} from "../src/store/astManipulators";
+} from "../apps/web/src/store/astManipulators";
 
 // -- Validation Setup --
-const schemaPath = path.join(process.cwd(), "src/schema/docframe.schema.json");
+const schemaPath = path.join(
+  process.cwd(),
+  "apps/web/src/schema/docframe.schema.json"
+);
 const docframeSchema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -372,9 +375,10 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   }
 
   const fileMap: Record<string, string> = {
-    "formcast://schema/specification": "src/schema/docframe.schema.json",
-    "formcast://template/invoice": "src/schema/invoice.template.json",
-    "formcast://template/report": "src/schema/report.template.json",
+    "formcast://schema/specification":
+      "apps/web/src/schema/docframe.schema.json",
+    "formcast://template/invoice": "apps/web/src/schema/invoice.template.json",
+    "formcast://template/report": "apps/web/src/schema/report.template.json",
   };
 
   if (fileMap[uri]) {

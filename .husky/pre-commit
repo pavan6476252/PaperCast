@@ -1,3 +1,3 @@
 export PATH="$(pwd)/node_modules/.bin:$PATH"
-pnpm run schema:validate && git add src/schema/docframe.schema.json
+pnpm run schema:validate && git add apps/web/src/schema/docframe.schema.json
 pnpm exec lint-staged
