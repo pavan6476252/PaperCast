@@ -23,7 +23,7 @@ Run the development server:
 pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application in action.
+Open [http://localhost:8000](http://localhost:8000) with your browser to see the application in action.
 
 ## How to Use
 

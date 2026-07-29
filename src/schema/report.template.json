@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "meta": {
+    "pageSize": "A4",
+    "orientation": "portrait",
+    "baseUnit": "px",
+    "dpi": 96
+  },
+  "theme": {
+    "defaults": {
+      "base": {
+        "fontFamily": "Inter",
+        "fontSizePx": 14,
+        "lineHeight": 1.5,
+        "color": "#333333"
+      }
+    }
+  },
+  "data": { "title": "Monthly Performance Report", "date": "2026-08-01" },
+  "definitions": { "widgets": {} },
+  "document": {
+    "body": {
+      "id": "body",
+      "type": "root",
+      "layout": {
+        "direction": "column",
+        "paddingLeft": 40,
+        "paddingRight": 40,
+        "paddingTop": 40,
+        "paddingBottom": 40,
+        "rowGap": 20
+      },
+      "children": [
+        {
+          "id": "report-title",
+          "type": "text",
+          "bind": { "path": "title" },
+          "style": { "fontSizePx": 32, "fontWeight": "bold", "color": "#111" }
+        },
+        {
+          "id": "report-date",
+          "type": "text",
+          "bind": { "path": "date" },
+          "style": { "fontSizePx": 14, "color": "#666" }
+        },
+        {
+          "id": "summary-box",
+          "type": "column",
+          "layout": {
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 20,
+            "paddingRight": 20,
+            "borderTopWidth": 1,
+            "borderBottomWidth": 1,
+            "borderLeftWidth": 1,
+            "borderRightWidth": 1,
+            "borderTopColor": "#ccc",
+            "borderBottomColor": "#ccc",
+            "borderLeftColor": "#ccc",
+            "borderRightColor": "#ccc"
+          },
+          "children": [
+            {
+              "id": "summary-text",
+              "type": "text",
+              "props": {
+                "content": "This is a summary of the monthly performance."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

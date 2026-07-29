@@ -27,7 +27,10 @@ FormCast is a Schema-First Document Builder and Renderer built with React, Next.
 ## Core Directories & File Structure
 
 - [src/app](file:///Users/pavankumar/Documents/formcast/src/app): Next.js Pages and API routes.
-  - [page.tsx](file:///Users/pavankumar/Documents/formcast/src/app/page.tsx): Main visual editor interface, split between the JSON Editor (left) and Document Preview (right).
+  - [(app)/playground/page.tsx](<file:///Users/pavankumar/Documents/formcast/src/app/(app)/playground/page.tsx>): Main visual editor playground interface, split between the JSON Editor (left) and Document Preview (right).
+  - [(marketing)/page.tsx](<file:///Users/pavankumar/Documents/formcast/src/app/(marketing)/page.tsx>): Landing/marketing page.
+  - [(marketing)/docs/[slug]/page.tsx](<file:///Users/pavankumar/Documents/formcast/src/app/(marketing)/docs/[slug]/page.tsx>): Documentation pages.
+  - [print/page.tsx](file:///Users/pavankumar/Documents/formcast/src/app/print/page.tsx): Dedicated page layout optimized for printing/PDF generation.
   - [api/pdf/route.ts](file:///Users/pavankumar/Documents/formcast/src/app/api/pdf/route.ts): API endpoint for exporting/rendering PDFs using Puppeteer.
 - [src/components](file:///Users/pavankumar/Documents/formcast/src/components): React components.
   - [editor/JsonEditor.tsx](file:///Users/pavankumar/Documents/formcast/src/components/editor/JsonEditor.tsx): Monaco editor integration configured with JSON Schema autocomplete/validation.
@@ -61,3 +64,11 @@ FormCast is a Schema-First Document Builder and Renderer built with React, Next.
 
 - Run `pnpm run dev` to start the development server.
 - Run `pnpm run build` to verify the Next.js production build and TypeScript compilation.
+
+## Pre-Commit Hooks & Validation
+
+To ensure code quality and schema validity:
+
+- A Git pre-commit hook (configured via Husky in [.husky/pre-commit](file:///Users/pavankumar/Documents/formcast/.husky/pre-commit)) runs:
+  1. `pnpm run schema:validate` to regenerate the JSON schema from types (`src/types/schema.ts`) and validate the test document (`src/store/test.data.ts`) using the script `scripts/validate-schema.ts`.
+  2. `pnpm exec lint-staged` to run ESLint autofixes and Prettier formatting on staged files.

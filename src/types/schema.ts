@@ -237,7 +237,7 @@ export interface WidgetDefinition {
 export interface DocumentSection {
   id?: string;
   name?: string;
-  condition?: "all" | "first" | "last" | "even" | "odd";
+  condition?: "all" | "first" | "last" | "even" | "odd" | "other";
   heightPx?: number;
   root: BaseNode;
 }

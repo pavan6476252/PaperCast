@@ -1,0 +1,65 @@
+# Examples & Workflows
+
+Using an AI agent connected to FormCast via MCP opens up an entirely new, conversational way to design document layouts. Instead of manually dragging widgets and configuring JSON properties, you can simply ask your AI assistant to perform complex tasks.
+
+Below are several examples and common workflows demonstrating how to interact with an agentic assistant (like Claude or Gemini) equipped with FormCast's MCP tools.
+
+## Example 1: Building a Complex Layout from Scratch
+
+**Your Prompt:**
+
+> _"I need to build an invoice. Start by clearing the current document. Then, create a two-column header layout. The left column should contain the company logo (use a placeholder image) and company address. The right column should have the Invoice number, Date, and Due Date right-aligned."_
+
+**What the Agent Does:**
+
+1. Calls `set_document_state` to clear the existing canvas.
+2. Reads `widget-Layouts.md` and `widget-TextNode.md` skills to understand column structures and typography.
+3. Constructs a JSON tree with a `row` containing two `column` nodes.
+4. Adds the image and text nodes, applying `textAlign: "right"` to the second column's text nodes.
+5. Calls `insert_layout_element` to place the constructed tree into the body.
+6. The FormCast playground updates instantly to show your new invoice header.
+
+## Example 2: Styling and Theming
+
+**Your Prompt:**
+
+> _"The text in the main body looks a bit plain. Can you change the global theme so the primary color is a deep indigo, and update the main heading to use 'Inter' font, size 24, bold, and colored with the new primary color?"_
+
+**What the Agent Does:**
+
+1. Calls `update_document_theme` to set `primaryColor: "#4F46E5"`.
+2. Locates the main heading node in the AST using `get_document_state`.
+3. Calls `patch_element_properties` on the heading node to update its `style.typography` to `{ fontFamily: "Inter", fontSize: 24, fontWeight: "bold", color: "primary" }`.
+
+## Example 3: Adding Headers and Footers
+
+**Your Prompt:**
+
+> _"Add a footer to my document. It should only appear on the last page. Inside it, put a centered text that says 'Thank you for your business!'."_
+
+**What the Agent Does:**
+
+1. Reads `engine-HeadersAndFooters.md` to understand the condition rules.
+2. Calls `set_document_section` to create a footer named "Footer 1", setting `condition: "last"`.
+3. Constructs a centered text node.
+4. Uses `insert_layout_element` targeting the footer's root ID to insert the text node.
+
+## Example 4: Data Binding and Tables
+
+**Your Prompt:**
+
+> _"I have a list of products. Create a data-bound table that shows 'Item Name', 'Quantity', and 'Price'. Bind this to a variable called `items`. Then, inject some test data into the document so I can see what it looks like."_
+
+**What the Agent Does:**
+
+1. Reads `schema-DataBinding.md` and `widget-TableNode.md`.
+2. Uses `add_table_widget` or constructs a table node configured to iterate over `items`, defining the columns.
+3. Calls `insert_layout_element` to add the table.
+4. Calls `update_document_data` passing JSON like `{ "items": [{ "Item Name": "Widget", "Quantity": 2, "Price": "$10.00" }] }`.
+5. The preview engine immediately re-renders the document, populating the table with the test data.
+
+## Tips for Best Results
+
+- **Be Specific:** Tell the agent exactly what you want (e.g., "Make the background gray-100 and add 16px of padding" rather than "make it look nice").
+- **Ask for Suggestions:** You can ask the agent, _"Can you review my current layout and suggest a better way to align the footer text?"_ It will use `get_document_state` to analyze your AST and propose improvements.
+- **Iterative Refinement:** If the agent builds a layout that is slightly off, simply follow up: _"Make the left column wider and the text slightly smaller."_ The agent will patch the specific properties.

@@ -481,7 +481,7 @@
       "additionalProperties": false,
       "properties": {
         "condition": {
-          "enum": ["all", "first", "last", "even", "odd"],
+          "enum": ["all", "first", "last", "even", "odd", "other"],
           "type": "string"
         },
         "heightPx": {

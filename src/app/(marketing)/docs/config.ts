@@ -174,6 +174,27 @@ export const DOC_CATEGORIES: DocCategory[] = [
       },
     ],
   },
+  {
+    title: "Model Context Protocol (MCP)",
+    pages: [
+      {
+        id: "mcp-introduction",
+        title: "Introduction to MCP",
+        description: "Understanding FormCast's integration with AI agents.",
+      },
+      {
+        id: "mcp-capabilities",
+        title: "Agent Capabilities",
+        description:
+          "Available tools and skills for interacting with FormCast.",
+      },
+      {
+        id: "mcp-examples",
+        title: "Examples & Workflows",
+        description: "Examples of how to use an AI agent with FormCast.",
+      },
+    ],
+  },
 ];
 
 export const DOC_PAGES = DOC_CATEGORIES.flatMap((cat) => cat.pages);

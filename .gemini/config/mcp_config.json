@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "formcast": {
+      "command": "npx",
+      "args": ["-y", "tsx", "./scripts/mcp-server.ts"],
+      "cwd": "/Users/pavankumar/Documents/formcast"
+    }
+  }
+}

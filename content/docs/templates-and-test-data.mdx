@@ -4,13 +4,16 @@ To facilitate development, testing, and the showcase gallery, FormCast includes 
 
 ## `src/store/test.data.ts`
 
-This file contains large, complex `DocumentSchema` objects that demonstrate the capabilities of the engine.
+This file contains large, complex `DocumentSchema` objects that demonstrate the capabilities of the engine, mostly used for fallback testing.
 
-### Included Templates:
+## `src/schema/*.template.json`
 
-1. **Invoice Template**: Demonstrates tables, calculations, auto-pagination for long item lists, and data-binding for customer information.
-2. **Report Template**: Highlights rich text, images, complex multi-column layouts, and styled headers.
-3. **Blank Canvas**: A minimal starter schema.
+Recently, we have transitioned to storing templates as raw JSON files in the `src/schema/` directory. This makes them easily readable by both human developers and AI agents over MCP.
+
+### Included JSON Templates:
+
+1. **`src/schema/invoice.template.json`**: Demonstrates tables, auto-pagination for long item lists, and data-binding for customer information.
+2. **`src/schema/report.template.json`**: Highlights complex multi-column layouts and styled headers.
 
 ## Adding a New Template
 

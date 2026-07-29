@@ -1,0 +1,57 @@
+# Introduction to Model Context Protocol (MCP)
+
+FormCast integrates deeply with the **Model Context Protocol (MCP)**, an open standard that allows AI assistants and local agentic models to interact directly with the application state. By exposing FormCast's powerful JSON-based schema engine through an MCP server, you can pair-program with AI agents to build, style, and structure complex PDF documents instantly.
+
+## What is MCP?
+
+The Model Context Protocol acts as a bridge between an AI assistant and your local tools, data, and applications. In the context of FormCast, it allows agents (like Anthropic's Claude, Gemini, or any local agent) to:
+
+- Read the current state of your FormCast document (the JSON AST).
+- Understand the schema (the properties and allowed configurations for any widget).
+- Automatically generate or modify widgets based on plain English instructions.
+- Ensure all updates are instantly synced to your visual builder interface.
+
+## FormCast's MCP Architecture
+
+The MCP integration in FormCast is built on two primary components:
+
+### 1. The MCP Server (`scripts/mcp-server.ts`)
+
+This is the backend NodeJS service that hosts the Model Context Protocol. It handles requests from external agents, providing them with:
+
+- **Tools**: Executable functions (e.g., `patch_element_properties`, `insert_layout_element`, `add_table_widget`) that modify the document's structure safely.
+- **Resources**: Read-only views into the document state, schema rules, or the available widgets.
+- **Skills**: Detailed markdown guides (`mcp-skills/*.md`) that instruct the AI on the specific rules of the FormCast schema, making the AI highly reliable and context-aware.
+
+### 2. The Client Sync Hook (`src/hooks/useMcpSync.ts`)
+
+To make changes visible in real-time, the FormCast Playground uses a specialized React Hook: `useMcpSync`.
+
+- **WebSocket Connection**: It connects to a WebSocket port (default `9000`) provided by the MCP server.
+- **Session Registration**: When you open the playground, the tab registers a unique `sessionId`.
+- **Bi-Directional Sync**:
+  - _Client to Server_: When you manually drag a widget or change a property, the client broadcasts the updated `schema` and `selectedNodeId` to the MCP Server.
+  - _Server to Client_: When the AI agent executes a tool (e.g., calling an `AST_ACTION` like `insertNode`), the server emits an event. The hook receives this event and applies the change directly to the local Zustand store.
+
+## The MCP Connection Status Badge
+
+When you open the FormCast Playground, you will notice a connection status badge in the bottom-left corner of the screen.
+
+- **Green / "MCP Connected: session-xxx"**: The WebSockets connection is established. Agents can successfully read and manipulate your active document.
+- **Gray / "MCP Disconnected"**: The MCP server is not currently running. The playground functions normally as a visual builder, but external AI control is offline.
+
+## Why use MCP with FormCast?
+
+FormCast's schema is incredibly flexible but can be tedious to hand-write for complex tables or deeply nested columns.
+With MCP, you can simply tell your AI assistant:
+
+> _"Create a 3-column pricing layout with a recommended tier highlighted in blue."_
+
+The AI will:
+
+1. Retrieve the `schema-BoxModel.md` and `widget-Layouts.md` skills to understand column structures.
+2. Formulate the valid JSON nodes.
+3. Call the `insert_layout_element` tool to inject it into your active document.
+4. You instantly see the pricing layout appear in your browser.
+
+Ready to see what the agent can do? Check out the [Agent Capabilities](/docs/mcp-capabilities) page.

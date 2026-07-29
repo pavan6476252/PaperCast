@@ -13,7 +13,9 @@ import {
   PanelLeftOpen,
   Settings,
   ChevronDown,
+  Plus,
 } from "lucide-react";
+import { SectionToolbar } from "../editor/SectionToolbar";
 import { RendererProvider } from "./RendererContext";
 import "./nodes/basicNodes"; // Register basic nodes
 import "./nodes/TableNode"; // Register table node
@@ -54,6 +56,8 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const setAllowHeaderFooterEditing = useDocumentStore(
     (state) => state.setAllowHeaderFooterEditing
   );
+  const addHeader = useDocumentStore((state) => state.addHeader);
+  const addFooter = useDocumentStore((state) => state.addFooter);
   const [activeTab, setActiveTab] = useState<PreviewTab>("content");
   const [pages, setPages] = useState<PageData[] | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -536,15 +540,47 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             className="flex flex-col gap-8 transition-transform origin-top"
             style={{ transform: `scale(${zoom})` }}
           >
+            <div
+              className="flex justify-between items-center w-full max-w-[100%] print-hidden"
+              style={{ width }}
+            >
+              <h2 className="text-lg font-bold text-gray-800">Headers</h2>
+              <button
+                onClick={() => {
+                  const id = `header-${Date.now()}`;
+                  addHeader(id, {
+                    id,
+                    name: `Header ${Object.keys(parsedDocument.document?.headers || {}).length + 1}`,
+                    condition: "all",
+                    root: {
+                      id: `${id}-root`,
+                      type: "row",
+                      layout: {
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                      },
+                      children: [],
+                    },
+                  });
+                }}
+                className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={14} />
+                <span>Create Header</span>
+              </button>
+            </div>
             {Object.entries(parsedDocument.document?.headers || {}).map(
               ([id, header]) => (
-                <div key={id} className="flex flex-col">
-                  <span className="text-xs text-gray-500 mb-2 font-mono">
-                    {id} {header.name ? `(${header.name})` : ""} -{" "}
-                    {header.condition || "all"}
-                  </span>
+                <div
+                  key={id}
+                  className="flex flex-col shadow-xl rounded-md bg-white border border-gray-200"
+                  style={{ width }}
+                >
+                  <SectionToolbar type="header" id={id} section={header} />
                   <div
-                    className="bg-white shadow-xl flex flex-col relative overflow-hidden"
+                    className="flex flex-col relative overflow-hidden"
                     style={{
                       width,
                       height:
@@ -579,15 +615,47 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             className="flex flex-col gap-8 transition-transform origin-top"
             style={{ transform: `scale(${zoom})` }}
           >
+            <div
+              className="flex justify-between items-center w-full max-w-[100%] print-hidden"
+              style={{ width }}
+            >
+              <h2 className="text-lg font-bold text-gray-800">Footers</h2>
+              <button
+                onClick={() => {
+                  const id = `footer-${Date.now()}`;
+                  addFooter(id, {
+                    id,
+                    name: `Footer ${Object.keys(parsedDocument.document?.footers || {}).length + 1}`,
+                    condition: "all",
+                    root: {
+                      id: `${id}-root`,
+                      type: "row",
+                      layout: {
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                      },
+                      children: [],
+                    },
+                  });
+                }}
+                className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={14} />
+                <span>Create Footer</span>
+              </button>
+            </div>
             {Object.entries(parsedDocument.document?.footers || {}).map(
               ([id, footer]) => (
-                <div key={id} className="flex flex-col">
-                  <span className="text-xs text-gray-500 mb-2 font-mono">
-                    {id} {footer.name ? `(${footer.name})` : ""} -{" "}
-                    {footer.condition || "all"}
-                  </span>
+                <div
+                  key={id}
+                  className="flex flex-col shadow-xl rounded-md bg-white border border-gray-200"
+                  style={{ width }}
+                >
+                  <SectionToolbar type="footer" id={id} section={footer} />
                   <div
-                    className="bg-white shadow-xl flex flex-col relative overflow-hidden"
+                    className="flex flex-col relative overflow-hidden"
                     style={{
                       width,
                       height:

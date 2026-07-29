@@ -1,0 +1,65 @@
+# Agent Capabilities and Tools
+
+When an AI agent connects to FormCast via the Model Context Protocol, it gains access to a comprehensive suite of tools, resources, and skills. These capabilities empower the agent to build, modify, and style document layouts directly, acting as your automated co-developer.
+
+## FormCast MCP Tools
+
+The FormCast MCP server exposes specific executable tools that agents can invoke to interact with your active session.
+
+### Session and State Management
+
+- **`get_active_sessions`**: Retrieves a list of all currently active browser tabs connected to the MCP server.
+- **`select_active_session`**: Focuses the agent's actions on a specific browser tab.
+- **`get_document_state`**: Fetches the complete JSON schema (AST) of the active document.
+- **`set_document_state`**: Replaces the entire document state.
+- **`replace_document_body`**: Replaces only the `body` section of the document, leaving headers, footers, and meta-information intact.
+- **`update_document_data`**: Injects new test data for data-binding (e.g., updating `{ "customerName": "John" }`).
+
+### Node and AST Manipulation
+
+- **`get_layout_element`**: Retrieves a specific node from the AST by its ID.
+- **`insert_layout_element`**: Inserts a new node (row, column, text, image, etc.) into the document tree.
+- **`delete_layout_element`**: Removes a specific node and its children.
+- **`patch_element_properties` / `update_element_properties`**: Safely updates specific properties of a node (e.g., changing text color, padding, or typography) without overwriting the entire node.
+
+### Widget-Specific Helpers
+
+- **`get_available_widgets`**: Lists all registered widgets and their basic schemas.
+- **`add_text_widget`**: A convenience tool to quickly append a text node.
+- **`add_table_widget`**: Generates a complex data table and inserts it into the layout.
+
+### Document Level Configuration
+
+- **`set_document_section`**: Configures a Header or Footer (e.g., creating a "first-page only" cover header).
+- **`delete_document_section`**: Removes a specific Header or Footer.
+- **`update_document_meta`**: Updates meta properties like page size (A4, Letter) and orientation.
+- **`update_document_theme`**: Modifies the global document theme and color palette.
+- **`set_page_override`**: Configures page-specific margins or paddings.
+- **`generate_pdf`**: Triggers a backend PDF generation to test output fidelity.
+
+## FormCast Skills
+
+The true power of the MCP integration lies in **Skills**. Skills are markdown-based guides that teach the agent the specific "rules of the game" for FormCast. By reading these skills, the agent learns how to generate valid, compliant JSON that the FormCast engine can render flawlessly.
+
+The agent can discover and read skills using:
+
+- **`list_formcast_skills`**: Returns the index of available skills.
+- **`read_formcast_skill`**: Reads the full markdown content of a specific skill.
+
+### Available Skills
+
+1. **Schema Basics**: `schema-BaseNode.md`, `schema-BoxModel.md`, `schema-TypographyAndColor.md` (Explains paddings, margins, flexbox properties, and font styling).
+2. **Widgets**: `widget-Layouts.md`, `widget-TextNode.md`, `widget-TableNode.md`, `widget-ImageNode.md`, `widget-FormControls.md`, `widget-ListTileNode.md` (Explains the required properties for each widget type).
+3. **Engine & Logic**: `engine-HeadersAndFooters.md`, `schema-DataBinding.md`, `ast-manipulation.md` (Teaches the agent how to inject dynamic data, create repeating headers, and safely traverse the JSON tree).
+4. **Troubleshooting**: `troubleshooting.md`, `engine-Troubleshooting.md` (Provides the agent with solutions to common errors like missing IDs or invalid parent-child relationships).
+
+## How Agents Use Capabilities
+
+When you ask an agent to "make a pricing table", it will:
+
+1. Call `read_formcast_skill` to understand the table schema (`widget-TableNode.md`).
+2. Call `get_document_state` to see the current layout.
+3. Formulate the JSON for the new table.
+4. Call `insert_layout_element` to place it safely inside the document.
+
+Check out the [Examples & Workflows](/docs/mcp-examples) page to see these tools in action.

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { DocumentSchema, BaseNode } from "../types/schema";
+import { DocumentSchema, BaseNode, DocumentSection } from "../types/schema";
 import { TEST_DOCUMENT } from "./test.data";
 import { updateJsonNodeProperty } from "../utils/jsonUpdater";
 import {
@@ -109,6 +109,29 @@ interface DocumentStore {
   ) => void;
   setZoom: (zoom: number | ((prev: number) => number)) => void;
   setAllowHeaderFooterEditing: (allowed: boolean) => void;
+
+  // Header and Footer Management
+  addHeader: (id: string, headerData: DocumentSection) => void;
+  updateHeaderProperty: <K extends keyof DocumentSection>(
+    id: string,
+    key: K,
+    value: DocumentSection[K]
+  ) => void;
+  deleteHeader: (id: string) => void;
+  addFooter: (id: string, footerData: DocumentSection) => void;
+  updateFooterProperty: <K extends keyof DocumentSection>(
+    id: string,
+    key: K,
+    value: DocumentSection[K]
+  ) => void;
+  deleteFooter: (id: string) => void;
+  updatePageOverrides: (
+    overrides: Record<
+      string,
+      { headerId?: string | null; footerId?: string | null }
+    >
+  ) => void;
+
   // Structural Edits
   deleteNode: (id: string) => void;
   moveNode: (id: string, direction: "up" | "down" | "out") => void;
@@ -345,6 +368,98 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
       );
     });
 
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  addHeader: (id, headerData) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument) return;
+    const newDoc = { ...parsedDocument };
+    newDoc.document.headers = { ...newDoc.document.headers, [id]: headerData };
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  updateHeaderProperty: (id, key, value) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument || !parsedDocument.document.headers[id]) return;
+    const newDoc = { ...parsedDocument };
+    newDoc.document.headers[id] = {
+      ...newDoc.document.headers[id],
+      [key]: value,
+    };
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  deleteHeader: (id) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument || !parsedDocument.document.headers[id]) return;
+    const newDoc = { ...parsedDocument };
+    const newHeaders = { ...newDoc.document.headers };
+    delete newHeaders[id];
+    newDoc.document.headers = newHeaders;
+
+    // Also remove any pageOverrides for this header
+    const newOverrides = { ...newDoc.document.pageOverrides };
+    Object.keys(newOverrides).forEach((page) => {
+      if (newOverrides[page].headerId === id) {
+        newOverrides[page] = { ...newOverrides[page], headerId: null };
+        if (!newOverrides[page].headerId && !newOverrides[page].footerId) {
+          delete newOverrides[page];
+        }
+      }
+    });
+    newDoc.document.pageOverrides = newOverrides;
+
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  addFooter: (id, footerData) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument) return;
+    const newDoc = { ...parsedDocument };
+    newDoc.document.footers = { ...newDoc.document.footers, [id]: footerData };
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  updateFooterProperty: (id, key, value) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument || !parsedDocument.document.footers[id]) return;
+    const newDoc = { ...parsedDocument };
+    newDoc.document.footers[id] = {
+      ...newDoc.document.footers[id],
+      [key]: value,
+    };
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  deleteFooter: (id) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument || !parsedDocument.document.footers[id]) return;
+    const newDoc = { ...parsedDocument };
+    const newFooters = { ...newDoc.document.footers };
+    delete newFooters[id];
+    newDoc.document.footers = newFooters;
+
+    // Also remove any pageOverrides for this footer
+    const newOverrides = { ...newDoc.document.pageOverrides };
+    Object.keys(newOverrides).forEach((page) => {
+      if (newOverrides[page].footerId === id) {
+        newOverrides[page] = { ...newOverrides[page], footerId: null };
+        if (!newOverrides[page].headerId && !newOverrides[page].footerId) {
+          delete newOverrides[page];
+        }
+      }
+    });
+    newDoc.document.pageOverrides = newOverrides;
+
+    setJsonString(JSON.stringify(newDoc, null, 2));
+  },
+
+  updatePageOverrides: (overrides) => {
+    const { parsedDocument, setJsonString } = get();
+    if (!parsedDocument) return;
+    const newDoc = { ...parsedDocument };
+    newDoc.document.pageOverrides = overrides;
     setJsonString(JSON.stringify(newDoc, null, 2));
   },
 }));

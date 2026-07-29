@@ -6,8 +6,10 @@ import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
 import { PropertyPanel } from "../../../components/editor/PropertyPanel";
 import { WidgetsPanel } from "../../../components/editor/WidgetsPanel";
 import { useDocumentStore } from "../../../store/documentStore";
+import { useMcpSync } from "../../../hooks/useMcpSync";
 
 export default function Home() {
+  const { isConnected, sessionId } = useMcpSync();
   const [leftWidth, setLeftWidth] = useState(400); // initial width in pixels
   const [rightWidth, setRightWidth] = useState(320); // initial right width
   const [showEditor, setShowEditor] = useState(true);
@@ -183,6 +185,18 @@ export default function Home() {
         <div className="flex-1 overflow-hidden">
           {rightPanelMode === "widgets" && <WidgetsPanel />}
           {rightPanelMode === "properties" && <PropertyPanel />}
+        </div>
+      </div>
+
+      {/* MCP Connection Status Badge */}
+      <div className="absolute bottom-4 left-4 z-50 print:hidden">
+        <div
+          className={`flex items-center gap-2 px-3 py-2 rounded-full shadow-lg border text-xs font-medium bg-white ${isConnected ? "border-green-200 text-green-700" : "border-gray-200 text-gray-500"}`}
+        >
+          <div
+            className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
+          />
+          {isConnected ? `MCP Connected: ${sessionId}` : "MCP Disconnected"}
         </div>
       </div>
     </main>
