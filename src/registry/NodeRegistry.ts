@@ -13,14 +13,18 @@ export interface SplitContext {
 export interface NodeTypeDefinition<TNode extends BaseNode = BaseNode> {
   type: string;
   measure: (node: TNode, ctx: MeasureContext) => number;
-  render: React.ComponentType<{ 
-    node: TNode; 
+  render: React.ComponentType<{
+    node: TNode;
     path?: string;
     isSelected?: boolean;
     onSelect?: (e: React.MouseEvent) => void;
     pageContext?: { pageNumber: number; pageCount: number };
   }>;
-  split?: (node: TNode, remainingHeight: number, ctx: SplitContext) => [TNode, TNode | null, number?] | null;
+  split?: (
+    node: TNode,
+    remainingHeight: number,
+    ctx: SplitContext
+  ) => [TNode, TNode | null, number?] | null;
 }
 
 class Registry {

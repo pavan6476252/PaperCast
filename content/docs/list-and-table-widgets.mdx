@@ -7,7 +7,9 @@ For structured, repeating data, FormCast provides List and Table widgets.
 FormCast supports both `UnorderedList` (bullet points) and `OrderedList` (numbered items).
 
 ### Usage
+
 A List node acts as a container. You drop other widgets (like Text nodes) inside the List, and FormCast will automatically wrap them in `<li>` tags during rendering.
+
 - **Unordered List**: Renders with `list-style-type: disc` and 20px of left padding.
 - **Ordered List**: Renders with `list-style-type: decimal` and 20px of left padding.
 
@@ -35,10 +37,13 @@ You can use the **Bind** tab on a List node with the **Repeat** mode to dynamica
 The `Table` widget is one of the most powerful and complex elements in FormCast. It is designed to handle tabular data (like an invoice item breakdown) that may span across multiple pages.
 
 ### Data Binding
+
 Unlike other containers where you map a repeating binding to the container itself, the Table node requires you to define a `bindPath` pointing to an array of objects.
 
 ### Column Configuration
+
 In the **Props** tab of a Table widget, you can configure the columns:
+
 - **Header Text**: The string to display at the top of the column.
 - **Bind Path**: The key in your data object to map to this column (e.g., `item.price`).
 - **Width Px**: A fixed width in pixels for the column.
@@ -46,11 +51,12 @@ In the **Props** tab of a Table widget, you can configure the columns:
 - **Align**: Align the text in the column (`left`, `center`, `right`).
 
 ### Pagination Behavior
+
 Tables can be massive. When a table reaches the bottom of a page, the Pagination Engine intelligently slices the rows.
 
-By default, the Table Header will **repeat** at the top of the table on the next page so users don't lose context! 
+By default, the Table Header will **repeat** at the top of the table on the next page so users don't lose context!
 
-If you do *not* want the header to repeat when a table splits across pages, you can set `hideHeaderOnSplit: true` in the Table's properties.
+If you do _not_ want the header to repeat when a table splits across pages, you can set `hideHeaderOnSplit: true` in the Table's properties.
 
 ```json
 {

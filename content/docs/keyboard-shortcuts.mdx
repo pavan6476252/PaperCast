@@ -6,22 +6,25 @@ FormCast includes a globally registered keyboard shortcut system and an interact
 
 The system listens for specific key combinations to trigger actions without requiring the user to reach for their mouse. These are currently tied to the main builder interface.
 
-| Shortcut | Action | Description |
-| :--- | :--- | :--- |
-| `Ctrl + S` / `Cmd + S` | **Save to PDF** | Triggers the Puppeteer PDF generation API. |
-| `Ctrl + P` / `Cmd + P` | **Print** | Opens the browser's native print dialog on the current preview. |
-| `Ctrl + E` / `Cmd + E` | **Toggle Editor** | Shows or hides the Monaco JSON Editor panel. |
-| `Ctrl + /` / `Cmd + /` | **Help** | (Planned) Opens a quick reference guide. |
+| Shortcut               | Action            | Description                                                     |
+| :--------------------- | :---------------- | :-------------------------------------------------------------- |
+| `Ctrl + S` / `Cmd + S` | **Save to PDF**   | Triggers the Puppeteer PDF generation API.                      |
+| `Ctrl + P` / `Cmd + P` | **Print**         | Opens the browser's native print dialog on the current preview. |
+| `Ctrl + E` / `Cmd + E` | **Toggle Editor** | Shows or hides the Monaco JSON Editor panel.                    |
+| `Ctrl + /` / `Cmd + /` | **Help**          | (Planned) Opens a quick reference guide.                        |
 
 ## The Toolbar
 
 Located at the top of the Document Preview panel, the Toolbar provides quick access to layout and export settings:
 
 1. **Page Size Selector**: Dropdown to select standard formats (A4, A3, Letter). When changed, the `DocumentSchema.meta.pageSize` is updated in the AST.
-2. **Orientation Toggle**: Switches between Portrait and Landscape modes. 
+2. **Orientation Toggle**: Switches between Portrait and Landscape modes.
 3. **Zoom Controls**: Adjusts the scale of the preview without affecting the physical dimensions of the final PDF.
 4. **Export Actions**: Buttons for "Save PDF" and "Print".
 
 <Callout type="info" title="Implementation Detail">
-Keyboard events are captured globally using an event listener in a `useEffect` hook near the root of the builder page (`src/app/page.tsx`). `event.preventDefault()` is used to override native browser behaviors (like overriding the default `Ctrl+S` HTML save dialog).
+  Keyboard events are captured globally using an event listener in a `useEffect`
+  hook near the root of the builder page (`src/app/page.tsx`).
+  `event.preventDefault()` is used to override native browser behaviors (like
+  overriding the default `Ctrl+S` HTML save dialog).
 </Callout>

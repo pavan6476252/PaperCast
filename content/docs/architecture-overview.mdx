@@ -7,6 +7,7 @@ This AST is validated, measured, paginated, and finally rendered.
 ## The FormCast Pipeline
 
 ### 1. Document Store (Zustand)
+
 The source of truth is the JSON AST (Abstract Syntax Tree). The user edits the JSON string (via the Monaco editor), and the store parses it into a strongly-typed `DocumentSchema` object.
 
 ```json
@@ -41,7 +42,11 @@ The source of truth is the JSON AST (Abstract Syntax Tree). The user edits the J
           "type": "row",
           "layout": { "paddingBottom": 20 },
           "children": [
-            { "id": "logo", "type": "image", "props": { "urlLiteral": "logo.png" } }
+            {
+              "id": "logo",
+              "type": "image",
+              "props": { "urlLiteral": "logo.png" }
+            }
           ]
         }
       }
@@ -49,9 +54,19 @@ The source of truth is the JSON AST (Abstract Syntax Tree). The user edits the J
     "body": {
       "id": "body-root",
       "type": "column",
-      "layout": { "paddingTop": 40, "paddingRight": 40, "paddingBottom": 40, "paddingLeft": 40 },
+      "layout": {
+        "paddingTop": 40,
+        "paddingRight": 40,
+        "paddingBottom": 40,
+        "paddingLeft": 40
+      },
       "children": [
-        { "id": "title", "type": "text", "props": { "literal": "Invoice" }, "style": { "fontSizePx": 24 } }
+        {
+          "id": "title",
+          "type": "text",
+          "props": { "literal": "Invoice" },
+          "style": { "fontSizePx": 24 }
+        }
       ]
     },
     "footers": {}
@@ -60,11 +75,11 @@ The source of truth is the JSON AST (Abstract Syntax Tree). The user edits the J
 ```
 
 ### 2. Validation & Registration
-Every update to the AST is strictly validated against `docframe.schema.json`.
-3. **Offscreen Measurement**: Before anything is shown to the user, `OffscreenMeasurer.tsx` silently renders the nodes in the DOM to measure their physical heights in pixels.
-4. **Pagination Engine**: With the height data available, `PaginationEngine.ts` splits the AST into discrete pages, injecting Headers and Footers based on conditions (first page, even, odd).
-5. **Rendering**: The `DocumentPreview` maps the paginated AST nodes back to React components via the `NodeRegistry`.
+
+Every update to the AST is strictly validated against `docframe.schema.json`. 3. **Offscreen Measurement**: Before anything is shown to the user, `OffscreenMeasurer.tsx` silently renders the nodes in the DOM to measure their physical heights in pixels. 4. **Pagination Engine**: With the height data available, `PaginationEngine.ts` splits the AST into discrete pages, injecting Headers and Footers based on conditions (first page, even, odd). 5. **Rendering**: The `DocumentPreview` maps the paginated AST nodes back to React components via the `NodeRegistry`.
 
 <Callout type="info" title="Why Offscreen Measurement?">
-Browsers are inherently dynamic. To guarantee that a PDF matches the screen exactly, we must measure how the browser renders specific fonts and line heights before we can mathematically decide where to insert a page break.
+  Browsers are inherently dynamic. To guarantee that a PDF matches the screen
+  exactly, we must measure how the browser renders specific fonts and line
+  heights before we can mathematically decide where to insert a page break.
 </Callout>

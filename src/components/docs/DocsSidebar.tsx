@@ -12,7 +12,7 @@ export function DocsSidebar() {
     <aside className="w-full md:w-64 lg:w-72 shrink-0 border-r border-slate-200/60 bg-white/60 backdrop-blur-xl p-6 overflow-y-auto relative hidden md:block">
       {/* Background blobs for sidebar */}
       <div className="absolute top-0 -left-10 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply filter blur-[50px] opacity-40 animate-blob pointer-events-none"></div>
-      
+
       <div className="relative z-10">
         {DOC_CATEGORIES.map((category, catIndex) => (
           <div key={category.title} className={catIndex > 0 ? "mt-8" : ""}>

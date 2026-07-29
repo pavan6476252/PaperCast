@@ -7,7 +7,7 @@ import { useRendererContext } from "../RendererContext";
 // Helper to resolve nested object path
 const resolvePath = (obj: any, path: string) => {
   if (!obj || !path) return undefined;
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 
 export const TableComponent: React.FC<{
@@ -33,12 +33,18 @@ export const TableComponent: React.FC<{
     }
   }
 
-  const visibleColumns = columns.filter((col: TableColumnConfig) => !col.hidden);
-  const totalFlex = visibleColumns.reduce((sum, col) => sum + (col.flex || 0), 0);
+  const visibleColumns = columns.filter(
+    (col: TableColumnConfig) => !col.hidden
+  );
+  const totalFlex = visibleColumns.reduce(
+    (sum, col) => sum + (col.flex || 0),
+    0
+  );
 
   // Handle pagination limits
   const startIndex = props.splitIndex || 0;
-  const endIndex = props.endIndex !== undefined ? props.endIndex : rowData.length;
+  const endIndex =
+    props.endIndex !== undefined ? props.endIndex : rowData.length;
   const displayRows = rowData.slice(startIndex, endIndex);
 
   return (
@@ -55,13 +61,20 @@ export const TableComponent: React.FC<{
       }}
       onClick={onSelect}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onSelect?.(e as any);
         }
       }}
     >
-      <table data-table-id={node.id} style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+      <table
+        data-table-id={node.id}
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          tableLayout: "fixed",
+        }}
+      >
         {/* Table Columns */}
         <colgroup>
           {visibleColumns.map((col: TableColumnConfig, idx: number) => {
@@ -78,7 +91,12 @@ export const TableComponent: React.FC<{
         {/* Table Header */}
         {(!props.hideHeaderOnSplit || startIndex === 0) && (
           <thead>
-            <tr style={{ backgroundColor: "#f5f5f5", borderBottom: "1px solid #ccc" }}>
+            <tr
+              style={{
+                backgroundColor: "#f5f5f5",
+                borderBottom: "1px solid #ccc",
+              }}
+            >
               {visibleColumns.map((col: TableColumnConfig, idx: number) => (
                 <th
                   key={idx}
@@ -100,43 +118,58 @@ export const TableComponent: React.FC<{
         <tbody>
           {errorMsg ? (
             <tr>
-              <td colSpan={visibleColumns.length || 1} style={{ padding: "16px", textAlign: "center", color: "#dc2626", backgroundColor: "#fef2f2", fontSize: "0.9em", border: "1px dashed #f87171" }}>
+              <td
+                colSpan={visibleColumns.length || 1}
+                style={{
+                  padding: "16px",
+                  textAlign: "center",
+                  color: "#dc2626",
+                  backgroundColor: "#fef2f2",
+                  fontSize: "0.9em",
+                  border: "1px dashed #f87171",
+                }}
+              >
                 {errorMsg}
               </td>
             </tr>
           ) : displayRows.length === 0 ? (
             <tr>
-              <td colSpan={visibleColumns.length || 1} style={{ padding: "16px", textAlign: "center", color: "#999" }}>
+              <td
+                colSpan={visibleColumns.length || 1}
+                style={{ padding: "16px", textAlign: "center", color: "#999" }}
+              >
                 No data
               </td>
             </tr>
           ) : (
             displayRows.map((row, rowIdx) => (
               <tr key={rowIdx} style={{ borderBottom: "1px solid #eee" }}>
-                {visibleColumns.map((col: TableColumnConfig, colIdx: number) => {
-                  let cellVal = "";
-                  if (col.bindPath) {
-                    const val = resolvePath(row, col.bindPath);
-                    if (val === undefined) {
-                      cellVal = `[Missing: ${col.bindPath}]`;
-                    } else {
-                      cellVal = String(val);
+                {visibleColumns.map(
+                  (col: TableColumnConfig, colIdx: number) => {
+                    let cellVal = "";
+                    if (col.bindPath) {
+                      const val = resolvePath(row, col.bindPath);
+                      if (val === undefined) {
+                        cellVal = `[Missing: ${col.bindPath}]`;
+                      } else {
+                        cellVal = String(val);
+                      }
                     }
+                    return (
+                      <td
+                        key={colIdx}
+                        style={{
+                          padding: "8px",
+                          textAlign: col.align || "left",
+                          fontSize: "0.9em",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        {cellVal}
+                      </td>
+                    );
                   }
-                  return (
-                    <td
-                      key={colIdx}
-                      style={{
-                        padding: "8px",
-                        textAlign: col.align || "left",
-                        fontSize: "0.9em",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      {cellVal}
-                    </td>
-                  );
-                })}
+                )}
               </tr>
             ))
           )}
@@ -151,7 +184,7 @@ NodeRegistry.register({
   measure: () => 0,
   render: TableComponent,
   split: (node: TableNode, remainingHeight: number, ctx) => {
-    const originalId = node.id.split('-part')[0];
+    const originalId = node.id.split("-part")[0];
     const rowHeights = ctx.measurements?.tableRows?.[originalId];
 
     let headerHeight = 38;
@@ -179,7 +212,8 @@ NodeRegistry.register({
     }
 
     const currentStartIndex = node.props?.splitIndex || 0;
-    const currentEndIndex = node.props?.endIndex !== undefined ? node.props.endIndex : totalRows;
+    const currentEndIndex =
+      node.props?.endIndex !== undefined ? node.props.endIndex : totalRows;
 
     let availableRows = 0;
     let accumulatedHeight = 0;
@@ -212,11 +246,13 @@ NodeRegistry.register({
       props: {
         ...node.props,
         splitIndex: currentStartIndex,
-        endIndex: newSplitIndex > currentEndIndex ? currentEndIndex : newSplitIndex,
-      }
+        endIndex:
+          newSplitIndex > currentEndIndex ? currentEndIndex : newSplitIndex,
+      },
     };
 
-    const chunk1Height = headerHeight + accumulatedHeight + marginTop + marginBottom;
+    const chunk1Height =
+      headerHeight + accumulatedHeight + marginTop + marginBottom;
 
     // If we've processed all rows, there is no chunk2
     if (newSplitIndex >= currentEndIndex) {
@@ -230,10 +266,10 @@ NodeRegistry.register({
         ...node.props,
         splitIndex: newSplitIndex,
         endIndex: currentEndIndex,
-        hideHeaderOnSplit: node.props?.tableSplitBehaviour === "withoutHeader"
-      }
+        hideHeaderOnSplit: node.props?.tableSplitBehaviour === "withoutHeader",
+      },
     };
 
     return [chunk1, chunk2, chunk1Height];
-  }
+  },
 });

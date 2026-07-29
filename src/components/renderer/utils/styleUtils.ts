@@ -1,5 +1,5 @@
-import { BoxModel, TypographyAndColor, BaseNode } from "../../../types/schema";
 import { CSSProperties } from "react";
+import { BaseNode } from "../../../types/schema";
 
 export function getStyle(node: BaseNode): CSSProperties {
   const layout = node.layout || {};
@@ -65,7 +65,7 @@ export function getStyle(node: BaseNode): CSSProperties {
   };
 
   // Remove undefined properties to prevent React warnings about mixing shorthand/non-shorthand
-  Object.keys(css).forEach(key => {
+  Object.keys(css).forEach((key) => {
     if ((css as any)[key] === undefined) {
       delete (css as any)[key];
     }

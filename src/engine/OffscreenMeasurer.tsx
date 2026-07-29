@@ -11,7 +11,11 @@ interface OffscreenMeasurerProps {
   onMeasure: (measurements: Measurements) => void;
 }
 
-export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({ document: doc, pageWidth, onMeasure }) => {
+export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({
+  document: doc,
+  pageWidth,
+  onMeasure,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -25,39 +29,50 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({ document: 
     const tableRows: Record<string, number[]> = {};
     const tableHeaders: Record<string, number> = {};
 
-    const headerNodes = containerRef.current.querySelectorAll("[data-measure-header]");
+    const headerNodes = containerRef.current.querySelectorAll(
+      "[data-measure-header]"
+    );
     headerNodes.forEach((node) => {
       const id = node.getAttribute("data-measure-header");
       if (id) headers[id] = node.getBoundingClientRect().height;
     });
 
-    const footerNodes = containerRef.current.querySelectorAll("[data-measure-footer]");
+    const footerNodes = containerRef.current.querySelectorAll(
+      "[data-measure-footer]"
+    );
     footerNodes.forEach((node) => {
       const id = node.getAttribute("data-measure-footer");
       if (id) footers[id] = node.getBoundingClientRect().height;
     });
 
-    const blockNodes = containerRef.current.querySelectorAll("[data-measure-block]");
+    const blockNodes = containerRef.current.querySelectorAll(
+      "[data-measure-block]"
+    );
     blockNodes.forEach((node) => {
       const id = node.getAttribute("data-measure-block");
       if (id) blocks[id] = node.getBoundingClientRect().height;
     });
 
-    const allNodeElements = containerRef.current.querySelectorAll("[data-node-id]");
+    const allNodeElements =
+      containerRef.current.querySelectorAll("[data-node-id]");
     allNodeElements.forEach((node) => {
       const id = node.getAttribute("data-node-id");
       if (id) blocks[id] = node.getBoundingClientRect().height;
     });
 
-    const tables = containerRef.current.querySelectorAll("table[data-table-id]");
+    const tables = containerRef.current.querySelectorAll(
+      "table[data-table-id]"
+    );
     tables.forEach((table) => {
       const id = table.getAttribute("data-table-id");
       if (id) {
         const thead = table.querySelector("thead");
         tableHeaders[id] = thead ? thead.getBoundingClientRect().height : 0;
-        
+
         const trs = table.querySelectorAll("tbody tr");
-        tableRows[id] = Array.from(trs).map(tr => tr.getBoundingClientRect().height);
+        tableRows[id] = Array.from(trs).map(
+          (tr) => tr.getBoundingClientRect().height
+        );
       }
     });
 
@@ -79,14 +94,22 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({ document: 
       >
         {/* Measure Headers */}
         {Object.entries(doc.document.headers || {}).map(([id, header]) => (
-          <div key={`header-${id}`} data-measure-header={id} style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            key={`header-${id}`}
+            data-measure-header={id}
+            style={{ display: "flex", flexDirection: "column" }}
+          >
             {header.root && <NodeRenderer node={header.root} />}
           </div>
         ))}
 
         {/* Measure Footers */}
         {Object.entries(doc.document.footers || {}).map(([id, footer]) => (
-          <div key={`footer-${id}`} data-measure-footer={id} style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            key={`footer-${id}`}
+            data-measure-footer={id}
+            style={{ display: "flex", flexDirection: "column" }}
+          >
             {footer.root && <NodeRenderer node={footer.root} />}
           </div>
         ))}
@@ -94,7 +117,10 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({ document: 
         {/* Measure Top-level Body Blocks */}
         <div style={{ ...getStyle(doc.document.body), width: "100%" }}>
           {doc.document.body.children?.map((child, index) => (
-            <div key={`block-${child.id || index}`} data-measure-block={child.id || index}>
+            <div
+              key={`block-${child.id || index}`}
+              data-measure-block={child.id || index}
+            >
               <NodeRenderer node={child} />
             </div>
           ))}

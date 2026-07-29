@@ -33,7 +33,8 @@ export interface BoxModel {
   // flex/flow controls
   direction?: "row" | "column";
   wrap?: boolean;
-  justifyContent?: "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
+  justifyContent?:
+    "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
   alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
   rowGap?: number;
   columnGap?: number;
@@ -100,39 +101,64 @@ export interface BaseNodeCommon {
   overrides?: Record<string, Partial<BaseNode>>;
 }
 
-export interface RootNode extends BaseNodeCommon { type: "root"; props?: undefined; }
-export interface RowNode extends BaseNodeCommon { type: "row"; props?: undefined; }
-export interface ColumnNode extends BaseNodeCommon { type: "column"; props?: undefined; }
-export interface TextNode extends BaseNodeCommon { 
-  type: "text"; 
-  props?: { 
+export interface RootNode extends BaseNodeCommon {
+  type: "root";
+  props?: undefined;
+}
+export interface RowNode extends BaseNodeCommon {
+  type: "row";
+  props?: undefined;
+}
+export interface ColumnNode extends BaseNodeCommon {
+  type: "column";
+  props?: undefined;
+}
+export interface TextNode extends BaseNodeCommon {
+  type: "text";
+  props?: {
     literal?: string;
     isAnchor?: boolean;
     hrefLiteral?: string;
     hrefBind?: string;
-  }; 
+  };
 }
-export interface ImageNode extends BaseNodeCommon { type: "image"; props?: { srcBind?: string; srcLiteral?: string; fit?: "contain" | "cover" | "stretch" }; }
-export interface SpacerNode extends BaseNodeCommon { type: "spacer"; props?: { sizePx?: number }; }
-export interface TableNode extends BaseNodeCommon { type: "table"; props?: TableProps; }
-export interface WidgetInstanceNode extends BaseNodeCommon { type: "widgetInstance"; props?: { definitionId: string }; }
-
-export interface ListTileNode extends BaseNodeCommon { 
-  type: "listTile"; 
-  props?: { 
-    titleLiteral?: string; 
-    titleBind?: string; 
-    subtitleLiteral?: string; 
-    subtitleBind?: string; 
-  }; 
+export interface ImageNode extends BaseNodeCommon {
+  type: "image";
+  props?: {
+    srcBind?: string;
+    srcLiteral?: string;
+    fit?: "contain" | "cover" | "stretch";
+  };
+}
+export interface SpacerNode extends BaseNodeCommon {
+  type: "spacer";
+  props?: { sizePx?: number };
+}
+export interface TableNode extends BaseNodeCommon {
+  type: "table";
+  props?: TableProps;
+}
+export interface WidgetInstanceNode extends BaseNodeCommon {
+  type: "widgetInstance";
+  props?: { definitionId: string };
 }
 
-export interface RichTextNode extends BaseNodeCommon { 
-  type: "richText"; 
-  props?: { 
-    htmlLiteral?: string; 
-    htmlBind?: string; 
-  }; 
+export interface ListTileNode extends BaseNodeCommon {
+  type: "listTile";
+  props?: {
+    titleLiteral?: string;
+    titleBind?: string;
+    subtitleLiteral?: string;
+    subtitleBind?: string;
+  };
+}
+
+export interface RichTextNode extends BaseNodeCommon {
+  type: "richText";
+  props?: {
+    htmlLiteral?: string;
+    htmlBind?: string;
+  };
 }
 
 export interface UnorderedListNode extends BaseNodeCommon {
@@ -176,7 +202,23 @@ export interface RadioGroupNode extends BaseNodeCommon {
   };
 }
 
-export type BaseNode = RootNode | RowNode | ColumnNode | TextNode | ImageNode | SpacerNode | TableNode | WidgetInstanceNode | ListTileNode | RichTextNode | UnorderedListNode | OrderedListNode | CheckboxNode | RadioNode | RadioGroupNode | (BaseNodeCommon & { type: string; props?: Record<string, any> });
+export type BaseNode =
+  | RootNode
+  | RowNode
+  | ColumnNode
+  | TextNode
+  | ImageNode
+  | SpacerNode
+  | TableNode
+  | WidgetInstanceNode
+  | ListTileNode
+  | RichTextNode
+  | UnorderedListNode
+  | OrderedListNode
+  | CheckboxNode
+  | RadioNode
+  | RadioGroupNode
+  | (BaseNodeCommon & { type: string; props?: Record<string, any> });
 
 export interface Theme {
   defaults: {
@@ -202,10 +244,13 @@ export interface DocumentSection {
 
 export interface RichTextPreferences {
   autoDeconstruct?: boolean;
-  tagStyles?: Record<string, {
-    style?: TypographyAndColor;
-    layout?: BoxModel;
-  }>;
+  tagStyles?: Record<
+    string,
+    {
+      style?: TypographyAndColor;
+      layout?: BoxModel;
+    }
+  >;
 }
 
 export interface DocumentSchema {
@@ -227,7 +272,10 @@ export interface DocumentSchema {
     footers: Record<string, DocumentSection>;
     headerDefaultId?: string | null;
     footerDefaultId?: string | null;
-    pageOverrides: Record<string, { headerId?: string | null; footerId?: string | null }>;
+    pageOverrides: Record<
+      string,
+      { headerId?: string | null; footerId?: string | null }
+    >;
     body: BaseNode;
   };
 }

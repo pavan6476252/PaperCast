@@ -5,8 +5,10 @@ import { DocumentPreview } from "../../components/renderer/DocumentPreview";
 import { useDocumentStore } from "../../store/documentStore";
 
 export default function PrintPage() {
-  const setJsonString = useDocumentStore(state => state.setJsonString);
-  const deconstructAllRichText = useDocumentStore(state => state.deconstructAllRichText);
+  const setJsonString = useDocumentStore((state) => state.setJsonString);
+  // const deconstructAllRichText = useDocumentStore(
+  //   (state) => state.deconstructAllRichText
+  // );
   const [ready, setReady] = useState(false);
 
   useEffect(() => {

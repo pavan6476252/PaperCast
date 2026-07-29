@@ -16,12 +16,16 @@ interface RendererContextValue {
 ```
 
 ### `isPrintMode`
+
 Used to distinguish between the live "Preview" on the screen vs. the actual PDF generation phase.
+
 - **Preview Mode (`false`)**: We might render dashed borders around empty columns, show hover states, or display debugging outlines to help the user build the document.
 - **Print Mode (`true`)**: The UI must look exactly as it will on paper. Helper borders are removed, and interactive elements are flattened.
 
 ### `currentPage` and `totalPages`
+
 Injected automatically by the `PaginationEngine`.
+
 - Used by Header and Footer widgets to render dynamic page numbers (e.g., "Page 1 of 5").
 - Used to conditionally hide cover-page headers on subsequent pages.
 
@@ -30,15 +34,13 @@ Injected automatically by the `PaginationEngine`.
 Any node renderer component can consume this context to alter its behavior:
 
 ```tsx
-import { useRendererContext } from './RendererContext';
+import { useRendererContext } from "./RendererContext";
 
 export function ColumnRenderer({ node }) {
   const { isPrintMode } = useRendererContext();
-  
+
   return (
-    <div 
-      className={!isPrintMode ? 'border border-dashed border-gray-300' : ''}
-    >
+    <div className={!isPrintMode ? "border border-dashed border-gray-300" : ""}>
       {/* children */}
     </div>
   );

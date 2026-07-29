@@ -12,7 +12,9 @@ export interface RendererContextType {
   location?: "body" | "header" | "footer";
 }
 
-const RendererContext = createContext<RendererContextType | undefined>(undefined);
+const RendererContext = createContext<RendererContextType | undefined>(
+  undefined
+);
 
 export const RendererProvider: React.FC<{
   data: any;
@@ -22,7 +24,9 @@ export const RendererProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ data, pageContext, activeTab, location, children }) => {
   return (
-    <RendererContext.Provider value={{ data, pageContext, activeTab, location }}>
+    <RendererContext.Provider
+      value={{ data, pageContext, activeTab, location }}
+    >
       {children}
     </RendererContext.Provider>
   );
@@ -31,7 +35,9 @@ export const RendererProvider: React.FC<{
 export const useRendererContext = () => {
   const context = useContext(RendererContext);
   if (!context) {
-    throw new Error("useRendererContext must be used within a RendererProvider");
+    throw new Error(
+      "useRendererContext must be used within a RendererProvider"
+    );
   }
   return context;
 };

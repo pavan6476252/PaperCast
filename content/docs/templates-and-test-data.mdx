@@ -23,22 +23,24 @@ To add a new template for the showcase or for testing a specific bug:
 ```typescript
 export const MY_NEW_TEMPLATE: DocumentSchema = {
   version: 1,
-  meta: { pageSize: 'A4', orientation: 'portrait' },
-  theme: { defaults: { base: { fontFamily: 'Inter' } } },
+  meta: { pageSize: "A4", orientation: "portrait" },
+  theme: { defaults: { base: { fontFamily: "Inter" } } },
   document: {
     headers: {},
     footers: {},
     body: {
-      id: 'root-column',
-      type: 'column',
+      id: "root-column",
+      type: "column",
       children: [
-        { id: 'text-1', type: 'text', props: { literal: 'Hello World' } }
-      ]
-    }
-  }
+        { id: "text-1", type: "text", props: { literal: "Hello World" } },
+      ],
+    },
+  },
 };
 ```
 
 <Callout type="tip" title="Data Injection">
-When designing a template, make sure to utilize the `data` block. This allows you to showcase how `{{ variable }}` interpolation works beautifully for dynamic document generation!
+  When designing a template, make sure to utilize the `data` block. This allows
+  you to showcase how `{{ variable }}` interpolation works beautifully for
+  dynamic document generation!
 </Callout>

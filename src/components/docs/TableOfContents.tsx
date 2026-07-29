@@ -23,7 +23,10 @@ export function TableOfContents({ source }: { source: string }) {
         const level = match[1].length;
         const title = match[2].trim();
         // Create an ID similarly to how rehype-slug would
-        const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+        const id = title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
         foundHeadings.push({ id, title, level });
       }
     });
@@ -58,7 +61,9 @@ export function TableOfContents({ source }: { source: string }) {
 
   return (
     <div className="w-full">
-      <h3 className="text-sm font-semibold text-slate-900 mb-4">On this page</h3>
+      <h3 className="text-sm font-semibold text-slate-900 mb-4">
+        On this page
+      </h3>
       <nav className="flex flex-col space-y-2.5">
         {headings.map((heading, i) => (
           <a

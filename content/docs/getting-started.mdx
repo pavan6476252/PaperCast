@@ -1,23 +1,24 @@
 # Getting Started with FormCast
 
-Welcome to the FormCast API documentation. 
+Welcome to the FormCast API documentation.
 FormCast is a Schema-First Document Builder. You design your layout using a JSON schema, and our engine renders it dynamically.
 
 ## Using Widgets
 
 You can easily embed our widgets into your own document schemas. Below is a full-scale interactive example of an Invoice widget.
 
-<WidgetCard 
-  title="Invoice Example" 
-  description="This widget demonstrates how an invoice template renders in the engine." 
+<WidgetCard
+  title="Invoice Example"
+  description="This widget demonstrates how an invoice template renders in the engine."
 />
 
 ## API Overview
+
 To programmatically generate PDFs, send a POST request with your JSON schema to `/api/pdf`.
 
 ```js
-fetch('/api/pdf', {
-  method: 'POST',
-  body: JSON.stringify(mySchema)
+fetch("/api/pdf", {
+  method: "POST",
+  body: JSON.stringify(mySchema),
 });
 ```

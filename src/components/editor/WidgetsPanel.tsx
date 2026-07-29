@@ -1,32 +1,50 @@
-import React, { useMemo } from 'react';
-import { useDocumentStore } from '../../store/documentStore';
-import { BaseNode } from '../../types/schema';
-import { Type, Image, Columns, Rows, ArrowUpDown, LayoutGrid, List, FileText, Settings, ListOrdered, CheckSquare, CircleDot, ListChecks, Focus } from 'lucide-react';
+import React, { useMemo } from "react";
+import { useDocumentStore } from "../../store/documentStore";
+import { BaseNode } from "../../types/schema";
+import {
+  Type,
+  Image,
+  Columns,
+  Rows,
+  ArrowUpDown,
+  LayoutGrid,
+  List,
+  FileText,
+  Settings,
+  ListOrdered,
+  CheckSquare,
+  CircleDot,
+  ListChecks,
+  Focus,
+} from "lucide-react";
 
 const WIDGETS = [
-  { type: 'text', label: 'Text', icon: Type },
-  { type: 'image', label: 'Image', icon: Image },
-  { type: 'row', label: 'Row', icon: Rows },
-  { type: 'column', label: 'Column', icon: Columns },
-  { type: 'spacer', label: 'Spacer', icon: ArrowUpDown },
-  { type: 'table', label: 'Table', icon: LayoutGrid },
-  { type: 'listTile', label: 'List Tile', icon: List },
-  { type: 'richText', label: 'Rich Text', icon: FileText },
-  { type: 'ul', label: 'Unordered List', icon: List },
-  { type: 'ol', label: 'Ordered List', icon: ListOrdered },
-  { type: 'checkbox', label: 'Checkbox', icon: CheckSquare },
-  { type: 'radio', label: 'Radio', icon: CircleDot },
-  { type: 'radioGroup', label: 'Radio Group', icon: ListChecks },
+  { type: "text", label: "Text", icon: Type },
+  { type: "image", label: "Image", icon: Image },
+  { type: "row", label: "Row", icon: Rows },
+  { type: "column", label: "Column", icon: Columns },
+  { type: "spacer", label: "Spacer", icon: ArrowUpDown },
+  { type: "table", label: "Table", icon: LayoutGrid },
+  { type: "listTile", label: "List Tile", icon: List },
+  { type: "richText", label: "Rich Text", icon: FileText },
+  { type: "ul", label: "Unordered List", icon: List },
+  { type: "ol", label: "Ordered List", icon: ListOrdered },
+  { type: "checkbox", label: "Checkbox", icon: CheckSquare },
+  { type: "radio", label: "Radio", icon: CircleDot },
+  { type: "radioGroup", label: "Radio Group", icon: ListChecks },
 ];
 
 export const WidgetsPanel: React.FC = () => {
-  const { selectedNodeId, parsedDocument, setRightPanelMode } = useDocumentStore();
+  const { selectedNodeId, parsedDocument, setRightPanelMode } =
+    useDocumentStore();
 
   const selectedNodeType = useMemo(() => {
     if (!selectedNodeId || !parsedDocument) return null;
 
+    const baseNodeId = selectedNodeId.split("-part")[0];
+
     const findNode = (node: BaseNode): BaseNode | null => {
-      if (node.id === selectedNodeId) return node;
+      if (node.id === baseNodeId) return node;
       if (node.children) {
         for (const child of node.children) {
           const found = findNode(child as BaseNode);
@@ -37,7 +55,8 @@ export const WidgetsPanel: React.FC = () => {
     };
 
     let found: BaseNode | null = null;
-    if (parsedDocument.document.body) found = findNode(parsedDocument.document.body);
+    if (parsedDocument.document.body)
+      found = findNode(parsedDocument.document.body);
     if (!found && parsedDocument.document.headers) {
       for (const h of Object.values(parsedDocument.document.headers)) {
         if (h.root && !found) found = findNode(h.root);
@@ -59,22 +78,39 @@ export const WidgetsPanel: React.FC = () => {
           {selectedNodeId && (
             <button
               onClick={() => {
-                let el = document.querySelector(`#preview-scroll-container [data-node-id="${selectedNodeId}"]`);
+                let el = document.querySelector(
+                  `#preview-scroll-container [data-node-id="${selectedNodeId}"]`
+                );
                 if (!el) {
-                  const baseNodeId = selectedNodeId.split('-part')[0];
-                  el = document.querySelector(`#preview-scroll-container [data-node-id="${baseNodeId}"]`) || 
-                       document.querySelector(`#preview-scroll-container [data-node-id="${baseNodeId}-part1"]`);
+                  const baseNodeId = selectedNodeId.split("-part")[0];
+                  el =
+                    document.querySelector(
+                      `#preview-scroll-container [data-node-id="${baseNodeId}"]`
+                    ) ||
+                    document.querySelector(
+                      `#preview-scroll-container [data-node-id="${baseNodeId}-part1"]`
+                    );
                 }
                 if (el) {
-                   const scrollContainer = document.getElementById('preview-scroll-container');
-                   if (scrollContainer) {
-                      const containerRect = scrollContainer.getBoundingClientRect();
-                      const elRect = el.getBoundingClientRect();
-                      const scrollTopTarget = scrollContainer.scrollTop + (elRect.top - containerRect.top) - (containerRect.height / 2) + (elRect.height / 2);
-                      scrollContainer.scrollTo({ top: scrollTopTarget, behavior: 'smooth' });
-                   } else {
-                      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                   }
+                  const scrollContainer = document.getElementById(
+                    "preview-scroll-container"
+                  );
+                  if (scrollContainer) {
+                    const containerRect =
+                      scrollContainer.getBoundingClientRect();
+                    const elRect = el.getBoundingClientRect();
+                    const scrollTopTarget =
+                      scrollContainer.scrollTop +
+                      (elRect.top - containerRect.top) -
+                      containerRect.height / 2 +
+                      elRect.height / 2;
+                    scrollContainer.scrollTo({
+                      top: scrollTopTarget,
+                      behavior: "smooth",
+                    });
+                  } else {
+                    el.scrollIntoView({ behavior: "smooth", block: "center" });
+                  }
                 }
               }}
               className="text-gray-400 hover:text-blue-600 transition-colors"
@@ -83,7 +119,9 @@ export const WidgetsPanel: React.FC = () => {
               <Focus size={14} />
             </button>
           )}
-          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Available Widgets</p>
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+            Available Widgets
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
@@ -94,19 +132,31 @@ export const WidgetsPanel: React.FC = () => {
                 key={widget.type}
                 draggable={true}
                 onDragStart={(e) => {
-                  e.dataTransfer.setData('application/formcast-widget', widget.type);
-                  e.dataTransfer.effectAllowed = 'copy';
+                  e.dataTransfer.setData(
+                    "application/formcast-widget",
+                    widget.type
+                  );
+                  e.dataTransfer.effectAllowed = "copy";
                 }}
                 className={`
                   flex items-center p-2 border rounded-md cursor-grab transition-colors group
-                  ${isSelectedType
-                    ? 'border-blue-500 bg-blue-50 text-blue-800 shadow-sm'
-                    : 'border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 hover:bg-gray-100'}
+                  ${
+                    isSelectedType
+                      ? "border-blue-500 bg-blue-50 text-blue-800 shadow-sm"
+                      : "border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 hover:bg-gray-100"
+                  }
                 `}
                 title={`Drag to add ${widget.label}`}
               >
                 <div className="flex items-center flex-1">
-                  <widget.icon size={16} className={isSelectedType ? 'text-blue-600 mr-3' : 'text-gray-500 mr-3'} />
+                  <widget.icon
+                    size={16}
+                    className={
+                      isSelectedType
+                        ? "text-blue-600 mr-3"
+                        : "text-gray-500 mr-3"
+                    }
+                  />
                   <span className="text-sm font-medium">{widget.label}</span>
                 </div>
 
@@ -114,7 +164,7 @@ export const WidgetsPanel: React.FC = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setRightPanelMode('properties');
+                      setRightPanelMode("properties");
                     }}
                     className="ml-2 px-2 py-2 rounded-full bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700 transition-colors"
                   >

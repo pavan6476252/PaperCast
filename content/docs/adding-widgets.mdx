@@ -17,18 +17,24 @@ Building a document in FormCast is as simple as dragging and dropping.
 When building your structure, it's important to understand the two main types of widgets:
 
 ### Layout Containers
+
 Widgets like `Row`, `Column`, and `Stack` do not render any text or images themselves. Instead, they act as **Containers** that hold other widgets.
+
 - Use a **Row** to place items side-by-side.
 - Use a **Column** to stack items vertically.
 
 ### Basic Nodes
-Widgets like `Text`, `Image`, and `Divider` are the actual content. They are usually dropped *inside* of layout containers.
+
+Widgets like `Text`, `Image`, and `Divider` are the actual content. They are usually dropped _inside_ of layout containers.
 
 <Callout type="warning" title="Selection Hierarchy">
-Sometimes it can be tricky to select a container instead of the text inside it. If you select a `Text` node, look at the **Breadcrumbs** at the top of the Property Panel to navigate "up" to its parent `Column` or `Row`.
+  Sometimes it can be tricky to select a container instead of the text inside
+  it. If you select a `Text` node, look at the **Breadcrumbs** at the top of the
+  Property Panel to navigate "up" to its parent `Column` or `Row`.
 </Callout>
 
 ### Full-Scale AST Example
+
 To understand how these containers nest together, look at this JSON AST representing a common layout: a column containing a header, followed by a row with an image and text side-by-side.
 
 ```json

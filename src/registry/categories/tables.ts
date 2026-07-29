@@ -1,5 +1,5 @@
+import { table } from "@/store/test.data";
 import { WidgetRegistryItem, wrap } from "../utils";
-import { table, column, text } from "@/store/test.data";
 
 export const tables: WidgetRegistryItem[] = [
   {
@@ -11,14 +11,29 @@ export const tables: WidgetRegistryItem[] = [
       table(
         [
           { headerText: "Description", bindPath: "items.desc", flex: 3 },
-          { headerText: "Qty", bindPath: "items.qty", flex: 1, align: "center" },
-          { headerText: "Rate", bindPath: "items.rate", flex: 1, align: "right" },
-          { headerText: "Amount", bindPath: "items.total", flex: 1, align: "right" }
+          {
+            headerText: "Qty",
+            bindPath: "items.qty",
+            flex: 1,
+            align: "center",
+          },
+          {
+            headerText: "Rate",
+            bindPath: "items.rate",
+            flex: 1,
+            align: "right",
+          },
+          {
+            headerText: "Amount",
+            bindPath: "items.total",
+            flex: 1,
+            align: "right",
+          },
         ],
         "items"
       ),
       250
-    )
+    ),
   },
   {
     id: "compact-table",
@@ -30,11 +45,16 @@ export const tables: WidgetRegistryItem[] = [
         [
           { headerText: "Item No.", bindPath: "items.qty", flex: 1 },
           { headerText: "Service Name", bindPath: "items.desc", flex: 4 },
-          { headerText: "Unit Price", bindPath: "items.rate", flex: 1, align: "right" }
+          {
+            headerText: "Unit Price",
+            bindPath: "items.rate",
+            flex: 1,
+            align: "right",
+          },
         ],
         "items"
       ),
       200
-    )
-  }
+    ),
+  },
 ];

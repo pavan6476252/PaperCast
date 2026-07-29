@@ -13,16 +13,18 @@ export default function Home() {
   const [showEditor, setShowEditor] = useState(true);
   const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
   const rightPanelMode = useDocumentStore((state) => state.rightPanelMode);
-  const setRightPanelMode = useDocumentStore((state) => state.setRightPanelMode);
+  const setRightPanelMode = useDocumentStore(
+    (state) => state.setRightPanelMode
+  );
   const isLeftDragging = useRef(false);
   const isRightDragging = useRef(false);
 
-  const handleLeftMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleLeftMouseDown = useCallback((_e: React.MouseEvent) => {
     isLeftDragging.current = true;
     document.body.style.cursor = "col-resize";
   }, []);
 
-  const handleRightMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleRightMouseDown = useCallback((__e: React.MouseEvent) => {
     isRightDragging.current = true;
     document.body.style.cursor = "col-resize";
   }, []);
@@ -35,22 +37,33 @@ export default function Home() {
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isLeftDragging.current) {
-      const newWidth = Math.max(200, Math.min(e.clientX, window.innerWidth - 400));
+      const newWidth = Math.max(
+        200,
+        Math.min(e.clientX, window.innerWidth - 400)
+      );
       setLeftWidth(newWidth);
     }
     if (isRightDragging.current) {
-      const newWidth = Math.max(200, Math.min(window.innerWidth - e.clientX, window.innerWidth - 400));
+      const newWidth = Math.max(
+        200,
+        Math.min(window.innerWidth - e.clientX, window.innerWidth - 400)
+      );
       setRightWidth(newWidth);
     }
   }, []);
 
   const setZoom = useDocumentStore((state) => state.setZoom);
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
-  const deconstructAllRichText = useDocumentStore((state) => state.deconstructAllRichText);
+  const deconstructAllRichText = useDocumentStore(
+    (state) => state.deconstructAllRichText
+  );
   const initialLoadDone = useRef(false);
 
   useEffect(() => {
-    if (!initialLoadDone.current && parsedDocument?.meta?.richTextPreferences?.autoDeconstruct) {
+    if (
+      !initialLoadDone.current &&
+      parsedDocument?.meta?.richTextPreferences?.autoDeconstruct
+    ) {
       initialLoadDone.current = true;
       deconstructAllRichText();
     }
@@ -116,15 +129,15 @@ export default function Home() {
     <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
       {showEditor && (
         <>
-          <div 
-            style={{ width: leftWidth }} 
+          <div
+            style={{ width: leftWidth }}
             className="flex flex-col z-10 shadow-xl relative shrink-0 print:hidden"
           >
             <JsonEditor />
           </div>
-          
+
           {/* Resizer Handle */}
-          <div 
+          <div
             onMouseDown={handleLeftMouseDown}
             className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
           >
@@ -134,39 +147,42 @@ export default function Home() {
       )}
 
       <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
-        <DocumentPreview isEditorVisible={showEditor} onToggleEditor={() => setShowEditor(s => !s)} />
+        <DocumentPreview
+          isEditorVisible={showEditor}
+          onToggleEditor={() => setShowEditor((s) => !s)}
+        />
       </div>
 
       {/* Right Resizer Handle */}
-      <div 
+      <div
         onMouseDown={handleRightMouseDown}
         className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
       >
         <div className="h-8 w-1 bg-gray-400 rounded-full" />
       </div>
-      
-      <div 
-        style={{ width: rightWidth, minWidth: 260 }} 
+
+      <div
+        style={{ width: rightWidth, minWidth: 260 }}
         className="flex flex-col z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.1)] relative shrink-0 print:hidden bg-white h-full"
       >
         <div className="flex border-b border-gray-200 shrink-0">
-          <button 
-            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === 'widgets' ? 'border-b-2 border-blue-500 text-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700 bg-gray-50'}`}
-            onClick={() => setRightPanelMode('widgets')}
+          <button
+            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "widgets" ? "border-b-2 border-blue-500 text-blue-600 bg-white" : "text-gray-500 hover:text-gray-700 bg-gray-50"}`}
+            onClick={() => setRightPanelMode("widgets")}
           >
             Widgets
           </button>
-          <button 
-            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === 'properties' ? 'border-b-2 border-blue-500 text-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700 bg-gray-50'}`}
-            onClick={() => setRightPanelMode('properties')}
+          <button
+            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "properties" ? "border-b-2 border-blue-500 text-blue-600 bg-white" : "text-gray-500 hover:text-gray-700 bg-gray-50"}`}
+            onClick={() => setRightPanelMode("properties")}
           >
-            Properties {selectedNodeId ? '•' : ''}
+            Properties {selectedNodeId ? "•" : ""}
           </button>
         </div>
-        
+
         <div className="flex-1 overflow-hidden">
-          {rightPanelMode === 'widgets' && <WidgetsPanel />}
-          {rightPanelMode === 'properties' && <PropertyPanel />}
+          {rightPanelMode === "widgets" && <WidgetsPanel />}
+          {rightPanelMode === "properties" && <PropertyPanel />}
         </div>
       </div>
     </main>

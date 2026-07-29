@@ -10,7 +10,7 @@ export const widgets: WidgetRegistryItem[] = [
   ...footers,
   ...layouts,
   ...tables,
-  ...advanced
+  ...advanced,
 ];
 
 export type { WidgetRegistryItem };

@@ -23,10 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-    >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="m-0 p-0 antialiased">
         <script
           dangerouslySetInnerHTML={{
@@ -41,7 +38,7 @@ export default function RootLayout({
                   event.preventDefault();
                 }
               });
-            `
+            `,
           }}
         />
         {children}

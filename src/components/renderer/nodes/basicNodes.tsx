@@ -1,5 +1,15 @@
 import React from "react";
-import { BaseNode, RootNode, RowNode, ColumnNode, TextNode, ImageNode, SpacerNode, ListTileNode, RichTextNode } from "../../../types/schema";
+import {
+  BaseNode,
+  RootNode,
+  RowNode,
+  ColumnNode,
+  TextNode,
+  ImageNode,
+  SpacerNode,
+  ListTileNode,
+  RichTextNode,
+} from "../../../types/schema";
 import { getStyle } from "../utils/styleUtils";
 import { NodeRenderer } from "../NodeRenderer";
 import { NodeRegistry } from "../../../registry/NodeRegistry";
@@ -25,10 +35,18 @@ const getInteractionStyle = (isSelected?: boolean) => ({
 });
 
 // --- Root Node ---
-const RootComponent: React.FC<{ node: RootNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const RootComponent: React.FC<{ node: RootNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   return (
     <div
-      style={{ ...getStyle(node), position: "relative", ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        position: "relative",
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     >
       {renderChildren(node)}
@@ -42,10 +60,18 @@ NodeRegistry.register({
 });
 
 // --- Row Node ---
-const RowComponent: React.FC<{ node: RowNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const RowComponent: React.FC<{ node: RowNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   return (
     <div
-      style={{ ...getStyle(node), flexDirection: "row", ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        flexDirection: "row",
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     >
       {renderChildren(node)}
@@ -59,10 +85,18 @@ NodeRegistry.register({
 });
 
 // --- Column Node ---
-const ColumnComponent: React.FC<{ node: ColumnNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const ColumnComponent: React.FC<{ node: ColumnNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   return (
     <div
-      style={{ ...getStyle(node), flexDirection: "column", ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        flexDirection: "column",
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     >
       {renderChildren(node)}
@@ -78,11 +112,15 @@ NodeRegistry.register({
 // Helper to resolve nested object path
 const resolvePath = (obj: any, path: string) => {
   if (!obj || !path) return undefined;
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 
 // --- Text Node ---
-const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   const { data, pageContext } = useRendererContext();
   let content = "";
   const isAnchor = node.props?.isAnchor;
@@ -107,7 +145,7 @@ const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({ node, isSelec
     const val = resolvePath(data, node.bind.path);
     if (val === undefined) {
       content = `[Missing Data: ${node.bind.path}]`;
-    } else if (typeof val === 'object' && val !== null) {
+    } else if (typeof val === "object" && val !== null) {
       content = `[Invalid Data: Expected primitive for ${node.bind.path}]`;
     } else {
       content = String(val);
@@ -133,7 +171,12 @@ const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({ node, isSelec
         href={href || "#"}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ ...style, textDecoration: style.textDecoration || "underline", color: style.color || "blue", cursor: "pointer" }}
+        style={{
+          ...style,
+          textDecoration: style.textDecoration || "underline",
+          color: style.color || "blue",
+          cursor: "pointer",
+        }}
         onClick={(e) => {
           if (onSelect) {
             e.preventDefault(); // Prevent navigation when editing
@@ -147,24 +190,33 @@ const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({ node, isSelec
   }
 
   return (
-    <div
-      style={style}
-      onClick={onSelect}
-    >
+    <div style={style} onClick={onSelect}>
       {content}
     </div>
   );
 };
-const splitTextNode = (node: BaseNode, remainingHeight: number, ctx: any): [BaseNode, BaseNode | null, number] | null => {
-  const originalId = node.id.split('-part')[0];
-  const totalHeight = ctx.measurements.blocks[originalId] || ctx.measurements.blocks[node.id] || 0;
-  
-  if (totalHeight <= remainingHeight || totalHeight === 0 || remainingHeight <= 15) return null;
+const splitTextNode = (
+  node: BaseNode,
+  remainingHeight: number,
+  ctx: any
+): [BaseNode, BaseNode | null, number] | null => {
+  const originalId = node.id.split("-part")[0];
+  const totalHeight =
+    ctx.measurements.blocks[originalId] ||
+    ctx.measurements.blocks[node.id] ||
+    0;
+
+  if (
+    totalHeight <= remainingHeight ||
+    totalHeight === 0 ||
+    remainingHeight <= 15
+  )
+    return null;
 
   let text = (node.props as any)?.literal || "";
   if (node.bind?.path) {
     const val = resolvePath(ctx.data, node.bind.path);
-    if (val !== undefined && typeof val !== 'object') {
+    if (val !== undefined && typeof val !== "object") {
       text = String(val);
     }
   }
@@ -172,13 +224,17 @@ const splitTextNode = (node: BaseNode, remainingHeight: number, ctx: any): [Base
   if (!text) return null;
 
   // We assume the text fits proportionally, subtract safety buffer
-  let ratio = (remainingHeight - 12) / totalHeight;
+  const ratio = (remainingHeight - 12) / totalHeight;
   if (ratio <= 0) return null;
 
   let splitCharIndex = Math.floor(text.length * ratio);
 
   // Backtrack to the nearest space
-  while (splitCharIndex > 0 && text[splitCharIndex] !== ' ' && text[splitCharIndex] !== '\n') {
+  while (
+    splitCharIndex > 0 &&
+    text[splitCharIndex] !== " " &&
+    text[splitCharIndex] !== "\n"
+  ) {
     splitCharIndex--;
   }
 
@@ -186,21 +242,21 @@ const splitTextNode = (node: BaseNode, remainingHeight: number, ctx: any): [Base
   if (splitCharIndex === 0) {
     splitCharIndex = Math.floor(text.length * ratio);
   }
-  
-  if (splitCharIndex === 0) return null; 
+
+  if (splitCharIndex === 0) return null;
 
   const chunk1Text = text.substring(0, splitCharIndex);
   const chunk2Text = text.substring(splitCharIndex).trimStart();
 
   if (!chunk1Text) return null;
 
-  const partNumber = (parseInt(node.id.split('-part')[1]) || 1) + 1;
+  const partNumber = (parseInt(node.id.split("-part")[1]) || 1) + 1;
 
   const chunk1 = {
     ...node,
     id: `${originalId}-part${partNumber - 1}`,
     props: { ...node.props, literal: chunk1Text },
-    layout: { ...node.layout, marginBottom: 0, paddingBottom: 0 }
+    layout: { ...node.layout, marginBottom: 0, paddingBottom: 0 },
   };
   delete chunk1.bind;
 
@@ -208,7 +264,7 @@ const splitTextNode = (node: BaseNode, remainingHeight: number, ctx: any): [Base
     ...node,
     id: `${originalId}-part${partNumber}`,
     props: { ...node.props, literal: chunk2Text },
-    layout: { ...node.layout, marginTop: 0, paddingTop: 0 }
+    layout: { ...node.layout, marginTop: 0, paddingTop: 0 },
   };
   delete chunk2.bind;
 
@@ -223,7 +279,11 @@ NodeRegistry.register({
 });
 
 // --- Image Node ---
-const ImageComponent: React.FC<{ node: ImageNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const ImageComponent: React.FC<{ node: ImageNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   const { data } = useRendererContext();
   const isBound = !!node.props?.srcBind;
   let src = "";
@@ -238,26 +298,52 @@ const ImageComponent: React.FC<{ node: ImageNode } & BaseProps> = ({ node, isSel
       src = String(val);
     }
   } else {
-    src = (node.props?.srcLiteral) || "";
+    src = node.props?.srcLiteral || "";
   }
 
-  const fit = (node.props?.fit) || "contain";
+  const fit = node.props?.fit || "contain";
 
   const objectFitMap = {
     contain: "contain",
     cover: "cover",
-    stretch: "fill"
+    stretch: "fill",
   } as const;
 
   return (
     <div
-      style={{ ...getStyle(node), overflow: "hidden", ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        overflow: "hidden",
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     >
       {src ? (
-        <img src={src} style={{ width: "100%", height: "100%", objectFit: objectFitMap[fit] }} alt="" />
+        <img
+          src={src}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: objectFitMap[fit],
+          }}
+          alt=""
+        />
       ) : (
-        <div style={{ width: "100%", height: "100%", backgroundColor: missingError ? "#fef2f2" : "#eee", color: missingError ? "#dc2626" : "inherit", display: "flex", alignItems: "center", justifyContent: "center", border: missingError ? "1px dashed #f87171" : "none", fontSize: "0.85em", textAlign: "center", padding: "4px" }}>
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: missingError ? "#fef2f2" : "#eee",
+            color: missingError ? "#dc2626" : "inherit",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: missingError ? "1px dashed #f87171" : "none",
+            fontSize: "0.85em",
+            textAlign: "center",
+            padding: "4px",
+          }}
+        >
           {missingError || "[Image]"}
         </div>
       )}
@@ -271,11 +357,21 @@ NodeRegistry.register({
 });
 
 // --- Spacer Node ---
-const SpacerComponent: React.FC<{ node: SpacerNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
-  const sizePx = (node.props?.sizePx) || 16;
+const SpacerComponent: React.FC<{ node: SpacerNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
+  const sizePx = node.props?.sizePx || 16;
   return (
     <div
-      style={{ ...getStyle(node), flexBasis: sizePx, flexShrink: 0, flexGrow: 0, ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        flexBasis: sizePx,
+        flexShrink: 0,
+        flexGrow: 0,
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     />
   );
@@ -287,7 +383,11 @@ NodeRegistry.register({
 });
 
 // --- ListTile Node ---
-const ListTileComponent: React.FC<{ node: ListTileNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const ListTileComponent: React.FC<{ node: ListTileNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   const { data } = useRendererContext();
 
   let title = node.props?.titleLiteral || "";
@@ -321,15 +421,30 @@ const ListTileComponent: React.FC<{ node: ListTileNode } & BaseProps> = ({ node,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        ...getInteractionStyle(isSelected)
+        ...getInteractionStyle(isSelected),
       }}
       onClick={onSelect}
     >
-      <div style={{ fontWeight: "bold", fontSize: "1em", marginBottom: (subtitle || subtitleError) ? "4px" : "0" }}>
-        {titleError ? <span style={{ color: "#dc2626" }}>{titleError}</span> : (title || "[Title]")}
+      <div
+        style={{
+          fontWeight: "bold",
+          fontSize: "1em",
+          marginBottom: subtitle || subtitleError ? "4px" : "0",
+        }}
+      >
+        {titleError ? (
+          <span style={{ color: "#dc2626" }}>{titleError}</span>
+        ) : (
+          title || "[Title]"
+        )}
       </div>
       {(subtitle || subtitleError) && (
-        <div style={{ fontSize: "0.85em", color: subtitleError ? "#dc2626" : "#666" }}>
+        <div
+          style={{
+            fontSize: "0.85em",
+            color: subtitleError ? "#dc2626" : "#666",
+          }}
+        >
           {subtitleError || subtitle}
         </div>
       )}
@@ -343,7 +458,11 @@ NodeRegistry.register({
 });
 
 // --- RichText Node ---
-const RichTextComponent: React.FC<{ node: RichTextNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const RichTextComponent: React.FC<{ node: RichTextNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   const { data } = useRendererContext();
 
   let htmlContent = node.props?.htmlLiteral || "";
@@ -361,7 +480,15 @@ const RichTextComponent: React.FC<{ node: RichTextNode } & BaseProps> = ({ node,
   if (richTextError) {
     return (
       <div
-        style={{ ...getStyle(node), color: "#dc2626", border: "1px dashed #f87171", backgroundColor: "#fef2f2", padding: "8px", fontSize: "0.9em", ...getInteractionStyle(isSelected) }}
+        style={{
+          ...getStyle(node),
+          color: "#dc2626",
+          border: "1px dashed #f87171",
+          backgroundColor: "#fef2f2",
+          padding: "8px",
+          fontSize: "0.9em",
+          ...getInteractionStyle(isSelected),
+        }}
         onClick={onSelect}
       >
         {richTextError}

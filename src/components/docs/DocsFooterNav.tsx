@@ -16,12 +16,24 @@ export function DocsFooterNav({ currentSlug }: { currentSlug: string }) {
           className="group flex flex-col items-start px-6 py-4 rounded-xl border border-slate-200 bg-white/50 hover:bg-slate-50 transition-colors w-full sm:w-1/2"
         >
           <span className="text-sm font-medium text-slate-500 mb-1 flex items-center">
-            <svg className="w-4 h-4 mr-1 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-4 h-4 mr-1 transition-transform group-hover:-translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Previous
           </span>
-          <span className="text-base font-semibold text-blue-600 group-hover:text-blue-700">{prevPage.title}</span>
+          <span className="text-base font-semibold text-blue-600 group-hover:text-blue-700">
+            {prevPage.title}
+          </span>
         </Link>
       ) : (
         <div className="w-full sm:w-1/2"></div>
@@ -34,11 +46,23 @@ export function DocsFooterNav({ currentSlug }: { currentSlug: string }) {
         >
           <span className="text-sm font-medium text-slate-500 mb-1 flex items-center">
             Next
-            <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg
+              className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </span>
-          <span className="text-base font-semibold text-blue-600 group-hover:text-blue-700">{nextPage.title}</span>
+          <span className="text-base font-semibold text-blue-600 group-hover:text-blue-700">
+            {nextPage.title}
+          </span>
         </Link>
       ) : (
         <div className="w-full sm:w-1/2"></div>

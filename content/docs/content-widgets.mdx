@@ -7,17 +7,21 @@ Content widgets are the visible elements of your document: the words, paragraphs
 The `Text` widget is the most versatile node in FormCast. It supports static text, dynamic data binding, string interpolation, and even hyperlinking!
 
 ### Core Properties
+
 - **Literal**: The hardcoded string to display. If you type `"Hello World"`, it will always render exactly that.
 - **Bind Path**: A JSON path to inject a variable (e.g., `user.firstName`). If `bind` is used, the `literal` value is ignored.
 
 ### String Interpolation
+
 You can mix static text and dynamic variables inside the `literal` property using double curly braces:
 `Hello {{user.firstName}}, your balance is {{account.balance}}`
 
 > **Note**: For page numbers in Headers and Footers, use `{{pageNumber}}` and `{{pageCount}}`.
 
 ### Hyperlinks (Anchors)
+
 You can turn any Text node into a clickable link!
+
 1. Check the `isAnchor` box in the property panel.
 2. Provide a static URL in **Href Literal** (e.g., `https://google.com`), OR
 3. Provide a JSON path in **Href Bind** (e.g., `company.websiteUrl`) to dynamically route the link based on your data payload.
@@ -42,7 +46,8 @@ You can turn any Text node into a clickable link!
 The `RichText` widget is designed for users who want to paste formatted content from tools like Microsoft Word or Google Docs (bolding, italics, bullet points, etc.).
 
 ### How it works
-Under the hood, FormCast does not actually save raw HTML. If it did, the Pagination Engine wouldn't be able to split long paragraphs across pages. 
+
+Under the hood, FormCast does not actually save raw HTML. If it did, the Pagination Engine wouldn't be able to split long paragraphs across pages.
 
 Instead, when you paste into a Rich Text widget, the FormCast engine **intercepts the HTML**, parses the DOM tree, and automatically converts `<p>`, `<strong>`, and `<em>` tags into native FormCast AST nodes! This ensures your pasted content remains paginatable and adheres to the document's global styling rules.
 
@@ -54,21 +59,27 @@ Instead, when you paste into a Rich Text widget, the FormCast engine **intercept
   }
 }
 ```
-*(Note: FormCast will internally transform this into a `column` containing a `row` of `text` nodes!)*
+
+_(Note: FormCast will internally transform this into a `column` containing a `row` of `text` nodes!)_
 
 ## Image Node
 
 The `Image` widget allows you to embed graphics, logos, and photos.
 
 ### Image Sources
+
 - **URL Literal**: A static, hardcoded URL to an image (e.g., `https://example.com/logo.png`).
 - **URL Bind**: A JSON path (e.g., `user.avatarUrl`) to dynamically load an image based on the data payload.
 
 ### Sizing and Aspect Ratio
+
 Images in FormCast will attempt to respect their container's bounds. It is highly recommended to set an explicit `width` or `height` on the Image widget (or its parent `Row`/`Column`) to prevent the image from blowing out the layout.
 
 <Callout type="warning" title="Atomic Splitting">
-Unlike Text nodes (which can mathematically split their characters across pages), Image nodes are **Atomic**. If an image cannot fit on the current page, it will not be cut in half; the entire image will be pushed to the next page.
+  Unlike Text nodes (which can mathematically split their characters across
+  pages), Image nodes are **Atomic**. If an image cannot fit on the current
+  page, it will not be cut in half; the entire image will be pushed to the next
+  page.
 </Callout>
 
 ```json

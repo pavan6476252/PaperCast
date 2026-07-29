@@ -9,11 +9,13 @@ FormCast provides a powerful Property Panel on the right side of the screen that
 Every widget in FormCast adheres to the standard CSS Box Model. When you select a widget and open the **Layout** tab, you can adjust:
 
 1. **Width & Height**: Set fixed dimensions (e.g., `100px`) or percentages (e.g., `100%`).
-2. **Padding**: Space *inside* the element's border. Useful for giving text some breathing room inside a container.
-3. **Margin**: Space *outside* the element's border. Useful for pushing other elements away.
+2. **Padding**: Space _inside_ the element's border. Useful for giving text some breathing room inside a container.
+3. **Margin**: Space _outside_ the element's border. Useful for pushing other elements away.
 
 ### Flexbox Controls
+
 If you have selected a container like a `Row` or `Column`, you will see Flexbox controls:
+
 - **Direction**: Choose whether children flow horizontally (Row) or vertically (Column).
 - **Justify**: How to align children along the main axis (e.g., Center, Space Between).
 - **Align Items**: How to align children along the cross axis.
@@ -21,18 +23,22 @@ If you have selected a container like a `Row` or `Column`, you will see Flexbox 
 
 ## Typography and Colors (Style Tab)
 
-To make your document look professional, use the **Style** tab. 
+To make your document look professional, use the **Style** tab.
 Here you can adjust:
+
 - **Font Family**: Select from modern fonts like Inter, Roboto, or standard system fonts.
 - **Font Size & Weight**: Make text larger, bolder, or italicized.
 - **Colors**: Apply text colors and background colors using hex codes (e.g., `#FF0000`).
 - **Text Align**: Left, Center, Right, or Justify.
 
 <Callout type="success" title="Inheritance">
-FormCast supports basic style inheritance! If you set `color: #0000FF` on a parent `Column`, all `Text` nodes inside that column will turn blue unless they specifically define their own color.
+  FormCast supports basic style inheritance! If you set `color: #0000FF` on a
+  parent `Column`, all `Text` nodes inside that column will turn blue unless
+  they specifically define their own color.
 </Callout>
 
 ### Full-Scale Styling Example
+
 Here is the JSON representation of a highly styled alert box demonstrating complex BoxModel properties (borders, flexbox) and Typography inheritance:
 
 ```json

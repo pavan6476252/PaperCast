@@ -3,6 +3,7 @@
 FormCast is a powerful, dynamic Document Builder built with Next.js. It allows you to design, preview, and generate print-ready PDF documents dynamically using a simple JSON structure.
 
 ## Features
+
 - **Live Preview:** Real-time rendering of your document based on JSON input.
 - **Customizable Layouts:** Select standard page sizes (A4, A3, Letter) or set custom dimensions.
 - **Orientation Control:** Toggle instantly between Portrait and Landscape modes.
@@ -34,6 +35,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Development
 
 ### Generate JSON Schema
+
 If you update the core TypeScript types (`src/types/schema.ts`), you can regenerate the JSON schema for validation using:
 
 ```bash

@@ -1,6 +1,6 @@
 # Monaco JSON Editor
 
-FormCast features an embedded Monaco Editor for users who prefer to write code or need pixel-perfect control over their schemas. 
+FormCast features an embedded Monaco Editor for users who prefer to write code or need pixel-perfect control over their schemas.
 
 ## JSON Schema Integration
 
@@ -21,6 +21,7 @@ monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
 ```
 
 Because of this, the editor provides:
+
 1. **Real-time squiggly lines** if you use an invalid property (like spelling `font-size` instead of `fontSizePx`).
 2. **Autocomplete (Ctrl+Space)** for all valid widget types, style properties, and box model constraints.
 3. **Hover documentation** (if `description` fields are defined in the schema).
@@ -33,10 +34,10 @@ When a user clicks a node in the visual preview on the right, the editor automat
 const matches = model.findMatches(
   `"id"\\s*:\\s*"${selectedNodeId}"`,
   false, // searchString
-  true,  // isRegex
+  true, // isRegex
   false, // matchCase
-  null,  // wordSeparators
-  true   // captureMatches
+  null, // wordSeparators
+  true // captureMatches
 );
 
 if (matches && matches.length > 0) {

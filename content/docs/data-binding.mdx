@@ -11,6 +11,7 @@ Templates are only useful if you can fill them with dynamic data. FormCast allow
 3. In the `Path` input, type the JSON path to your data variable.
 
 For example, if your root data looks like this:
+
 ```json
 {
   "customer": {
@@ -19,11 +20,12 @@ For example, if your root data looks like this:
   }
 }
 ```
+
 You would type `customer.firstName` into the Path field. The text node will instantly update to say "John".
 
 ### Dynamic Hyperlinks (Anchors)
 
-Did you know Text widgets can act as clickable links? 
+Did you know Text widgets can act as clickable links?
 If you toggle a Text node to be an **Anchor**, you can bind its destination URL dynamically!
 
 1. Select a Text widget and enable `isAnchor` in its Props.
@@ -49,11 +51,12 @@ If you have a list of items (like products in an invoice), you can use the **Rep
 4. Set the `Path` to your array (e.g., `invoice.items`).
 5. Set an `Item Alias` (e.g., `item`).
 
-Now, whatever you place inside this container will be duplicated for every item in the array! 
+Now, whatever you place inside this container will be duplicated for every item in the array!
 
 Inside the repeating container, you can add a Text node and set its bind path to `item.name` or `item.price`. FormCast will dynamically render a list.
 
 ### Full-Scale Data Binding Example
+
 Imagine you are passing the following eCommerce data payload to FormCast:
 
 ```json

@@ -12,26 +12,33 @@ When you create a new widget or node type in FormCast, you must register it with
 export interface NodeTypeDefinition<TNode extends BaseNode = BaseNode> {
   // The string type in the JSON schema (e.g. 'text', 'row', 'image')
   type: string;
-  
+
   // A function that calculates the height of the node based on available width
   measure: (node: TNode, ctx: MeasureContext) => number;
-  
+
   // The React component responsible for rendering this node
-  render: React.ComponentType<{ 
-    node: TNode; 
+  render: React.ComponentType<{
+    node: TNode;
     path?: string;
     isSelected?: boolean;
     onSelect?: (e: React.MouseEvent) => void;
     pageContext?: { pageNumber: number; pageCount: number };
   }>;
-  
+
   // Optional logic for splitting the node across pages
-  split?: (node: TNode, remainingHeight: number, ctx: SplitContext) => [TNode, TNode | null, number?] | null;
+  split?: (
+    node: TNode,
+    remainingHeight: number,
+    ctx: SplitContext
+  ) => [TNode, TNode | null, number?] | null;
 }
 ```
 
 <Callout type="info" title="Why is measuring separate from rendering?">
-Because FormCast runs `OffscreenMeasurer.tsx` silently before doing any pagination, the engine needs a lightweight way to ask a node how tall it will be given a specific width constraint, without actually rendering the heavy React tree to the screen.
+  Because FormCast runs `OffscreenMeasurer.tsx` silently before doing any
+  pagination, the engine needs a lightweight way to ask a node how tall it will
+  be given a specific width constraint, without actually rendering the heavy
+  React tree to the screen.
 </Callout>
 
 ## Registering a Node
@@ -57,16 +64,14 @@ First, build the component that will render the signature line.
 
 ```tsx
 // src/components/renderer/nodes/SignatureNode.tsx
-import React from 'react';
-import { BaseNode } from '../../../types/schema';
+import React from "react";
+import { BaseNode } from "../../../types/schema";
 
 export const SignatureNode = ({ node }: { node: BaseNode }) => {
   return (
     <div className="mt-8 flex flex-col w-64">
       <div className="border-b border-black h-12" />
-      <span className="text-sm text-slate-500 mt-2 font-italic">
-        Sign Here
-      </span>
+      <span className="text-sm text-slate-500 mt-2 font-italic">Sign Here</span>
     </div>
   );
 };
@@ -76,14 +81,14 @@ export const SignatureNode = ({ node }: { node: BaseNode }) => {
 In your widget registration file (e.g., `src/registry/categories/basic.ts`):
 
 ```tsx
-import { NodeRegistry } from '../NodeRegistry';
-import { SignatureNode } from '../../components/renderer/nodes/SignatureNode';
+import { NodeRegistry } from "../NodeRegistry";
+import { SignatureNode } from "../../components/renderer/nodes/SignatureNode";
 
 NodeRegistry.register({
-  type: 'signature',
+  type: "signature",
   // A signature box is roughly 70px tall (48px line + 20px text)
-  measure: () => 70, 
-  render: SignatureNode
+  measure: () => 70,
+  render: SignatureNode,
 });
 ```
 
@@ -93,15 +98,15 @@ Now, define the default JSON payload that should be injected into the AST when a
 ```typescript
 // Inside your widget category definitions
 export const signatureWidgetDef = {
-  id: 'signature-widget',
-  name: 'Signature Box',
-  icon: 'PenTool', // Lucide icon
+  id: "signature-widget",
+  name: "Signature Box",
+  icon: "PenTool", // Lucide icon
   defaultNode: {
-    type: 'signature',
+    type: "signature",
     layout: {
-      marginTop: 20
-    }
-  }
+      marginTop: 20,
+    },
+  },
 };
 ```
 

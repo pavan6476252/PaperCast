@@ -12,7 +12,7 @@ const CATEGORIES = [
   { id: "footers", label: "Footers" },
   { id: "tables", label: "Tables" },
   { id: "layout", label: "Layout & Blocks" },
-  { id: "advanced", label: "Advanced" }
+  { id: "advanced", label: "Advanced" },
 ];
 
 function WidgetsContent() {
@@ -21,11 +21,13 @@ function WidgetsContent() {
   const pathname = usePathname();
 
   const widgetParam = searchParams.get("widget");
-  const activeWidgetId = widgetParam && widgets.some(w => w.id === widgetParam)
-    ? widgetParam
-    : widgets[0]?.id;
+  const activeWidgetId =
+    widgetParam && widgets.some((w) => w.id === widgetParam)
+      ? widgetParam
+      : widgets[0]?.id;
 
-  const activeWidget = widgets.find(w => w.id === activeWidgetId) || widgets[0];
+  const activeWidget =
+    widgets.find((w) => w.id === activeWidgetId) || widgets[0];
 
   const handleWidgetChange = (id: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -37,10 +39,14 @@ function WidgetsContent() {
     <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
       {/* Sidebar */}
       <aside className="w-full md:w-72 shrink-0 border-r border-slate-200 bg-white p-6 overflow-y-auto">
-        <h2 className="text-xl font-bold text-slate-900 mb-8">Widget Registry</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-8">
+          Widget Registry
+        </h2>
         <nav className="space-y-10">
           {CATEGORIES.map((category, idx) => {
-            const categoryWidgets = widgets.filter(w => w.categoryId === category.id);
+            const categoryWidgets = widgets.filter(
+              (w) => w.categoryId === category.id
+            );
             if (categoryWidgets.length === 0) return null;
 
             return (
@@ -54,7 +60,7 @@ function WidgetsContent() {
                   {category.label}
                 </h3>
                 <ul className="space-y-1 relative">
-                  {categoryWidgets.map(widget => {
+                  {categoryWidgets.map((widget) => {
                     const isActive = activeWidgetId === widget.id;
                     return (
                       <li key={widget.id} className="relative">
@@ -63,15 +69,20 @@ function WidgetsContent() {
                             layoutId="activeWidgetBackground"
                             className="absolute inset-0 bg-blue-50 border border-blue-100 rounded-lg z-0"
                             initial={false}
-                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
                           />
                         )}
                         <button
                           onClick={() => handleWidgetChange(widget.id)}
-                          className={`relative z-10 w-full text-left px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${isActive
+                          className={`relative z-10 w-full text-left px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                            isActive
                               ? "text-blue-700"
                               : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                            }`}
+                          }`}
                         >
                           {widget.title}
                         </button>
@@ -104,8 +115,18 @@ function WidgetsContent() {
             </motion.div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
-              <svg className="w-16 h-16 mb-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                className="w-16 h-16 mb-4 text-slate-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
               <p>No widgets found.</p>
             </div>
@@ -118,7 +139,13 @@ function WidgetsContent() {
 
 export default function WidgetsPage() {
   return (
-    <Suspense fallback={<div className="flex-1 flex items-center justify-center p-8 text-slate-500">Loading widgets...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex-1 flex items-center justify-center p-8 text-slate-500">
+          Loading widgets...
+        </div>
+      }
+    >
       <WidgetsContent />
     </Suspense>
   );

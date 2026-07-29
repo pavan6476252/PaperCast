@@ -13,7 +13,7 @@ In the root `DocumentSchema`, headers and footers are stored in dictionaries:
       "condition": "all",
       "node": {
         "type": "row",
-        "children": [ /* ... */ ]
+        "children": [/* ... */]
       }
     },
     "first-page-header": {
@@ -30,10 +30,12 @@ In the root `DocumentSchema`, headers and footers are stored in dictionaries:
 
 ## Injection via DocumentPreview
 
-When `PaginationEngine.ts` spits out `PageData[]`, each page object contains a `headerId` and `footerId` (resolved by `resolver.ts`). 
+When `PaginationEngine.ts` spits out `PageData[]`, each page object contains a `headerId` and `footerId` (resolved by `resolver.ts`).
 
 The `DocumentPreview.tsx` component then looks up those IDs in the root document dictionary and renders them above and below the main `bodyNodes` for that specific page.
 
 <Callout type="success" title="Fixed Heights">
-Because headers and footers take up physical space on the printed page, their height is subtracted from the `availableHeight` when paginating the main body content.
+  Because headers and footers take up physical space on the printed page, their
+  height is subtracted from the `availableHeight` when paginating the main body
+  content.
 </Callout>

@@ -1,12 +1,14 @@
 <!-- BEGIN:nextjs-agent-rules -->
+
 # This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-
 ## Active Review Pipelines
+
 Whenever a repository review or component evaluation is requested, always route the analysis through these three specific skill configurations in tandem:
+
 - vercel-react-best-practices (for framework performance and strict React/TS standards)
 - web-design-guidelines (for visual, layout, and UX compliance)
 - writing-guidelines (for codebase documentation and UI copy standards)
@@ -19,9 +21,11 @@ Whenever a repository review or component evaluation is requested, always route 
 > **After every critical feature implementation or structural change (mentioned in agent md files), make sure to update respective agent files content.**
 
 ## Repository Overview
+
 FormCast is a Schema-First Document Builder and Renderer built with React, Next.js, and Monaco Editor. The user defines the layout using a JSON Schema (DocFrame Schema), and the engine renders it dynamically, pagination-enabled, and ready to print or download as a PDF.
 
 ## Core Directories & File Structure
+
 - [src/app](file:///Users/pavankumar/Documents/formcast/src/app): Next.js Pages and API routes.
   - [page.tsx](file:///Users/pavankumar/Documents/formcast/src/app/page.tsx): Main visual editor interface, split between the JSON Editor (left) and Document Preview (right).
   - [api/pdf/route.ts](file:///Users/pavankumar/Documents/formcast/src/app/api/pdf/route.ts): API endpoint for exporting/rendering PDFs using Puppeteer.
@@ -43,6 +47,7 @@ FormCast is a Schema-First Document Builder and Renderer built with React, Next.
   - [schema.ts](file:///Users/pavankumar/Documents/formcast/src/types/schema.ts): Holds type definitions matching the JSON schema.
 
 ## Key Architectures & Flows
+
 1. **State Flow**:
    - The user edits JSON in Monaco Editor (`JsonEditor`).
    - The text is passed to Zustand store (`documentStore`). If it's valid JSON, it gets parsed and set as `parsedDocument`.
@@ -53,5 +58,6 @@ FormCast is a Schema-First Document Builder and Renderer built with React, Next.
    - `DocumentPreview` displays pages side-by-side or stacked on the screen.
 
 ## Build and Tests
+
 - Run `pnpm run dev` to start the development server.
 - Run `pnpm run build` to verify the Next.js production build and TypeScript compilation.

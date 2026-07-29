@@ -10,7 +10,7 @@ The Pagination Engine is the heart of FormCast's dynamic document generation. It
 
 ### The Splitting Logic
 
-The engine iterates through the children of a container. If a child overflows, it recursively attempts to split the child itself. 
+The engine iterates through the children of a container. If a child overflows, it recursively attempts to split the child itself.
 
 Here is the core recursive splitting logic from `src/engine/PaginationEngine.ts`:
 
@@ -22,7 +22,7 @@ function splitContainerNode(
 ): [BaseNode, BaseNode | null, number] | null {
   if (!node.children || node.children.length === 0) return null;
 
-  const originalId = node.id.split('-part')[0];
+  const originalId = node.id.split("-part")[0];
   const children = node.children;
 
   let currentHeight = 0;
@@ -31,7 +31,7 @@ function splitContainerNode(
 
   const layout = node.layout || {};
   const rowGap = layout.rowGap || 0;
-  
+
   let splitChildChunk1: BaseNode | null = null;
   let splitChildChunk2: BaseNode | null = null;
   let splitChildHeight = 0;
@@ -48,7 +48,11 @@ function splitContainerNode(
     } else {
       // Try to split the child itself recursively
       const def = NodeRegistry.get(child.type);
-      const childSplitFn = def?.split || (child.children && child.children.length > 0 ? splitContainerNode : undefined);
+      const childSplitFn =
+        def?.split ||
+        (child.children && child.children.length > 0
+          ? splitContainerNode
+          : undefined);
       // ... proceeds to split the child
       break;
     }
@@ -65,10 +69,12 @@ When splitting a layout node (like a `column`), the engine must account for the 
 const addedHeight = i > 0 ? rowGap + childHeight : childHeight;
 ```
 
-This ensures that the space *between* elements is accurately measured. If a node is pushed to the next page, the `rowGap` before it is ignored on the new page, exactly matching how CSS Flexbox behaves.
+This ensures that the space _between_ elements is accurately measured. If a node is pushed to the next page, the `rowGap` before it is ignored on the new page, exactly matching how CSS Flexbox behaves.
 
 <Callout type="warning" title="Atomic Nodes">
-If a node does not define a `split` function and has no children (e.g., an Image node), the Pagination Engine treats it as "Atomic". If it overflows, it will push the entire node to the next page.
+  If a node does not define a `split` function and has no children (e.g., an
+  Image node), the Pagination Engine treats it as "Atomic". If it overflows, it
+  will push the entire node to the next page.
 </Callout>
 
 ## Deep Dive: The OffscreenMeasurer Trick

@@ -84,11 +84,7 @@
               "type": "string"
             }
           },
-          "required": [
-            "id",
-            "layout",
-            "type"
-          ],
+          "required": ["id", "layout", "type"],
           "type": "object"
         }
       ]
@@ -97,23 +93,14 @@
       "additionalProperties": false,
       "properties": {
         "alignItems": {
-          "enum": [
-            "flex-start",
-            "center",
-            "flex-end",
-            "stretch"
-          ],
+          "enum": ["flex-start", "center", "flex-end", "stretch"],
           "type": "string"
         },
         "borderBottomColor": {
           "type": "string"
         },
         "borderBottomStyle": {
-          "enum": [
-            "solid",
-            "dashed",
-            "none"
-          ],
+          "enum": ["solid", "dashed", "none"],
           "type": "string"
         },
         "borderBottomWidth": {
@@ -123,11 +110,7 @@
           "type": "string"
         },
         "borderLeftStyle": {
-          "enum": [
-            "solid",
-            "dashed",
-            "none"
-          ],
+          "enum": ["solid", "dashed", "none"],
           "type": "string"
         },
         "borderLeftWidth": {
@@ -137,11 +120,7 @@
           "type": "string"
         },
         "borderRightStyle": {
-          "enum": [
-            "solid",
-            "dashed",
-            "none"
-          ],
+          "enum": ["solid", "dashed", "none"],
           "type": "string"
         },
         "borderRightWidth": {
@@ -151,44 +130,28 @@
           "type": "string"
         },
         "borderTopStyle": {
-          "enum": [
-            "solid",
-            "dashed",
-            "none"
-          ],
+          "enum": ["solid", "dashed", "none"],
           "type": "string"
         },
         "borderTopWidth": {
           "type": "number"
         },
         "breakInside": {
-          "enum": [
-            "auto",
-            "avoid"
-          ],
+          "enum": ["auto", "avoid"],
           "type": "string"
         },
         "columnGap": {
           "type": "number"
         },
         "direction": {
-          "enum": [
-            "row",
-            "column"
-          ],
+          "enum": ["row", "column"],
           "type": "string"
         },
         "flex": {
-          "type": [
-            "number",
-            "string"
-          ]
+          "type": ["number", "string"]
         },
         "flexBasis": {
-          "type": [
-            "number",
-            "string"
-          ]
+          "type": ["number", "string"]
         },
         "flexGrow": {
           "type": "number"
@@ -197,10 +160,7 @@
           "type": "number"
         },
         "height": {
-          "type": [
-            "number",
-            "string"
-          ]
+          "type": ["number", "string"]
         },
         "justifyContent": {
           "enum": [
@@ -249,10 +209,7 @@
           "type": "number"
         },
         "width": {
-          "type": [
-            "number",
-            "string"
-          ]
+          "type": ["number", "string"]
         },
         "wrap": {
           "type": "boolean"
@@ -311,11 +268,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "ColumnNode": {
@@ -354,11 +307,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "CustomTableRow": {
@@ -372,10 +321,7 @@
           "type": "number"
         }
       },
-      "required": [
-        "index",
-        "cells"
-      ],
+      "required": ["index", "cells"],
       "type": "object"
     },
     "DataBinding": {
@@ -388,26 +334,18 @@
           "type": "string"
         },
         "layoutMode": {
-          "enum": [
-            "stack",
-            "grid"
-          ],
+          "enum": ["stack", "grid"],
           "type": "string"
         },
         "mode": {
-          "enum": [
-            "single",
-            "repeat"
-          ],
+          "enum": ["single", "repeat"],
           "type": "string"
         },
         "path": {
           "type": "string"
         }
       },
-      "required": [
-        "path"
-      ],
+      "required": ["path"],
       "type": "object"
     },
     "DocumentSchema": {
@@ -426,9 +364,7 @@
               "type": "object"
             }
           },
-          "required": [
-            "widgets"
-          ],
+          "required": ["widgets"],
           "type": "object"
         },
         "document": {
@@ -438,10 +374,7 @@
               "$ref": "#/definitions/BaseNode"
             },
             "footerDefaultId": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
             },
             "footers": {
               "additionalProperties": {
@@ -450,10 +383,7 @@
               "type": "object"
             },
             "headerDefaultId": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": ["string", "null"]
             },
             "headers": {
               "additionalProperties": {
@@ -466,16 +396,10 @@
                 "additionalProperties": false,
                 "properties": {
                   "footerId": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": ["string", "null"]
                   },
                   "headerId": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": ["string", "null"]
                   }
                 },
                 "type": "object"
@@ -483,12 +407,7 @@
               "type": "object"
             }
           },
-          "required": [
-            "headers",
-            "footers",
-            "pageOverrides",
-            "body"
-          ],
+          "required": ["headers", "footers", "pageOverrides", "body"],
           "type": "object"
         },
         "meta": {
@@ -502,10 +421,7 @@
               "type": "number"
             },
             "orientation": {
-              "enum": [
-                "portrait",
-                "landscape"
-              ],
+              "enum": ["portrait", "landscape"],
               "type": "string"
             },
             "pageSize": {
@@ -532,10 +448,7 @@
                       "type": "number"
                     }
                   },
-                  "required": [
-                    "widthPx",
-                    "heightPx"
-                  ],
+                  "required": ["widthPx", "heightPx"],
                   "type": "object"
                 }
               ]
@@ -544,12 +457,7 @@
               "$ref": "#/definitions/RichTextPreferences"
             }
           },
-          "required": [
-            "pageSize",
-            "orientation",
-            "baseUnit",
-            "dpi"
-          ],
+          "required": ["pageSize", "orientation", "baseUnit", "dpi"],
           "type": "object"
         },
         "theme": {
@@ -573,13 +481,7 @@
       "additionalProperties": false,
       "properties": {
         "condition": {
-          "enum": [
-            "all",
-            "first",
-            "last",
-            "even",
-            "odd"
-          ],
+          "enum": ["all", "first", "last", "even", "odd"],
           "type": "string"
         },
         "heightPx": {
@@ -595,9 +497,7 @@
           "$ref": "#/definitions/BaseNode"
         }
       },
-      "required": [
-        "root"
-      ],
+      "required": ["root"],
       "type": "object"
     },
     "ImageNode": {
@@ -629,11 +529,7 @@
           "additionalProperties": false,
           "properties": {
             "fit": {
-              "enum": [
-                "contain",
-                "cover",
-                "stretch"
-              ],
+              "enum": ["contain", "cover", "stretch"],
               "type": "string"
             },
             "srcBind": {
@@ -653,11 +549,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "ListTileNode": {
@@ -711,11 +603,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "OrderedListNode": {
@@ -754,11 +642,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "RadioGroupNode": {
@@ -809,11 +693,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "RadioNode": {
@@ -873,11 +753,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "RichTextNode": {
@@ -925,11 +801,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "RichTextPreferences": {
@@ -942,11 +814,11 @@
           "additionalProperties": {
             "additionalProperties": false,
             "properties": {
-              "style": {
-                "$ref": "#/definitions/TypographyAndColor"
-              },
               "layout": {
                 "$ref": "#/definitions/BoxModel"
+              },
+              "style": {
+                "$ref": "#/definitions/TypographyAndColor"
               }
             },
             "type": "object"
@@ -992,11 +864,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "RowNode": {
@@ -1035,11 +903,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "SpacerNode": {
@@ -1084,22 +948,14 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "TableColumnConfig": {
       "additionalProperties": false,
       "properties": {
         "align": {
-          "enum": [
-            "left",
-            "center",
-            "right"
-          ],
+          "enum": ["left", "center", "right"],
           "type": "string"
         },
         "bindPath": {
@@ -1156,11 +1012,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "TableProps": {
@@ -1188,10 +1040,7 @@
           "type": "number"
         },
         "tableSplitBehaviour": {
-          "enum": [
-            "withHeader",
-            "withoutHeader"
-          ],
+          "enum": ["withHeader", "withoutHeader"],
           "type": "string"
         }
       },
@@ -1248,11 +1097,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "Theme": {
@@ -1265,12 +1110,7 @@
                 "additionalProperties": false,
                 "properties": {
                   "alignItems": {
-                    "enum": [
-                      "flex-start",
-                      "center",
-                      "flex-end",
-                      "stretch"
-                    ],
+                    "enum": ["flex-start", "center", "flex-end", "stretch"],
                     "type": "string"
                   },
                   "backgroundColor": {
@@ -1280,11 +1120,7 @@
                     "type": "string"
                   },
                   "borderBottomStyle": {
-                    "enum": [
-                      "solid",
-                      "dashed",
-                      "none"
-                    ],
+                    "enum": ["solid", "dashed", "none"],
                     "type": "string"
                   },
                   "borderBottomWidth": {
@@ -1294,11 +1130,7 @@
                     "type": "string"
                   },
                   "borderLeftStyle": {
-                    "enum": [
-                      "solid",
-                      "dashed",
-                      "none"
-                    ],
+                    "enum": ["solid", "dashed", "none"],
                     "type": "string"
                   },
                   "borderLeftWidth": {
@@ -1308,11 +1140,7 @@
                     "type": "string"
                   },
                   "borderRightStyle": {
-                    "enum": [
-                      "solid",
-                      "dashed",
-                      "none"
-                    ],
+                    "enum": ["solid", "dashed", "none"],
                     "type": "string"
                   },
                   "borderRightWidth": {
@@ -1322,21 +1150,14 @@
                     "type": "string"
                   },
                   "borderTopStyle": {
-                    "enum": [
-                      "solid",
-                      "dashed",
-                      "none"
-                    ],
+                    "enum": ["solid", "dashed", "none"],
                     "type": "string"
                   },
                   "borderTopWidth": {
                     "type": "number"
                   },
                   "breakInside": {
-                    "enum": [
-                      "auto",
-                      "avoid"
-                    ],
+                    "enum": ["auto", "avoid"],
                     "type": "string"
                   },
                   "color": {
@@ -1346,23 +1167,14 @@
                     "type": "number"
                   },
                   "direction": {
-                    "enum": [
-                      "row",
-                      "column"
-                    ],
+                    "enum": ["row", "column"],
                     "type": "string"
                   },
                   "flex": {
-                    "type": [
-                      "number",
-                      "string"
-                    ]
+                    "type": ["number", "string"]
                   },
                   "flexBasis": {
-                    "type": [
-                      "number",
-                      "string"
-                    ]
+                    "type": ["number", "string"]
                   },
                   "flexGrow": {
                     "type": "number"
@@ -1377,10 +1189,7 @@
                     "type": "number"
                   },
                   "fontStyle": {
-                    "enum": [
-                      "normal",
-                      "italic"
-                    ],
+                    "enum": ["normal", "italic"],
                     "type": "string"
                   },
                   "fontWeight": {
@@ -1399,10 +1208,7 @@
                     ]
                   },
                   "height": {
-                    "type": [
-                      "number",
-                      "string"
-                    ]
+                    "type": ["number", "string"]
                   },
                   "justifyContent": {
                     "enum": [
@@ -1454,26 +1260,15 @@
                     "type": "number"
                   },
                   "textAlign": {
-                    "enum": [
-                      "left",
-                      "center",
-                      "right",
-                      "justify"
-                    ],
+                    "enum": ["left", "center", "right", "justify"],
                     "type": "string"
                   },
                   "textDecoration": {
-                    "enum": [
-                      "none",
-                      "underline"
-                    ],
+                    "enum": ["none", "underline"],
                     "type": "string"
                   },
                   "width": {
-                    "type": [
-                      "number",
-                      "string"
-                    ]
+                    "type": ["number", "string"]
                   },
                   "wrap": {
                     "type": "boolean"
@@ -1491,12 +1286,7 @@
               "additionalProperties": false,
               "properties": {
                 "alignItems": {
-                  "enum": [
-                    "flex-start",
-                    "center",
-                    "flex-end",
-                    "stretch"
-                  ],
+                  "enum": ["flex-start", "center", "flex-end", "stretch"],
                   "type": "string"
                 },
                 "backgroundColor": {
@@ -1506,11 +1296,7 @@
                   "type": "string"
                 },
                 "borderBottomStyle": {
-                  "enum": [
-                    "solid",
-                    "dashed",
-                    "none"
-                  ],
+                  "enum": ["solid", "dashed", "none"],
                   "type": "string"
                 },
                 "borderBottomWidth": {
@@ -1520,11 +1306,7 @@
                   "type": "string"
                 },
                 "borderLeftStyle": {
-                  "enum": [
-                    "solid",
-                    "dashed",
-                    "none"
-                  ],
+                  "enum": ["solid", "dashed", "none"],
                   "type": "string"
                 },
                 "borderLeftWidth": {
@@ -1534,11 +1316,7 @@
                   "type": "string"
                 },
                 "borderRightStyle": {
-                  "enum": [
-                    "solid",
-                    "dashed",
-                    "none"
-                  ],
+                  "enum": ["solid", "dashed", "none"],
                   "type": "string"
                 },
                 "borderRightWidth": {
@@ -1548,21 +1326,14 @@
                   "type": "string"
                 },
                 "borderTopStyle": {
-                  "enum": [
-                    "solid",
-                    "dashed",
-                    "none"
-                  ],
+                  "enum": ["solid", "dashed", "none"],
                   "type": "string"
                 },
                 "borderTopWidth": {
                   "type": "number"
                 },
                 "breakInside": {
-                  "enum": [
-                    "auto",
-                    "avoid"
-                  ],
+                  "enum": ["auto", "avoid"],
                   "type": "string"
                 },
                 "color": {
@@ -1572,23 +1343,14 @@
                   "type": "number"
                 },
                 "direction": {
-                  "enum": [
-                    "row",
-                    "column"
-                  ],
+                  "enum": ["row", "column"],
                   "type": "string"
                 },
                 "flex": {
-                  "type": [
-                    "number",
-                    "string"
-                  ]
+                  "type": ["number", "string"]
                 },
                 "flexBasis": {
-                  "type": [
-                    "number",
-                    "string"
-                  ]
+                  "type": ["number", "string"]
                 },
                 "flexGrow": {
                   "type": "number"
@@ -1603,10 +1365,7 @@
                   "type": "number"
                 },
                 "fontStyle": {
-                  "enum": [
-                    "normal",
-                    "italic"
-                  ],
+                  "enum": ["normal", "italic"],
                   "type": "string"
                 },
                 "fontWeight": {
@@ -1625,10 +1384,7 @@
                   ]
                 },
                 "height": {
-                  "type": [
-                    "number",
-                    "string"
-                  ]
+                  "type": ["number", "string"]
                 },
                 "justifyContent": {
                   "enum": [
@@ -1680,26 +1436,15 @@
                   "type": "number"
                 },
                 "textAlign": {
-                  "enum": [
-                    "left",
-                    "center",
-                    "right",
-                    "justify"
-                  ],
+                  "enum": ["left", "center", "right", "justify"],
                   "type": "string"
                 },
                 "textDecoration": {
-                  "enum": [
-                    "none",
-                    "underline"
-                  ],
+                  "enum": ["none", "underline"],
                   "type": "string"
                 },
                 "width": {
-                  "type": [
-                    "number",
-                    "string"
-                  ]
+                  "type": ["number", "string"]
                 },
                 "wrap": {
                   "type": "boolean"
@@ -1711,9 +1456,7 @@
           "type": "object"
         }
       },
-      "required": [
-        "defaults"
-      ],
+      "required": ["defaults"],
       "type": "object"
     },
     "TypographyAndColor": {
@@ -1732,10 +1475,7 @@
           "type": "number"
         },
         "fontStyle": {
-          "enum": [
-            "normal",
-            "italic"
-          ],
+          "enum": ["normal", "italic"],
           "type": "string"
         },
         "fontWeight": {
@@ -1757,19 +1497,11 @@
           "type": "number"
         },
         "textAlign": {
-          "enum": [
-            "left",
-            "center",
-            "right",
-            "justify"
-          ],
+          "enum": ["left", "center", "right", "justify"],
           "type": "string"
         },
         "textDecoration": {
-          "enum": [
-            "none",
-            "underline"
-          ],
+          "enum": ["none", "underline"],
           "type": "string"
         }
       },
@@ -1811,11 +1543,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     },
     "WidgetDefinition": {
@@ -1835,11 +1563,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "type",
-        "root"
-      ],
+      "required": ["id", "type", "root"],
       "type": "object"
     },
     "WidgetInstanceNode": {
@@ -1874,9 +1598,7 @@
               "type": "string"
             }
           },
-          "required": [
-            "definitionId"
-          ],
+          "required": ["definitionId"],
           "type": "object"
         },
         "style": {
@@ -1887,11 +1609,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "layout",
-        "type"
-      ],
+      "required": ["id", "layout", "type"],
       "type": "object"
     }
   }

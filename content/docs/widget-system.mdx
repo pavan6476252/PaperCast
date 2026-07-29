@@ -12,13 +12,16 @@ In `src/registry/categories/`, widgets are grouped into categories:
 
 ## Drag and Drop
 
-The visual builder uses a DnD system to allow users to pull from the widget registry and drop them into the document. 
+The visual builder uses a DnD system to allow users to pull from the widget registry and drop them into the document.
 
 When a widget is dropped:
+
 1. The builder reads the default JSON schema defined for that widget (e.g., a basic Text widget drops with `{ type: "text", content: "New Text" }`).
 2. The `astManipulators` inject this new node into the active AST.
 3. The store updates, triggering a re-render and re-pagination.
 
 <Callout type="warning" title="Widget IDs">
-Every node requires a universally unique `id`. When a widget is dropped from the registry, FormCast automatically generates a new UUID for that node to ensure the AST remains strictly valid.
+  Every node requires a universally unique `id`. When a widget is dropped from
+  the registry, FormCast automatically generates a new UUID for that node to
+  ensure the AST remains strictly valid.
 </Callout>

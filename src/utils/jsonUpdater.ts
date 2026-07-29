@@ -1,19 +1,26 @@
-import { parse } from 'json-source-map';
-import { DocumentSchema, BaseNode } from '../types/schema';
+import { parse } from "json-source-map";
+import { DocumentSchema, BaseNode } from "../types/schema";
 
 /**
  * Finds the JSON pointer path to a node by its ID.
  */
-export function findNodePath(doc: DocumentSchema, targetId: string): string | null {
+export function findNodePath(
+  doc: DocumentSchema,
+  targetId: string
+): string | null {
   // Check body
-  const bodyPath = findInNode(doc.document.body, targetId, '/document/body');
+  const bodyPath = findInNode(doc.document.body, targetId, "/document/body");
   if (bodyPath) return bodyPath;
 
   // Check headers
   if (doc.document.headers) {
     for (const [key, header] of Object.entries(doc.document.headers)) {
       if (header.root) {
-        const path = findInNode(header.root, targetId, `/document/headers/${key}/root`);
+        const path = findInNode(
+          header.root,
+          targetId,
+          `/document/headers/${key}/root`
+        );
         if (path) return path;
       }
     }
@@ -23,7 +30,11 @@ export function findNodePath(doc: DocumentSchema, targetId: string): string | nu
   if (doc.document.footers) {
     for (const [key, footer] of Object.entries(doc.document.footers)) {
       if (footer.root) {
-        const path = findInNode(footer.root, targetId, `/document/footers/${key}/root`);
+        const path = findInNode(
+          footer.root,
+          targetId,
+          `/document/footers/${key}/root`
+        );
         if (path) return path;
       }
     }
@@ -33,7 +44,11 @@ export function findNodePath(doc: DocumentSchema, targetId: string): string | nu
   if (doc.definitions?.widgets) {
     for (const [key, widget] of Object.entries(doc.definitions.widgets)) {
       if (widget.root) {
-        const path = findInNode(widget.root, targetId, `/definitions/widgets/${key}/root`);
+        const path = findInNode(
+          widget.root,
+          targetId,
+          `/definitions/widgets/${key}/root`
+        );
         if (path) return path;
       }
     }
@@ -42,14 +57,22 @@ export function findNodePath(doc: DocumentSchema, targetId: string): string | nu
   return null;
 }
 
-function findInNode(node: BaseNode, targetId: string, currentPath: string): string | null {
+function findInNode(
+  node: BaseNode,
+  targetId: string,
+  currentPath: string
+): string | null {
   if (node.id === targetId) {
     return currentPath;
   }
   if (node.children) {
     for (let i = 0; i < node.children.length; i++) {
       const child = node.children[i];
-      const childPath = findInNode(child, targetId, `${currentPath}/children/${i}`);
+      const childPath = findInNode(
+        child,
+        targetId,
+        `${currentPath}/children/${i}`
+      );
       if (childPath) return childPath;
     }
   }
@@ -63,7 +86,7 @@ function findInNode(node: BaseNode, targetId: string, currentPath: string): stri
 export function updateJsonNodeProperty(
   jsonString: string,
   nodePointer: string,
-  propertyGroup: 'layout' | 'style' | 'props' | 'bind',
+  propertyGroup: "layout" | "style" | "props" | "bind",
   propertyKey: string,
   newValue: any
 ): string {
@@ -80,7 +103,11 @@ export function updateJsonNodeProperty(
     } else {
       const start = exactPointer.value.pos;
       const end = exactPointer.valueEnd.pos;
-      return jsonString.slice(0, start) + JSON.stringify(newValue) + jsonString.slice(end);
+      return (
+        jsonString.slice(0, start) +
+        JSON.stringify(newValue) +
+        jsonString.slice(end)
+      );
     }
   }
 
@@ -95,8 +122,11 @@ export function updateJsonNodeProperty(
     let groupObj: Record<string, any> = {};
     try {
       groupObj = JSON.parse(groupJson);
-    } catch (e) {
-      console.warn("Failed to parse group JSON segment. Rebuilding from scratch.");
+    } catch (_e) {
+      console.warn(
+        "Failed to parse group JSON segment. Rebuilding from scratch.",
+        _e
+      );
     }
 
     if (newValue === undefined) {
@@ -108,9 +138,12 @@ export function updateJsonNodeProperty(
     // Attempt to guess indentation
     const indentLevel = groupPointer.value.column;
     const indent = " ".repeat(Math.max(0, indentLevel));
-    
+
     // Stringify and re-indent
-    const newGroupJson = JSON.stringify(groupObj, null, 2).replace(/\n/g, "\n" + indent);
+    const newGroupJson = JSON.stringify(groupObj, null, 2).replace(
+      /\n/g,
+      "\n" + indent
+    );
     return jsonString.slice(0, start) + newGroupJson + jsonString.slice(end);
   }
 
@@ -125,10 +158,15 @@ export function updateJsonNodeProperty(
   const insertPos = nodePointerObj.valueEnd.pos - 1; // index of '}'
   const indentLevel = nodePointerObj.value.column;
   const indent = " ".repeat(Math.max(0, indentLevel + 2)); // 2 spaces for properties
-  
+
   const newGroupObj = { [propertyKey]: newValue };
-  const newGroupJson = JSON.stringify(newGroupObj, null, 2).replace(/\n/g, "\n" + indent);
-  
+  const newGroupJson = JSON.stringify(newGroupObj, null, 2).replace(
+    /\n/g,
+    "\n" + indent
+  );
+
   const injection = `,\n${indent}"${propertyGroup}": ${newGroupJson}\n${" ".repeat(Math.max(0, indentLevel))}`;
-  return jsonString.slice(0, insertPos) + injection + jsonString.slice(insertPos);
+  return (
+    jsonString.slice(0, insertPos) + injection + jsonString.slice(insertPos)
+  );
 }

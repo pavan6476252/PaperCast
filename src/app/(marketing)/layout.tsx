@@ -16,10 +16,16 @@ export default function MarketingLayout({
               <span className="inline-block font-bold">FormCast</span>
             </Link>
             <nav className="hidden gap-6 md:flex">
-              <Link href="/widgets" className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900">
+              <Link
+                href="/widgets"
+                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+              >
                 Widgets
               </Link>
-              <Link href="/docs" className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900">
+              <Link
+                href="/docs"
+                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+              >
                 Documentation
               </Link>
             </nav>
@@ -31,7 +37,9 @@ export default function MarketingLayout({
           </div>
         </div>
       </header>
-      <main className="flex-1 flex flex-col overflow-y-auto relative z-10">{children}</main>
+      <main className="flex-1 flex flex-col overflow-y-auto relative z-10">
+        {children}
+      </main>
     </div>
   );
 }

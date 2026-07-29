@@ -5,7 +5,6 @@ export function resolveHeader(
   totalPages: number, // often we don't know totalPages until pagination finishes, but we can pass Infinity or evaluate "last" in a second pass
   doc: DocumentSchema["document"]
 ): string | undefined {
-  
   // 1. Check page overrides
   const override = doc.pageOverrides?.[pageNumber.toString()]?.headerId;
   if (override !== undefined) {
@@ -14,10 +13,10 @@ export function resolveHeader(
   }
 
   const entries = Object.entries(doc.headers || {});
-  
+
   // 2. Evaluate conditions by priority: first/last > even/odd > all
   let matchedKey: string | undefined = undefined;
-  
+
   if (pageNumber === 1) {
     matchedKey = entries.find(([_, h]) => h.condition === "first")?.[0];
   } else if (pageNumber === totalPages) {
@@ -26,11 +25,15 @@ export function resolveHeader(
 
   if (!matchedKey) {
     const isEven = pageNumber % 2 === 0;
-    matchedKey = entries.find(([_, h]) => h.condition === (isEven ? "even" : "odd"))?.[0];
+    matchedKey = entries.find(
+      ([_, h]) => h.condition === (isEven ? "even" : "odd")
+    )?.[0];
   }
 
   if (!matchedKey) {
-    matchedKey = entries.find(([_, h]) => h.condition === "all" || !h.condition)?.[0];
+    matchedKey = entries.find(
+      ([_, h]) => h.condition === "all" || !h.condition
+    )?.[0];
   }
 
   // 3. Fallback to default
@@ -46,7 +49,6 @@ export function resolveFooter(
   totalPages: number,
   doc: DocumentSchema["document"]
 ): string | undefined {
-  
   // 1. Check page overrides
   const override = doc.pageOverrides?.[pageNumber.toString()]?.footerId;
   if (override !== undefined) {
@@ -58,7 +60,7 @@ export function resolveFooter(
 
   // 2. Evaluate conditions by priority: first/last > even/odd > all
   let matchedKey: string | undefined = undefined;
-  
+
   if (pageNumber === 1) {
     matchedKey = entries.find(([_, h]) => h.condition === "first")?.[0];
   } else if (pageNumber === totalPages) {
@@ -67,11 +69,15 @@ export function resolveFooter(
 
   if (!matchedKey) {
     const isEven = pageNumber % 2 === 0;
-    matchedKey = entries.find(([_, h]) => h.condition === (isEven ? "even" : "odd"))?.[0];
+    matchedKey = entries.find(
+      ([_, h]) => h.condition === (isEven ? "even" : "odd")
+    )?.[0];
   }
 
   if (!matchedKey) {
-    matchedKey = entries.find(([_, h]) => h.condition === "all" || !h.condition)?.[0];
+    matchedKey = entries.find(
+      ([_, h]) => h.condition === "all" || !h.condition
+    )?.[0];
   }
 
   // 3. Fallback to default

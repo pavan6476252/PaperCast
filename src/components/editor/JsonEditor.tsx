@@ -8,18 +8,22 @@ import { getNodeContextPaths } from "../../utils/dataBinding";
 export const JsonEditor: React.FC = () => {
   const monaco = useMonaco();
   const editorRef = useRef<any>(null);
-  
+
   const jsonString = useDocumentStore((state) => state.jsonString);
   const setJsonString = useDocumentStore((state) => state.setJsonString);
   const isAutoSync = useDocumentStore((state) => state.isAutoSync);
   const toggleAutoSync = useDocumentStore((state) => state.toggleAutoSync);
-  const triggerManualSync = useDocumentStore((state) => state.triggerManualSync);
+  const triggerManualSync = useDocumentStore(
+    (state) => state.triggerManualSync
+  );
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
   const lastVisualEdit = useDocumentStore((state) => state.lastVisualEdit);
-  
+
   const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
-  const setSelectedNodeId = useDocumentStore((state) => state.setSelectedNodeId);
-  
+  const setSelectedNodeId = useDocumentStore(
+    (state) => state.setSelectedNodeId
+  );
+
   // Track if a selection change was initiated by the editor or externally
   const isEditorInitiatedSelection = useRef(false);
 
@@ -36,49 +40,59 @@ export const JsonEditor: React.FC = () => {
           },
         ],
       });
-      
-      const disposable = monaco.languages.registerCompletionItemProvider("json", {
-        triggerCharacters: ['"'],
-        provideCompletionItems: (model: any, position: any) => {
-          const textUntilPosition = model.getValueInRange({
-            startLineNumber: position.lineNumber,
-            startColumn: 1,
-            endLineNumber: position.lineNumber,
-            endColumn: position.column
-          });
-          
-          const word = model.getWordUntilPosition(position);
-          const range = {
-            startLineNumber: position.lineNumber,
-            endLineNumber: position.lineNumber,
-            startColumn: word.startColumn,
-            endColumn: word.endColumn
-          };
-          
-          // Basic heuristic: are we inside a "path": "..." string?
-          if (textUntilPosition.match(/"path"\s*:\s*"/)) {
-             const dataKeys = parsedDocument?.data ? Object.keys(parsedDocument.data) : [];
-             const suggestions = dataKeys.map(key => ({
-               label: key,
-               kind: monaco.languages.CompletionItemKind.Field,
-               insertText: key,
-               detail: `Data binding field: ${key}`,
-               range: range
-             }));
-             
-             return { suggestions };
-          }
-          return { suggestions: [] };
+
+      const disposable = monaco.languages.registerCompletionItemProvider(
+        "json",
+        {
+          triggerCharacters: ['"'],
+          provideCompletionItems: (model: any, position: any) => {
+            const textUntilPosition = model.getValueInRange({
+              startLineNumber: position.lineNumber,
+              startColumn: 1,
+              endLineNumber: position.lineNumber,
+              endColumn: position.column,
+            });
+
+            const word = model.getWordUntilPosition(position);
+            const range = {
+              startLineNumber: position.lineNumber,
+              endLineNumber: position.lineNumber,
+              startColumn: word.startColumn,
+              endColumn: word.endColumn,
+            };
+
+            // Basic heuristic: are we inside a "path": "..." string?
+            if (textUntilPosition.match(/"path"\s*:\s*"/)) {
+              const dataKeys = parsedDocument?.data
+                ? Object.keys(parsedDocument.data)
+                : [];
+              const suggestions = dataKeys.map((key) => ({
+                label: key,
+                kind: monaco.languages.CompletionItemKind.Field,
+                insertText: key,
+                detail: `Data binding field: ${key}`,
+                range: range,
+              }));
+
+              return { suggestions };
+            }
+            return { suggestions: [] };
+          },
         }
-      });
-      
+      );
+
       return () => disposable.dispose();
     }
   }, [monaco, parsedDocument?.data]);
 
   // Sync selection from Preview -> Editor
   useEffect(() => {
-    if (selectedNodeId && editorRef.current && monaco && !isEditorInitiatedSelection.current) {
+    if (
+      selectedNodeId &&
+      editorRef.current &&
+      monaco &&
+      !isEditorInitiatedSelection.current
+    ) {
       const editor = editorRef.current;
       const model = editor.getModel();
       if (!model) return;
@@ -95,25 +109,25 @@ export const JsonEditor: React.FC = () => {
       if (matches && matches.length > 0) {
         const match = matches[0];
         editor.revealLineInCenter(match.range.startLineNumber);
-        
+
         // Add a temporary highlight decoration
         const decorations = editor.createDecorationsCollection([
           {
             range: match.range,
             options: {
               isWholeLine: true,
-              className: 'bg-blue-900/30',
-              marginClassName: 'bg-blue-500'
-            }
-          }
+              className: "bg-blue-900/30",
+              marginClassName: "bg-blue-500",
+            },
+          },
         ]);
-        
+
         setTimeout(() => {
           decorations.clear();
         }, 1500);
       }
     }
-    
+
     // Reset the flag
     isEditorInitiatedSelection.current = false;
   }, [selectedNodeId, monaco]);
@@ -126,7 +140,7 @@ export const JsonEditor: React.FC = () => {
       if (model && model.getValue() !== lastVisualEdit.newString) {
         // Save view state to prevent cursor/scroll jumping
         const viewState = editor.saveViewState();
-        
+
         // Push to undo stack
         editor.pushUndoStop();
         editor.executeEdits("visual-panel", [
@@ -136,7 +150,7 @@ export const JsonEditor: React.FC = () => {
           },
         ]);
         editor.pushUndoStop();
-        
+
         if (viewState) {
           editor.restoreViewState(viewState);
         }
@@ -153,19 +167,25 @@ export const JsonEditor: React.FC = () => {
     });
 
     // Register Autocomplete for srcBind and path
-    monaco.languages.registerCompletionItemProvider('json', {
+    monaco.languages.registerCompletionItemProvider("json", {
       triggerCharacters: ['"'],
       provideCompletionItems: (model: any, position: any) => {
         const lineContent = model.getLineContent(position.lineNumber);
         const textUntilPosition = lineContent.substring(0, position.column - 1);
-        
+
         // Check if we are inside a "srcBind" or "path" value string
-        const match = textUntilPosition.match(/"(srcBind|path)"\s*:\s*"([^"]*)$/);
+        const match = textUntilPosition.match(
+          /"(srcBind|path)"\s*:\s*"([^"]*)$/
+        );
         if (!match) return { suggestions: [] };
 
         // Heuristic: search upwards to find the closest "id"
         let foundId = null;
-        for (let i = position.lineNumber; i >= Math.max(1, position.lineNumber - 50); i--) {
+        for (
+          let i = position.lineNumber;
+          i >= Math.max(1, position.lineNumber - 50);
+          i--
+        ) {
           const content = model.getLineContent(i);
           const idMatch = content.match(/"id"\s*:\s*"([^"]+)"/);
           if (idMatch) {
@@ -178,7 +198,7 @@ export const JsonEditor: React.FC = () => {
         if (!parsedDocument || !foundId) return { suggestions: [] };
 
         const paths = getNodeContextPaths(parsedDocument, foundId);
-        
+
         const word = model.getWordUntilPosition(position);
         const range = {
           startLineNumber: position.lineNumber,
@@ -187,15 +207,15 @@ export const JsonEditor: React.FC = () => {
           endColumn: word.endColumn,
         };
 
-        const suggestions = paths.map(p => ({
+        const suggestions = paths.map((p) => ({
           label: p,
           kind: monaco.languages.CompletionItemKind.Variable,
           insertText: p,
-          range
+          range,
         }));
 
         return { suggestions };
-      }
+      },
     });
 
     // Listen for cursor changes to sync Editor -> Preview
@@ -204,7 +224,7 @@ export const JsonEditor: React.FC = () => {
       if (e.reason === monaco.editor.CursorChangeReason.Explicit) {
         const model = editor.getModel();
         const currentLine = e.selection.startLineNumber;
-        
+
         // Simple heuristic: search upwards to find the closest "id"
         let foundId = null;
         for (let i = currentLine; i >= Math.max(1, currentLine - 50); i--) {
@@ -230,18 +250,25 @@ export const JsonEditor: React.FC = () => {
     <div className="flex flex-col h-full bg-[#1e1e1e]">
       {/* Editor Toolbar */}
       <div className="h-12 border-b border-gray-700 flex items-center px-4 justify-between shrink-0 bg-[#252526]">
-        <span className="text-sm font-semibold text-gray-300">docframe.json</span>
+        <span className="text-sm font-semibold text-gray-300">
+          docframe.json
+        </span>
         <div className="flex items-center space-x-3">
           <button
             onClick={toggleAutoSync}
             className={`flex items-center space-x-1 text-xs px-2 py-1 rounded transition-colors ${
-              isAutoSync ? "bg-blue-600/20 text-blue-400" : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+              isAutoSync
+                ? "bg-blue-600/20 text-blue-400"
+                : "bg-gray-700 text-gray-400 hover:bg-gray-600"
             }`}
           >
-            <RefreshCw size={14} className={isAutoSync ? "animate-spin-slow" : ""} />
+            <RefreshCw
+              size={14}
+              className={isAutoSync ? "animate-spin-slow" : ""}
+            />
             <span>{isAutoSync ? "Auto-Sync ON" : "Auto-Sync OFF"}</span>
           </button>
-          
+
           {!isAutoSync && (
             <button
               onClick={triggerManualSync}
@@ -254,7 +281,7 @@ export const JsonEditor: React.FC = () => {
           )}
         </div>
       </div>
-      
+
       <div className="flex-1 overflow-hidden">
         <Editor
           height="100%"

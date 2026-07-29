@@ -18,7 +18,7 @@ function splitContainerNode(
 ): [BaseNode, BaseNode | null, number] | null {
   if (!node.children || node.children.length === 0) return null;
 
-  const originalId = node.id.split('-part')[0];
+  const originalId = node.id.split("-part")[0];
   const children = node.children;
 
   let currentHeight = 0;
@@ -27,14 +27,14 @@ function splitContainerNode(
 
   const layout = node.layout || {};
   const rowGap = layout.rowGap || 0;
-  
+
   let splitChildChunk1: BaseNode | null = null;
   let splitChildChunk2: BaseNode | null = null;
   let splitChildHeight = 0;
 
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
-    let childHeight = getNodeHeight(child, ctx.measurements);
+    const childHeight = getNodeHeight(child, ctx.measurements);
 
     const addedHeight = i > 0 ? rowGap + childHeight : childHeight;
 
@@ -45,23 +45,28 @@ function splitContainerNode(
     } else {
       // Try to split the child itself recursively
       const def = NodeRegistry.get(child.type);
-      const childSplitFn = def?.split || (child.children && child.children.length > 0 ? splitContainerNode : undefined);
-      
+      const childSplitFn =
+        def?.split ||
+        (child.children && child.children.length > 0
+          ? splitContainerNode
+          : undefined);
+
       if (childSplitFn) {
-        const childRemaining = remainingHeight - currentHeight - (i > 0 ? rowGap : 0);
+        const childRemaining =
+          remainingHeight - currentHeight - (i > 0 ? rowGap : 0);
         // Only try to split if we have reasonable space left
         if (childRemaining > 0) {
-           const childSplitResult = childSplitFn(child, childRemaining, ctx);
-           if (childSplitResult) {
-              const [cChunk1, cChunk2, cChunk1Height] = childSplitResult;
-              splitChildChunk1 = cChunk1;
-              splitChildChunk2 = cChunk2;
-              splitChildHeight = cChunk1Height ?? 0;
-              
-              currentHeight += (i > 0 ? rowGap : 0) + (cChunk1Height ?? 0);
-              splitIndex = i; // The boundary is AT this child
-              fitsAtLeastOne = true;
-           }
+          const childSplitResult = childSplitFn(child, childRemaining, ctx);
+          if (childSplitResult) {
+            const [cChunk1, cChunk2, cChunk1Height] = childSplitResult;
+            splitChildChunk1 = cChunk1;
+            splitChildChunk2 = cChunk2;
+            splitChildHeight = cChunk1Height ?? 0;
+
+            currentHeight += (i > 0 ? rowGap : 0) + (cChunk1Height ?? 0);
+            splitIndex = i; // The boundary is AT this child
+            fitsAtLeastOne = true;
+          }
         }
       }
       break;
@@ -76,7 +81,7 @@ function splitContainerNode(
     return [node, null, currentHeight];
   }
 
-  const partNumber = (parseInt(node.id.split('-part')[1]) || 1) + 1;
+  const partNumber = (parseInt(node.id.split("-part")[1]) || 1) + 1;
   const chunk1Children = children.slice(0, splitIndex);
   const chunk2Children = children.slice(splitIndex);
 
@@ -116,16 +121,22 @@ function splitContainerNode(
   return [chunk1, chunk2, currentHeight];
 }
 
-function getTableNodeHeight(node: BaseNode, measurements: Measurements): number {
-  const originalId = node.id.split('-part')[0];
+function getTableNodeHeight(
+  node: BaseNode,
+  measurements: Measurements
+): number {
+  const originalId = node.id.split("-part")[0];
   const rowHeights = measurements.tableRows?.[originalId];
-  
+
   let headerHeight = 38;
   if (measurements.tableHeaders?.[originalId] !== undefined) {
     headerHeight = measurements.tableHeaders[originalId];
   }
-  
-  if ((node.props as any)?.hideHeaderOnSplit && ((node.props as any)?.splitIndex || 0) > 0) {
+
+  if (
+    (node.props as any)?.hideHeaderOnSplit &&
+    ((node.props as any)?.splitIndex || 0) > 0
+  ) {
     headerHeight = 0;
   }
 
@@ -137,7 +148,10 @@ function getTableNodeHeight(node: BaseNode, measurements: Measurements): number 
   let rowSum = 0;
   const startIndex = (node.props as any)?.splitIndex || 0;
   const totalRows = rowHeights ? rowHeights.length : 0;
-  const endIndex = (node.props as any)?.endIndex !== undefined ? (node.props as any).endIndex : totalRows;
+  const endIndex =
+    (node.props as any)?.endIndex !== undefined
+      ? (node.props as any).endIndex
+      : totalRows;
 
   if (rowHeights) {
     const end = Math.min(endIndex, rowHeights.length);
@@ -149,25 +163,38 @@ function getTableNodeHeight(node: BaseNode, measurements: Measurements): number 
     rowSum = Math.max(0, count) * 38;
   }
 
-  return headerHeight + rowSum + marginTop + marginBottom + paddingTop + paddingBottom;
+  return (
+    headerHeight +
+    rowSum +
+    marginTop +
+    marginBottom +
+    paddingTop +
+    paddingBottom
+  );
 }
 
-function getContainerNodeHeight(node: BaseNode, measurements: Measurements): number {
+function getContainerNodeHeight(
+  node: BaseNode,
+  measurements: Measurements
+): number {
   if (!node.children || node.children.length === 0) return 0;
-  
+
   const layout = node.layout || {};
   const rowGap = layout.rowGap || 0;
   const marginTop = layout.marginTop || 0;
   const marginBottom = layout.marginBottom || 0;
   const paddingTop = layout.paddingTop || 0;
   const paddingBottom = layout.paddingBottom || 0;
-  
+
   const isHorizontal = node.type === "row";
 
   if (isHorizontal) {
     let maxHeight = 0;
     for (let i = 0; i < node.children.length; i++) {
-      maxHeight = Math.max(maxHeight, getNodeHeight(node.children[i], measurements));
+      maxHeight = Math.max(
+        maxHeight,
+        getNodeHeight(node.children[i], measurements)
+      );
     }
     return maxHeight + marginTop + marginBottom + paddingTop + paddingBottom;
   } else {
@@ -183,24 +210,24 @@ function getContainerNodeHeight(node: BaseNode, measurements: Measurements): num
 
 function getNodeHeight(node: BaseNode, measurements: Measurements): number {
   const nodeId = node.id || "unnamed";
-  
+
   if (node.type === "table") {
     return getTableNodeHeight(node, measurements);
   }
-  
+
   if (measurements.blocks[nodeId] !== undefined) {
     return measurements.blocks[nodeId];
   }
-  
+
   if (node.children && node.children.length > 0) {
     return getContainerNodeHeight(node, measurements);
   }
-  
-  const originalId = nodeId.split('-part')[0];
+
+  const originalId = nodeId.split("-part")[0];
   if (measurements.blocks[originalId] !== undefined) {
     return measurements.blocks[originalId];
   }
-  
+
   return 0;
 }
 
@@ -212,52 +239,76 @@ export function paginateDocument(
   const pages: PageData[] = [];
   let currentPageNumber = 1;
   let currentNodes: BaseNode[] = [];
-  
+
   const bodyLayout = doc.document.body.layout || {};
   const paddingTop = bodyLayout.paddingTop || 0;
   const paddingBottom = bodyLayout.paddingBottom || 0;
   const borderTop = bodyLayout.borderTopWidth || 0;
   const borderBottom = bodyLayout.borderBottomWidth || 0;
   const rowGap = bodyLayout.rowGap || 0;
-  
+
   let headerKey = resolveHeader(currentPageNumber, Infinity, doc.document);
   let footerKey = resolveFooter(currentPageNumber, Infinity, doc.document);
-  
+
   let headerSection = headerKey ? doc.document.headers[headerKey] : undefined;
   let footerSection = footerKey ? doc.document.footers[footerKey] : undefined;
-  
-  let headerHeight = headerSection ? (headerSection.heightPx ?? measurements.headers[headerKey!] ?? 0) : 0;
-  let footerHeight = footerSection ? (footerSection.heightPx ?? measurements.footers[footerKey!] ?? 0) : 0;
-  
-  let availableHeight = pageHeight - headerHeight - footerHeight - paddingTop - paddingBottom - borderTop - borderBottom;
+
+  let headerHeight = headerSection
+    ? (headerSection.heightPx ?? measurements.headers[headerKey!] ?? 0)
+    : 0;
+  let footerHeight = footerSection
+    ? (footerSection.heightPx ?? measurements.footers[footerKey!] ?? 0)
+    : 0;
+
+  let availableHeight =
+    pageHeight -
+    headerHeight -
+    footerHeight -
+    paddingTop -
+    paddingBottom -
+    borderTop -
+    borderBottom;
   let currentHeight = 0;
-  
+
   const blocks = [...(doc.document.body.children || [])];
-  
+
   while (blocks.length > 0) {
     const block = blocks.shift()!;
-    const blockId = block.id || "unnamed";
+    // const blockId = block.id || "unnamed";
 
-    const forcePageBreak = block.layout?.pageBreakBefore && currentNodes.length > 0;
-    
+    const forcePageBreak =
+      block.layout?.pageBreakBefore && currentNodes.length > 0;
+
     // Calculate accurate block height based on exact split parts / contents
     const blockHeight = getNodeHeight(block, measurements);
 
-    const addedHeight = currentNodes.length > 0 ? rowGap + blockHeight : blockHeight;
+    const addedHeight =
+      currentNodes.length > 0 ? rowGap + blockHeight : blockHeight;
     // Add 1px subpixel safety margin to available height comparison
-    const exceedsSpace = forcePageBreak || (currentHeight + addedHeight > availableHeight - 1);
+    const exceedsSpace =
+      forcePageBreak || currentHeight + addedHeight > availableHeight - 1;
 
     if (exceedsSpace) {
       let didSplit = false;
 
       if (!forcePageBreak) {
         const def = NodeRegistry.get(block.type);
-        const splitFn = def?.split || (block.children && block.children.length > 0 ? splitContainerNode : undefined);
+        const splitFn =
+          def?.split ||
+          (block.children && block.children.length > 0
+            ? splitContainerNode
+            : undefined);
 
         if (splitFn) {
-          const remaining = availableHeight - currentHeight - (currentNodes.length > 0 ? rowGap : 0);
-          const splitResult = splitFn(block, remaining, { data: doc.data, measurements });
-          
+          const remaining =
+            availableHeight -
+            currentHeight -
+            (currentNodes.length > 0 ? rowGap : 0);
+          const splitResult = splitFn(block, remaining, {
+            data: doc.data,
+            measurements,
+          });
+
           if (splitResult) {
             const [chunk1, chunk2, chunk1Height] = splitResult;
             currentNodes.push(chunk1);
@@ -267,7 +318,9 @@ export function paginateDocument(
               didSplit = true;
             } else {
               // Overestimated height caused a split check, but it actually fits entirely!
-              currentHeight += (currentNodes.length > 1 ? rowGap : 0) + (chunk1Height ?? remaining);
+              currentHeight +=
+                (currentNodes.length > 1 ? rowGap : 0) +
+                (chunk1Height ?? remaining);
               continue; // Skip finalizing the page! Move to next block.
             }
           }
@@ -293,21 +346,26 @@ export function paginateDocument(
           footerId: footerKey,
           headerHeight,
           footerHeight,
-          bodyNodes: currentNodes
+          bodyNodes: currentNodes,
         });
-        
+
         currentPageNumber++;
         currentNodes = [];
         currentHeight = 0;
-        
+
         headerKey = resolveHeader(currentPageNumber, Infinity, doc.document);
         footerKey = resolveFooter(currentPageNumber, Infinity, doc.document);
         headerSection = headerKey ? doc.document.headers[headerKey] : undefined;
         footerSection = footerKey ? doc.document.footers[footerKey] : undefined;
-        
-        headerHeight = headerSection ? (headerSection.heightPx ?? measurements.headers[headerKey!] ?? 0) : 0;
-        footerHeight = footerSection ? (footerSection.heightPx ?? measurements.footers[footerKey!] ?? 0) : 0;
-        availableHeight = pageHeight - headerHeight - footerHeight - paddingTop - paddingBottom;
+
+        headerHeight = headerSection
+          ? (headerSection.heightPx ?? measurements.headers[headerKey!] ?? 0)
+          : 0;
+        footerHeight = footerSection
+          ? (footerSection.heightPx ?? measurements.footers[footerKey!] ?? 0)
+          : 0;
+        availableHeight =
+          pageHeight - headerHeight - footerHeight - paddingTop - paddingBottom;
       }
     } else {
       // It fits fully on the current page
@@ -315,7 +373,7 @@ export function paginateDocument(
       currentHeight += addedHeight;
     }
   }
-  
+
   // Push the final page
   if (currentNodes.length > 0 || pages.length === 0) {
     pages.push({
@@ -324,24 +382,32 @@ export function paginateDocument(
       footerId: footerKey,
       headerHeight,
       footerHeight,
-      bodyNodes: currentNodes
+      bodyNodes: currentNodes,
     });
   }
-  
+
   // Second pass: correct "last" page header/footer resolution
   const totalPages = pages.length;
   const lastPage = pages[totalPages - 1];
-  
+
   const lastHeaderKey = resolveHeader(totalPages, totalPages, doc.document);
   const lastFooterKey = resolveFooter(totalPages, totalPages, doc.document);
-  
-  const lastHeaderSection = lastHeaderKey ? doc.document.headers[lastHeaderKey] : undefined;
-  const lastFooterSection = lastFooterKey ? doc.document.footers[lastFooterKey] : undefined;
-  
+
+  const lastHeaderSection = lastHeaderKey
+    ? doc.document.headers[lastHeaderKey]
+    : undefined;
+  const lastFooterSection = lastFooterKey
+    ? doc.document.footers[lastFooterKey]
+    : undefined;
+
   lastPage.headerId = lastHeaderKey;
   lastPage.footerId = lastFooterKey;
-  lastPage.headerHeight = lastHeaderSection ? (lastHeaderSection.heightPx ?? measurements.headers[lastHeaderKey!] ?? 0) : 0;
-  lastPage.footerHeight = lastFooterSection ? (lastFooterSection.heightPx ?? measurements.footers[lastFooterKey!] ?? 0) : 0;
-  
+  lastPage.headerHeight = lastHeaderSection
+    ? (lastHeaderSection.heightPx ?? measurements.headers[lastHeaderKey!] ?? 0)
+    : 0;
+  lastPage.footerHeight = lastFooterSection
+    ? (lastFooterSection.heightPx ?? measurements.footers[lastFooterKey!] ?? 0)
+    : 0;
+
   return pages;
 }

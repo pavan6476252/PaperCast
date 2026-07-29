@@ -12,7 +12,11 @@ interface WidgetCardProps {
   schema: DocumentSchema;
 }
 
-export const WidgetCard: React.FC<WidgetCardProps> = ({ title, description, schema }) => {
+export const WidgetCard: React.FC<WidgetCardProps> = ({
+  title,
+  description,
+  schema,
+}) => {
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
   const [copied, setCopied] = useState(false);
   const [htmlCode, setHtmlCode] = useState("");
@@ -42,15 +46,19 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({ title, description, sche
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 bg-slate-50 p-4">
         <div>
           <h3 className="font-semibold text-slate-900">{title}</h3>
-          {description && <p className="text-sm text-slate-500 mt-1">{description}</p>}
+          {description && (
+            <p className="text-sm text-slate-500 mt-1">{description}</p>
+          )}
         </div>
-        
+
         <div className="flex items-center space-x-2 mt-4 sm:mt-0">
           <div className="flex bg-slate-200/50 p-0.5 rounded-lg border border-slate-200">
             <button
               onClick={() => setActiveTab("preview")}
               className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
-                activeTab === "preview" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"
+                activeTab === "preview"
+                  ? "bg-white shadow-sm text-slate-900"
+                  : "text-slate-500 hover:text-slate-700"
               }`}
             >
               Preview
@@ -58,7 +66,9 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({ title, description, sche
             <button
               onClick={() => setActiveTab("code")}
               className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
-                activeTab === "code" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"
+                activeTab === "code"
+                  ? "bg-white shadow-sm text-slate-900"
+                  : "text-slate-500 hover:text-slate-700"
               }`}
             >
               Code
@@ -69,7 +79,11 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({ title, description, sche
             className="flex items-center justify-center p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 rounded-lg transition-colors border border-transparent hover:border-slate-200"
             title="Copy JSON Schema"
           >
-            {copied ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
+            {copied ? (
+              <Check size={16} className="text-green-600" />
+            ) : (
+              <Copy size={16} />
+            )}
           </button>
         </div>
       </div>
@@ -86,9 +100,9 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({ title, description, sche
         ) : (
           <div className="flex-1 w-full max-h-[600px] overflow-auto bg-white p-4">
             {htmlCode ? (
-              <div 
+              <div
                 className="text-sm font-mono [&>pre]:!bg-transparent [&>pre]:!p-0"
-                dangerouslySetInnerHTML={{ __html: htmlCode }} 
+                dangerouslySetInnerHTML={{ __html: htmlCode }}
               />
             ) : (
               <div className="text-sm text-slate-400">Loading code...</div>

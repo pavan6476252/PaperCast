@@ -25,7 +25,8 @@ export interface BoxModel {
   // flex/flow controls
   direction?: "row" | "column";
   wrap?: boolean;
-  justifyContent?: "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
+  justifyContent?:
+    "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
   alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
   rowGap?: number;
   columnGap?: number;
@@ -50,7 +51,10 @@ export interface TypographyAndColor {
 ```
 
 <Callout type="warning" title="Validation">
-While TypeScript enforces types at compile time, the visual builder uses a Monaco Editor that enforces the JSON Schema (`docframe.schema.json`) at runtime. It is critical that any changes to `schema.ts` are reflected in the JSON schema file.
+  While TypeScript enforces types at compile time, the visual builder uses a
+  Monaco Editor that enforces the JSON Schema (`docframe.schema.json`) at
+  runtime. It is critical that any changes to `schema.ts` are reflected in the
+  JSON schema file.
 </Callout>
 
 ## The BaseNode

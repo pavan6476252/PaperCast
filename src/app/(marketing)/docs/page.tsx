@@ -10,7 +10,8 @@ export default function DocsIndexPage() {
           Documentation
         </h1>
         <p className="text-lg text-slate-600 max-w-2xl">
-          Everything you need to build, validate, and render complex documents and PDFs with FormCast.
+          Everything you need to build, validate, and render complex documents
+          and PDFs with FormCast.
         </p>
       </div>
 
@@ -24,7 +25,7 @@ export default function DocsIndexPage() {
           >
             {/* Hover Gradient Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            
+
             <div className="relative z-10 flex flex-col h-full">
               <h2 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-700 transition-colors">
                 {page.title}
@@ -32,11 +33,21 @@ export default function DocsIndexPage() {
               <p className="text-slate-600 text-sm leading-relaxed mb-4 flex-1">
                 {page.description}
               </p>
-              
+
               <div className="flex items-center text-blue-600 font-medium text-sm mt-auto">
                 Read more
-                <svg className="ml-1.5 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <svg
+                  className="ml-1.5 w-4 h-4 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
                 </svg>
               </div>
             </div>

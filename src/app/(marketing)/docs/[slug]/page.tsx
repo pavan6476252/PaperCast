@@ -13,7 +13,11 @@ import { TableOfContents } from "@/components/docs/TableOfContents";
 
 // Helper to extract text from children and generate slug
 function generateSlug(children: any): string {
-  if (typeof children === "string") return children.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  if (typeof children === "string")
+    return children
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
   if (Array.isArray(children)) return children.map(generateSlug).join("-");
   if (children?.props?.children) return generateSlug(children.props.children);
   return "";
@@ -21,25 +25,67 @@ function generateSlug(children: any): string {
 
 // Custom MDX Components for Phase 3 (we can add more later)
 const components = {
-  WidgetCard: (props: any) => <WidgetCard {...props} schema={props.schema || TEST_DOCUMENT} />,
+  WidgetCard: (props: any) => (
+    <WidgetCard {...props} schema={props.schema || TEST_DOCUMENT} />
+  ),
   Callout: (props: any) => <Callout {...props} />,
   h1: (props: any) => {
     const id = props.id || generateSlug(props.children);
-    return <h1 id={id} className="text-4xl font-extrabold tracking-tight text-slate-900 mb-6 group flex items-center scroll-mt-24" {...props} />
+    return (
+      <h1
+        id={id}
+        className="text-4xl font-extrabold tracking-tight text-slate-900 mb-6 group flex items-center scroll-mt-24"
+        {...props}
+      />
+    );
   },
   h2: (props: any) => {
     const id = props.id || generateSlug(props.children);
-    return <h2 id={id} className="text-2xl font-bold tracking-tight text-slate-900 mt-10 mb-4 border-b border-slate-200 pb-2 scroll-mt-24" {...props} />
+    return (
+      <h2
+        id={id}
+        className="text-2xl font-bold tracking-tight text-slate-900 mt-10 mb-4 border-b border-slate-200 pb-2 scroll-mt-24"
+        {...props}
+      />
+    );
   },
   h3: (props: any) => {
     const id = props.id || generateSlug(props.children);
-    return <h3 id={id} className="text-xl font-semibold tracking-tight text-slate-900 mt-8 mb-3 scroll-mt-24" {...props} />
+    return (
+      <h3
+        id={id}
+        className="text-xl font-semibold tracking-tight text-slate-900 mt-8 mb-3 scroll-mt-24"
+        {...props}
+      />
+    );
   },
-  p: (props: any) => <p className="leading-7 text-slate-600 [&:not(:first-child)]:mt-6" {...props} />,
-  a: (props: any) => <a className="font-medium text-blue-600 underline underline-offset-4 hover:text-blue-500" {...props} />,
-  ul: (props: any) => <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-slate-600" {...props} />,
-  code: (props: any) => <code className="relative rounded bg-slate-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900" {...props} />,
-  pre: (props: any) => <pre className="mb-4 mt-6 overflow-x-auto rounded-xl bg-slate-900 py-4 px-4 font-mono text-sm text-slate-50 shadow-lg" {...props} />,
+  p: (props: any) => (
+    <p
+      className="leading-7 text-slate-600 [&:not(:first-child)]:mt-6"
+      {...props}
+    />
+  ),
+  a: (props: any) => (
+    <a
+      className="font-medium text-blue-600 underline underline-offset-4 hover:text-blue-500"
+      {...props}
+    />
+  ),
+  ul: (props: any) => (
+    <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-slate-600" {...props} />
+  ),
+  code: (props: any) => (
+    <code
+      className="relative rounded bg-slate-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900"
+      {...props}
+    />
+  ),
+  pre: (props: any) => (
+    <pre
+      className="mb-4 mt-6 overflow-x-auto rounded-xl bg-slate-900 py-4 px-4 font-mono text-sm text-slate-50 shadow-lg"
+      {...props}
+    />
+  ),
 };
 
 export function generateStaticParams() {
@@ -48,7 +94,11 @@ export function generateStaticParams() {
   }));
 }
 
-export default async function DocPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function DocPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const docPage = getDocPageById(slug);
 
@@ -60,7 +110,7 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
   let mdxSource = "";
   try {
     mdxSource = fs.readFileSync(filePath, "utf-8");
-  } catch (e) {
+  } catch {
     // Return a beautiful fallback if file doesn't exist yet
     mdxSource = `# Coming Soon\n\nThis documentation page is currently being written. Please check back later!`;
   }
@@ -70,9 +120,15 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
       {/* Main Content Area */}
       <div className="flex-1 min-w-0 max-w-4xl mx-auto px-6 py-12 md:px-12 md:py-16">
         <div className="mb-8">
-          <p className="text-blue-600 font-semibold tracking-wide text-sm uppercase mb-2">Documentation</p>
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">{docPage.title}</h1>
-          <p className="text-lg text-slate-600 mt-4 leading-relaxed">{docPage.description}</p>
+          <p className="text-blue-600 font-semibold tracking-wide text-sm uppercase mb-2">
+            Documentation
+          </p>
+          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+            {docPage.title}
+          </h1>
+          <p className="text-lg text-slate-600 mt-4 leading-relaxed">
+            {docPage.description}
+          </p>
         </div>
 
         <div className="prose prose-slate prose-blue max-w-none">

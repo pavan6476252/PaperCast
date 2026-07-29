@@ -13,7 +13,11 @@ interface WidgetViewerProps {
   schema: DocumentSchema;
 }
 
-export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, schema }) => {
+export const WidgetViewer: React.FC<WidgetViewerProps> = ({
+  title,
+  description,
+  schema,
+}) => {
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
   const [copied, setCopied] = useState(false);
   const [htmlCode, setHtmlCode] = useState("");
@@ -32,7 +36,9 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
       if (isMounted) setHtmlCode(html);
     }
     highlight();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [jsonString]);
 
   const handleCopy = () => {
@@ -46,10 +52,16 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
       {/* Header Area */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 bg-white p-6 shrink-0 z-20">
         <div>
-          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">{title}</h3>
-          {description && <p className="text-sm text-slate-500 mt-2 max-w-2xl leading-relaxed">{description}</p>}
+          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
+            {title}
+          </h3>
+          {description && (
+            <p className="text-sm text-slate-500 mt-2 max-w-2xl leading-relaxed">
+              {description}
+            </p>
+          )}
         </div>
-        
+
         <div className="flex items-center space-x-3 mt-4 sm:mt-0">
           <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/60 relative">
             {["preview", "code"].map((tab) => {
@@ -59,7 +71,9 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
                   key={tab}
                   onClick={() => setActiveTab(tab as any)}
                   className={`relative px-5 py-2 text-sm font-semibold rounded-lg transition-colors z-10 capitalize ${
-                    isActive ? "text-slate-900" : "text-slate-500 hover:text-slate-700"
+                    isActive
+                      ? "text-slate-900"
+                      : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
                   {isActive && (
@@ -67,7 +81,11 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
                       layoutId="activeTabPill"
                       className="absolute inset-0 bg-white rounded-lg shadow-sm border border-slate-200/50"
                       initial={false}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
                     />
                   )}
                   <span className="relative z-20">{tab}</span>
@@ -80,7 +98,11 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
             className="group relative flex items-center justify-center p-2.5 text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 shadow-sm rounded-xl transition-all active:scale-95"
             title="Copy JSON Schema"
           >
-            {copied ? <Check size={18} className="text-green-600" /> : <Copy size={18} />}
+            {copied ? (
+              <Check size={18} className="text-green-600" />
+            ) : (
+              <Copy size={18} />
+            )}
           </button>
         </div>
       </div>
@@ -92,7 +114,7 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
 
         <AnimatePresence mode="wait">
           {activeTab === "preview" ? (
-            <motion.div 
+            <motion.div
               key="preview"
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -104,12 +126,14 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
                 {isClient ? (
                   <DocumentPreview schemaData={schema} hideToolbar={true} />
                 ) : (
-                  <div className="flex-1 flex items-center justify-center p-12 text-slate-400">Loading Preview...</div>
+                  <div className="flex-1 flex items-center justify-center p-12 text-slate-400">
+                    Loading Preview...
+                  </div>
                 )}
               </div>
             </motion.div>
           ) : (
-            <motion.div 
+            <motion.div
               key="code"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -132,13 +156,14 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({ title, description, 
                 {/* Code Content */}
                 <div className="flex-1 overflow-auto p-6">
                   {htmlCode ? (
-                    <div 
+                    <div
                       className="text-sm font-mono [&>pre]:!bg-transparent [&>pre]:!p-0 [&>pre]:!m-0"
-                      dangerouslySetInnerHTML={{ __html: htmlCode }} 
+                      dangerouslySetInnerHTML={{ __html: htmlCode }}
                     />
                   ) : (
                     <div className="text-sm text-slate-500 flex items-center">
-                      <Terminal className="w-4 h-4 mr-2 animate-pulse" /> Formatting code...
+                      <Terminal className="w-4 h-4 mr-2 animate-pulse" />{" "}
+                      Formatting code...
                     </div>
                   )}
                 </div>

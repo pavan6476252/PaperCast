@@ -1,11 +1,11 @@
 import React, { createContext, useContext } from "react";
-import { 
-  UnorderedListNode, 
-  OrderedListNode, 
-  CheckboxNode, 
-  RadioNode, 
+import {
+  UnorderedListNode,
+  OrderedListNode,
+  CheckboxNode,
+  RadioNode,
   RadioGroupNode,
-  BaseNode
+  BaseNode,
 } from "../../../types/schema";
 import { getStyle } from "../utils/styleUtils";
 import { NodeRenderer } from "../NodeRenderer";
@@ -14,12 +14,12 @@ import { useRendererContext } from "../RendererContext";
 
 const resolvePath = (obj: any, path: string) => {
   if (!obj || !path) return undefined;
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };
 
 const getInteractionStyle = (isSelected?: boolean) => {
-  return isSelected 
-    ? { outline: "2px solid #3b82f6", outlineOffset: "-2px" } 
+  return isSelected
+    ? { outline: "2px solid #3b82f6", outlineOffset: "-2px" }
     : {};
 };
 
@@ -37,18 +37,38 @@ const renderListChildren = (node: BaseNode) => {
   ));
 };
 
-const UnorderedListComponent: React.FC<{ node: UnorderedListNode } & BaseProps> = ({ node, isSelected, onSelect }) => (
+const UnorderedListComponent: React.FC<
+  { node: UnorderedListNode } & BaseProps
+> = ({ node, isSelected, onSelect }) => (
   <ul
-    style={{ display: "flex", flexDirection: "column", ...getStyle(node), listStyleType: "disc", paddingLeft: "20px", ...getInteractionStyle(isSelected) }}
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      ...getStyle(node),
+      listStyleType: "disc",
+      paddingLeft: "20px",
+      ...getInteractionStyle(isSelected),
+    }}
     onClick={onSelect}
   >
     {renderListChildren(node)}
   </ul>
 );
 
-const OrderedListComponent: React.FC<{ node: OrderedListNode } & BaseProps> = ({ node, isSelected, onSelect }) => (
+const OrderedListComponent: React.FC<{ node: OrderedListNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => (
   <ol
-    style={{ display: "flex", flexDirection: "column", ...getStyle(node), listStyleType: "decimal", paddingLeft: "20px", ...getInteractionStyle(isSelected) }}
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      ...getStyle(node),
+      listStyleType: "decimal",
+      paddingLeft: "20px",
+      ...getInteractionStyle(isSelected),
+    }}
     onClick={onSelect}
   >
     {renderListChildren(node)}
@@ -56,9 +76,13 @@ const OrderedListComponent: React.FC<{ node: OrderedListNode } & BaseProps> = ({
 );
 
 // --- Form Controls ---
-const CheckboxComponent: React.FC<{ node: CheckboxNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const CheckboxComponent: React.FC<{ node: CheckboxNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   const { data } = useRendererContext();
-  
+
   let label = node.props?.labelLiteral || "";
   let labelError = "";
   if (node.props?.labelBind) {
@@ -79,12 +103,25 @@ const CheckboxComponent: React.FC<{ node: CheckboxNode } & BaseProps> = ({ node,
 
   return (
     <div
-      style={{ ...getStyle(node), display: "flex", alignItems: "center", gap: "8px", ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     >
-      <input type="checkbox" checked={checked} readOnly style={{ cursor: "pointer" }} />
+      <input
+        type="checkbox"
+        checked={checked}
+        readOnly
+        style={{ cursor: "pointer" }}
+      />
       {labelError ? (
-        <label style={{ fontSize: "14px", color: "#dc2626" }}>{labelError}</label>
+        <label style={{ fontSize: "14px", color: "#dc2626" }}>
+          {labelError}
+        </label>
       ) : label ? (
         <label style={{ fontSize: "14px" }}>{label}</label>
       ) : null}
@@ -95,10 +132,14 @@ const CheckboxComponent: React.FC<{ node: CheckboxNode } & BaseProps> = ({ node,
 // --- Radio Group Context ---
 const RadioGroupContext = createContext<{ name?: string }>({});
 
-const RadioComponent: React.FC<{ node: RadioNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const RadioComponent: React.FC<{ node: RadioNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   const { data } = useRendererContext();
   const groupCtx = useContext(RadioGroupContext);
-  
+
   let label = node.props?.labelLiteral || "";
   let labelError = "";
   if (node.props?.labelBind) {
@@ -122,12 +163,27 @@ const RadioComponent: React.FC<{ node: RadioNode } & BaseProps> = ({ node, isSel
 
   return (
     <div
-      style={{ ...getStyle(node), display: "flex", alignItems: "center", gap: "8px", ...getInteractionStyle(isSelected) }}
+      style={{
+        ...getStyle(node),
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        ...getInteractionStyle(isSelected),
+      }}
       onClick={onSelect}
     >
-      <input type="radio" name={name} value={value} checked={checked} readOnly style={{ cursor: "pointer" }} />
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        readOnly
+        style={{ cursor: "pointer" }}
+      />
       {labelError ? (
-        <label style={{ fontSize: "14px", color: "#dc2626" }}>{labelError}</label>
+        <label style={{ fontSize: "14px", color: "#dc2626" }}>
+          {labelError}
+        </label>
       ) : label ? (
         <label style={{ fontSize: "14px" }}>{label}</label>
       ) : null}
@@ -141,11 +197,19 @@ const renderChildren = (node: BaseNode) => {
   ));
 };
 
-const RadioGroupComponent: React.FC<{ node: RadioGroupNode } & BaseProps> = ({ node, isSelected, onSelect }) => {
+const RadioGroupComponent: React.FC<{ node: RadioGroupNode } & BaseProps> = ({
+  node,
+  isSelected,
+  onSelect,
+}) => {
   return (
     <RadioGroupContext.Provider value={{ name: node.props?.name || node.id }}>
       <div
-        style={{ ...getStyle(node), display: "flex", ...getInteractionStyle(isSelected) }}
+        style={{
+          ...getStyle(node),
+          display: "flex",
+          ...getInteractionStyle(isSelected),
+        }}
         onClick={onSelect}
       >
         {renderChildren(node)}
@@ -155,8 +219,28 @@ const RadioGroupComponent: React.FC<{ node: RadioGroupNode } & BaseProps> = ({ n
 };
 
 // --- Registration ---
-NodeRegistry.register({ type: "ul", measure: () => 0, render: UnorderedListComponent });
-NodeRegistry.register({ type: "ol", measure: () => 0, render: OrderedListComponent });
-NodeRegistry.register({ type: "checkbox", measure: () => 0, render: CheckboxComponent });
-NodeRegistry.register({ type: "radio", measure: () => 0, render: RadioComponent });
-NodeRegistry.register({ type: "radioGroup", measure: () => 0, render: RadioGroupComponent });
+NodeRegistry.register({
+  type: "ul",
+  measure: () => 0,
+  render: UnorderedListComponent,
+});
+NodeRegistry.register({
+  type: "ol",
+  measure: () => 0,
+  render: OrderedListComponent,
+});
+NodeRegistry.register({
+  type: "checkbox",
+  measure: () => 0,
+  render: CheckboxComponent,
+});
+NodeRegistry.register({
+  type: "radio",
+  measure: () => 0,
+  render: RadioComponent,
+});
+NodeRegistry.register({
+  type: "radioGroup",
+  measure: () => 0,
+  render: RadioGroupComponent,
+});

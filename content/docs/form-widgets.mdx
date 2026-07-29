@@ -7,7 +7,9 @@ FormCast supports interactive form elements that are typically used when the gen
 The `Checkbox` widget renders a standard HTML checkbox input with an optional text label next to it.
 
 ### Properties
+
 In the **Props** tab, you can configure:
+
 - **Label Literal**: The static text to display next to the checkbox (e.g., "I agree to the Terms").
 - **Label Bind**: A JSON path to dynamically inject the label text (e.g., `user.agreementText`).
 - **Checked Literal**: A static boolean (`true` or `false`) to determine if the box starts checked.
@@ -28,17 +30,22 @@ In the **Props** tab, you can configure:
 Radio buttons are unique because they rely on a parent-child relationship to function correctly. A single radio button doesn't make much sense on its own; it needs to be part of a group where only one option can be selected.
 
 ### Radio Group
-The `RadioGroup` widget acts as the container. 
+
+The `RadioGroup` widget acts as the container.
+
 - You must assign a **Name Literal** or **Name Bind** in its Props. This `name` attribute is passed down to all children, ensuring they belong to the same logical group in the browser.
 
 ### Radio Node
-You drop `Radio` widgets *inside* the `RadioGroup` container.
+
+You drop `Radio` widgets _inside_ the `RadioGroup` container.
+
 - **Value Literal**: The underlying value this specific radio button represents (e.g., "option_a").
 - **Value Bind**: Dynamically inject the value.
 - **Label Literal**: The text displayed next to the radio button (e.g., "Option A").
 
 ### How to set the selected radio button
-Because the `RadioGroup` controls the state, you do not bind the "checked" state on the individual radio nodes! 
+
+Because the `RadioGroup` controls the state, you do not bind the "checked" state on the individual radio nodes!
 
 Instead, you bind the `RadioGroup`'s **Value Bind** property to your data.
 If your data payload contains `{"selectedOption": "option_b"}`, and you have a `RadioGroup` bound to `selectedOption`, the engine will automatically check the child `Radio` node whose value matches "option_b".
