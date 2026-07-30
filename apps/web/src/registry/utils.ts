@@ -1,4 +1,4 @@
-import { BaseNode, DocumentSchema } from "@/types/schema";
+import { BaseNode, DocumentSchema } from "@formcast/core";
 
 export interface WidgetRegistryItem {
   id: string;

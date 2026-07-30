@@ -1,5 +1,5 @@
 import { WidgetRegistryItem, wrap } from "../utils";
-import { row, column, text, spacer, image, table } from "@/store/test.data";
+import { row, column, text, spacer, image, table } from "@formcast/core";
 
 export const advanced: WidgetRegistryItem[] = [
   {

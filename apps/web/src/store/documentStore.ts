@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { DocumentSchema, BaseNode, DocumentSection } from "../types/schema";
-import { TEST_DOCUMENT } from "./test.data";
+import { DocumentSchema, BaseNode, DocumentSection } from "@formcast/core";
+import { TEST_DOCUMENT } from "@formcast/core";
 import { updateJsonNodeProperty } from "../utils/jsonUpdater";
 import {
   deleteNodeFromAst,
@@ -9,7 +9,7 @@ import {
   moveNodeToNewParent,
   insertNodeSibling,
   moveNodeToSibling,
-} from "./astManipulators";
+} from "@formcast/core";
 import { autoDeconstructRichTextAst } from "../utils/htmlParser";
 
 const INITIAL_DOCUMENT: DocumentSchema = {
@@ -335,7 +335,7 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
     const { parsedDocument, setJsonString } = get();
     if (!parsedDocument) return;
     const baseId = id.split("-part")[0];
-    import("./astManipulators").then(({ replaceNodeInAst }) => {
+    import("@formcast/core").then(({ replaceNodeInAst }) => {
       const newAst = replaceNodeInAst(parsedDocument, baseId, newNode);
       setJsonString(JSON.stringify(newAst, null, 2));
     });

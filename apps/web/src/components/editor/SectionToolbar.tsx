@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDocumentStore } from "../../store/documentStore";
-import { DocumentSection } from "../../types/schema";
+import { DocumentSection } from "@formcast/core";
 import { Trash2 } from "lucide-react";
 
 interface SectionToolbarProps {

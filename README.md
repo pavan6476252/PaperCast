@@ -36,8 +36,29 @@ Open [http://localhost:8000](http://localhost:8000) with your browser to see the
 
 ### Generate JSON Schema
 
-If you update the core TypeScript types (`src/types/schema.ts`), you can regenerate the JSON schema for validation using:
+If you update the core TypeScript types (`packages/core/src/schema.ts`), you can regenerate the JSON schema for validation using:
 
 ```bash
-npx ts-json-schema-generator --path src/types/schema.ts --type DocumentSchema --out src/schema/docframe.schema.json
+pnpm --filter @formcast/core run schema:generate
+```
+
+### Cleaning the Workspace
+
+To remove all build artifacts and caches (e.g., `.next`, `dist`, `.turbo`) across the entire monorepo, run:
+
+```bash
+pnpm run clean
+```
+
+To clean a specific app or package, use Turborepo's filter flag:
+
+```bash
+# Clean the Next.js web app
+pnpm --filter formcast-web run clean
+
+# Clean the CLI app
+pnpm --filter formcast-cli run clean
+
+# Clean the core package
+pnpm --filter @formcast/core run clean
 ```

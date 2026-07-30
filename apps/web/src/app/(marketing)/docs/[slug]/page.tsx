@@ -4,7 +4,7 @@ import path from "path";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { WidgetCard } from "../../../../components/showcase/WidgetCard";
-import { TEST_DOCUMENT } from "../../../../store/test.data";
+import { TEST_DOCUMENT } from "@formcast/core";
 import { getDocPageById, DOC_PAGES } from "../config";
 import { DocsFooterNav } from "../../../../components/docs/DocsFooterNav";
 

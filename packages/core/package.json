@@ -1,0 +1,30 @@
+{
+  "name": "@formcast/core",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./schema.json": "./src/schema/formcast.schema.json",
+    "./invoice.template.json": "./src/schema/invoice.template.json",
+    "./report.template.json": "./src/schema/report.template.json"
+  },
+  "scripts": {
+    "lint": "eslint src/",
+    "schema:generate": "ts-json-schema-generator --path src/schema.ts --type DocumentSchema --out src/schema/formcast.schema.json",
+    "schema:test": "tsx scripts/validate-schema.ts",
+    "schema:validate": "pnpm run schema:generate && pnpm run schema:test",
+    "clean": "rm -rf dist .turbo"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "ts-json-schema-generator": "^2.9.0",
+    "tsx": "^4.23.1",
+    "typescript": "^5.0.0"
+  }
+}

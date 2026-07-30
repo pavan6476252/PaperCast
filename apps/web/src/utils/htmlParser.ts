@@ -3,7 +3,7 @@ import {
   RichTextPreferences,
   TypographyAndColor,
   BoxModel,
-} from "../types/schema";
+} from "@formcast/core";
 
 /**
  * Utility to parse HTML strings and convert tags to FormCast AST widgets

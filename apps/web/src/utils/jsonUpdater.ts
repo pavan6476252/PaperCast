@@ -1,5 +1,5 @@
 import { parse } from "json-source-map";
-import { DocumentSchema, BaseNode } from "../types/schema";
+import { DocumentSchema, BaseNode } from "@formcast/core";
 
 /**
  * Finds the JSON pointer path to a node by its ID.

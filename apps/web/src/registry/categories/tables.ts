@@ -1,4 +1,4 @@
-import { table } from "@/store/test.data";
+import { table } from "@formcast/core";
 import { WidgetRegistryItem, wrap } from "../utils";
 
 export const tables: WidgetRegistryItem[] = [

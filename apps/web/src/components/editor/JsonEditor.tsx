@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Editor, { useMonaco } from "@monaco-editor/react";
 import { useDocumentStore } from "../../store/documentStore";
-import docframeSchema from "../../schema/docframe.schema.json";
+import docframeSchema from "@formcast/core/schema.json";
 import { Save, RefreshCw } from "lucide-react";
 import { getNodeContextPaths } from "../../utils/dataBinding";
 

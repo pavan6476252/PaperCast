@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { BaseNode } from "../../../types/schema";
+import { BaseNode } from "@formcast/core";
 
 export function getStyle(node: BaseNode): CSSProperties {
   const layout = node.layout || {};

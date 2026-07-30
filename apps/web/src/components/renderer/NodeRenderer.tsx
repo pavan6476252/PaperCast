@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BaseNode } from "../../types/schema";
+import { BaseNode } from "@formcast/core";
 import { NodeRegistry } from "../../registry/NodeRegistry";
 import { useDocumentStore } from "../../store/documentStore";
 import { HoverToolbar } from "../editor/HoverToolbar";

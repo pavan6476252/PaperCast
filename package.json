@@ -7,30 +7,20 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
+    "clean": "turbo clean",
     "prepare": "husky",
     "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64 libpango-1.0-0 libcairo2 libnss3 libnspr4 libx11-xcb1 libxss1 fonts-liberation libgtk-3-0t64 xdg-utils && npx puppeteer browsers install chrome",
-    "schema:generate": "ts-json-schema-generator --path apps/web/src/types/schema.ts --type DocumentSchema --out apps/web/src/schema/docframe.schema.json",
-    "schema:test": "tsx scripts/validate-schema.ts",
-    "schema:validate": "pnpm run schema:generate && pnpm run schema:test",
-    "mcp:start": "tsx scripts/mcp-server.ts"
+    "schema:validate": "pnpm --filter @formcast/core run schema:validate",
+    "mcp:start": "pnpm --filter formcast-cli run dev",
+    "mcp:build": "pnpm --filter formcast-cli run build"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
-    "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1",
-    "json-source-map": "^0.6.1",
-    "ws": "^8.21.1"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/json-source-map": "^0.6.0",
     "@types/node": "^20",
-    "@types/ws": "^8.18.1",
     "eslint": "^9.39.5",
     "husky": "^9.1.7",
     "lint-staged": "^17.2.0",
     "prettier": "^3.0.0",
-    "ts-json-schema-generator": "^2.9.0",
-    "tsx": "^4.23.1",
     "turbo": "^2.0.0",
     "typescript": "^5"
   },

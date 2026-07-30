@@ -6,14 +6,17 @@
     "dev": "next dev -p ${PORT:-8000}",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clean": "rm -rf .next .turbo"
   },
   "dependencies": {
+    "@formcast/core": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
     "@sparticuz/chromium": "^149.0.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "framer-motion": "^12.42.2",
+    "json-source-map": "^0.6.1",
     "lucide-react": "^1.27.0",
     "next": "16.2.12",
     "next-mdx-remote": "^6.0.0",
@@ -26,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/json-source-map": "^0.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

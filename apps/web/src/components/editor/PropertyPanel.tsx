@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useDocumentStore } from "../../store/documentStore";
-import { BaseNode, TableColumnConfig, DataBinding } from "../../types/schema";
+import { BaseNode, TableColumnConfig, DataBinding } from "@formcast/core";
 import { XCircle, GripVertical, Focus } from "lucide-react";
 import { getNodeContextPaths } from "../../utils/dataBinding";
 import { convertHtmlToNodes } from "../../utils/htmlParser";

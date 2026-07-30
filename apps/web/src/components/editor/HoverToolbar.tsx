@@ -7,7 +7,7 @@ import {
   CornerLeftUp,
 } from "lucide-react";
 import { useDocumentStore } from "../../store/documentStore";
-import { BaseNode } from "../../types/schema";
+import { BaseNode } from "@formcast/core";
 
 export const HoverToolbar: React.FC<{ nodeId: string }> = ({ nodeId }) => {
   const { moveNode, deleteNode, setSelectedNodeId, parsedDocument } =

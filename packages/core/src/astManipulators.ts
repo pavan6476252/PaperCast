@@ -1,4 +1,4 @@
-import { DocumentSchema, BaseNode } from "../types/schema";
+import { DocumentSchema, BaseNode } from "./schema";
 
 type ParentInfo = {
   parent: BaseNode;

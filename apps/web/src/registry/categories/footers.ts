@@ -1,12 +1,5 @@
 import { WidgetRegistryItem, wrapFooter } from "../utils";
-import {
-  row,
-  column,
-  text,
-  spacer,
-  divider,
-  paragraph,
-} from "@/store/test.data";
+import { row, column, text, spacer, divider, paragraph } from "@formcast/core";
 
 export const footers: WidgetRegistryItem[] = [
   {

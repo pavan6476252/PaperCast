@@ -1,5 +1,5 @@
 import React from "react";
-import { TableColumnConfig, TableNode } from "../../../types/schema";
+import { TableColumnConfig, TableNode } from "@formcast/core";
 import { getStyle } from "../utils/styleUtils";
 import { NodeRegistry } from "../../../registry/NodeRegistry";
 import { useRendererContext } from "../RendererContext";

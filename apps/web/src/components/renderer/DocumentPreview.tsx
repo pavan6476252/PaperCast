@@ -20,7 +20,7 @@ import { RendererProvider } from "./RendererContext";
 import "./nodes/basicNodes"; // Register basic nodes
 import "./nodes/TableNode"; // Register table node
 import "./nodes/formNodes"; // Register form nodes
-import { Measurements, DocumentSchema } from "@/types/schema";
+import { Measurements, DocumentSchema } from "@formcast/core";
 
 type PreviewTab = "content" | "headers" | "footers";
 

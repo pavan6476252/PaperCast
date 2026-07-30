@@ -1,4 +1,4 @@
-import { DocumentSchema, BaseNode, Measurements } from "../types/schema";
+import { DocumentSchema, BaseNode, Measurements } from "@formcast/core";
 import { resolveHeader, resolveFooter } from "./resolver";
 import { NodeRegistry } from "../registry/NodeRegistry";
 

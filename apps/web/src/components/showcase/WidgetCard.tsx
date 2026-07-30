@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Copy, Check } from "lucide-react";
 import { codeToHtml } from "shiki";
 import { DocumentPreview } from "../renderer/DocumentPreview";
-import { DocumentSchema } from "@/types/schema";
+import { DocumentSchema } from "@formcast/core";
 
 interface WidgetCardProps {
   title: string;

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useDocumentStore } from "../../store/documentStore";
-import { BaseNode } from "../../types/schema";
+import { BaseNode } from "@formcast/core";
 import {
   Type,
   Image,

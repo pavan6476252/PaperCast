@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentStore } from "../store/documentStore";
+import { WsEventType, WsMessage } from "@formcast/core";
 
 export function useMcpSync() {
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
@@ -24,7 +25,7 @@ export function useMcpSync() {
         // Register this tab session
         ws.send(
           JSON.stringify({
-            type: "REGISTER_TAB",
+            type: WsEventType.REGISTER_TAB,
             sessionId,
             title: document.title || "FormCast Playground",
             timestamp: Date.now(),
@@ -34,20 +35,20 @@ export function useMcpSync() {
 
       ws.onmessage = (event) => {
         try {
-          const message = JSON.parse(event.data);
+          const message = JSON.parse(event.data) as WsMessage;
 
           switch (message.type) {
-            case "UPDATE_SCHEMA":
+            case WsEventType.UPDATE_SCHEMA:
               if (message.payload) {
                 setJsonString(JSON.stringify(message.payload, null, 2));
               }
               break;
 
-            case "GET_CURRENT_SCHEMA":
+            case WsEventType.GET_CURRENT_SCHEMA:
               const store = useDocumentStore.getState();
               ws.send(
                 JSON.stringify({
-                  type: "STATE_CHANGED",
+                  type: WsEventType.STATE_CHANGED,
                   requestId: message.requestId,
                   sessionId,
                   schema: store.parsedDocument,
@@ -56,7 +57,7 @@ export function useMcpSync() {
               );
               break;
 
-            case "AST_ACTION": {
+            case WsEventType.AST_ACTION: {
               const { action, args } = message;
               const store = useDocumentStore.getState();
               if (typeof (store as any)[action] === "function") {

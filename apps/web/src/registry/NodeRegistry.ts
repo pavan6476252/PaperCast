@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseNode, Measurements } from "../types/schema";
+import { BaseNode, Measurements } from "@formcast/core";
 
 export interface MeasureContext {
   availableWidthPx: number;

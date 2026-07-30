@@ -1,4 +1,4 @@
-import { DocumentSchema } from "../types/schema";
+import { DocumentSchema } from "@formcast/core";
 
 export function resolveHeader(
   pageNumber: number,

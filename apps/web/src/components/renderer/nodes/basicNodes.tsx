@@ -9,7 +9,7 @@ import {
   SpacerNode,
   ListTileNode,
   RichTextNode,
-} from "../../../types/schema";
+} from "@formcast/core";
 import { getStyle } from "../utils/styleUtils";
 import { NodeRenderer } from "../NodeRenderer";
 import { NodeRegistry } from "../../../registry/NodeRegistry";

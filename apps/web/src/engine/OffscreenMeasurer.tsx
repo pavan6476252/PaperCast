@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { DocumentSchema, Measurements } from "../types/schema";
+import { DocumentSchema, Measurements } from "@formcast/core";
 import { NodeRenderer } from "../components/renderer/NodeRenderer";
 import { getStyle } from "../components/renderer/utils/styleUtils";
 

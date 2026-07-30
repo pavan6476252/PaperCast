@@ -1,84 +1,35 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { JsonEditor } from "../../../components/editor/JsonEditor";
+import dynamic from "next/dynamic";
+
+const JsonEditor = dynamic(
+  () =>
+    import("../../../components/editor/JsonEditor").then(
+      (mod) => mod.JsonEditor
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-col items-center justify-center h-full bg-[#1e1e1e] text-gray-400 w-full min-w-[300px]">
+        <div className="w-8 h-8 border-4 border-gray-600 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+        <p className="text-sm font-medium animate-pulse">
+          Initializing Editor...
+        </p>
+      </div>
+    ),
+  }
+);
 import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
 import { PropertyPanel } from "../../../components/editor/PropertyPanel";
 import { WidgetsPanel } from "../../../components/editor/WidgetsPanel";
 import { useDocumentStore } from "../../../store/documentStore";
 import { useMcpSync } from "../../../hooks/useMcpSync";
 
-export default function Home() {
-  const { isConnected, sessionId } = useMcpSync();
-  const [leftWidth, setLeftWidth] = useState(400); // initial width in pixels
-  const [rightWidth, setRightWidth] = useState(320); // initial right width
-  const [showEditor, setShowEditor] = useState(true);
-  const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
-  const rightPanelMode = useDocumentStore((state) => state.rightPanelMode);
-  const setRightPanelMode = useDocumentStore(
-    (state) => state.setRightPanelMode
-  );
-  const isLeftDragging = useRef(false);
-  const isRightDragging = useRef(false);
-
-  const handleLeftMouseDown = useCallback((_e: React.MouseEvent) => {
-    isLeftDragging.current = true;
-    document.body.style.cursor = "col-resize";
-  }, []);
-
-  const handleRightMouseDown = useCallback((__e: React.MouseEvent) => {
-    isRightDragging.current = true;
-    document.body.style.cursor = "col-resize";
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    isLeftDragging.current = false;
-    isRightDragging.current = false;
-    document.body.style.cursor = "default";
-  }, []);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (isLeftDragging.current) {
-      const newWidth = Math.max(
-        200,
-        Math.min(e.clientX, window.innerWidth - 400)
-      );
-      setLeftWidth(newWidth);
-    }
-    if (isRightDragging.current) {
-      const newWidth = Math.max(
-        200,
-        Math.min(window.innerWidth - e.clientX, window.innerWidth - 400)
-      );
-      setRightWidth(newWidth);
-    }
-  }, []);
-
+const usePlaygroundShortcuts = (
+  setShowEditor: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const setZoom = useDocumentStore((state) => state.setZoom);
-  const parsedDocument = useDocumentStore((state) => state.parsedDocument);
-  const deconstructAllRichText = useDocumentStore(
-    (state) => state.deconstructAllRichText
-  );
-  const initialLoadDone = useRef(false);
-
-  useEffect(() => {
-    if (
-      !initialLoadDone.current &&
-      parsedDocument?.meta?.richTextPreferences?.autoDeconstruct
-    ) {
-      initialLoadDone.current = true;
-      deconstructAllRichText();
-    }
-  }, [parsedDocument, deconstructAllRichText]);
-
-  useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -101,7 +52,6 @@ export default function Home() {
           case "\\":
           case "b":
           case "e":
-            // Check if key is one of the toggles (e.g. Cmd+\ or Cmd+B or Cmd+E)
             e.preventDefault();
             setShowEditor((s) => !s);
             break;
@@ -115,54 +65,124 @@ export default function Home() {
             e.preventDefault();
             window.print();
             break;
-          default:
-            break;
         }
       }
     };
-
-    window.addEventListener("keydown", handleKeyDown, true); // Use capture to intercept keys before editor or browser actions
+    window.addEventListener("keydown", handleKeyDown, true);
     return () => {
       window.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [setZoom]);
+  }, [setZoom, setShowEditor]);
+};
+
+const LeftSidebar = ({ children }: { children: React.ReactNode }) => {
+  const [leftWidth, setLeftWidth] = useState(400);
+  const isLeftDragging = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleMouseDown = useCallback(() => {
+    isLeftDragging.current = true;
+    setIsDragging(true);
+    document.body.style.cursor = "col-resize";
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    isLeftDragging.current = false;
+    setIsDragging(false);
+    document.body.style.cursor = "default";
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (isLeftDragging.current) {
+      const newWidth = Math.max(
+        200,
+        Math.min(e.clientX, window.innerWidth - 400)
+      );
+      setLeftWidth(newWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   return (
-    <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
-      {showEditor && (
-        <>
-          <div
-            style={{ width: leftWidth }}
-            className="flex flex-col z-10 shadow-xl relative shrink-0 print:hidden"
-          >
-            <JsonEditor />
-          </div>
-
-          {/* Resizer Handle */}
-          <div
-            onMouseDown={handleLeftMouseDown}
-            className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
-          >
-            <div className="h-8 w-1 bg-gray-400 rounded-full" />
-          </div>
-        </>
-      )}
-
-      <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
-        <DocumentPreview
-          isEditorVisible={showEditor}
-          onToggleEditor={() => setShowEditor((s) => !s)}
-        />
-      </div>
-
-      {/* Right Resizer Handle */}
+    <>
       <div
-        onMouseDown={handleRightMouseDown}
+        style={{ width: leftWidth }}
+        className="flex flex-col z-10 shadow-xl relative shrink-0 print:hidden"
+      >
+        {children}
+      </div>
+      <div
+        onMouseDown={handleMouseDown}
         className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
       >
         <div className="h-8 w-1 bg-gray-400 rounded-full" />
       </div>
+    </>
+  );
+};
 
+const RightSidebar = () => {
+  const [rightWidth, setRightWidth] = useState(320);
+  const isRightDragging = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
+  const rightPanelMode = useDocumentStore((state) => state.rightPanelMode);
+  const setRightPanelMode = useDocumentStore(
+    (state) => state.setRightPanelMode
+  );
+
+  const handleMouseDown = useCallback(() => {
+    isRightDragging.current = true;
+    setIsDragging(true);
+    document.body.style.cursor = "col-resize";
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    isRightDragging.current = false;
+    setIsDragging(false);
+    document.body.style.cursor = "default";
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (isRightDragging.current) {
+      const newWidth = Math.max(
+        200,
+        Math.min(window.innerWidth - e.clientX, window.innerWidth - 400)
+      );
+      setRightWidth(newWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  return (
+    <>
+      <div
+        onMouseDown={handleMouseDown}
+        className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
+      >
+        <div className="h-8 w-1 bg-gray-400 rounded-full" />
+      </div>
       <div
         style={{ width: rightWidth, minWidth: 260 }}
         className="flex flex-col z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.1)] relative shrink-0 print:hidden bg-white h-full"
@@ -181,12 +201,53 @@ export default function Home() {
             Properties {selectedNodeId ? "•" : ""}
           </button>
         </div>
-
         <div className="flex-1 overflow-hidden">
           {rightPanelMode === "widgets" && <WidgetsPanel />}
           {rightPanelMode === "properties" && <PropertyPanel />}
         </div>
       </div>
+    </>
+  );
+};
+
+export default function Home() {
+  const { isConnected, sessionId } = useMcpSync();
+  const [showEditor, setShowEditor] = useState(true);
+
+  usePlaygroundShortcuts(setShowEditor);
+
+  const parsedDocument = useDocumentStore((state) => state.parsedDocument);
+  const deconstructAllRichText = useDocumentStore(
+    (state) => state.deconstructAllRichText
+  );
+  const initialLoadDone = useRef(false);
+
+  useEffect(() => {
+    if (
+      !initialLoadDone.current &&
+      parsedDocument?.meta?.richTextPreferences?.autoDeconstruct
+    ) {
+      initialLoadDone.current = true;
+      deconstructAllRichText();
+    }
+  }, [parsedDocument, deconstructAllRichText]);
+
+  return (
+    <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
+      {showEditor && (
+        <LeftSidebar>
+          <JsonEditor />
+        </LeftSidebar>
+      )}
+
+      <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
+        <DocumentPreview
+          isEditorVisible={showEditor}
+          onToggleEditor={() => setShowEditor((s) => !s)}
+        />
+      </div>
+
+      <RightSidebar />
 
       {/* MCP Connection Status Badge */}
       <div className="absolute bottom-4 left-4 z-50 print:hidden">

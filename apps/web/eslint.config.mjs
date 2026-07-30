@@ -22,6 +22,7 @@ const eslintConfig = defineConfig([
       "react-hooks/preserve-manual-memoization": "off",
       "react-hooks/rules-of-hooks": "off",
       "react/no-unescaped-entities": "off",
+      "import/no-cycle": "error",
     },
   },
 ]);

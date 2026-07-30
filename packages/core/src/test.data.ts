@@ -10,7 +10,7 @@ import {
   TableNode,
   TextNode,
   TypographyAndColor,
-} from "@/types/schema";
+} from "./schema";
 
 const _TEST_DOCUMENT: DocumentSchema = {
   version: 1,
