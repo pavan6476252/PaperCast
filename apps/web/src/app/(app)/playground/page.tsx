@@ -21,10 +21,17 @@ const JsonEditor = dynamic(
   }
 );
 import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
-import { PropertyPanel } from "../../../components/editor/PropertyPanel";
-import { WidgetsPanel } from "../../../components/editor/WidgetsPanel";
+import {
+  EditorProvider,
+  PropertyPanel,
+  WidgetsPanel,
+} from "@formcast/react/editor";
 import { useDocumentStore } from "../../../store/documentStore";
 import { useMcpSync } from "../../../hooks/useMcpSync";
+import { registerDefaultWidgets } from "@formcast/react/widgets";
+
+// Register default FormCast widgets on client load
+registerDefaultWidgets();
 
 const usePlaygroundShortcuts = (
   setShowEditor: React.Dispatch<React.SetStateAction<boolean>>
@@ -136,12 +143,6 @@ const RightSidebar = () => {
   const isRightDragging = useRef(false);
   const [isDragging, setIsDragging] = useState(false);
 
-  const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
-  const rightPanelMode = useDocumentStore((state) => state.rightPanelMode);
-  const setRightPanelMode = useDocumentStore(
-    (state) => state.setRightPanelMode
-  );
-
   const handleMouseDown = useCallback(() => {
     isRightDragging.current = true;
     setIsDragging(true);
@@ -175,6 +176,12 @@ const RightSidebar = () => {
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
+  const rightPanelMode = useDocumentStore((state) => state.rightPanelMode);
+  const setRightPanelMode = useDocumentStore(
+    (state) => state.setRightPanelMode
+  );
+  const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
+
   return (
     <>
       <div
@@ -202,7 +209,11 @@ const RightSidebar = () => {
           </button>
         </div>
         <div className="flex-1 overflow-hidden">
-          {rightPanelMode === "widgets" && <WidgetsPanel />}
+          {rightPanelMode === "widgets" && (
+            <WidgetsPanel
+              onSettingsClick={() => setRightPanelMode("properties")}
+            />
+          )}
           {rightPanelMode === "properties" && <PropertyPanel />}
         </div>
       </div>
@@ -213,53 +224,96 @@ const RightSidebar = () => {
 export default function Home() {
   const { isConnected, sessionId } = useMcpSync();
   const [showEditor, setShowEditor] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    // Load schema from session storage if available
+    try {
+      const storedSchema = sessionStorage.getItem("formcast_schema");
+      if (storedSchema) {
+        JSON.parse(storedSchema); // Validate JSON
+        useDocumentStore.getState().setJsonString(storedSchema);
+        // Clear it so it doesn't persist across fresh navigations later
+        sessionStorage.removeItem("formcast_schema");
+      }
+    } catch (e) {
+      console.error("Failed to load schema from session storage", e);
+    }
+  }, []);
 
   usePlaygroundShortcuts(setShowEditor);
 
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
-  const deconstructAllRichText = useDocumentStore(
-    (state) => state.deconstructAllRichText
+  const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
+  const isValid = useDocumentStore((state) => state.isValid);
+  const updateNodeProperty = useDocumentStore(
+    (state) => state.updateNodeProperty
   );
-  const initialLoadDone = useRef(false);
+  const replaceNode = useDocumentStore((state) => state.replaceNode);
+  const deleteNode = useDocumentStore((state) => state.deleteNode);
+  const moveNode = useDocumentStore((state) => state.moveNode);
+  const setSelectedNodeId = useDocumentStore(
+    (state) => state.setSelectedNodeId
+  );
 
-  useEffect(() => {
-    if (
-      !initialLoadDone.current &&
-      parsedDocument?.meta?.richTextPreferences?.autoDeconstruct
-    ) {
-      initialLoadDone.current = true;
-      deconstructAllRichText();
-    }
-  }, [parsedDocument, deconstructAllRichText]);
+  const storeInsertNode = useDocumentStore((state) => state.insertNode);
+  const insertNode = useCallback(
+    (parentId: string, node: any, index?: number) => {
+      storeInsertNode(parentId, index, node);
+    },
+    [storeInsertNode]
+  );
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#1e1e1e] text-gray-400">
+        <div className="w-8 h-8 border-4 border-gray-600 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
-      {showEditor && (
-        <LeftSidebar>
-          <JsonEditor />
-        </LeftSidebar>
-      )}
+    <EditorProvider
+      state={{ document: parsedDocument, selectedNodeId, isValid }}
+      actions={{
+        setSelectedNodeId,
+        updateNodeProperty,
+        replaceNode,
+        insertNode,
+        deleteNode,
+        moveNode,
+      }}
+    >
+      <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
+        {showEditor && (
+          <LeftSidebar>
+            <JsonEditor />
+          </LeftSidebar>
+        )}
 
-      <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
-        <DocumentPreview
-          isEditorVisible={showEditor}
-          onToggleEditor={() => setShowEditor((s) => !s)}
-        />
-      </div>
-
-      <RightSidebar />
-
-      {/* MCP Connection Status Badge */}
-      <div className="absolute bottom-4 left-4 z-50 print:hidden">
-        <div
-          className={`flex items-center gap-2 px-3 py-2 rounded-full shadow-lg border text-xs font-medium bg-white ${isConnected ? "border-green-200 text-green-700" : "border-gray-200 text-gray-500"}`}
-        >
-          <div
-            className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
+        <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
+          <DocumentPreview
+            isEditorVisible={showEditor}
+            onToggleEditor={() => setShowEditor((s) => !s)}
           />
-          {isConnected ? `MCP Connected: ${sessionId}` : "MCP Disconnected"}
         </div>
-      </div>
-    </main>
+
+        <RightSidebar />
+
+        {/* MCP Connection Status Badge */}
+        <div className="absolute bottom-4 left-4 z-50 print:hidden">
+          <div
+            className={`flex items-center gap-2 px-3 py-2 rounded-full shadow-lg border text-xs font-medium bg-white ${isConnected ? "border-green-200 text-green-700" : "border-gray-200 text-gray-500"}`}
+          >
+            <div
+              className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
+            />
+            {isConnected ? `MCP Connected: ${sessionId}` : "MCP Disconnected"}
+          </div>
+        </div>
+      </main>
+    </EditorProvider>
   );
 }

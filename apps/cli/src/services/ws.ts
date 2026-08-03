@@ -1,5 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws";
-import { WsEventType, WsMessage } from "@formcast/core";
+import { WsEventType, WsMessage } from "@formcast/core/ws";
+// to-replace
 
 export interface FormCastSession {
   ws: WebSocket;

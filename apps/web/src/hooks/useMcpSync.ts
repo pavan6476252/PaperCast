@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentStore } from "../store/documentStore";
-import { WsEventType, WsMessage } from "@formcast/core";
+import { WsEventType, WsMessage } from "@formcast/core/ws";
+// to-replace
 
 export function useMcpSync() {
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);

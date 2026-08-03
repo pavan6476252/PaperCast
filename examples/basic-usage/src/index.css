@@ -1,0 +1,93 @@
+/* Tailwind-like Preflight Reset for consistent rendering */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  line-height: 1.5;
+}
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+/* 
+  CRITICAL for printing: 
+  This removes Chrome/Safari's default injected headers (date, title, url)
+  and sets the page size to exactly what we measured.
+  @page MUST be at the top level in a CSS file to work consistently in Chrome.
+*/
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0 !important;
+  }
+
+  html,
+  body {
+    background-color: white !important;
+  }
+
+  /* Hide the background padding when printing */
+  #root > div {
+    padding: 0 !important;
+    background-color: white !important;
+  }
+
+  /* Hide shadows and margins on the pages */
+  .page-container {
+    box-shadow: none !important;
+    margin: 0 !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* The last page doesn't need a break */
+  .page-container:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+}

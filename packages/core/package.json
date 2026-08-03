@@ -9,11 +9,22 @@
       "types": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./test": {
+      "types": "./src/test.data.ts",
+      "default": "./src/test.data.ts"
+    },
+    "./ws": {
+      "types": "./src/ws.ts",
+      "default": "./src/ws.ts"
+    },
     "./schema.json": "./src/schema/formcast.schema.json",
     "./invoice.template.json": "./src/schema/invoice.template.json",
     "./report.template.json": "./src/schema/report.template.json"
   },
   "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint src/",
     "schema:generate": "ts-json-schema-generator --path src/schema.ts --type DocumentSchema --out src/schema/formcast.schema.json",
     "schema:test": "tsx scripts/validate-schema.ts",

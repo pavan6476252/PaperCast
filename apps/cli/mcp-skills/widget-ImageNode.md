@@ -8,7 +8,7 @@ The `ImageNode` renders graphic assets.
   "type": "image",
   "layout": { "width": 150, "height": 150 },
   "props": {
-    "srcLiteral": "https://example.com/logo.png",
+    "srcLiteral": "https://picsum.photos/150/50",
     "fit": "contain"
   }
 }

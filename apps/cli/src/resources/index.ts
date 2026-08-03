@@ -4,7 +4,8 @@ import { sendCommandToActiveSession } from "../services/ws.js";
 import formcastSchema from "@formcast/core/schema.json";
 import invoiceTemplate from "@formcast/core/invoice.template.json";
 import reportTemplate from "@formcast/core/report.template.json";
-import { WsEventType } from "@formcast/core";
+import { WsEventType } from "@formcast/core/ws";
+// to-replace
 
 export function registerResources(server: McpServer) {
   server.registerResource(

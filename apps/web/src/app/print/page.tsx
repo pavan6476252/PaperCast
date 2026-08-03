@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { DocumentPreview } from "../../components/renderer/DocumentPreview";
 import { useDocumentStore } from "../../store/documentStore";
+import { registerDefaultWidgets } from "@formcast/react/widgets";
+
+registerDefaultWidgets();
 
 export default function PrintPage() {
   const setJsonString = useDocumentStore((state) => state.setJsonString);
-  // const deconstructAllRichText = useDocumentStore(
-  //   (state) => state.deconstructAllRichText
-  // );
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -16,17 +16,8 @@ export default function PrintPage() {
     const data = (window as any).__PRINT_DATA__;
     if (data) {
       setJsonString(data);
-      // Let Zustand state settle, then deconstruct if configured
-      setTimeout(() => {
-        const store = useDocumentStore.getState();
-        if (store.parsedDocument?.meta?.richTextPreferences?.autoDeconstruct) {
-          store.deconstructAllRichText();
-        }
-        setReady(true);
-      }, 0);
-    } else {
-      setReady(true);
     }
+    setReady(true);
   }, [setJsonString]);
 
   if (!ready) return null;

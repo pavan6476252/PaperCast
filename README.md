@@ -62,3 +62,14 @@ pnpm --filter formcast-cli run clean
 # Clean the core package
 pnpm --filter @formcast/core run clean
 ```
+
+## Architecture & Core Concepts
+
+FormCast is a Schema-First Document Builder and Renderer, split across multiple decoupled packages:
+
+- **Core Engine (`packages/engine`)**: Framework-agnostic vanilla TypeScript logic responsible for parsing the FormCast JSON schema, calculating pagination, and resolving dynamic data. It contains no React or DOM-specific code.
+- **Headless Binding (`packages/react`)**: A framework-specific adapter (e.g., `@formcast/react`) that implements the UI rendering and DOM measurement interfaces required by the Core Engine.
+- **Measurer Adapter (`IMeasurer`)**: An interface defined by the Core Engine but implemented by the Headless Binding. It provides the layout heights of rendered elements without coupling the engine to a specific DOM implementation.
+- **Schema & Component Registries**: A lightweight registry in the Core Engine stores node metadata, while a Component Registry in the Headless Binding maps node types to actual UI components.
+
+By keeping the business logic and layout orchestration strictly separated from the rendering framework, FormCast remains fast, flexible, and portable.

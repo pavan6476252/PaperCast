@@ -3,7 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { sendCommandToActiveSession } from "../services/ws.js";
-import { WsEventType } from "@formcast/core";
+import { WsEventType } from "@formcast/core/ws";
+// to-replace
 
 export function registerPdfTools(server: McpServer) {
   server.registerTool(

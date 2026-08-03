@@ -1,4 +1,4 @@
-# PDF Export & Print Workflow
+# PDF Export & Client Integration
 
 FormCast generates high-quality, print-ready PDFs directly from the rendered React components using **Puppeteer** in a serverless environment.
 
@@ -62,4 +62,79 @@ const pdf = await page.pdf({
   `printBackground: true` is essential! Without it, any background colors,
   images, or dark themes you applied to your layout elements will be completely
   white in the final PDF.
+</Callout>
+
+## Client-Side Integration
+
+To provide a seamless experience for your users, you should integrate keyboard shortcuts (`CTRL + P` or `CMD + P`) and a dedicated "Download PDF" button directly into your frontend application.
+
+### Intercepting Print Shortcuts
+
+You can capture the standard print shortcut to trigger the browser's native print dialog over your specific document container, rather than printing the entire web app UI.
+
+```tsx
+import { useEffect } from "react";
+
+export function usePrintShortcut(onPrint: () => void) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check for CTRL+P (Windows/Linux) or CMD+P (Mac)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        onPrint();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onPrint]);
+}
+```
+
+Usage in your component:
+
+```tsx
+usePrintShortcut(() => {
+  window.print();
+});
+```
+
+### Downloading as PDF
+
+To trigger the serverless Puppeteer generation and download the resulting file, send the full JSON schema to your `/api/pdf` endpoint.
+
+```tsx
+const handleDownload = async (jsonString: string) => {
+  try {
+    const res = await fetch("/api/pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonString,
+    });
+
+    if (!res.ok) throw new Error("Failed to generate PDF");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "document.pdf";
+    document.body.appendChild(a);
+    a.click();
+
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error("Download error:", error);
+  }
+};
+```
+
+<Callout type="info" title="Vite Proxy Configuration">
+  If you are developing a pure frontend app (e.g., Vite) and the API runs on a
+  separate Next.js backend, ensure you proxy `/api/pdf` to the Next.js server
+  port in your `vite.config.ts`.
 </Callout>

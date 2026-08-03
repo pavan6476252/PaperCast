@@ -1,10 +1,12 @@
 import React from "react";
+import { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { WidgetCard } from "../../../../components/showcase/WidgetCard";
-import { TEST_DOCUMENT } from "@formcast/core";
+import { TEST_DOCUMENT } from "@formcast/core/test";
+// to-replace
 import { getDocPageById, DOC_PAGES } from "../config";
 import { DocsFooterNav } from "../../../../components/docs/DocsFooterNav";
 
@@ -94,6 +96,41 @@ export function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const docPage = getDocPageById(slug);
+
+  if (!docPage) {
+    return {
+      title: "Page Not Found | FormCast",
+    };
+  }
+
+  return {
+    title: `${docPage.title} | FormCast Documentation`,
+    description: docPage.description,
+    openGraph: {
+      title: `${docPage.title} | FormCast Documentation`,
+      description: docPage.description,
+      url: `https://formcast.dev/docs/${slug}`,
+      siteName: "FormCast",
+      type: "article",
+    },
+    alternates: {
+      canonical: `https://formcast.dev/docs/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${docPage.title} | FormCast Documentation`,
+      description: docPage.description,
+    },
+  };
+}
+
 export default async function DocPage({
   params,
 }: {
@@ -115,10 +152,26 @@ export default async function DocPage({
     mdxSource = `# Coming Soon\n\nThis documentation page is currently being written. Please check back later!`;
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: docPage.title,
+    description: docPage.description,
+    url: `https://formcast.dev/docs/${slug}`,
+    author: {
+      "@type": "Organization",
+      name: "FormCast",
+    },
+  };
+
   return (
     <div className="flex flex-col xl:flex-row w-full animate-fade-in-up">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Main Content Area */}
-      <div className="flex-1 min-w-0 max-w-4xl mx-auto px-6 py-12 md:px-12 md:py-16">
+      <article className="flex-1 min-w-0 max-w-4xl mx-auto px-6 py-12 md:px-12 md:py-16">
         <div className="mb-8">
           <p className="text-blue-600 font-semibold tracking-wide text-sm uppercase mb-2">
             Documentation
@@ -136,7 +189,7 @@ export default async function DocPage({
         </div>
 
         <DocsFooterNav currentSlug={slug} />
-      </div>
+      </article>
 
       {/* Right Sidebar - Table of Contents */}
       <div className="hidden xl:block w-64 shrink-0 px-6 py-12">

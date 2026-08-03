@@ -4,7 +4,7 @@ The Pagination Engine is the heart of FormCast's dynamic document generation. It
 
 ## How it works
 
-1. **Measurement**: We use `OffscreenMeasurer.tsx` to get the height of every node.
+1. **Measurement**: We use `OffscreenMeasurer.tsx` (from `@formcast/react`) to get the height of every node.
 2. **Space Calculation**: The engine takes the `PageSetup` configuration (width, height, margins) and calculates the `remainingHeight` for the body content.
 3. **Splitting**: When a node exceeds the `remainingHeight`, the engine attempts to split the node.
 
@@ -12,7 +12,7 @@ The Pagination Engine is the heart of FormCast's dynamic document generation. It
 
 The engine iterates through the children of a container. If a child overflows, it recursively attempts to split the child itself.
 
-Here is the core recursive splitting logic from `src/engine/PaginationEngine.ts`:
+Here is the core recursive splitting logic from `@formcast/engine/src/PaginationEngine.ts`:
 
 ```typescript
 function splitContainerNode(
@@ -47,7 +47,7 @@ function splitContainerNode(
       fitsAtLeastOne = true;
     } else {
       // Try to split the child itself recursively
-      const def = NodeRegistry.get(child.type);
+      const def = SchemaRegistry.get(child.type);
       const childSplitFn =
         def?.split ||
         (child.children && child.children.length > 0
@@ -81,7 +81,7 @@ This ensures that the space _between_ elements is accurately measured. If a node
 
 Because FormCast renders standard React components, we cannot know how tall a paragraph of text will be until the browser actually renders it with the current font and width constraints.
 
-To solve this, `PaginationEngine` relies on `OffscreenMeasurer.tsx`.
+To solve this, the core `PaginationEngine` in `@formcast/engine` relies on the `IMeasurer` adapter, which is implemented by `@formcast/react`'s `OffscreenMeasurer.tsx`.
 
 1. **The Invisible DOM**: `OffscreenMeasurer` mounts a visually hidden div (`absolute`, `opacity-0`, `pointer-events-none`) into the DOM.
 2. **Synchronous Render**: When pagination begins, it passes the entire AST into this hidden div.

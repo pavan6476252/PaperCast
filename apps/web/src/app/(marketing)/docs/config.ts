@@ -102,7 +102,7 @@ export const DOC_CATEGORIES: DocCategory[] = [
       },
       {
         id: "pdf-export-architecture",
-        title: "PDF Export Workflow",
+        title: "PDF Export & Client Integration",
         description: "Serverless Puppeteer and print routing.",
       },
       {

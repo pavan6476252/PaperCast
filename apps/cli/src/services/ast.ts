@@ -1,7 +1,9 @@
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import { findNodeGlobal } from "@formcast/core";
-import { WsEventType } from "@formcast/core";
+// to-replace
+import { WsEventType } from "@formcast/core/ws";
+// to-replace
 import formcastSchema from "@formcast/core/schema.json";
 import { fireCommandToActiveSession } from "./ws.js";
 
@@ -28,7 +30,7 @@ export function deepMerge(target: any, source: any) {
 }
 
 export function patchNodeProperties(schema: any, nodeId: string, patch: any) {
-  const newSchema = JSON.parse(JSON.stringify(schema));
+  const newSchema = structuredClone(schema);
   const result = findNodeGlobal(newSchema, nodeId);
   if (!result) throw new Error(`Node ${nodeId} not found`);
 

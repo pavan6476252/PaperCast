@@ -23,6 +23,12 @@ export default function MarketingLayout({
                 Widgets
               </Link>
               <Link
+                href="/snippets"
+                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+              >
+                Snippets
+              </Link>
+              <Link
                 href="/docs"
                 className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
               >

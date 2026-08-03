@@ -7,8 +7,10 @@ import {
   insertNodeIntoAst,
   deleteNodeFromAst,
 } from "@formcast/core";
+// to-replace
 import { DEFAULT_WIDGET_CONFIGS, WIDGET_DOCUMENTATION } from "../constants.js";
-import { WsEventType } from "@formcast/core";
+import { WsEventType } from "@formcast/core/ws";
+// to-replace
 
 export function registerLayoutTools(server: McpServer) {
   server.registerTool(
@@ -196,10 +198,10 @@ export function registerLayoutTools(server: McpServer) {
 
       const generatedId = `${widgetType}-${Math.random().toString(36).substring(2, 9)}`;
       const newNode = {
-        ...JSON.parse(JSON.stringify(baseMock)),
+        ...structuredClone(baseMock),
         id: generatedId,
         ...props,
-      };
+      } as any;
 
       const state = await sendCommandToActiveSession({
         type: WsEventType.GET_CURRENT_SCHEMA,
@@ -292,7 +294,7 @@ export function registerLayoutTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: "GET_CURRENT_SCHEMA",
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       newSchema.document.pageOverrides = newSchema.document.pageOverrides || {};
       const pageKey = pageNumber.toString();
       newSchema.document.pageOverrides[pageKey] =

@@ -1,0 +1,33 @@
+{
+  "name": "advanced-editor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@formcast/core": "workspace:*",
+    "@formcast/engine": "workspace:*",
+    "@formcast/react": "workspace:*",
+    "@monaco-editor/react": "^4.7.0",
+    "json-source-map": "^0.6.1",
+    "lucide-react": "^1.27.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/json-source-map": "^0.6.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.0.2",
+    "vite": "^8.2.0"
+  }
+}

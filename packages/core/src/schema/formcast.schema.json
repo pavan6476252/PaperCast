@@ -2,95 +2,726 @@
   "$ref": "#/definitions/DocumentSchema",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "BaseNode": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/RootNode"
+    "AnyNode": {
+      "$ref": "#/definitions/BuiltInNode",
+      "description": "Comprehensive union representing any valid node (built-in or custom)."
+    },
+    "BaseNode<\"checkbox\",structure-src_schema.ts-4809-4924-src_schema.ts-4785-4926-src_schema.ts-4757-4927-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
         },
-        {
-          "$ref": "#/definitions/RowNode"
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
         },
-        {
-          "$ref": "#/definitions/ColumnNode"
+        "id": {
+          "type": "string"
         },
-        {
-          "$ref": "#/definitions/TextNode"
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
         },
-        {
-          "$ref": "#/definitions/ImageNode"
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
         },
-        {
-          "$ref": "#/definitions/SpacerNode"
-        },
-        {
-          "$ref": "#/definitions/TableNode"
-        },
-        {
-          "$ref": "#/definitions/WidgetInstanceNode"
-        },
-        {
-          "$ref": "#/definitions/ListTileNode"
-        },
-        {
-          "$ref": "#/definitions/RichTextNode"
-        },
-        {
-          "$ref": "#/definitions/UnorderedListNode"
-        },
-        {
-          "$ref": "#/definitions/OrderedListNode"
-        },
-        {
-          "$ref": "#/definitions/CheckboxNode"
-        },
-        {
-          "$ref": "#/definitions/RadioNode"
-        },
-        {
-          "$ref": "#/definitions/RadioGroupNode"
-        },
-        {
+        "props": {
           "additionalProperties": false,
           "properties": {
-            "bind": {
-              "$ref": "#/definitions/DataBinding"
-            },
-            "children": {
-              "items": {
-                "$ref": "#/definitions/BaseNode"
-              },
-              "type": "array"
-            },
-            "id": {
+            "checkedBind": {
               "type": "string"
             },
-            "layout": {
-              "$ref": "#/definitions/BoxModel"
+            "checkedLiteral": {
+              "type": "boolean"
             },
-            "overrides": {
-              "additionalProperties": {
-                "additionalProperties": false,
-                "type": "object"
-              },
-              "type": "object"
+            "labelBind": {
+              "type": "string"
             },
-            "props": {
-              "type": "object"
-            },
-            "style": {
-              "$ref": "#/definitions/TypographyAndColor"
-            },
-            "type": {
+            "labelLiteral": {
               "type": "string"
             }
           },
-          "required": ["id", "layout", "type"],
           "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "checkbox",
+          "type": "string"
         }
-      ]
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"column\",undefined>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "column",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"image\",structure-src_schema.ts-4042-4140-src_schema.ts-4021-4142-src_schema.ts-3997-4143-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "fit": {
+              "enum": ["contain", "cover", "stretch"],
+              "type": "string"
+            },
+            "srcBind": {
+              "type": "string"
+            },
+            "srcLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "image",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"listTile\",structure-src_schema.ts-4409-4525-src_schema.ts-4385-4527-src_schema.ts-4357-4528-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "subtitleBind": {
+              "type": "string"
+            },
+            "subtitleLiteral": {
+              "type": "string"
+            },
+            "titleBind": {
+              "type": "string"
+            },
+            "titleLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "listTile",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"ol\",undefined>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "ol",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"radio\",structure-src_schema.ts-4973-5127-src_schema.ts-4952-5129-src_schema.ts-4927-5130-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "checkedBind": {
+              "type": "string"
+            },
+            "checkedLiteral": {
+              "type": "boolean"
+            },
+            "labelBind": {
+              "type": "string"
+            },
+            "labelLiteral": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "radio",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"radioGroup\",structure-src_schema.ts-5186-5264-src_schema.ts-5160-5266-src_schema.ts-5130-5267-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "valueBind": {
+              "type": "string"
+            },
+            "valueLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "radioGroup",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"richText\",structure-src_schema.ts-4580-4637-src_schema.ts-4556-4639-src_schema.ts-4528-4640-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "htmlBind": {
+              "type": "string"
+            },
+            "htmlLiteral": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "richText",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"root\",undefined>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "root",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"row\",undefined>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "row",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"spacer\",structure-src_schema.ts-4187-4207-src_schema.ts-4168-4208-src_schema.ts-4143-4209-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "sizePx": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "spacer",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"table\",TableProps>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "$ref": "#/definitions/TableProps"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "table",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"text\",structure-src_schema.ts-3891-3994-src_schema.ts-3871-3996-src_schema.ts-3848-3997-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "hrefBind": {
+              "type": "string"
+            },
+            "hrefLiteral": {
+              "type": "string"
+            },
+            "isAnchor": {
+              "type": "boolean"
+            },
+            "literal": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "text",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"ul\",undefined>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "not": {}
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "ul",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
+    },
+    "BaseNode<\"widgetInstance\",structure-src_schema.ts-4327-4354-src_schema.ts-4297-4356-src_schema.ts-4264-4357-src_schema.ts-0-7488>": {
+      "additionalProperties": false,
+      "description": "The foundational shape of every node in the FormCast AST.",
+      "properties": {
+        "bind": {
+          "$ref": "#/definitions/DataBinding"
+        },
+        "children": {
+          "items": {
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/BoxModel"
+        },
+        "overrides": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "object"
+        },
+        "props": {
+          "additionalProperties": false,
+          "properties": {
+            "definitionId": {
+              "type": "string"
+            }
+          },
+          "required": ["definitionId"],
+          "type": "object"
+        },
+        "style": {
+          "$ref": "#/definitions/TypographyAndColor"
+        },
+        "type": {
+          "const": "widgetInstance",
+          "type": "string"
+        }
+      },
+      "required": ["id", "type", "layout"],
+      "type": "object"
     },
     "BoxModel": {
       "additionalProperties": false,
+      "description": "The standard CSS box model properties supported by the rendering engine. Maps closely to standard CSS styling.",
       "properties": {
         "alignItems": {
           "enum": ["flex-start", "center", "flex-end", "stretch"],
@@ -217,115 +848,65 @@
       },
       "type": "object"
     },
-    "CheckboxNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
+    "BuiltInNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RootNode"
         },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
+        {
+          "$ref": "#/definitions/RowNode"
         },
-        "id": {
-          "type": "string"
+        {
+          "$ref": "#/definitions/ColumnNode"
         },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
+        {
+          "$ref": "#/definitions/TextNode"
         },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
+        {
+          "$ref": "#/definitions/ImageNode"
         },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "checkedBind": {
-              "type": "string"
-            },
-            "checkedLiteral": {
-              "type": "boolean"
-            },
-            "labelBind": {
-              "type": "string"
-            },
-            "labelLiteral": {
-              "type": "string"
-            }
-          },
-          "type": "object"
+        {
+          "$ref": "#/definitions/SpacerNode"
         },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
+        {
+          "$ref": "#/definitions/TableNode"
         },
-        "type": {
-          "const": "checkbox",
-          "type": "string"
+        {
+          "$ref": "#/definitions/WidgetInstanceNode"
+        },
+        {
+          "$ref": "#/definitions/ListTileNode"
+        },
+        {
+          "$ref": "#/definitions/RichTextNode"
+        },
+        {
+          "$ref": "#/definitions/UnorderedListNode"
+        },
+        {
+          "$ref": "#/definitions/OrderedListNode"
+        },
+        {
+          "$ref": "#/definitions/CheckboxNode"
+        },
+        {
+          "$ref": "#/definitions/RadioNode"
+        },
+        {
+          "$ref": "#/definitions/RadioGroupNode"
         }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      ],
+      "description": "Union of all native FormCast nodes."
+    },
+    "CheckboxNode": {
+      "$ref": "#/definitions/BaseNode%3C%22checkbox%22%2Cstructure-src_schema.ts-4809-4924-src_schema.ts-4785-4926-src_schema.ts-4757-4927-src_schema.ts-0-7488%3E"
     },
     "ColumnNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "not": {}
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "column",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
-    },
-    "CustomTableRow": {
-      "additionalProperties": false,
-      "properties": {
-        "cells": {
-          "items": {},
-          "type": "array"
-        },
-        "index": {
-          "type": "number"
-        }
-      },
-      "required": ["index", "cells"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22column%22%2Cundefined%3E"
     },
     "DataBinding": {
       "additionalProperties": false,
+      "description": "Configuration for binding dynamic values (e.g. JSON data variables, arrays) into node properties or layouts.",
       "properties": {
         "columns": {
           "type": "number"
@@ -350,6 +931,7 @@
     },
     "DocumentSchema": {
       "additionalProperties": false,
+      "description": "Represents the entire state of a FormCast document, including its hierarchy, widget definitions, theme configuration, static data, and metadata.",
       "properties": {
         "data": {
           "type": "object"
@@ -371,36 +953,24 @@
           "additionalProperties": false,
           "properties": {
             "body": {
-              "$ref": "#/definitions/BaseNode"
-            },
-            "footerDefaultId": {
-              "type": ["string", "null"]
+              "$ref": "#/definitions/AnyNode"
             },
             "footers": {
               "additionalProperties": {
-                "$ref": "#/definitions/DocumentSection"
+                "$ref": "#/definitions/PageRegion"
               },
               "type": "object"
             },
-            "headerDefaultId": {
-              "type": ["string", "null"]
-            },
             "headers": {
               "additionalProperties": {
-                "$ref": "#/definitions/DocumentSection"
+                "$ref": "#/definitions/PageRegion"
               },
               "type": "object"
             },
             "pageOverrides": {
               "additionalProperties": {
-                "additionalProperties": false,
-                "properties": {
-                  "footerId": {
-                    "type": ["string", "null"]
-                  },
-                  "headerId": {
-                    "type": ["string", "null"]
-                  }
+                "additionalProperties": {
+                  "type": ["string", "null"]
                 },
                 "type": "object"
               },
@@ -477,12 +1047,20 @@
       ],
       "type": "object"
     },
-    "DocumentSection": {
+    "ImageNode": {
+      "$ref": "#/definitions/BaseNode%3C%22image%22%2Cstructure-src_schema.ts-4042-4140-src_schema.ts-4021-4142-src_schema.ts-3997-4143-src_schema.ts-0-7488%3E"
+    },
+    "ListTileNode": {
+      "$ref": "#/definitions/BaseNode%3C%22listTile%22%2Cstructure-src_schema.ts-4409-4525-src_schema.ts-4385-4527-src_schema.ts-4357-4528-src_schema.ts-0-7488%3E"
+    },
+    "OrderedListNode": {
+      "$ref": "#/definitions/BaseNode%3C%22ol%22%2Cundefined%3E"
+    },
+    "PageRegion": {
       "additionalProperties": false,
       "properties": {
         "condition": {
-          "enum": ["all", "first", "last", "even", "odd", "other"],
-          "type": "string"
+          "$ref": "#/definitions/RegionCondition"
         },
         "heightPx": {
           "type": "number"
@@ -494,315 +1072,58 @@
           "type": "string"
         },
         "root": {
-          "$ref": "#/definitions/BaseNode"
+          "$ref": "#/definitions/AnyNode"
         }
       },
       "required": ["root"],
       "type": "object"
     },
-    "ImageNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "fit": {
-              "enum": ["contain", "cover", "stretch"],
-              "type": "string"
-            },
-            "srcBind": {
-              "type": "string"
-            },
-            "srcLiteral": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "image",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
-    },
-    "ListTileNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "subtitleBind": {
-              "type": "string"
-            },
-            "subtitleLiteral": {
-              "type": "string"
-            },
-            "titleBind": {
-              "type": "string"
-            },
-            "titleLiteral": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "listTile",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
-    },
-    "OrderedListNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "not": {}
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "ol",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
-    },
     "RadioGroupNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "valueBind": {
-              "type": "string"
-            },
-            "valueLiteral": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "radioGroup",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22radioGroup%22%2Cstructure-src_schema.ts-5186-5264-src_schema.ts-5160-5266-src_schema.ts-5130-5267-src_schema.ts-0-7488%3E"
     },
     "RadioNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
+      "$ref": "#/definitions/BaseNode%3C%22radio%22%2Cstructure-src_schema.ts-4973-5127-src_schema.ts-4952-5129-src_schema.ts-4927-5130-src_schema.ts-0-7488%3E"
+    },
+    "RegionCondition": {
+      "anyOf": [
+        {
+          "const": "all",
           "type": "string"
         },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
+        {
+          "const": "first",
+          "type": "string"
         },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
+        {
+          "const": "last",
+          "type": "string"
         },
-        "props": {
+        {
+          "const": "even",
+          "type": "string"
+        },
+        {
+          "const": "odd",
+          "type": "string"
+        },
+        {
           "additionalProperties": false,
           "properties": {
-            "checkedBind": {
+            "expression": {
               "type": "string"
             },
-            "checkedLiteral": {
-              "type": "boolean"
-            },
-            "labelBind": {
-              "type": "string"
-            },
-            "labelLiteral": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "value": {
+            "type": {
+              "const": "custom",
               "type": "string"
             }
           },
+          "required": ["type", "expression"],
           "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "radio",
-          "type": "string"
         }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      ]
     },
     "RichTextNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "htmlBind": {
-              "type": "string"
-            },
-            "htmlLiteral": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "richText",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22richText%22%2Cstructure-src_schema.ts-4580-4637-src_schema.ts-4556-4639-src_schema.ts-4528-4640-src_schema.ts-0-7488%3E"
     },
     "RichTextPreferences": {
       "additionalProperties": false,
@@ -829,127 +1150,13 @@
       "type": "object"
     },
     "RootNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "not": {}
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "root",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22root%22%2Cundefined%3E"
     },
     "RowNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "not": {}
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "row",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22row%22%2Cundefined%3E"
     },
     "SpacerNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "sizePx": {
-              "type": "number"
-            }
-          },
-          "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "spacer",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22spacer%22%2Cstructure-src_schema.ts-4187-4207-src_schema.ts-4168-4208-src_schema.ts-4143-4209-src_schema.ts-0-7488%3E"
     },
     "TableColumnConfig": {
       "additionalProperties": false,
@@ -976,44 +1183,54 @@
       },
       "type": "object"
     },
-    "TableNode": {
+    "TableFooterCell": {
       "additionalProperties": false,
       "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
+        "borderBottom": {
+          "type": "boolean"
         },
-        "children": {
+        "borderLeft": {
+          "type": "boolean"
+        },
+        "borderRight": {
+          "type": "boolean"
+        },
+        "borderTop": {
+          "type": "boolean"
+        },
+        "colSpan": {
+          "type": "number"
+        },
+        "content": {
           "items": {
-            "$ref": "#/definitions/BaseNode"
+            "$ref": "#/definitions/AnyNode"
+          },
+          "type": "array"
+        },
+        "rowSpan": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "TableFooterRow": {
+      "additionalProperties": false,
+      "properties": {
+        "cells": {
+          "items": {
+            "$ref": "#/definitions/TableFooterCell"
           },
           "type": "array"
         },
         "id": {
           "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "$ref": "#/definitions/TableProps"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "table",
-          "type": "string"
         }
       },
-      "required": ["id", "layout", "type"],
+      "required": ["id", "cells"],
       "type": "object"
+    },
+    "TableNode": {
+      "$ref": "#/definitions/BaseNode%3C%22table%22%2CTableProps%3E"
     },
     "TableProps": {
       "additionalProperties": false,
@@ -1024,13 +1241,23 @@
           },
           "type": "array"
         },
-        "customRows": {
-          "items": {
-            "$ref": "#/definitions/CustomTableRow"
-          },
+        "data": {
+          "items": {},
           "type": "array"
         },
         "endIndex": {
+          "type": "number"
+        },
+        "footerEndIndex": {
+          "type": "number"
+        },
+        "footerRows": {
+          "items": {
+            "$ref": "#/definitions/TableFooterRow"
+          },
+          "type": "array"
+        },
+        "footerSplitIndex": {
           "type": "number"
         },
         "hideHeaderOnSplit": {
@@ -1039,6 +1266,9 @@
         "splitIndex": {
           "type": "number"
         },
+        "styleConfig": {
+          "$ref": "#/definitions/TableStyleConfig"
+        },
         "tableSplitBehaviour": {
           "enum": ["withHeader", "withoutHeader"],
           "type": "string"
@@ -1046,59 +1276,63 @@
       },
       "type": "object"
     },
-    "TextNode": {
+    "TableStyleConfig": {
       "additionalProperties": false,
       "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
+        "alternateRowBackgroundColor": {
           "type": "string"
         },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
+        "borderColor": {
+          "type": "string"
         },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
+        "borderWidthPx": {
+          "type": "number"
         },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "hrefBind": {
-              "type": "string"
-            },
-            "hrefLiteral": {
-              "type": "string"
-            },
-            "isAnchor": {
-              "type": "boolean"
-            },
-            "literal": {
-              "type": "string"
-            }
-          },
-          "type": "object"
+        "cellPaddingPx": {
+          "type": "number"
         },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
+        "footerBackgroundColor": {
+          "type": "string"
         },
-        "type": {
-          "const": "text",
+        "footerFontSizePx": {
+          "type": "number"
+        },
+        "footerFontWeight": {
+          "type": "string"
+        },
+        "footerTextColor": {
+          "type": "string"
+        },
+        "gridLines": {
+          "enum": ["all", "horizontal", "none"],
+          "type": "string"
+        },
+        "headerBackgroundColor": {
+          "type": "string"
+        },
+        "headerFontSizePx": {
+          "type": "number"
+        },
+        "headerFontWeight": {
+          "type": "string"
+        },
+        "headerTextColor": {
+          "type": "string"
+        },
+        "rowBackgroundColor": {
+          "type": "string"
+        },
+        "rowFontSizePx": {
+          "type": "number"
+        },
+        "rowTextColor": {
           "type": "string"
         }
       },
-      "required": ["id", "layout", "type"],
       "type": "object"
+    },
+    "TextNode": {
+      "$ref": "#/definitions/BaseNode%3C%22text%22%2Cstructure-src_schema.ts-3891-3994-src_schema.ts-3871-3996-src_schema.ts-3848-3997-src_schema.ts-0-7488%3E"
     },
     "Theme": {
       "additionalProperties": false,
@@ -1508,43 +1742,7 @@
       "type": "object"
     },
     "UnorderedListNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "not": {}
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "ul",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22ul%22%2Cundefined%3E"
     },
     "WidgetDefinition": {
       "additionalProperties": false,
@@ -1556,7 +1754,7 @@
           "type": "string"
         },
         "root": {
-          "$ref": "#/definitions/BaseNode"
+          "$ref": "#/definitions/AnyNode"
         },
         "type": {
           "const": "widgetDefinition",
@@ -1567,50 +1765,7 @@
       "type": "object"
     },
     "WidgetInstanceNode": {
-      "additionalProperties": false,
-      "properties": {
-        "bind": {
-          "$ref": "#/definitions/DataBinding"
-        },
-        "children": {
-          "items": {
-            "$ref": "#/definitions/BaseNode"
-          },
-          "type": "array"
-        },
-        "id": {
-          "type": "string"
-        },
-        "layout": {
-          "$ref": "#/definitions/BoxModel"
-        },
-        "overrides": {
-          "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "object"
-        },
-        "props": {
-          "additionalProperties": false,
-          "properties": {
-            "definitionId": {
-              "type": "string"
-            }
-          },
-          "required": ["definitionId"],
-          "type": "object"
-        },
-        "style": {
-          "$ref": "#/definitions/TypographyAndColor"
-        },
-        "type": {
-          "const": "widgetInstance",
-          "type": "string"
-        }
-      },
-      "required": ["id", "layout", "type"],
-      "type": "object"
+      "$ref": "#/definitions/BaseNode%3C%22widgetInstance%22%2Cstructure-src_schema.ts-4327-4354-src_schema.ts-4297-4356-src_schema.ts-4264-4357-src_schema.ts-0-7488%3E"
     }
   }
 }

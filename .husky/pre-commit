@@ -1,3 +1,4 @@
 export PATH="$(pwd)/node_modules/.bin:$PATH"
+pnpm run test
 pnpm run schema:validate && git add packages/core/src/schema/formcast.schema.json
 pnpm exec lint-staged

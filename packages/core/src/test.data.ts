@@ -1,5 +1,5 @@
 import {
-  BaseNode,
+  AnyNode,
   BoxModel,
   ColumnNode,
   DocumentSchema,
@@ -12,7 +12,7 @@ import {
   TypographyAndColor,
 } from "./schema";
 
-const _TEST_DOCUMENT: DocumentSchema = {
+export const _TEST_DOCUMENT: DocumentSchema = {
   version: 1,
   meta: {
     pageSize: "A4",
@@ -53,7 +53,7 @@ const _TEST_DOCUMENT: DocumentSchema = {
   data: {
     company: {
       name: "FormCast Technologies Pvt. Ltd.",
-      logo: "/assets/logo.png",
+      logo: "https://picsum.photos/130/60",
       address1: "18 Technology Park",
       address2: "Hyderabad",
       state: "Telangana",
@@ -468,7 +468,7 @@ const _TEST_DOCUMENT: DocumentSchema = {
                   id: "payment-qr",
                   type: "image",
                   props: {
-                    srcLiteral: "/assets/payment-qr.png",
+                    srcLiteral: "https://picsum.photos/72/72",
                     fit: "contain",
                   },
                   layout: {
@@ -1414,7 +1414,7 @@ const _TEST_DOCUMENT: DocumentSchema = {
                   id: "signature-image",
                   type: "image",
                   props: {
-                    srcLiteral: "/assets/signature.png",
+                    srcLiteral: "https://picsum.photos/140/60",
                     fit: "contain",
                   },
                   layout: {
@@ -1653,7 +1653,7 @@ export function spacer(size = 4): SpacerNode {
   };
 }
 
-export function row(children: BaseNode[], layout: BoxModel = {}): RowNode {
+export function row(children: AnyNode[], layout: BoxModel = {}): RowNode {
   return {
     id: nextId("row"),
 
@@ -1669,10 +1669,7 @@ export function row(children: BaseNode[], layout: BoxModel = {}): RowNode {
   };
 }
 
-export function column(
-  children: BaseNode[],
-  layout: BoxModel = {}
-): ColumnNode {
+export function column(children: AnyNode[], layout: BoxModel = {}): ColumnNode {
   return {
     id: nextId("column"),
 
@@ -1839,57 +1836,141 @@ export function table(
 }
 
 export function createInvoiceTable(): TableNode {
-  return table(
+  const invoiceTable = table(
     [
       {
         headerText: "#",
-
         bindPath: "index",
-
         widthPx: 40,
       },
-
       {
         headerText: "Description",
-
         bindPath: "description",
-
         widthPx: 300,
       },
-
       {
         headerText: "Qty",
-
         bindPath: "quantity",
-
         widthPx: 70,
-
         align: "right",
       },
-
       {
         headerText: "Price",
-
         bindPath: "price",
-
         widthPx: 100,
-
         align: "right",
       },
-
       {
         headerText: "Amount",
-
         bindPath: "amount",
-
         widthPx: 120,
-
         align: "right",
       },
     ],
-
     "items"
   );
+
+  invoiceTable.props = {
+    ...invoiceTable.props,
+    footerRows: [
+      {
+        id: "summary-row-1",
+        cells: [
+          {
+            colSpan: 3,
+            rowSpan: 2,
+            borderRight: true,
+            content: [
+              {
+                id: "notes-text",
+                type: "text",
+                props: { literal: "Notes: All amounts are in USD." },
+                style: { fontSizePx: 10, color: "#666" },
+                layout: { paddingTop: 4, paddingBottom: 4, paddingLeft: 8 },
+              },
+            ],
+          },
+          {
+            colSpan: 1,
+            rowSpan: 1,
+            content: [
+              {
+                id: "subtotal-label",
+                type: "text",
+                props: { literal: "Subtotal" },
+                style: { fontWeight: "bold", textAlign: "right" },
+                layout: { paddingTop: 4, paddingBottom: 4, paddingRight: 8 },
+              },
+            ],
+          },
+          {
+            colSpan: 1,
+            rowSpan: 1,
+            content: [
+              {
+                id: "subtotal-val",
+                type: "text",
+                props: { literal: "$1,200.00" },
+                style: { textAlign: "right" },
+                layout: { paddingTop: 4, paddingBottom: 4, paddingRight: 8 },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "summary-row-2",
+        cells: [
+          {
+            colSpan: 1,
+            rowSpan: 1,
+            content: [
+              {
+                id: "total-label",
+                type: "text",
+                props: { literal: "Total" },
+                style: { fontWeight: "bold", textAlign: "right" },
+                layout: { paddingTop: 4, paddingBottom: 4, paddingRight: 8 },
+              },
+            ],
+          },
+          {
+            colSpan: 1,
+            rowSpan: 1,
+            content: [
+              {
+                id: "total-val",
+                type: "text",
+                props: { literal: "$1,200.00" },
+                style: { fontWeight: "bold", textAlign: "right" },
+                layout: { paddingTop: 4, paddingBottom: 4, paddingRight: 8 },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    styleConfig: {
+      gridLines: "horizontal",
+      borderColor: "#e5e7eb",
+      borderWidthPx: 1,
+      cellPaddingPx: 12,
+      headerBackgroundColor: "#f9fafb",
+      headerTextColor: "#374151",
+      headerFontSizePx: 12,
+      headerFontWeight: "bold",
+      rowBackgroundColor: "#ffffff",
+      alternateRowBackgroundColor: "#f9fafb",
+      rowTextColor: "#111827",
+      rowFontSizePx: 11,
+      footerBackgroundColor: "#f3f4f6",
+      footerTextColor: "#111827",
+      footerFontSizePx: 12,
+      footerFontWeight: "normal",
+    },
+  };
+
+  return invoiceTable;
 }
 
 export function loremParagraph(sentences = 5): TextNode {
@@ -1919,7 +2000,7 @@ export function createStressTable(rows: number, columns: number): TableNode {
 }
 
 export function injectTestRichText(doc: DocumentSchema): DocumentSchema {
-  const newDoc = JSON.parse(JSON.stringify(doc));
+  const newDoc = structuredClone(doc);
 
   // Add RichTextPreferences to meta
   newDoc.meta.richTextPreferences = {
@@ -1945,7 +2026,7 @@ export function injectTestRichText(doc: DocumentSchema): DocumentSchema {
   };
 
   // Inject the provided RichText widget
-  newDoc.document.body.children.unshift({
+  const richTextNode: any = {
     id: "node-1785258000135",
     type: "richText",
     layout: { marginBottom: 32 },
@@ -1953,7 +2034,9 @@ export function injectTestRichText(doc: DocumentSchema): DocumentSchema {
       htmlLiteral:
         '<article class="content-wrapper">\n  <h1>Mastering Modern Web Architecture</h1>\n  <p class="intro-text">\n    Building fast, scalable web applications requires a deep understanding of frontend optimization, state management, and semantic markup structures. \n  </p>\n\n  <hr />\n\n  <h2>Key Development Pillars</h2>\n  <p>\n    When engineering enterprise-grade user interfaces, teams must balance performance with maintainability. Focus heavily on these three core segments:\n  </p>\n\n  <ul>\n    <li><strong>Component Isolation:</strong> Write modular CSS and scoped logic to prevent global style pollution.</li>\n    <li><strong>State Hydration:</strong> Optimize server-side rendering boundaries to lower Time to Interactive (TTI).</li>\n    <li><strong>Accessibility (a11y):</strong> Utilize ARIA attributes and native interactive elements cleanly.</li>\n  </ul>\n\n  <blockquote>\n    "Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make things worse: complexity sells better."\n    <cite>— Edsger W. Dijkstra</cite>\n  </blockquote>\n\n  <h2>Performance Metrics Comparison</h2>\n  <p>\n    The table below outlines the core web vitals that engineering teams track to evaluate application responsiveness and visual stability.\n  </p>\n\n  <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">\n    <thead>\n      <tr style="background-color: #f2f2f2; text-align: left;">\n        <th>Metric Name</th>\n        <th>Acronym</th>\n        <th>Target Score</th>\n        <th>Impact Level</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>Largest Contentful Paint</td>\n        <td><code>LCP</code></td>\n        <td>&lt; 2.5 seconds</td>\n        <td>High</td>\n      </tr>\n      <tr>\n        <td>Interaction to Next Paint</td>\n        <td><code>INP</code></td>\n        <td>&lt; 200 milliseconds</td>\n        <td>Critical</td>\n      </tr>\n      <tr>\n        <td>Cumulative Layout Shift</td>\n        <td><code>CLS</code></td>\n        <td>&lt; 0.1</td>\n        <td>Medium</td>\n      </tr>\n    </tbody>\n  </table>\n\n  <h2>Next Steps for Implementation</h2>\n  <p>\n    Review your application bundle sizes using a visualizer tool. Next, remove unused dependencies. Finally, test your interface under simulated mobile throttling networks.\n  </p>\n  \n  <p>\n    For more details, consult the internal architecture documentation or reach out via the engineering Slack channel.\n  </p>\n</article>\n',
     },
-  });
+  };
+  newDoc.document.body.children = newDoc.document.body.children || [];
+  newDoc.document.body.children.unshift(richTextNode);
 
   return newDoc;
 }

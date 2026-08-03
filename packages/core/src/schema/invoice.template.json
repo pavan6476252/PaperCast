@@ -87,7 +87,7 @@
   "data": {
     "company": {
       "name": "FormCast Technologies Pvt. Ltd.",
-      "logo": "/assets/logo.png",
+      "logo": "https://picsum.photos/130/60",
       "address1": "18 Technology Park",
       "address2": "Hyderabad",
       "state": "Telangana",
@@ -3702,7 +3702,7 @@
                   "id": "payment-qr",
                   "type": "image",
                   "props": {
-                    "srcLiteral": "/assets/payment-qr.png",
+                    "srcLiteral": "https://picsum.photos/72/72",
                     "fit": "contain"
                   },
                   "layout": {

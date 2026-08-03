@@ -2,7 +2,8 @@ import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { sendCommandToActiveSession } from "../services/ws.js";
 import { deepMerge, validateAndSend } from "../services/ast.js";
-import { WsEventType } from "@formcast/core";
+import { WsEventType } from "@formcast/core/ws";
+// to-replace
 
 export function registerDocumentTools(server: McpServer) {
   server.registerTool(
@@ -65,7 +66,7 @@ export function registerDocumentTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: WsEventType.GET_CURRENT_SCHEMA,
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       newSchema.document.body.children = children;
       return validateAndSend(
         newSchema,
@@ -90,7 +91,7 @@ export function registerDocumentTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: WsEventType.GET_CURRENT_SCHEMA,
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       newSchema.data = newSchema.data || {};
       deepMerge(newSchema.data, data);
       return validateAndSend(
@@ -126,7 +127,7 @@ export function registerDocumentTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: WsEventType.GET_CURRENT_SCHEMA,
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       newSchema.document[sectionType] = newSchema.document[sectionType] || {};
       newSchema.document[sectionType][sectionKey] = sectionData;
       return validateAndSend(
@@ -151,7 +152,7 @@ export function registerDocumentTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: WsEventType.GET_CURRENT_SCHEMA,
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       if (
         newSchema.document[sectionType] &&
         newSchema.document[sectionType][sectionKey]
@@ -181,7 +182,7 @@ export function registerDocumentTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: WsEventType.GET_CURRENT_SCHEMA,
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       newSchema.meta = newSchema.meta || {};
       deepMerge(newSchema.meta, patch);
       return validateAndSend(
@@ -207,7 +208,7 @@ export function registerDocumentTools(server: McpServer) {
       const state = await sendCommandToActiveSession({
         type: "GET_CURRENT_SCHEMA",
       });
-      const newSchema = JSON.parse(JSON.stringify(state.schema));
+      const newSchema = structuredClone(state.schema);
       newSchema.theme = newSchema.theme || {};
       newSchema.theme.defaults = newSchema.theme.defaults || {};
       deepMerge(newSchema.theme.defaults, patch);

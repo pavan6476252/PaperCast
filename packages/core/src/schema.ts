@@ -1,3 +1,7 @@
+/**
+ * The standard CSS box model properties supported by the rendering engine.
+ * Maps closely to standard CSS styling.
+ */
 export interface BoxModel {
   // sizing
   width?: number | string;
@@ -61,6 +65,10 @@ export interface TypographyAndColor {
   lineHeight?: number;
 }
 
+/**
+ * Configuration for binding dynamic values (e.g. JSON data variables, arrays)
+ * into node properties or layouts.
+ */
 export interface DataBinding {
   path: string;
   mode?: "single" | "repeat";
@@ -78,131 +86,164 @@ export interface TableColumnConfig {
   hidden?: boolean;
 }
 
-export interface CustomTableRow {
-  index: number;
-  cells: any[];
+export interface TableFooterCell {
+  colSpan?: number;
+  rowSpan?: number;
+  content?: AnyNode[];
+  borderRight?: boolean;
+  borderLeft?: boolean;
+  borderTop?: boolean;
+  borderBottom?: boolean;
+}
+
+export interface TableFooterRow {
+  id: string;
+  cells: TableFooterCell[];
+}
+
+export interface TableStyleConfig {
+  borderColor?: string;
+  borderWidthPx?: number;
+  cellPaddingPx?: number;
+  gridLines?: "all" | "horizontal" | "none";
+
+  headerBackgroundColor?: string;
+  headerTextColor?: string;
+  headerFontSizePx?: number;
+  headerFontWeight?: string;
+
+  footerBackgroundColor?: string;
+  footerTextColor?: string;
+  footerFontSizePx?: number;
+  footerFontWeight?: string;
+
+  rowBackgroundColor?: string;
+  alternateRowBackgroundColor?: string;
+  rowTextColor?: string;
+  rowFontSizePx?: number;
 }
 
 export interface TableProps {
   columns?: TableColumnConfig[];
-  customRows?: CustomTableRow[];
+  data?: any[];
+  footerRows?: TableFooterRow[];
+  footerSplitIndex?: number;
+  footerEndIndex?: number;
   splitIndex?: number;
   endIndex?: number;
   hideHeaderOnSplit?: boolean;
   tableSplitBehaviour?: "withHeader" | "withoutHeader";
+  styleConfig?: TableStyleConfig;
 }
 
-export interface BaseNodeCommon {
+/**
+ * The foundational shape of every node in the FormCast AST.
+ */
+export interface BaseNode<
+  TType extends string = string,
+  TProps = Record<string, any> | undefined,
+> {
   id: string;
+  type: TType;
   layout: BoxModel;
   style?: TypographyAndColor;
   bind?: DataBinding;
-  children?: BaseNode[];
-  overrides?: Record<string, Partial<BaseNode>>;
+  children?: AnyNode[];
+  overrides?: Record<string, Partial<AnyNode>>;
+  props?: TProps;
 }
 
-export interface RootNode extends BaseNodeCommon {
-  type: "root";
-  props?: undefined;
-}
-export interface RowNode extends BaseNodeCommon {
-  type: "row";
-  props?: undefined;
-}
-export interface ColumnNode extends BaseNodeCommon {
-  type: "column";
-  props?: undefined;
-}
-export interface TextNode extends BaseNodeCommon {
-  type: "text";
-  props?: {
+export type RootNode = BaseNode<"root", undefined>;
+export type RowNode = BaseNode<"row", undefined>;
+export type ColumnNode = BaseNode<"column", undefined>;
+export type TextNode = BaseNode<
+  "text",
+  {
     literal?: string;
     isAnchor?: boolean;
     hrefLiteral?: string;
     hrefBind?: string;
-  };
-}
-export interface ImageNode extends BaseNodeCommon {
-  type: "image";
-  props?: {
+  }
+>;
+export type ImageNode = BaseNode<
+  "image",
+  {
     srcBind?: string;
     srcLiteral?: string;
     fit?: "contain" | "cover" | "stretch";
-  };
-}
-export interface SpacerNode extends BaseNodeCommon {
-  type: "spacer";
-  props?: { sizePx?: number };
-}
-export interface TableNode extends BaseNodeCommon {
-  type: "table";
-  props?: TableProps;
-}
-export interface WidgetInstanceNode extends BaseNodeCommon {
-  type: "widgetInstance";
-  props?: { definitionId: string };
-}
+  }
+>;
+export type SpacerNode = BaseNode<"spacer", { sizePx?: number }>;
+export type TableNode = BaseNode<"table", TableProps>;
+export type WidgetInstanceNode = BaseNode<
+  "widgetInstance",
+  { definitionId: string }
+>;
 
-export interface ListTileNode extends BaseNodeCommon {
-  type: "listTile";
-  props?: {
+export type ListTileNode = BaseNode<
+  "listTile",
+  {
     titleLiteral?: string;
     titleBind?: string;
     subtitleLiteral?: string;
     subtitleBind?: string;
-  };
-}
+  }
+>;
 
-export interface RichTextNode extends BaseNodeCommon {
-  type: "richText";
-  props?: {
+export type RichTextNode = BaseNode<
+  "richText",
+  {
     htmlLiteral?: string;
     htmlBind?: string;
-  };
-}
+  }
+>;
 
-export interface UnorderedListNode extends BaseNodeCommon {
-  type: "ul";
-  props?: undefined;
-}
+export type UnorderedListNode = BaseNode<"ul", undefined>;
+export type OrderedListNode = BaseNode<"ol", undefined>;
 
-export interface OrderedListNode extends BaseNodeCommon {
-  type: "ol";
-  props?: undefined;
-}
-
-export interface CheckboxNode extends BaseNodeCommon {
-  type: "checkbox";
-  props?: {
+export type CheckboxNode = BaseNode<
+  "checkbox",
+  {
     labelLiteral?: string;
     labelBind?: string;
     checkedLiteral?: boolean;
     checkedBind?: string;
-  };
-}
+  }
+>;
 
-export interface RadioNode extends BaseNodeCommon {
-  type: "radio";
-  props?: {
+export type RadioNode = BaseNode<
+  "radio",
+  {
     labelLiteral?: string;
     labelBind?: string;
     checkedLiteral?: boolean;
     checkedBind?: string;
     value?: string;
-    name?: string; // fallback if not in group
-  };
-}
+    name?: string;
+  }
+>;
 
-export interface RadioGroupNode extends BaseNodeCommon {
-  type: "radioGroup";
-  props?: {
+export type RadioGroupNode = BaseNode<
+  "radioGroup",
+  {
     name?: string;
     valueLiteral?: string;
     valueBind?: string;
-  };
-}
+  }
+>;
 
-export type BaseNode =
+/**
+ * Interface for module augmentation.
+ * Package consumers can extend this interface to add their custom node types
+ * for strict typing and autocomplete.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CustomNodesRegistry {}
+
+/**
+ * Union of all native FormCast nodes.
+ */
+export type BuiltInNode =
   | RootNode
   | RowNode
   | ColumnNode
@@ -217,8 +258,13 @@ export type BaseNode =
   | OrderedListNode
   | CheckboxNode
   | RadioNode
-  | RadioGroupNode
-  | (BaseNodeCommon & { type: string; props?: Record<string, any> });
+  | RadioGroupNode;
+
+/**
+ * Comprehensive union representing any valid node (built-in or custom).
+ */
+export type AnyNode =
+  BuiltInNode | CustomNodesRegistry[keyof CustomNodesRegistry];
 
 export interface Theme {
   defaults: {
@@ -231,15 +277,23 @@ export interface WidgetDefinition {
   id: string;
   type: "widgetDefinition";
   contextShape?: string;
-  root: BaseNode;
+  root: AnyNode;
 }
 
-export interface DocumentSection {
+export type RegionCondition =
+  | "all"
+  | "first"
+  | "last"
+  | "even"
+  | "odd"
+  | { type: "custom"; expression: string };
+
+export interface PageRegion {
   id?: string;
   name?: string;
-  condition?: "all" | "first" | "last" | "even" | "odd" | "other";
+  condition?: RegionCondition;
   heightPx?: number;
-  root: BaseNode;
+  root: AnyNode;
 }
 
 export interface RichTextPreferences {
@@ -253,6 +307,10 @@ export interface RichTextPreferences {
   >;
 }
 
+/**
+ * Represents the entire state of a FormCast document, including its hierarchy,
+ * widget definitions, theme configuration, static data, and metadata.
+ */
 export interface DocumentSchema {
   version: number;
   meta: {
@@ -268,22 +326,9 @@ export interface DocumentSchema {
     widgets: Record<string, WidgetDefinition>;
   };
   document: {
-    headers: Record<string, DocumentSection>;
-    footers: Record<string, DocumentSection>;
-    headerDefaultId?: string | null;
-    footerDefaultId?: string | null;
-    pageOverrides: Record<
-      string,
-      { headerId?: string | null; footerId?: string | null }
-    >;
-    body: BaseNode;
+    headers: Record<string, PageRegion>;
+    footers: Record<string, PageRegion>;
+    pageOverrides: Record<string, Record<string, string | null>>;
+    body: AnyNode;
   };
-}
-
-export interface Measurements {
-  headers: Record<string, number>;
-  footers: Record<string, number>;
-  blocks: Record<string, number>;
-  tableRows: Record<string, number[]>;
-  tableHeaders: Record<string, number>;
 }

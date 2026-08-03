@@ -1,36 +1,47 @@
-# Node Registry
+# Node & Component Registries
 
-FormCast fundamentally separates the structure of a document (JSON Schema) from its visual representation (React Components). This is achieved through the `NodeRegistry`.
+FormCast fundamentally separates the structure of a document (JSON Schema) from its visual representation (React Components). Because of FormCast's Headless Architecture, this separation is achieved through two distinct registries: the **Schema Registry** in the core engine and the **Node Registry** (Component Registry) in the React headless binding.
 
-The `NodeRegistry` maps a `type` string from the JSON AST to a `NodeTypeDefinition`.
+## The Dual Registry System
 
-## API Reference: `NodeTypeDefinition`
+### 1. Schema Registry (`@formcast/engine`)
 
-When you create a new widget or node type in FormCast, you must register it with the `NodeRegistry` using this interface:
+This registry stores the logic for how a node behaves physically (its height and how it splits). It has **no knowledge of React or the DOM**.
 
 ```typescript
-export interface NodeTypeDefinition<TNode extends BaseNode = BaseNode> {
-  // The string type in the JSON schema (e.g. 'text', 'row', 'image')
+export interface SchemaTypeDefinition<TNode extends AnyNode = AnyNode> {
   type: string;
-
-  // A function that calculates the height of the node based on available width
   measure: (node: TNode, ctx: MeasureContext) => number;
-
-  // The React component responsible for rendering this node
-  render: React.ComponentType<{
-    node: TNode;
-    path?: string;
-    isSelected?: boolean;
-    onSelect?: (e: React.MouseEvent) => void;
-    pageContext?: { pageNumber: number; pageCount: number };
-  }>;
-
-  // Optional logic for splitting the node across pages
   split?: (
     node: TNode,
     remainingHeight: number,
     ctx: SplitContext
   ) => [TNode, TNode | null, number?] | null;
+}
+```
+
+### 2. Node Registry (`@formcast/react`)
+
+This is the React-specific registry that extends the Schema Registry. It maps the node type to an actual React component. When you register a node here, it automatically proxies the `measure` and `split` definitions down to the core engine's `SchemaRegistry`.
+
+## API Reference: `ComponentTypeDefinition`
+
+When you create a new widget or node type in FormCast, you register it with the React `NodeRegistry` using this interface:
+
+```typescript
+import { SchemaTypeDefinition } from "@formcast/engine";
+
+export interface ComponentTypeDefinition<
+  TNode extends AnyNode = AnyNode,
+> extends SchemaTypeDefinition<TNode> {
+  render: React.ComponentType<{
+    node: TNode;
+    path?: string;
+    pageContext?: { pageNumber: number; pageCount: number };
+    injectedProps?: React.HTMLAttributes<HTMLDivElement> & {
+      "data-selected"?: boolean;
+    };
+  }>;
 }
 ```
 
@@ -46,6 +57,8 @@ export interface NodeTypeDefinition<TNode extends BaseNode = BaseNode> {
 Here is an example of registering a simple "divider" node:
 
 ```typescript
+import { NodeRegistry } from "@formcast/react";
+
 NodeRegistry.register({
   type: "divider",
   measure: () => 10, // A divider is always 10px tall
@@ -65,9 +78,9 @@ First, build the component that will render the signature line.
 ```tsx
 // src/components/renderer/nodes/SignatureNode.tsx
 import React from "react";
-import { BaseNode } from "../../../types/schema";
+import { AnyNode } from "@formcast/core";
 
-export const SignatureNode = ({ node }: { node: BaseNode }) => {
+export const SignatureNode = ({ node }: { node: AnyNode }) => {
   return (
     <div className="mt-8 flex flex-col w-64">
       <div className="border-b border-black h-12" />
@@ -77,12 +90,12 @@ export const SignatureNode = ({ node }: { node: BaseNode }) => {
 };
 ```
 
-**2. Register it with the Engine**
-In your widget registration file (e.g., `src/registry/categories/basic.ts`):
+**2. Register it with the React Engine**
+In your widget registration file (e.g., `packages/react/src/widgets/basic.ts` or wherever your UI widgets are defined):
 
 ```tsx
-import { NodeRegistry } from "../NodeRegistry";
-import { SignatureNode } from "../../components/renderer/nodes/SignatureNode";
+import { NodeRegistry } from "@formcast/react";
+import { SignatureNode } from "./SignatureNode";
 
 NodeRegistry.register({
   type: "signature",
@@ -92,11 +105,11 @@ NodeRegistry.register({
 });
 ```
 
-**3. Add it to the DnD Widget Menu**
+**3. Add it to the DnD Widget Menu (App Layer)**
 Now, define the default JSON payload that should be injected into the AST when a user drags the widget from the sidebar into the document:
 
 ```typescript
-// Inside your widget category definitions
+// Inside your app's widget definitions
 export const signatureWidgetDef = {
   id: "signature-widget",
   name: "Signature Box",
@@ -110,4 +123,4 @@ export const signatureWidgetDef = {
 };
 ```
 
-That's it! The parser will now automatically measure, paginate, and render your custom Signature node.
+That's it! The core engine will handle pagination logic via the proxied schema registry, while `@formcast/react` will render your custom Signature node.

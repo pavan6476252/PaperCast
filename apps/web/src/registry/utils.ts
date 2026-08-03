@@ -1,4 +1,4 @@
-import { BaseNode, DocumentSchema } from "@formcast/core";
+import { AnyNode, DocumentSchema } from "@formcast/core";
 
 export interface WidgetRegistryItem {
   id: string;
@@ -71,7 +71,7 @@ const baseData = {
 };
 
 function wrapBase(
-  node: BaseNode,
+  node: AnyNode,
   heightPx?: number,
   section: "body" | "header" | "footer" = "body"
 ): DocumentSchema {
@@ -143,14 +143,14 @@ function wrapBase(
   };
 }
 
-export function wrap(node: BaseNode, heightPx?: number): DocumentSchema {
+export function wrap(node: AnyNode, heightPx?: number): DocumentSchema {
   return wrapBase(node, heightPx, "body");
 }
 
-export function wrapHeader(node: BaseNode, heightPx?: number): DocumentSchema {
+export function wrapHeader(node: AnyNode, heightPx?: number): DocumentSchema {
   return wrapBase(node, heightPx, "header");
 }
 
-export function wrapFooter(node: BaseNode, heightPx?: number): DocumentSchema {
+export function wrapFooter(node: AnyNode, heightPx?: number): DocumentSchema {
   return wrapBase(node, heightPx, "footer");
 }

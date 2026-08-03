@@ -76,7 +76,22 @@ The source of truth is the JSON AST (Abstract Syntax Tree). The user edits the J
 
 ### 2. Validation & Registration
 
-Every update to the AST is strictly validated against `docframe.schema.json`. 3. **Offscreen Measurement**: Before anything is shown to the user, `OffscreenMeasurer.tsx` silently renders the nodes in the DOM to measure their physical heights in pixels. 4. **Pagination Engine**: With the height data available, `PaginationEngine.ts` splits the AST into discrete pages, injecting Headers and Footers based on conditions (first page, even, odd). 5. **Rendering**: The `DocumentPreview` maps the paginated AST nodes back to React components via the `NodeRegistry`.
+Every update to the AST is strictly validated against `docframe.schema.json` in `@formcast/core`. The architecture is cleanly split into two halves:
+
+- **Core Engine (`@formcast/engine`)**: A standalone, framework-agnostic engine that calculates pagination, evaluates variables, and resolves templates without any knowledge of the DOM. It uses a **Schema Registry** to track node properties and validation behaviors.
+- **Headless Binding (`@formcast/react`)**: A React-specific adapter that implements DOM requirements (like measuring node heights) and acts as the **Component Registry**, mapping AST node types to actual visual React components.
+
+### 3. Offscreen Measurement
+
+Before anything is shown to the user, `OffscreenMeasurer.tsx` (an implementation of the engine's `IMeasurer` adapter) silently renders the nodes in the DOM to measure their physical heights in pixels.
+
+### 4. Pagination Engine
+
+With the height data available, `PaginationEngine.ts` inside `@formcast/engine` splits the AST into discrete pages, injecting Headers and Footers based on conditions (first page, even, odd).
+
+### 5. Rendering
+
+The `DocumentPreview` inside the web app maps the paginated AST nodes back to React components via the React Component Registry.
 
 <Callout type="info" title="Why Offscreen Measurement?">
   Browsers are inherently dynamic. To guarantee that a PDF matches the screen

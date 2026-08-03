@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="m-0 p-0 antialiased">
-        <script
+        <Script
+          id="cancelation-handler"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.addEventListener('unhandledrejection', function(event) {
