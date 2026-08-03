@@ -17,6 +17,12 @@ First, ensure you have dependencies installed (this project uses `pnpm`):
 pnpm install
 ```
 
+Install Husky git hooks and set executable permissions:
+
+```bash
+./scripts/setup-husky.sh
+```
+
 Run the development server:
 
 ```bash
