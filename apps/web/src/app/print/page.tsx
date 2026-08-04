@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { DocumentPreview } from "../../components/renderer/DocumentPreview";
 import { useDocumentStore } from "../../store/documentStore";
-import { registerDefaultWidgets } from "@formcast/react/widgets";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
 
 registerDefaultWidgets();
 

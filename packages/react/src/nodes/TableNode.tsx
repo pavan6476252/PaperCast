@@ -1,7 +1,7 @@
 import React from "react";
-import { TableColumnConfig, TableNode } from "@formcast/core";
+import { TableColumnConfig, TableNode } from "@papercast/core";
 import { ComponentTypeDefinition } from "../registry";
-import { resolvePath, TableBehavior } from "@formcast/engine";
+import { resolvePath, TableBehavior } from "@papercast/engine";
 import { useNodeData } from "../headless/useNodeData";
 import { useNodeStyle } from "../headless/useNodeStyle";
 import { NodeRenderer } from "../NodeRenderer";

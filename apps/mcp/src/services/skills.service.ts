@@ -4,7 +4,7 @@ import matter from "gray-matter";
 
 // In CommonJS, __dirname is available globally.
 
-export async function listFormcastSkills() {
+export async function listPapercastSkills() {
   const docsPath = path.join(__dirname, "../../mcp-skills");
   if (!fs.existsSync(docsPath)) {
     return {
@@ -34,13 +34,13 @@ export async function listFormcastSkills() {
     content: [
       {
         type: "text" as const,
-        text: `Available FormCast Skills/Docs:\n\n${skillSummaries.join("\n")}\n\nUse the 'read_formcast_skill' tool with the exact filename to read its full contents.`,
+        text: `Available PaperCast Skills/Docs:\n\n${skillSummaries.join("\n")}\n\nUse the 'read_papercast_skill' tool with the exact filename to read its full contents.`,
       },
     ],
   };
 }
 
-export async function readFormcastSkill(skillSlug: string) {
+export async function readPapercastSkill(skillSlug: string) {
   const docsPath = path.join(__dirname, "../../mcp-skills", skillSlug);
   const resolvedDocsDir = path.resolve(__dirname, "../../mcp-skills");
   const resolvedTargetPath = path.resolve(docsPath);

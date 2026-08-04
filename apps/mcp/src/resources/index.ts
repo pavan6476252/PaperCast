@@ -1,26 +1,26 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { sendCommandToActiveSession } from "../services/ws.js";
 
-import formcastSchema from "@formcast/core/schema.json";
-import invoiceTemplate from "@formcast/core/invoice.template.json";
-import reportTemplate from "@formcast/core/report.template.json";
-import { WsEventType } from "@formcast/core/ws";
+import papercastSchema from "@papercast/core/schema.json";
+import invoiceTemplate from "@papercast/core/invoice.template.json";
+import reportTemplate from "@papercast/core/report.template.json";
+import { WsEventType } from "@papercast/core/ws";
 // to-replace
 
 export function registerResources(server: McpServer) {
   server.registerResource(
     "schema-specification",
-    "formcast://schema/specification",
+    "papercast://schema/specification",
     {
       description:
-        "The complete JSON Schema validating FormCast document templates.",
+        "The complete JSON Schema validating PaperCast document templates.",
     },
     async (uri) => ({
       contents: [
         {
           uri: uri.href,
           mimeType: "application/json",
-          text: JSON.stringify(formcastSchema, null, 2),
+          text: JSON.stringify(papercastSchema, null, 2),
         },
       ],
     })
@@ -28,7 +28,7 @@ export function registerResources(server: McpServer) {
 
   server.registerResource(
     "current-schema",
-    "formcast://schema/current",
+    "papercast://schema/current",
     {
       description:
         "The layout schema currently loaded in the active browser tab.",
@@ -55,7 +55,7 @@ export function registerResources(server: McpServer) {
 
   server.registerResource(
     "invoice-template",
-    "formcast://template/invoice",
+    "papercast://template/invoice",
     { description: "Starter invoice template schema." },
     async (uri) => ({
       contents: [
@@ -70,7 +70,7 @@ export function registerResources(server: McpServer) {
 
   server.registerResource(
     "report-template",
-    "formcast://template/report",
+    "papercast://template/report",
     { description: "Starter report layout schema." },
     async (uri) => ({
       contents: [

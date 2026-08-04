@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useFormCastEditor } from "../EditorProvider";
-import { AnyNode, TableColumnConfig, DataBinding } from "@formcast/core";
+import { usePaperCastEditor } from "../EditorProvider";
+import { AnyNode, TableColumnConfig, DataBinding } from "@papercast/core";
 import { XCircle, GripVertical, Focus } from "lucide-react";
 import { getNodeContextPaths } from "../../utils/dataBinding";
 import { convertHtmlToNodes } from "../../utils/htmlParser";
@@ -13,7 +13,7 @@ export const PropertyPanel: React.FC = () => {
     setSelectedNodeId,
     isValid,
     replaceNode,
-  } = useFormCastEditor();
+  } = usePaperCastEditor();
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(
     null
   );
@@ -700,7 +700,7 @@ export const PropertyPanel: React.FC = () => {
                   <p className="text-[11px] text-gray-500 mb-3 leading-relaxed">
                     A single Rich Text block cannot split across page
                     boundaries. Convert its HTML paragraphs, headers, and lists
-                    into separate FormCast widgets inside a layout container to
+                    into separate PaperCast widgets inside a layout container to
                     enable page splitting.
                   </p>
                   <button

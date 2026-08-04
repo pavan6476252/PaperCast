@@ -10,9 +10,9 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@formcast/core": "workspace:*",
-    "@formcast/engine": "workspace:*",
-    "@formcast/react": "workspace:*",
+    "@papercast/core": "workspace:*",
+    "@papercast/engine": "workspace:*",
+    "@papercast/react": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
     "json-source-map": "^0.6.1",
     "lucide-react": "^1.27.0",

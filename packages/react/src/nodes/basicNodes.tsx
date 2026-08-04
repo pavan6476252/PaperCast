@@ -9,10 +9,10 @@ import {
   SpacerNode,
   ListTileNode,
   RichTextNode,
-} from "@formcast/core";
+} from "@papercast/core";
 import { NodeRenderer } from "../NodeRenderer";
 import { ComponentTypeDefinition } from "../registry";
-import { ContainerBehavior } from "@formcast/engine";
+import { ContainerBehavior } from "@papercast/engine";
 import { useNodeData } from "../headless/useNodeData";
 import { useNodeStyle } from "../headless/useNodeStyle";
 

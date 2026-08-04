@@ -25,13 +25,13 @@ import {
   EditorProvider,
   PropertyPanel,
   WidgetsPanel,
-} from "@formcast/react/editor";
+} from "@papercast/react/editor";
 import {
   useDocumentStore,
   useDocumentTemporalStore,
 } from "../../../store/documentStore";
 import { useMcpSync } from "../../../hooks/useMcpSync";
-import { registerDefaultWidgets } from "@formcast/react/widgets";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
 
 const WorkspaceSidebar = dynamic(
   () =>
@@ -49,7 +49,7 @@ const WorkspaceSidebar = dynamic(
   }
 );
 
-// Register default FormCast widgets on client load
+// Register default PaperCast widgets on client load
 registerDefaultWidgets();
 
 const usePlaygroundShortcuts = (
@@ -292,12 +292,12 @@ export function PlaygroundContent() {
 
     // Load schema from session storage if available
     try {
-      const storedSchema = sessionStorage.getItem("formcast_schema");
+      const storedSchema = sessionStorage.getItem("papercast_schema");
       if (storedSchema) {
         JSON.parse(storedSchema); // Validate JSON
         useDocumentStore.getState().setJsonString(storedSchema);
         // Clear it so it doesn't persist across fresh navigations later
-        sessionStorage.removeItem("formcast_schema");
+        sessionStorage.removeItem("papercast_schema");
       }
     } catch (e) {
       console.error("Failed to load schema from session storage", e);

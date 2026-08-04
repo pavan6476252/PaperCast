@@ -6,7 +6,7 @@ import {
   RadioNode,
   RadioGroupNode,
   AnyNode,
-} from "@formcast/core";
+} from "@papercast/core";
 import { NodeRenderer } from "../NodeRenderer";
 import { ComponentTypeDefinition } from "../registry";
 import { useNodeData } from "../headless/useNodeData";

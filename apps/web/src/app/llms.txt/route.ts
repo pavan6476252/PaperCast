@@ -1,11 +1,11 @@
 import { DOC_CATEGORIES } from "../(marketing)/docs/config";
 
 export async function GET() {
-  const baseUrl = "https://formcast.dev";
+  const baseUrl = "https://papercast.dev";
 
-  let content = `# FormCast Documentation for AI Agents
+  let content = `# PaperCast Documentation for AI Agents
 
-FormCast is a Schema-First Document Builder and Renderer.
+PaperCast is a Schema-First Document Builder and Renderer.
 
 Here is the documentation structure:
 `;

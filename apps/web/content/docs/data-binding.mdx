@@ -1,6 +1,6 @@
 # Data Binding
 
-Templates are only useful if you can fill them with dynamic data. FormCast allows you to bind elements in your document to a JSON data payload.
+Templates are only useful if you can fill them with dynamic data. PaperCast allows you to bind elements in your document to a JSON data payload.
 
 ![Data Binding interface](/images/data-binding.gif)
 
@@ -53,11 +53,11 @@ If you have a list of items (like products in an invoice), you can use the **Rep
 
 Now, whatever you place inside this container will be duplicated for every item in the array!
 
-Inside the repeating container, you can add a Text node and set its bind path to `item.name` or `item.price`. FormCast will dynamically render a list.
+Inside the repeating container, you can add a Text node and set its bind path to `item.name` or `item.price`. PaperCast will dynamically render a list.
 
 ### Full-Scale Data Binding Example
 
-Imagine you are passing the following eCommerce data payload to FormCast:
+Imagine you are passing the following eCommerce data payload to PaperCast:
 
 ```json
 {

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { PaperFormat } from "puppeteer-core";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import docframeSchema from "@formcast/core/schema.json";
+import docframeSchema from "@papercast/core/schema.json";
 
 export const runtime = "nodejs"; // must NOT be 'edge'
 export const maxDuration = 60; // Vercel default is 10s on Hobby — PDF gen often needs more

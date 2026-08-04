@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDocumentStore } from "../../store/documentStore";
-import { PageRegion } from "@formcast/core";
+import { PageRegion } from "@papercast/core";
 import { Trash2 } from "lucide-react";
 
 interface SectionToolbarProps {

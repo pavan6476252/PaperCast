@@ -14,7 +14,7 @@ The `layout` object on a `BaseNode` controls flexbox positioning, dimensions, sp
 
 ## Flex / Flow Controls
 
-FormCast translates layout directions directly into CSS flexbox behaviors.
+PaperCast translates layout directions directly into CSS flexbox behaviors.
 
 - `direction`: `"row"` | `"column"`
 - `wrap`: `boolean` (Legacy)

@@ -3,11 +3,11 @@ import { Metadata } from "next";
 import { DocsIndexClient } from "../../../components/docs/DocsIndexClient";
 
 export const metadata: Metadata = {
-  title: "Documentation | FormCast",
+  title: "Documentation | PaperCast",
   description:
-    "Comprehensive documentation, guides, and API reference for FormCast. Learn how to build, validate, and render complex documents and PDFs.",
+    "Comprehensive documentation, guides, and API reference for PaperCast. Learn how to build, validate, and render complex documents and PDFs.",
   keywords: [
-    "FormCast",
+    "PaperCast",
     "Documentation",
     "PDF",
     "React",
@@ -16,18 +16,18 @@ export const metadata: Metadata = {
     "Agentic Document Generation",
   ],
   openGraph: {
-    title: "Documentation | FormCast",
+    title: "Documentation | PaperCast",
     description:
-      "Learn how to build, validate, and render complex documents and PDFs with FormCast.",
-    url: "https://formcast.dev/docs",
-    siteName: "FormCast",
+      "Learn how to build, validate, and render complex documents and PDFs with PaperCast.",
+    url: "https://papercast.dev/docs",
+    siteName: "PaperCast",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Documentation | FormCast",
+    title: "Documentation | PaperCast",
     description:
-      "Learn how to build, validate, and render complex documents and PDFs with FormCast.",
+      "Learn how to build, validate, and render complex documents and PDFs with PaperCast.",
   },
 };
 

@@ -1,6 +1,9 @@
-# FormCast
+# PaperCast
 
-FormCast is a powerful, dynamic Document Builder built with Next.js. It allows you to design, preview, and generate print-ready PDF documents dynamically using a simple JSON structure.
+[![CI](https://github.com/pavan6476252/papercast/actions/workflows/ci.yml/badge.svg)](https://github.com/pavan6476252/papercast/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+PaperCast is a powerful, dynamic Document Builder built with Next.js. It allows you to design, preview, and generate print-ready PDF documents dynamically using a simple JSON structure.
 
 ## Features
 
@@ -56,7 +59,7 @@ Open [http://localhost:8000](http://localhost:8000) with your browser to see the
 If you update the core TypeScript types (`packages/core/src/schema.ts`), you can regenerate the JSON schema for validation using:
 
 ```bash
-pnpm --filter @formcast/core run schema:generate
+pnpm --filter @papercast/core run schema:generate
 ```
 
 ### Cleaning the Workspace
@@ -71,22 +74,22 @@ To clean a specific app or package, use Turborepo's filter flag:
 
 ```bash
 # Clean the Next.js web app
-pnpm --filter formcast-web run clean
+pnpm --filter papercast-web run clean
 
 # Clean the CLI app
-pnpm --filter formcast-mcp run clean
+pnpm --filter papercast-mcp run clean
 
 # Clean the core package
-pnpm --filter @formcast/core run clean
+pnpm --filter @papercast/core run clean
 ```
 
 ## Architecture & Core Concepts
 
-FormCast is a Schema-First Document Builder and Renderer, split across multiple decoupled packages:
+PaperCast is a Schema-First Document Builder and Renderer, split across multiple decoupled packages:
 
-- **Core Engine (`packages/engine`)**: Framework-agnostic vanilla TypeScript logic responsible for parsing the FormCast JSON schema, calculating pagination, and resolving dynamic data. It contains no React or DOM-specific code.
-- **Headless Binding (`packages/react`)**: A framework-specific adapter (e.g., `@formcast/react`) that implements the UI rendering and DOM measurement interfaces required by the Core Engine.
+- **Core Engine (`packages/engine`)**: Framework-agnostic vanilla TypeScript logic responsible for parsing the PaperCast JSON schema, calculating pagination, and resolving dynamic data. It contains no React or DOM-specific code.
+- **Headless Binding (`packages/react`)**: A framework-specific adapter (e.g., `@papercast/react`) that implements the UI rendering and DOM measurement interfaces required by the Core Engine.
 - **Measurer Adapter (`IMeasurer`)**: An interface defined by the Core Engine but implemented by the Headless Binding. It provides the layout heights of rendered elements without coupling the engine to a specific DOM implementation.
 - **Schema & Component Registries**: A lightweight registry in the Core Engine stores node metadata, while a Component Registry in the Headless Binding maps node types to actual UI components.
 
-By keeping the business logic and layout orchestration strictly separated from the rendering framework, FormCast remains fast, flexible, and portable.
+By keeping the business logic and layout orchestration strictly separated from the rendering framework, PaperCast remains fast, flexible, and portable.

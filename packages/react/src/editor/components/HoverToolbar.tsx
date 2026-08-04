@@ -7,8 +7,8 @@ import {
   Trash2,
   CornerLeftUp,
 } from "lucide-react";
-import { AnyNode } from "@formcast/core";
-import { useFormCastEditor } from "../EditorProvider";
+import { AnyNode } from "@papercast/core";
+import { usePaperCastEditor } from "../EditorProvider";
 
 export const HoverToolbar: React.FC<{
   nodeId: string;
@@ -20,7 +20,7 @@ export const HoverToolbar: React.FC<{
     moveNode,
     setSelectedNodeId,
     document: parsedDocument,
-  } = useFormCastEditor();
+  } = usePaperCastEditor();
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [positionAtBottom, setPositionAtBottom] = useState(false);
 

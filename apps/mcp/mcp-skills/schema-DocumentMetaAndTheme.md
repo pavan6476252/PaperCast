@@ -1,6 +1,6 @@
 # Document Meta and Theme Schema
 
-The FormCast engine allows controlling global page settings via `document.meta` and global styling defaults via `document.theme`.
+The PaperCast engine allows controlling global page settings via `document.meta` and global styling defaults via `document.theme`.
 
 ## Document Meta
 

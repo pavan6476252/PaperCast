@@ -1,15 +1,15 @@
 import React, { createContext, useContext, useMemo } from "react";
-import { AnyNode } from "@formcast/core";
-import { FormCastContext, DefaultTData } from "@formcast/engine";
+import { AnyNode } from "@papercast/core";
+import { PaperCastContext, DefaultTData } from "@papercast/engine";
 
 export interface PageContextType {
   pageNumber: number;
   pageCount: number;
 }
 
-export interface FormCastProviderProps<
+export interface PaperCastProviderProps<
   TData = DefaultTData,
-> extends FormCastContext<TData> {
+> extends PaperCastContext<TData> {
   pageContext?: PageContextType;
   activeTab?: "content" | "headers" | "footers";
   location?: "body" | "header" | "footer";
@@ -25,16 +25,16 @@ export interface FormCastProviderProps<
   children?: React.ReactNode;
 }
 
-export type FormCastProviderValue<TData = DefaultTData> =
-  FormCastProviderProps<TData>;
+export type PaperCastProviderValue<TData = DefaultTData> =
+  PaperCastProviderProps<TData>;
 
-const Context = createContext<FormCastProviderValue<any> | undefined>(
+const Context = createContext<PaperCastProviderValue<any> | undefined>(
   undefined
 );
 
 const selectionStyle = `
 [data-selected="true"] {
-  outline: 2px solid var(--formcast-selection-color, #3b82f6);
+  outline: 2px solid var(--papercast-selection-color, #3b82f6);
   outline-offset: -2px;
 }
 @media print {
@@ -46,11 +46,11 @@ const selectionStyle = `
 
 /**
  * Provider component that propagates dynamic data binding values, pagination context,
- * and custom node wrappers down the React tree to all rendered FormCast nodes.
- * @param props - FormCast context configuration and children.
+ * and custom node wrappers down the React tree to all rendered PaperCast nodes.
+ * @param props - PaperCast context configuration and children.
  */
-export function FormCastProvider<TData = DefaultTData>(
-  props: FormCastProviderProps<TData>
+export function PaperCastProvider<TData = DefaultTData>(
+  props: PaperCastProviderProps<TData>
 ) {
   const parent = useContext(Context);
 
@@ -90,17 +90,17 @@ export function FormCastProvider<TData = DefaultTData>(
 }
 
 /**
- * Hook to access the current FormCast context, providing access to bound data
+ * Hook to access the current PaperCast context, providing access to bound data
  * and pagination context (like current page number vs total pages).
- * Must be used within a <FormCastProvider>.
- * @returns The current FormCast context value.
+ * Must be used within a <PaperCastProvider>.
+ * @returns The current PaperCast context value.
  */
-export function useFormCastContext<TData = DefaultTData>() {
+export function usePaperCastContext<TData = DefaultTData>() {
   const context = useContext(Context);
   if (!context) {
     throw new Error(
-      "useFormCastContext must be used within a FormCastProvider"
+      "usePaperCastContext must be used within a PaperCastProvider"
     );
   }
-  return context as FormCastProviderValue<TData>;
+  return context as PaperCastProviderValue<TData>;
 }

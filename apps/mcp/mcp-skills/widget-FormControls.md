@@ -1,6 +1,6 @@
 # Form Controls
 
-FormCast provides nodes for rendering standard form inputs. These widgets should use `*Literal` for their visual labels, and `*Bind` if they are tied to a data state.
+PaperCast provides nodes for rendering standard form inputs. These widgets should use `*Literal` for their visual labels, and `*Bind` if they are tied to a data state.
 
 ## CheckboxNode
 

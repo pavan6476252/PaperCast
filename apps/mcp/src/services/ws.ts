@@ -1,14 +1,14 @@
 import { WebSocketServer, WebSocket } from "ws";
-import { WsEventType, WsMessage } from "@formcast/core/ws";
+import { WsEventType, WsMessage } from "@papercast/core/ws";
 // to-replace
 
-export interface FormCastSession {
+export interface PaperCastSession {
   ws: WebSocket;
   title: string;
   lastActive: number;
 }
 
-export const sessions = new Map<string, FormCastSession>();
+export const sessions = new Map<string, PaperCastSession>();
 export let activeSessionId: string | null = null;
 
 const pendingRequests = new Map<
@@ -22,7 +22,7 @@ const pendingRequests = new Map<
 
 export function initWebSocketServer(port: number = 9000) {
   const wss = new WebSocketServer({ port });
-  console.error(`Starting FormCast Sync WebSocket Server on port ${port}...`);
+  console.error(`Starting PaperCast Sync WebSocket Server on port ${port}...`);
 
   wss.on("connection", (ws) => {
     let registeredSessionId: string | null = null;
@@ -37,7 +37,7 @@ export function initWebSocketServer(port: number = 9000) {
             registeredSessionId = sessionId;
             sessions.set(sessionId, {
               ws,
-              title: title || "FormCast Playground",
+              title: title || "PaperCast Playground",
               lastActive: Date.now(),
             });
 
@@ -135,7 +135,7 @@ export function sendCommandToActiveSession(
     if (!targetSessionId || !sessions.has(targetSessionId)) {
       return reject(
         new Error(
-          "No active browser session connected. Open the FormCast Playground in your browser."
+          "No active browser session connected. Open the PaperCast Playground in your browser."
         )
       );
     }
@@ -157,7 +157,7 @@ export function fireCommandToActiveSession(message: Record<string, unknown>) {
   const targetSessionId = activeSessionId;
   if (!targetSessionId || !sessions.has(targetSessionId)) {
     throw new Error(
-      "No active browser session connected. Open the FormCast Playground in your browser."
+      "No active browser session connected. Open the PaperCast Playground in your browser."
     );
   }
   const session = sessions.get(targetSessionId)!;

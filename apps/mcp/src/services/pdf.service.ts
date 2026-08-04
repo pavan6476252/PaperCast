@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { sendCommandToActiveSession } from "./ws.js";
-import { WsEventType } from "@formcast/core/ws";
+import { WsEventType } from "@papercast/core/ws";
 
 export async function generatePdf(providedSchema?: any, outputPath?: string) {
   let finalSchema = providedSchema;

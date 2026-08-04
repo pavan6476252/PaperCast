@@ -52,7 +52,7 @@ export const _TEST_DOCUMENT: DocumentSchema = {
   },
   data: {
     company: {
-      name: "FormCast Technologies Pvt. Ltd.",
+      name: "PaperCast Technologies Pvt. Ltd.",
       logo: "https://picsum.photos/130/60",
       address1: "18 Technology Park",
       address2: "Hyderabad",
@@ -60,11 +60,11 @@ export const _TEST_DOCUMENT: DocumentSchema = {
       postalCode: "500081",
       country: "India",
       phone: "+91 9876543210",
-      email: "accounts@formcast.dev",
-      website: "https://formcast.dev",
+      email: "accounts@papercast.dev",
+      website: "https://papercast.dev",
       gst: "36ABCDE1234F1Z5",
       bank: {
-        accountName: "FormCast Technologies Pvt Ltd",
+        accountName: "PaperCast Technologies Pvt Ltd",
         accountNumber: "XXXXXXXX1234",
         ifsc: "HDFC0001234",
         bankName: "HDFC Bank",
@@ -595,7 +595,7 @@ export const _TEST_DOCUMENT: DocumentSchema = {
               id: "copyright",
               type: "text",
               props: {
-                literal: "© 2026 FormCast Technologies Pvt. Ltd.",
+                literal: "© 2026 PaperCast Technologies Pvt. Ltd.",
               },
               style: {
                 fontSizePx: 9,

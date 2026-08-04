@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 
 export function getStyle(node: AnyNode): CSSProperties {
   const layout = node.layout || {};

@@ -1,10 +1,10 @@
 # State Management
 
-The core state of the FormCast application is managed by Zustand in `src/store/documentStore.ts`.
+The core state of the PaperCast application is managed by Zustand in `src/store/documentStore.ts`.
 
 ## The Dual State System
 
-FormCast operates on two representations of the document simultaneously:
+PaperCast operates on two representations of the document simultaneously:
 
 1. `jsonString`: The raw, stringified JSON representing what the user sees in the Monaco code editor.
 2. `parsedDocument`: The validated, parsed JavaScript object (`DocumentSchema`) that the engines and React components actually render.
@@ -63,13 +63,13 @@ If validation fails, `isValid` becomes false, `parseError` is set, and the `pars
 
 One of the most complex state management tasks is handling Rich Text input from the user (e.g., when they paste formatted text from Word or Google Docs).
 
-FormCast cannot simply store raw HTML strings because the Pagination Engine would not be able to split them across pages.
+PaperCast cannot simply store raw HTML strings because the Pagination Engine would not be able to split them across pages.
 
 Instead, we use a utility `autoDeconstructRichTextAst` (located in `src/utils/htmlParser.ts`).
 
 1. **Interception**: When a user pastes rich text into a `RichTextNode`, the editor captures the raw HTML.
 2. **Parsing**: The utility traverses the DOM of the pasted HTML.
-3. **Deconstruction**: It converts `<p>`, `<strong>`, `<em>`, and `<a>` tags into discrete FormCast AST nodes (`text`, `row`, `column`).
+3. **Deconstruction**: It converts `<p>`, `<strong>`, `<em>`, and `<a>` tags into discrete PaperCast AST nodes (`text`, `row`, `column`).
 4. **Injection**: These new nodes replace the original single text node in the `parsedDocument`.
 
 Because the rich text is now represented as individual standard AST nodes, the `PaginationEngine` can seamlessly split paragraphs or wrap lines across multiple PDF pages!

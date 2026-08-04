@@ -131,7 +131,7 @@ export const headerSnippets: SchemaSnippet[] = [
     id: "alternating-headers",
     name: "Alternating Headers (Even/Odd)",
     description:
-      "Demonstrates FormCast's condition logic. Logo on left for even pages, right for odd pages.",
+      "Demonstrates PaperCast's condition logic. Logo on left for even pages, right for odd pages.",
     category: "headers",
     tags: ["header", "alternating", "even", "odd", "conditions"],
     schema: {

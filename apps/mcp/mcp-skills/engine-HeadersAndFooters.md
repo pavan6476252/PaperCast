@@ -4,7 +4,7 @@ description: Documentation for properly defining repeating page Headers and Foot
 
 # Headers and Footers
 
-The FormCast engine automatically injects Headers and Footers during the Pagination phase.
+The PaperCast engine automatically injects Headers and Footers during the Pagination phase.
 
 ## Declaration
 
@@ -44,7 +44,7 @@ Headers and footers are declared in dictionaries outside the main body.
 
 ## Custom Condition Block
 
-**CRITICAL RULE**: Do **NOT** use custom condition expressions (e.g., `{ "type": "custom", "expression": "..." }`) for headers or footers. The FormCast engine explicitly blocks custom expressions (`console.warn("Custom RegionConditions are not yet implemented")`) for security reasons. They will always evaluate to `false` and your header/footer will never render.
+**CRITICAL RULE**: Do **NOT** use custom condition expressions (e.g., `{ "type": "custom", "expression": "..." }`) for headers or footers. The PaperCast engine explicitly blocks custom expressions (`console.warn("Custom RegionConditions are not yet implemented")`) for security reasons. They will always evaluate to `false` and your header/footer will never render.
 
 ## Resolving Priority
 

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from "react";
-import { DocumentSchema, AnyNode } from "@formcast/core";
+import { DocumentSchema, AnyNode } from "@papercast/core";
 
 export interface EditorState {
   document: DocumentSchema | null;
@@ -43,10 +43,10 @@ export function EditorProvider({
   );
 }
 
-export function useFormCastEditor() {
+export function usePaperCastEditor() {
   const context = useContext(EditorContext);
   if (!context) {
-    throw new Error("useFormCastEditor must be used within an EditorProvider");
+    throw new Error("usePaperCastEditor must be used within an EditorProvider");
   }
   return context;
 }

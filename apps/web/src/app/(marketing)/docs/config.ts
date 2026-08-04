@@ -17,7 +17,7 @@ export const DOC_CATEGORIES: DocCategory[] = [
         id: "getting-started",
         title: "Getting Started",
         description:
-          "Learn the basics of FormCast and how to build your first document.",
+          "Learn the basics of PaperCast and how to build your first document.",
       },
     ],
   },
@@ -98,7 +98,7 @@ export const DOC_CATEGORIES: DocCategory[] = [
       {
         id: "architecture-overview",
         title: "Architecture Overview",
-        description: "High-level overview of FormCast rendering flow.",
+        description: "High-level overview of PaperCast rendering flow.",
       },
       {
         id: "pdf-export-architecture",
@@ -180,23 +180,23 @@ export const DOC_CATEGORIES: DocCategory[] = [
       {
         id: "mcp-introduction",
         title: "Introduction to MCP",
-        description: "Understanding FormCast's integration with AI agents.",
+        description: "Understanding PaperCast's integration with AI agents.",
       },
       {
         id: "mcp-setup",
         title: "Installation & Setup",
-        description: "How to configure your AI agent to connect to FormCast.",
+        description: "How to configure your AI agent to connect to PaperCast.",
       },
       {
         id: "mcp-capabilities",
         title: "Agent Capabilities",
         description:
-          "Available tools and skills for interacting with FormCast.",
+          "Available tools and skills for interacting with PaperCast.",
       },
       {
         id: "mcp-examples",
         title: "Examples & Workflows",
-        description: "Examples of how to use an AI agent with FormCast.",
+        description: "Examples of how to use an AI agent with PaperCast.",
       },
     ],
   },

@@ -145,7 +145,7 @@ export interface TableProps {
 }
 
 /**
- * The foundational shape of every node in the FormCast AST.
+ * The foundational shape of every node in the PaperCast AST.
  */
 export interface BaseNode<
   TType extends string = string,
@@ -249,7 +249,7 @@ export type RadioGroupNode = BaseNode<
 export interface CustomNodesRegistry {}
 
 /**
- * Union of all native FormCast nodes.
+ * Union of all native PaperCast nodes.
  */
 export type BuiltInNode =
   | RootNode
@@ -316,7 +316,7 @@ export interface RichTextPreferences {
 }
 
 /**
- * Represents the entire state of a FormCast document, including its hierarchy,
+ * Represents the entire state of a PaperCast document, including its hierarchy,
  * widget definitions, theme configuration, static data, and metadata.
  */
 export interface DocumentSchema {

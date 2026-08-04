@@ -1,6 +1,6 @@
 import { sendCommandToActiveSession } from "./ws.js";
 import { deepMerge, validateAndSend } from "./ast.js";
-import { WsEventType } from "@formcast/core/ws";
+import { WsEventType } from "@papercast/core/ws";
 
 export async function getDocumentState() {
   const state = await sendCommandToActiveSession({

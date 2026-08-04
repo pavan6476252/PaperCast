@@ -7,7 +7,7 @@ import {
   divider,
   addressBlock,
   summaryCard,
-} from "@formcast/core/test";
+} from "@papercast/core/test";
 
 export const layouts: WidgetRegistryItem[] = [
   {

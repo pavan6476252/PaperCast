@@ -1,7 +1,7 @@
 import React from "react";
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 import { NodeRegistry } from "./registry";
-import { useFormCastContext } from "./FormCastProvider";
+import { usePaperCastContext } from "./PaperCastProvider";
 
 export interface PageContext {
   pageNumber: number;
@@ -18,10 +18,10 @@ export interface NodeRendererProps {
 }
 
 /**
- * The core React component that resolves a FormCast AST Node to its respective
+ * The core React component that resolves a PaperCast AST Node to its respective
  * React component via the internal NodeRegistry.
  *
- * If a `NodeWrapper` is configured in the `FormCastProvider` (e.g. for the visual builder),
+ * If a `NodeWrapper` is configured in the `PaperCastProvider` (e.g. for the visual builder),
  * it will automatically wrap the resolved component.
  */
 export const NodeRenderer: React.FC<NodeRendererProps> = ({
@@ -31,9 +31,9 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
 }) => {
   const def = NodeRegistry.get(node.type);
 
-  let formCastCtx;
+  let paperCastCtx;
   try {
-    formCastCtx = useFormCastContext();
+    paperCastCtx = usePaperCastContext();
   } catch {
     // Context may not be defined in OffscreenMeasurer
   }
@@ -53,8 +53,8 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
     "data-node-type": node.type,
   };
 
-  if (formCastCtx?.NodeWrapper) {
-    const Wrapper = formCastCtx.NodeWrapper;
+  if (paperCastCtx?.NodeWrapper) {
+    const Wrapper = paperCastCtx.NodeWrapper;
     const renderContent = (
       injectedProps?: React.HTMLAttributes<HTMLDivElement> & {
         "data-selected"?: boolean;

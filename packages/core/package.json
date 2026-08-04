@@ -1,7 +1,7 @@
 {
-  "name": "@formcast/core",
+  "name": "@papercast/core",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "main": "src/index.ts",
   "types": "src/index.ts",
   "exports": {
@@ -17,7 +17,7 @@
       "types": "./src/ws.ts",
       "default": "./src/ws.ts"
     },
-    "./schema.json": "./src/schema/formcast.schema.json",
+    "./schema.json": "./src/schema/papercast.schema.json",
     "./invoice.template.json": "./src/schema/invoice.template.json",
     "./report.template.json": "./src/schema/report.template.json"
   },
@@ -26,7 +26,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src/",
-    "schema:generate": "ts-json-schema-generator --path src/schema.ts --type DocumentSchema --out src/schema/formcast.schema.json",
+    "schema:generate": "ts-json-schema-generator --path src/schema.ts --type DocumentSchema --out src/schema/papercast.schema.json",
     "schema:test": "tsx scripts/validate-schema.ts",
     "schema:validate": "pnpm run schema:generate && pnpm run schema:test",
     "clean": "rm -rf dist .turbo"
@@ -37,5 +37,13 @@
     "ts-json-schema-generator": "^2.9.0",
     "tsx": "^4.23.1",
     "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pavan6476252/papercast"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

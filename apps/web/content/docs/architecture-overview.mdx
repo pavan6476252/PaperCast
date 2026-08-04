@@ -1,10 +1,10 @@
 # Architecture Overview
 
-FormCast is built on a declarative, schema-first approach. Instead of manually pushing React components into a DOM and hoping they fit on a PDF page, FormCast defines the entire document as a JSON Abstract Syntax Tree (AST).
+PaperCast is built on a declarative, schema-first approach. Instead of manually pushing React components into a DOM and hoping they fit on a PDF page, PaperCast defines the entire document as a JSON Abstract Syntax Tree (AST).
 
 This AST is validated, measured, paginated, and finally rendered.
 
-## The FormCast Pipeline
+## The PaperCast Pipeline
 
 ### 1. Document Store (Zustand)
 
@@ -76,10 +76,10 @@ The source of truth is the JSON AST (Abstract Syntax Tree). The user edits the J
 
 ### 2. Validation & Registration
 
-Every update to the AST is strictly validated against `docframe.schema.json` in `@formcast/core`. The architecture is cleanly split into two halves:
+Every update to the AST is strictly validated against `docframe.schema.json` in `@papercast/core`. The architecture is cleanly split into two halves:
 
-- **Core Engine (`@formcast/engine`)**: A standalone, framework-agnostic engine that calculates pagination, evaluates variables, and resolves templates without any knowledge of the DOM. It uses a **Schema Registry** to track node properties and validation behaviors.
-- **Headless Binding (`@formcast/react`)**: A React-specific adapter that implements DOM requirements (like measuring node heights) and acts as the **Component Registry**, mapping AST node types to actual visual React components.
+- **Core Engine (`@papercast/engine`)**: A standalone, framework-agnostic engine that calculates pagination, evaluates variables, and resolves templates without any knowledge of the DOM. It uses a **Schema Registry** to track node properties and validation behaviors.
+- **Headless Binding (`@papercast/react`)**: A React-specific adapter that implements DOM requirements (like measuring node heights) and acts as the **Component Registry**, mapping AST node types to actual visual React components.
 
 ### 3. Offscreen Measurement
 
@@ -87,7 +87,7 @@ Before anything is shown to the user, `OffscreenMeasurer.tsx` (an implementation
 
 ### 4. Pagination Engine
 
-With the height data available, `PaginationEngine.ts` inside `@formcast/engine` splits the AST into discrete pages, injecting Headers and Footers based on conditions (first page, even, odd).
+With the height data available, `PaginationEngine.ts` inside `@papercast/engine` splits the AST into discrete pages, injecting Headers and Footers based on conditions (first page, even, odd).
 
 ### 5. Rendering
 

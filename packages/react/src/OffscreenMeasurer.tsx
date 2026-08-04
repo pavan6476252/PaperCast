@@ -1,10 +1,10 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { DocumentSchema } from "@formcast/core";
-import { Measurements } from "@formcast/engine";
+import { DocumentSchema } from "@papercast/core";
+import { Measurements } from "@papercast/engine";
 import { NodeRenderer } from "./NodeRenderer";
 import { getStyle } from "./utils/styleUtils";
 
-import { FormCastProvider } from "./FormCastProvider";
+import { PaperCastProvider } from "./PaperCastProvider";
 
 export interface OffscreenMeasurerProps {
   /** The complete document schema to measure */
@@ -103,7 +103,7 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({
   }, [doc, pageWidth, onMeasure]);
 
   return (
-    <FormCastProvider data={doc.data}>
+    <PaperCastProvider data={doc.data}>
       <div
         ref={containerRef}
         style={{
@@ -149,6 +149,6 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({
           ))}
         </div>
       </div>
-    </FormCastProvider>
+    </PaperCastProvider>
   );
 };

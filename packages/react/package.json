@@ -1,7 +1,7 @@
 {
-  "name": "@formcast/react",
+  "name": "@papercast/react",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "main": "src/index.ts",
   "types": "src/index.ts",
   "exports": {
@@ -28,8 +28,8 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@formcast/core": "workspace:*",
-    "@formcast/engine": "workspace:*"
+    "@papercast/core": "workspace:*",
+    "@papercast/engine": "workspace:*"
   },
   "peerDependencies": {
     "lucide-react": "^0.300.0 || ^0.400.0",
@@ -40,5 +40,13 @@
     "typescript": "^5.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pavan6476252/papercast"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

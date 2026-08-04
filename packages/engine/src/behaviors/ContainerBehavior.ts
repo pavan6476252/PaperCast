@@ -1,4 +1,4 @@
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 import { SchemaRegistry, MeasureContext, SplitContext } from "../registry";
 
 export const ContainerBehavior = {

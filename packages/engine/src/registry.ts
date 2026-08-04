@@ -1,4 +1,4 @@
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 import { Measurements, DefaultTData } from "./types";
 
 export interface MeasureContext {

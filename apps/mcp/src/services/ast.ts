@@ -1,15 +1,15 @@
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import { findNodeGlobal } from "@formcast/core";
+import { findNodeGlobal } from "@papercast/core";
 // to-replace
-import { WsEventType } from "@formcast/core/ws";
+import { WsEventType } from "@papercast/core/ws";
 // to-replace
-import formcastSchema from "@formcast/core/schema.json";
+import papercastSchema from "@papercast/core/schema.json";
 import { fireCommandToActiveSession } from "./ws.js";
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
-export const validateFormcast = ajv.compile(formcastSchema);
+export const validatePapercast = ajv.compile(papercastSchema);
 
 export function isObject(item: any) {
   return item && typeof item === "object" && !Array.isArray(item);
@@ -44,9 +44,9 @@ export function patchNodeProperties(schema: any, nodeId: string, patch: any) {
 }
 
 export function validateAndSend(schema: any, successMessage: string) {
-  const isValid = validateFormcast(schema);
+  const isValid = validatePapercast(schema);
   if (!isValid) {
-    const topErrors = validateFormcast.errors
+    const topErrors = validatePapercast.errors
       ?.slice(0, 10)
       .map((e: any) => `${e.instancePath}: ${e.message}`)
       .join("\n");

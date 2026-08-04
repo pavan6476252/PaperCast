@@ -1,6 +1,6 @@
 # BaseNode Schema
 
-Every single element in the FormCast AST must satisfy `BaseNodeCommon`.
+Every single element in the PaperCast AST must satisfy `BaseNodeCommon`.
 
 ## Core Required Structure
 
@@ -12,7 +12,7 @@ Every single element in the FormCast AST must satisfy `BaseNodeCommon`.
 }
 ```
 
-**CRITICAL:** The `layout` object is strictly required by the `formcast.schema.json` Ajv validation. Omitting it will crash the validation process.
+**CRITICAL:** The `layout` object is strictly required by the `papercast.schema.json` Ajv validation. Omitting it will crash the validation process.
 
 ## Optional Core Properties
 

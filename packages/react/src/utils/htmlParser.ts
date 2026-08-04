@@ -3,16 +3,16 @@ import {
   RichTextPreferences,
   TypographyAndColor,
   BoxModel,
-} from "@formcast/core";
-import { SchemaRegistry } from "@formcast/engine";
+} from "@papercast/core";
+import { SchemaRegistry } from "@papercast/engine";
 
 /**
- * Utility to parse HTML strings and convert tags to FormCast AST widgets.
- * Only supports standard formatting tags that map cleanly to FormCast equivalents.
+ * Utility to parse HTML strings and convert tags to PaperCast AST widgets.
+ * Only supports standard formatting tags that map cleanly to PaperCast equivalents.
  *
  * @param htmlString - Raw HTML content to parse
  * @param preferences - Rich text parsing preferences (e.g., custom tag styles)
- * @returns Array of corresponding FormCast nodes.
+ * @returns Array of corresponding PaperCast nodes.
  */
 export function convertHtmlToNodes(
   htmlString: string,

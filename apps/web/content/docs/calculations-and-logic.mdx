@@ -1,12 +1,12 @@
 # Calculations and Logic
 
-FormCast supports dynamic logic injection using the `resolver.ts` module. The schema is static JSON, but it can describe dynamic conditions—such as which header to show on the last page.
+PaperCast supports dynamic logic injection using the `resolver.ts` module. The schema is static JSON, but it can describe dynamic conditions—such as which header to show on the last page.
 
 ## Dynamic Headers and Footers
 
 The `resolveHeader` and `resolveFooter` functions evaluate the current page number against conditions defined in the JSON schema (`"first"`, `"last"`, `"even"`, `"odd"`, `"all"`).
 
-Here is the exact API reference pulled from `@formcast/engine/src/resolver.ts`:
+Here is the exact API reference pulled from `@papercast/engine/src/resolver.ts`:
 
 ```typescript
 export function resolveHeader(
@@ -56,14 +56,14 @@ export function resolveHeader(
 
 <Callout type="success" title="Two-Pass Pagination">
   Notice the `totalPages` argument. Because we don't know the total number of
-  pages until pagination finishes, FormCast performs a **Two-Pass** pagination.
+  pages until pagination finishes, PaperCast performs a **Two-Pass** pagination.
   It paginates once to find `totalPages`, then paginates a second time to inject
   the correct `"last"` page headers and footers.
 </Callout>
 
 ## Data Binding & Variable Injection
 
-FormCast allows you to inject dynamic data from a JSON payload into your document using the `bind` property on a `DocNode`.
+PaperCast allows you to inject dynamic data from a JSON payload into your document using the `bind` property on a `DocNode`.
 
 The `DataBinding` interface defines how this works:
 

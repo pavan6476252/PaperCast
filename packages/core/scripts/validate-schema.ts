@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { TEST_DOCUMENT } from "../src/test.data";
 
-const schemaPath = path.join(__dirname, "../src/schema/formcast.schema.json");
+const schemaPath = path.join(__dirname, "../src/schema/papercast.schema.json");
 
 if (!fs.existsSync(schemaPath)) {
   console.error(
@@ -25,7 +25,7 @@ const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
 const validate = ajv.compile(docframeSchema);
 
-console.log("Validating TEST_DOCUMENT against formcast.schema.json...");
+console.log("Validating TEST_DOCUMENT against papercast.schema.json...");
 const isValid = validate(TEST_DOCUMENT);
 
 if (!isValid) {

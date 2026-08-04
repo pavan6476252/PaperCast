@@ -6,7 +6,7 @@ import { registerResources } from "./resources/index.js";
 import { registerTools } from "./tools/index.js";
 
 const server = new McpServer({
-  name: "formcast-mcp-server",
+  name: "papercast-mcp-server",
   version: "1.0.0",
 });
 
@@ -20,7 +20,7 @@ registerTools(server);
 async function run() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("FormCast MCP Server running on stdio transport");
+  console.error("PaperCast MCP Server running on stdio transport");
 }
 
 run().catch((error) => {

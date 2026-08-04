@@ -5,7 +5,7 @@ import path from "path";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { WidgetCard } from "../../../../components/showcase/WidgetCard";
-import { TEST_DOCUMENT } from "@formcast/core/test";
+import { TEST_DOCUMENT } from "@papercast/core/test";
 // to-replace
 import { getDocPageById, DOC_PAGES } from "../config";
 import { DocsFooterNav } from "../../../../components/docs/DocsFooterNav";
@@ -136,26 +136,26 @@ export async function generateMetadata({
 
   if (!docPage) {
     return {
-      title: "Page Not Found | FormCast",
+      title: "Page Not Found | PaperCast",
     };
   }
 
   return {
-    title: `${docPage.title} | FormCast Documentation`,
+    title: `${docPage.title} | PaperCast Documentation`,
     description: docPage.description,
     openGraph: {
-      title: `${docPage.title} | FormCast Documentation`,
+      title: `${docPage.title} | PaperCast Documentation`,
       description: docPage.description,
-      url: `https://formcast.dev/docs/${slug}`,
-      siteName: "FormCast",
+      url: `https://papercast.dev/docs/${slug}`,
+      siteName: "PaperCast",
       type: "article",
     },
     alternates: {
-      canonical: `https://formcast.dev/docs/${slug}`,
+      canonical: `https://papercast.dev/docs/${slug}`,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${docPage.title} | FormCast Documentation`,
+      title: `${docPage.title} | PaperCast Documentation`,
       description: docPage.description,
     },
   };
@@ -187,10 +187,10 @@ export default async function DocPage({
     "@type": "TechArticle",
     headline: docPage.title,
     description: docPage.description,
-    url: `https://formcast.dev/docs/${slug}`,
+    url: `https://papercast.dev/docs/${slug}`,
     author: {
       "@type": "Organization",
-      name: "FormCast",
+      name: "PaperCast",
     },
   };
 

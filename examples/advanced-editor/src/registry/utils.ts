@@ -1,4 +1,4 @@
-import { AnyNode, DocumentSchema } from "@formcast/core";
+import { AnyNode, DocumentSchema } from "@papercast/core";
 
 export interface WidgetRegistryItem {
   id: string;

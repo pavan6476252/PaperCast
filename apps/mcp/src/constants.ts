@@ -87,7 +87,7 @@ export const DEFAULT_WIDGET_CONFIGS = {
 
 export const WIDGET_DOCUMENTATION = {
   description:
-    "FormCast schema nodes must always include 'id', 'type', and a 'layout' object. The 'props' structure depends on the widget type. Use *Literal fields for static data, and *Bind fields for data-binding.",
+    "PaperCast schema nodes must always include 'id', 'type', and a 'layout' object. The 'props' structure depends on the widget type. Use *Literal fields for static data, and *Bind fields for data-binding.",
   widgets: {
     row: {
       type: "row",

@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { DocumentSchema } from "@formcast/core";
-import { Measurements, paginateDocument, PageData } from "@formcast/engine";
+import { DocumentSchema } from "@papercast/core";
+import { Measurements, paginateDocument, PageData } from "@papercast/engine";
 import {
   NodeRenderer,
-  FormCastProvider,
+  PaperCastProvider,
   OffscreenMeasurer,
   getStyle,
-} from "@formcast/react";
-import { registerDefaultWidgets } from "@formcast/react/widgets";
+} from "@papercast/react";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
 
 // Ensure widgets are registered for the preview
 registerDefaultWidgets();
@@ -114,7 +114,7 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
                 className="bg-white shadow-md flex flex-col relative shrink-0 overflow-hidden"
                 style={{ width, height }}
               >
-                <FormCastProvider
+                <PaperCastProvider
                   data={schema.data}
                   pageContext={{
                     pageNumber: page.pageNumber,
@@ -124,7 +124,7 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
                 >
                   {/* Header */}
                   {header && header.root && (
-                    <FormCastProvider
+                    <PaperCastProvider
                       data={schema.data}
                       pageContext={{
                         pageNumber: page.pageNumber,
@@ -144,11 +144,11 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
                       >
                         <NodeRenderer node={header.root} />
                       </div>
-                    </FormCastProvider>
+                    </PaperCastProvider>
                   )}
 
                   {/* Body */}
-                  <FormCastProvider
+                  <PaperCastProvider
                     data={schema.data}
                     pageContext={{
                       pageNumber: page.pageNumber,
@@ -168,11 +168,11 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
                         />
                       ))}
                     </div>
-                  </FormCastProvider>
+                  </PaperCastProvider>
 
                   {/* Footer */}
                   {footer && footer.root && (
-                    <FormCastProvider
+                    <PaperCastProvider
                       data={schema.data}
                       pageContext={{
                         pageNumber: page.pageNumber,
@@ -192,9 +192,9 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
                       >
                         <NodeRenderer node={footer.root} />
                       </div>
-                    </FormCastProvider>
+                    </PaperCastProvider>
                   )}
-                </FormCastProvider>
+                </PaperCastProvider>
               </div>
             );
           })}

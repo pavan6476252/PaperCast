@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 import { useDocumentStore } from "../../store/documentStore";
 
-import { useFormCastContext } from "@formcast/react";
-import { HoverToolbar } from "@formcast/react/editor";
+import { usePaperCastContext } from "@papercast/react";
+import { HoverToolbar } from "@papercast/react/editor";
 
 export const EditorNodeWrapper: React.FC<{
   node: AnyNode;
@@ -36,7 +36,7 @@ export const EditorNodeWrapper: React.FC<{
 
   let rendererCtx;
   try {
-    rendererCtx = useFormCastContext();
+    rendererCtx = usePaperCastContext();
   } catch {}
 
   const activeTab = rendererCtx?.activeTab;
@@ -73,7 +73,7 @@ export const EditorNodeWrapper: React.FC<{
       e.preventDefault();
       return;
     }
-    e.dataTransfer.setData("application/formcast-node-id", node.id);
+    e.dataTransfer.setData("application/papercast-node-id", node.id);
     e.dataTransfer.effectAllowed = "move";
   };
 
@@ -134,9 +134,9 @@ export const EditorNodeWrapper: React.FC<{
     const currentDropPosition = dropPosition; // capture before reset
     setDropPosition(null);
 
-    const widgetType = e.dataTransfer.getData("application/formcast-widget");
+    const widgetType = e.dataTransfer.getData("application/papercast-widget");
     const existingNodeId = e.dataTransfer.getData(
-      "application/formcast-node-id"
+      "application/papercast-node-id"
     );
 
     if (widgetType) {

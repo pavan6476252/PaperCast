@@ -1,6 +1,6 @@
 # Advanced AST Manipulation
 
-FormCast stores the entire document state as a JSON string. While the Monaco editor allows direct manipulation of this string, the visual builder (Property Panel, Drag-and-Drop) requires a way to safely edit the AST without breaking the JSON validity or dropping user content.
+PaperCast stores the entire document state as a JSON string. While the Monaco editor allows direct manipulation of this string, the visual builder (Property Panel, Drag-and-Drop) requires a way to safely edit the AST without breaking the JSON validity or dropping user content.
 
 This is handled by the **AST Manipulators** (`src/store/astManipulators.ts`).
 
@@ -46,7 +46,7 @@ export function updateJsonNodeProperty(
 ): string;
 ```
 
-If the JSON is beautifully formatted, doing a simple `JSON.parse` and `JSON.stringify` would destroy the user's custom formatting, comments (if any were allowed), and collapse empty lines. While FormCast generally overwrites the string, these manipulators aim to keep updates localized and reactive.
+If the JSON is beautifully formatted, doing a simple `JSON.parse` and `JSON.stringify` would destroy the user's custom formatting, comments (if any were allowed), and collapse empty lines. While PaperCast generally overwrites the string, these manipulators aim to keep updates localized and reactive.
 
 <Callout type="info" title="Why not just modify the object?">
   In React/Zustand, state is immutable. To trigger a re-render in the preview,

@@ -2,11 +2,11 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useDocumentStore } from "../../store/documentStore";
 import {
   NodeRenderer,
-  FormCastProvider,
+  PaperCastProvider,
   OffscreenMeasurer,
   getStyle,
-} from "@formcast/react";
-import { Measurements, paginateDocument, PageData } from "@formcast/engine";
+} from "@papercast/react";
+import { Measurements, paginateDocument, PageData } from "@papercast/engine";
 import {
   ZoomIn,
   ZoomOut,
@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { EditorNodeWrapper } from "./EditorNodeWrapper";
-import { DocumentSchema } from "@formcast/core";
+import { DocumentSchema } from "@papercast/core";
 
 type PreviewTab = "content" | "headers" | "footers";
 
@@ -173,9 +173,12 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     const handleGlobalDownload = () => {
       handleDownloadRef.current();
     };
-    window.addEventListener("formcast-download-pdf", handleGlobalDownload);
+    window.addEventListener("papercast-download-pdf", handleGlobalDownload);
     return () => {
-      window.removeEventListener("formcast-download-pdf", handleGlobalDownload);
+      window.removeEventListener(
+        "papercast-download-pdf",
+        handleGlobalDownload
+      );
     };
   }, []);
 
@@ -347,7 +350,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                             setIsMenuOpen(false);
                           }}
                           className="w-full text-xs font-semibold px-2 py-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 transition-colors border border-blue-200 cursor-pointer"
-                          title="Programmatically convert all Rich Text blocks in the document to FormCast widgets"
+                          title="Programmatically convert all Rich Text blocks in the document to PaperCast widgets"
                         >
                           Convert All Rich Text
                         </button>
@@ -451,7 +454,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                       className="bg-white shadow-xl flex flex-col relative shrink-0 overflow-hidden print-page"
                       style={{ width, height }}
                     >
-                      <FormCastProvider
+                      <PaperCastProvider
                         data={parsedDocument.data}
                         pageContext={{
                           pageNumber: page.pageNumber,
@@ -462,7 +465,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                       >
                         {/* Header */}
                         {header && header.root && (
-                          <FormCastProvider
+                          <PaperCastProvider
                             data={parsedDocument.data}
                             pageContext={{
                               pageNumber: page.pageNumber,
@@ -482,10 +485,10 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                             >
                               <NodeRenderer node={header.root} />
                             </div>
-                          </FormCastProvider>
+                          </PaperCastProvider>
                         )}
                         {/* Body */}
-                        <FormCastProvider
+                        <PaperCastProvider
                           data={parsedDocument.data}
                           pageContext={{
                             pageNumber: page.pageNumber,
@@ -507,11 +510,11 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                               />
                             ))}
                           </div>
-                        </FormCastProvider>
+                        </PaperCastProvider>
 
                         {/* Footer */}
                         {footer && footer.root && (
-                          <FormCastProvider
+                          <PaperCastProvider
                             data={parsedDocument.data}
                             pageContext={{
                               pageNumber: page.pageNumber,
@@ -531,9 +534,9 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                             >
                               <NodeRenderer node={footer.root} />
                             </div>
-                          </FormCastProvider>
+                          </PaperCastProvider>
                         )}
-                      </FormCastProvider>
+                      </PaperCastProvider>
                     </div>
                   </div>
                 );
@@ -598,14 +601,14 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                     }}
                   >
                     {header.root ? (
-                      <FormCastProvider
+                      <PaperCastProvider
                         data={parsedDocument.data}
                         activeTab="headers"
                         location="header"
                         NodeWrapper={EditorNodeWrapper}
                       >
                         <NodeRenderer node={header.root} />
-                      </FormCastProvider>
+                      </PaperCastProvider>
                     ) : (
                       <div className="p-4 text-gray-400">Empty</div>
                     )}
@@ -674,14 +677,14 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                     }}
                   >
                     {footer.root ? (
-                      <FormCastProvider
+                      <PaperCastProvider
                         data={parsedDocument.data}
                         activeTab="footers"
                         location="footer"
                         NodeWrapper={EditorNodeWrapper}
                       >
                         <NodeRenderer node={footer.root} />
-                      </FormCastProvider>
+                      </PaperCastProvider>
                     ) : (
                       <div className="p-4 text-gray-400">Empty</div>
                     )}

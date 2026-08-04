@@ -1,4 +1,4 @@
-import { table } from "@formcast/core/test";
+import { table } from "@papercast/core/test";
 import { WidgetRegistryItem, wrap } from "../utils";
 
 export const tables: WidgetRegistryItem[] = [

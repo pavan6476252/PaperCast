@@ -1,25 +1,25 @@
-# @formcast/core
+# @papercast/core
 
-Welcome to **@formcast/core**!
+Welcome to **@papercast/core**!
 
-This is the main brain of FormCast. It does not have any UI (like React) or complex calculation logic. It only keeps the rules.
+This is the main brain of PaperCast. It does not have any UI (like React) or complex calculation logic. It only keeps the rules.
 
 ## What is inside?
 
-1. **JSON Schema**: The strict rules (schema) that tell us how a FormCast document should look.
+1. **JSON Schema**: The strict rules (schema) that tell us how a PaperCast document should look.
 2. **TypeScript Types**: Types used in the whole project so that developers do not make mistakes.
 3. **AST Manipulators**: Simple functions to add, remove, or change elements (nodes) inside the document safely.
 
 ## Why do we need this?
 
-By keeping rules separate from UI and Engine, we make sure that anyone can build their own engine or UI on top of FormCast using these exact same rules.
+By keeping rules separate from UI and Engine, we make sure that anyone can build their own engine or UI on top of PaperCast using these exact same rules.
 
 ## Installation
 
 Run this command in your terminal:
 
 ```bash
-npm install @formcast/core
+npm install @papercast/core
 ```
 
 ## Basic Usage
@@ -27,8 +27,8 @@ npm install @formcast/core
 Here is a simple example showing how to use the types:
 
 ```typescript
-import { DocumentSchema, NodeTypes } from "@formcast/core";
-import formcastSchema from "@formcast/core/schema.json";
+import { DocumentSchema, NodeTypes } from "@papercast/core";
+import papercastSchema from "@papercast/core/schema.json";
 
 // Create a simple empty document using the standard rules
 const myDocument: DocumentSchema = {
@@ -54,4 +54,4 @@ const myDocument: DocumentSchema = {
 
 ## Need Help?
 
-If you want to see how to show this document on the screen, please check our `@formcast/react` package!
+If you want to see how to show this document on the screen, please check our `@papercast/react` package!

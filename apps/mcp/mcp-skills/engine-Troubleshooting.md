@@ -2,7 +2,7 @@
 
 ## 1. "Invalid string length" / Ajv Crash
 
-If you see an error like `Schema validation failed`, this means your payload failed the Ajv schema. FormCast uses strict `anyOf` validation for `BaseNode`.
+If you see an error like `Schema validation failed`, this means your payload failed the Ajv schema. PaperCast uses strict `anyOf` validation for `BaseNode`.
 
 - **Cause 1:** Missing `layout: {}`. Every node MUST have a layout object.
 - **Cause 2:** Providing `children` to a node that doesn't support it (e.g. `text`).

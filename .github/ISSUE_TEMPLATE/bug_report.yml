@@ -1,5 +1,5 @@
 name: Bug Report
-description: Create a report to help us improve FormCast
+description: Create a report to help us improve PaperCast
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -26,6 +26,6 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of FormCast are you using?
+      description: What version of PaperCast are you using?
     validations:
       required: true

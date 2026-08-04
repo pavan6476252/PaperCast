@@ -1,6 +1,6 @@
 import React from "react";
-import { AnyNode } from "@formcast/core";
-import { SchemaRegistry, SchemaTypeDefinition } from "@formcast/engine";
+import { AnyNode } from "@papercast/core";
+import { SchemaRegistry, SchemaTypeDefinition } from "@papercast/engine";
 
 export interface ComponentTypeDefinition<
   TNode extends AnyNode = AnyNode,

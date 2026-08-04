@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Copy, Check, Plus, Code, Eye, ExternalLink, X } from "lucide-react";
-import { SchemaSnippet } from "@formcast/core";
+import { SchemaSnippet } from "@papercast/core";
 import { SnippetPreview } from "./SnippetPreview";
 
 interface SnippetCardProps {
@@ -30,7 +30,7 @@ export const SnippetCard: React.FC<SnippetCardProps> = ({
   const handleOpenPlayground = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     sessionStorage.setItem(
-      "formcast_schema",
+      "papercast_schema",
       JSON.stringify(snippet.schema, null, 2)
     );
     window.open("/playground", "_blank");

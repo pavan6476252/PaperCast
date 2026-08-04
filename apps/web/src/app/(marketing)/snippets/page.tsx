@@ -1,6 +1,6 @@
 "use client";
 
-import { SNIPPETS } from "@formcast/core";
+import { SNIPPETS } from "@papercast/core";
 import { motion } from "framer-motion";
 import { LayoutTemplate, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -116,7 +116,7 @@ function SnippetsContent() {
                 "Schema Snippets"}
             </h1>
             <p className="text-slate-500 mt-1">
-              Browse pre-built FormCast JSON schemas. Copy and drop them into
+              Browse pre-built PaperCast JSON schemas. Copy and drop them into
               your document.
             </p>
           </div>

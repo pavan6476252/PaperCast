@@ -1,5 +1,5 @@
 import React from "react";
-import { SNIPPETS, SchemaSnippet } from "@formcast/core";
+import { SNIPPETS, SchemaSnippet } from "@papercast/core";
 import { useWorkspaceStore } from "../../store/workspaceStore";
 import { useDocumentStore } from "../../store/documentStore";
 import { X } from "lucide-react";

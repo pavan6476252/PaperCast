@@ -6,7 +6,7 @@ import {
   spacer,
   divider,
   paragraph,
-} from "@formcast/core/test";
+} from "@papercast/core/test";
 
 export const footers: WidgetRegistryItem[] = [
   {
@@ -318,12 +318,18 @@ export const footers: WidgetRegistryItem[] = [
           spacer(12),
           row(
             [
-              text("© 2026 FormCast Inc.", { color: "#94a3b8", fontSizePx: 9 }),
+              text("© 2026 PaperCast Inc.", {
+                color: "#94a3b8",
+                fontSizePx: 9,
+              }),
               row(
                 [
-                  text("🐦 @formcast", { color: "#64748b", fontSizePx: 9 }),
-                  text("📷 @formcast_app", { color: "#64748b", fontSizePx: 9 }),
-                  text("💼 /company/formcast", {
+                  text("🐦 @papercast", { color: "#64748b", fontSizePx: 9 }),
+                  text("📷 @papercast_app", {
+                    color: "#64748b",
+                    fontSizePx: 9,
+                  }),
+                  text("💼 /company/papercast", {
                     color: "#64748b",
                     fontSizePx: 9,
                   }),

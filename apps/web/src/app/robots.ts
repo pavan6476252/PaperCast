@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/print/"],
     },
-    sitemap: "https://formcast.dev/sitemap.xml",
+    sitemap: "https://papercast.dev/sitemap.xml",
   };
 }

@@ -41,7 +41,7 @@ export function DocsIndexClient() {
         </h1>
         <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10">
           Everything you need to build, validate, and render complex documents
-          and PDFs with FormCast.
+          and PDFs with PaperCast.
         </p>
 
         {/* Search Bar */}

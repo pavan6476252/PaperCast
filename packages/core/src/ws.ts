@@ -12,6 +12,7 @@ export enum WsEventType {
   WORKSPACE_LOAD = "WORKSPACE_LOAD",
   WORKSPACE_SAVE = "WORKSPACE_SAVE",
   WORKSPACE_DELETE = "WORKSPACE_DELETE",
+  WORKSPACE_CREATE = "WORKSPACE_CREATE",
 }
 
 export interface RegisterTabPayload {
@@ -81,6 +82,12 @@ export interface WorkspaceDeletePayload {
   id: string;
 }
 
+export interface WorkspaceCreatePayload {
+  type: WsEventType.WORKSPACE_CREATE;
+  name: string;
+  schema?: DocumentSchema;
+}
+
 export type WsMessage =
   | RegisterTabPayload
   | TabFocusPayload
@@ -92,4 +99,5 @@ export type WsMessage =
   | WorkspaceListResPayload
   | WorkspaceLoadPayload
   | WorkspaceSavePayload
-  | WorkspaceDeletePayload;
+  | WorkspaceDeletePayload
+  | WorkspaceCreatePayload;

@@ -7,7 +7,7 @@ export function registerDocumentTools(server: McpServer) {
     "get_document_state",
     {
       description:
-        "Get the complete active FormCast document schema JSON currently opened in the browser. IMPORTANT: If there are multiple active sessions, use get_active_sessions to check and select_active_session to explicitly target one.",
+        "Get the complete active PaperCast document schema JSON currently opened in the browser. IMPORTANT: If there are multiple active sessions, use get_active_sessions to check and select_active_session to explicitly target one.",
       annotations: { readOnlyHint: true },
     },
     async () => documentService.getDocumentState()
@@ -21,7 +21,7 @@ export function registerDocumentTools(server: McpServer) {
       inputSchema: {
         schema: z
           .record(z.string(), z.any())
-          .describe("The complete valid FormCast JSON layout schema."),
+          .describe("The complete valid PaperCast JSON layout schema."),
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },

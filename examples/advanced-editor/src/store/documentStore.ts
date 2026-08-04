@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { DocumentSchema, AnyNode, PageRegion } from "@formcast/core";
+import { DocumentSchema, AnyNode, PageRegion } from "@papercast/core";
 // to-replace
-import { TEST_DOCUMENT } from "@formcast/core/test";
+import { TEST_DOCUMENT } from "@papercast/core/test";
 // to-replace
 import { updateJsonNodeProperty } from "../utils/jsonUpdater";
 import {
@@ -11,8 +11,8 @@ import {
   moveNodeToNewParent,
   insertNodeSibling,
   moveNodeToSibling,
-} from "@formcast/core";
-import { autoDeconstructRichTextAst } from "@formcast/react";
+} from "@papercast/core";
+import { autoDeconstructRichTextAst } from "@papercast/react";
 
 const INITIAL_DOCUMENT: DocumentSchema = {
   version: 1,
@@ -33,7 +33,7 @@ const INITIAL_DOCUMENT: DocumentSchema = {
     },
   },
   data: {
-    title: "Hello FormCast!",
+    title: "Hello PaperCast!",
     description: "Start editing the JSON on the left to see live updates.",
   },
   definitions: {
@@ -377,7 +377,7 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
     const { parsedDocument, setJsonString } = get();
     if (!parsedDocument) return;
     const baseId = id.split("-part")[0];
-    import("@formcast/core").then(({ replaceNodeInAst }) => {
+    import("@papercast/core").then(({ replaceNodeInAst }) => {
       const newAst = replaceNodeInAst(parsedDocument, baseId, newNode);
       setJsonString(JSON.stringify(newAst, null, 2));
     });

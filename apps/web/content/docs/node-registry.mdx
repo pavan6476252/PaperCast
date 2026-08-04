@@ -1,10 +1,10 @@
 # Node & Component Registries
 
-FormCast fundamentally separates the structure of a document (JSON Schema) from its visual representation (React Components). Because of FormCast's Headless Architecture, this separation is achieved through two distinct registries: the **Schema Registry** in the core engine and the **Node Registry** (Component Registry) in the React headless binding.
+PaperCast fundamentally separates the structure of a document (JSON Schema) from its visual representation (React Components). Because of PaperCast's Headless Architecture, this separation is achieved through two distinct registries: the **Schema Registry** in the core engine and the **Node Registry** (Component Registry) in the React headless binding.
 
 ## The Dual Registry System
 
-### 1. Schema Registry (`@formcast/engine`)
+### 1. Schema Registry (`@papercast/engine`)
 
 This registry stores the logic for how a node behaves physically (its height and how it splits). It has **no knowledge of React or the DOM**.
 
@@ -20,16 +20,16 @@ export interface SchemaTypeDefinition<TNode extends AnyNode = AnyNode> {
 }
 ```
 
-### 2. Node Registry (`@formcast/react`)
+### 2. Node Registry (`@papercast/react`)
 
 This is the React-specific registry that extends the Schema Registry. It maps the node type to an actual React component. When you register a node here, it automatically proxies the `measure` and `split` definitions down to the core engine's `SchemaRegistry`.
 
 ## API Reference: `ComponentTypeDefinition`
 
-When you create a new widget or node type in FormCast, you register it with the React `NodeRegistry` using this interface:
+When you create a new widget or node type in PaperCast, you register it with the React `NodeRegistry` using this interface:
 
 ```typescript
-import { SchemaTypeDefinition } from "@formcast/engine";
+import { SchemaTypeDefinition } from "@papercast/engine";
 
 export interface ComponentTypeDefinition<
   TNode extends AnyNode = AnyNode,
@@ -46,7 +46,7 @@ export interface ComponentTypeDefinition<
 ```
 
 <Callout type="info" title="Why is measuring separate from rendering?">
-  Because FormCast runs `OffscreenMeasurer.tsx` silently before doing any
+  Because PaperCast runs `OffscreenMeasurer.tsx` silently before doing any
   pagination, the engine needs a lightweight way to ask a node how tall it will
   be given a specific width constraint, without actually rendering the heavy
   React tree to the screen.
@@ -57,7 +57,7 @@ export interface ComponentTypeDefinition<
 Here is an example of registering a simple "divider" node:
 
 ```typescript
-import { NodeRegistry } from "@formcast/react";
+import { NodeRegistry } from "@papercast/react";
 
 NodeRegistry.register({
   type: "divider",
@@ -78,7 +78,7 @@ First, build the component that will render the signature line.
 ```tsx
 // src/components/renderer/nodes/SignatureNode.tsx
 import React from "react";
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 
 export const SignatureNode = ({ node }: { node: AnyNode }) => {
   return (
@@ -94,7 +94,7 @@ export const SignatureNode = ({ node }: { node: AnyNode }) => {
 In your widget registration file (e.g., `packages/react/src/widgets/basic.ts` or wherever your UI widgets are defined):
 
 ```tsx
-import { NodeRegistry } from "@formcast/react";
+import { NodeRegistry } from "@papercast/react";
 import { SignatureNode } from "./SignatureNode";
 
 NodeRegistry.register({
@@ -123,4 +123,4 @@ export const signatureWidgetDef = {
 };
 ```
 
-That's it! The core engine will handle pagination logic via the proxied schema registry, while `@formcast/react` will render your custom Signature node.
+That's it! The core engine will handle pagination logic via the proxied schema registry, while `@papercast/react` will render your custom Signature node.

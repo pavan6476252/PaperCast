@@ -1,10 +1,10 @@
 import { NodeRegistry, ComponentTypeDefinition } from "./registry";
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 
 /**
- * Top-level React API namespace for FormCast configuration.
+ * Top-level React API namespace for PaperCast configuration.
  */
-export const FormCastReact = {
+export const PaperCastReact = {
   /**
    * Registers a custom component definition globally so it can be rendered by the NodeRenderer.
    * @param def - The React component definition matching a node type.

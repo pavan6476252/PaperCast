@@ -1,14 +1,14 @@
 import { useState, useCallback, useMemo } from "react";
 import {
   NodeRenderer,
-  FormCastProvider,
+  PaperCastProvider,
   OffscreenMeasurer,
   getStyle,
   autoDeconstructRichTextAst,
-} from "@formcast/react";
-import { Measurements, paginateDocument, PageData } from "@formcast/engine";
-import { DocumentSchema, AnyNode } from "@formcast/core";
-import { TEST_DOCUMENT } from "@formcast/core/test";
+} from "@papercast/react";
+import { Measurements, paginateDocument, PageData } from "@papercast/engine";
+import { DocumentSchema, AnyNode } from "@papercast/core";
+import { TEST_DOCUMENT } from "@papercast/core/test";
 import "./index.css";
 
 function App() {
@@ -80,7 +80,7 @@ function App() {
                 flexDirection: "column",
               }}
             >
-              <FormCastProvider
+              <PaperCastProvider
                 data={parsedDocument.data}
                 pageContext={{
                   pageNumber: page.pageNumber,
@@ -90,7 +90,7 @@ function App() {
               >
                 {/* Render Header */}
                 {header?.root && (
-                  <FormCastProvider
+                  <PaperCastProvider
                     data={parsedDocument.data}
                     pageContext={{
                       pageNumber: page.pageNumber,
@@ -109,11 +109,11 @@ function App() {
                     >
                       <NodeRenderer node={header.root} />
                     </div>
-                  </FormCastProvider>
+                  </PaperCastProvider>
                 )}
 
                 {/* Render Body for this page */}
-                <FormCastProvider
+                <PaperCastProvider
                   data={parsedDocument.data}
                   pageContext={{
                     pageNumber: page.pageNumber,
@@ -133,11 +133,11 @@ function App() {
                       <NodeRenderer key={`body-${node.id || i}`} node={node} />
                     ))}
                   </div>
-                </FormCastProvider>
+                </PaperCastProvider>
 
                 {/* Render Footer */}
                 {footer?.root && (
-                  <FormCastProvider
+                  <PaperCastProvider
                     data={parsedDocument.data}
                     pageContext={{
                       pageNumber: page.pageNumber,
@@ -156,9 +156,9 @@ function App() {
                     >
                       <NodeRenderer node={footer.root} />
                     </div>
-                  </FormCastProvider>
+                  </PaperCastProvider>
                 )}
-              </FormCastProvider>
+              </PaperCastProvider>
             </div>
           );
         })}

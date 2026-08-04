@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@formcast/core", "@formcast/engine", "@formcast/react"],
+  transpilePackages: [
+    "@papercast/core",
+    "@papercast/engine",
+    "@papercast/react",
+  ],
   outputFileTracingIncludes: {
     "/api/pdf/**": ["node_modules/@sparticuz/chromium/**"],
   },

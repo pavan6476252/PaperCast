@@ -1,8 +1,8 @@
-# FormCast Web Application Guide
+# PaperCast Web Application Guide
 
 ## Workspace Overview
 
-This workspace (`apps/web`) contains the FormCast Next.js web application. It acts as the interactive visual playground for editing and previewing JSON Schemas.
+This workspace (`apps/web`) contains the PaperCast Next.js web application. It acts as the interactive visual playground for editing and previewing JSON Schemas.
 
 ## Key Responsibilities
 
@@ -13,7 +13,7 @@ This workspace (`apps/web`) contains the FormCast Next.js web application. It ac
 
 ## Architectural Boundaries
 
-- **No Direct AST Manipulation**: All core logic for modifying the AST is strictly maintained in `@formcast/core`. The Next.js app consumes this via standard imports.
+- **No Direct AST Manipulation**: All core logic for modifying the AST is strictly maintained in `@papercast/core`. The Next.js app consumes this via standard imports.
 - **State Management**: Uses Zustand (`src/store/documentStore.ts`) to synchronize the AST between the Monaco Editor and the visual preview.
 
 ## Getting Started

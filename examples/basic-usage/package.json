@@ -10,9 +10,9 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@formcast/core": "workspace:*",
-    "@formcast/engine": "workspace:*",
-    "@formcast/react": "workspace:*",
+    "@papercast/core": "workspace:*",
+    "@papercast/engine": "workspace:*",
+    "@papercast/react": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

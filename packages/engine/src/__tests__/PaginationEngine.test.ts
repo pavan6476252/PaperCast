@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { paginateDocument } from "../PaginationEngine";
 import type { Measurements } from "../types";
-import { DocumentSchema } from "@formcast/core";
+import { DocumentSchema } from "@papercast/core";
 
 describe("PaginationEngine", () => {
   const createMockSchema = (children: any[]): DocumentSchema => ({

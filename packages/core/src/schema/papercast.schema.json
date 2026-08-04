@@ -6,9 +6,9 @@
       "$ref": "#/definitions/BuiltInNode",
       "description": "Comprehensive union representing any valid node (built-in or custom)."
     },
-    "BaseNode<\"checkbox\",structure-src_schema.ts-5036-5151-src_schema.ts-5012-5153-src_schema.ts-4984-5154-src_schema.ts-0-7715>": {
+    "BaseNode<\"checkbox\",structure-src_schema.ts-5037-5152-src_schema.ts-5013-5154-src_schema.ts-4985-5155-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -63,7 +63,7 @@
     },
     "BaseNode<\"column\",undefined>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -101,9 +101,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"image\",structure-src_schema.ts-4269-4367-src_schema.ts-4248-4369-src_schema.ts-4224-4370-src_schema.ts-0-7715>": {
+    "BaseNode<\"image\",structure-src_schema.ts-4270-4368-src_schema.ts-4249-4370-src_schema.ts-4225-4371-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -154,9 +154,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"listTile\",structure-src_schema.ts-4636-4752-src_schema.ts-4612-4754-src_schema.ts-4584-4755-src_schema.ts-0-7715>": {
+    "BaseNode<\"listTile\",structure-src_schema.ts-4637-4753-src_schema.ts-4613-4755-src_schema.ts-4585-4756-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -211,7 +211,7 @@
     },
     "BaseNode<\"ol\",undefined>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -249,9 +249,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"radio\",structure-src_schema.ts-5200-5354-src_schema.ts-5179-5356-src_schema.ts-5154-5357-src_schema.ts-0-7715>": {
+    "BaseNode<\"radio\",structure-src_schema.ts-5201-5355-src_schema.ts-5180-5357-src_schema.ts-5155-5358-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -310,9 +310,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"radioGroup\",structure-src_schema.ts-5413-5491-src_schema.ts-5387-5493-src_schema.ts-5357-5494-src_schema.ts-0-7715>": {
+    "BaseNode<\"radioGroup\",structure-src_schema.ts-5414-5492-src_schema.ts-5388-5494-src_schema.ts-5358-5495-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -362,9 +362,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"richText\",structure-src_schema.ts-4807-4864-src_schema.ts-4783-4866-src_schema.ts-4755-4867-src_schema.ts-0-7715>": {
+    "BaseNode<\"richText\",structure-src_schema.ts-4808-4865-src_schema.ts-4784-4867-src_schema.ts-4756-4868-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -413,7 +413,7 @@
     },
     "BaseNode<\"root\",undefined>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -453,7 +453,7 @@
     },
     "BaseNode<\"row\",undefined>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -491,9 +491,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"spacer\",structure-src_schema.ts-4414-4434-src_schema.ts-4395-4435-src_schema.ts-4370-4436-src_schema.ts-0-7715>": {
+    "BaseNode<\"spacer\",structure-src_schema.ts-4415-4435-src_schema.ts-4396-4436-src_schema.ts-4371-4437-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -539,7 +539,7 @@
     },
     "BaseNode<\"table\",TableProps>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -577,9 +577,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"text\",structure-src_schema.ts-4118-4221-src_schema.ts-4098-4223-src_schema.ts-4075-4224-src_schema.ts-0-7715>": {
+    "BaseNode<\"text\",structure-src_schema.ts-4119-4222-src_schema.ts-4099-4224-src_schema.ts-4076-4225-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -634,7 +634,7 @@
     },
     "BaseNode<\"ul\",undefined>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -672,9 +672,9 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"widgetInstance\",structure-src_schema.ts-4554-4581-src_schema.ts-4524-4583-src_schema.ts-4491-4584-src_schema.ts-0-7715>": {
+    "BaseNode<\"widgetInstance\",structure-src_schema.ts-4555-4582-src_schema.ts-4525-4584-src_schema.ts-4492-4585-src_schema.ts-0-7718>": {
       "additionalProperties": false,
-      "description": "The foundational shape of every node in the FormCast AST.",
+      "description": "The foundational shape of every node in the PaperCast AST.",
       "properties": {
         "bind": {
           "$ref": "#/definitions/DataBinding"
@@ -918,10 +918,10 @@
           "$ref": "#/definitions/RadioGroupNode"
         }
       ],
-      "description": "Union of all native FormCast nodes."
+      "description": "Union of all native PaperCast nodes."
     },
     "CheckboxNode": {
-      "$ref": "#/definitions/BaseNode%3C%22checkbox%22%2Cstructure-src_schema.ts-5036-5151-src_schema.ts-5012-5153-src_schema.ts-4984-5154-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22checkbox%22%2Cstructure-src_schema.ts-5037-5152-src_schema.ts-5013-5154-src_schema.ts-4985-5155-src_schema.ts-0-7718%3E"
     },
     "ColumnNode": {
       "$ref": "#/definitions/BaseNode%3C%22column%22%2Cundefined%3E"
@@ -953,7 +953,7 @@
     },
     "DocumentSchema": {
       "additionalProperties": false,
-      "description": "Represents the entire state of a FormCast document, including its hierarchy, widget definitions, theme configuration, static data, and metadata.",
+      "description": "Represents the entire state of a PaperCast document, including its hierarchy, widget definitions, theme configuration, static data, and metadata.",
       "properties": {
         "data": {
           "type": "object"
@@ -1070,10 +1070,10 @@
       "type": "object"
     },
     "ImageNode": {
-      "$ref": "#/definitions/BaseNode%3C%22image%22%2Cstructure-src_schema.ts-4269-4367-src_schema.ts-4248-4369-src_schema.ts-4224-4370-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22image%22%2Cstructure-src_schema.ts-4270-4368-src_schema.ts-4249-4370-src_schema.ts-4225-4371-src_schema.ts-0-7718%3E"
     },
     "ListTileNode": {
-      "$ref": "#/definitions/BaseNode%3C%22listTile%22%2Cstructure-src_schema.ts-4636-4752-src_schema.ts-4612-4754-src_schema.ts-4584-4755-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22listTile%22%2Cstructure-src_schema.ts-4637-4753-src_schema.ts-4613-4755-src_schema.ts-4585-4756-src_schema.ts-0-7718%3E"
     },
     "OrderedListNode": {
       "$ref": "#/definitions/BaseNode%3C%22ol%22%2Cundefined%3E"
@@ -1101,10 +1101,10 @@
       "type": "object"
     },
     "RadioGroupNode": {
-      "$ref": "#/definitions/BaseNode%3C%22radioGroup%22%2Cstructure-src_schema.ts-5413-5491-src_schema.ts-5387-5493-src_schema.ts-5357-5494-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22radioGroup%22%2Cstructure-src_schema.ts-5414-5492-src_schema.ts-5388-5494-src_schema.ts-5358-5495-src_schema.ts-0-7718%3E"
     },
     "RadioNode": {
-      "$ref": "#/definitions/BaseNode%3C%22radio%22%2Cstructure-src_schema.ts-5200-5354-src_schema.ts-5179-5356-src_schema.ts-5154-5357-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22radio%22%2Cstructure-src_schema.ts-5201-5355-src_schema.ts-5180-5357-src_schema.ts-5155-5358-src_schema.ts-0-7718%3E"
     },
     "RegionCondition": {
       "anyOf": [
@@ -1145,7 +1145,7 @@
       ]
     },
     "RichTextNode": {
-      "$ref": "#/definitions/BaseNode%3C%22richText%22%2Cstructure-src_schema.ts-4807-4864-src_schema.ts-4783-4866-src_schema.ts-4755-4867-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22richText%22%2Cstructure-src_schema.ts-4808-4865-src_schema.ts-4784-4867-src_schema.ts-4756-4868-src_schema.ts-0-7718%3E"
     },
     "RichTextPreferences": {
       "additionalProperties": false,
@@ -1178,7 +1178,7 @@
       "$ref": "#/definitions/BaseNode%3C%22row%22%2Cundefined%3E"
     },
     "SpacerNode": {
-      "$ref": "#/definitions/BaseNode%3C%22spacer%22%2Cstructure-src_schema.ts-4414-4434-src_schema.ts-4395-4435-src_schema.ts-4370-4436-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22spacer%22%2Cstructure-src_schema.ts-4415-4435-src_schema.ts-4396-4436-src_schema.ts-4371-4437-src_schema.ts-0-7718%3E"
     },
     "TableColumnConfig": {
       "additionalProperties": false,
@@ -1354,7 +1354,7 @@
       "type": "object"
     },
     "TextNode": {
-      "$ref": "#/definitions/BaseNode%3C%22text%22%2Cstructure-src_schema.ts-4118-4221-src_schema.ts-4098-4223-src_schema.ts-4075-4224-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22text%22%2Cstructure-src_schema.ts-4119-4222-src_schema.ts-4099-4224-src_schema.ts-4076-4225-src_schema.ts-0-7718%3E"
     },
     "Theme": {
       "additionalProperties": false,
@@ -1822,7 +1822,7 @@
       "type": "object"
     },
     "WidgetInstanceNode": {
-      "$ref": "#/definitions/BaseNode%3C%22widgetInstance%22%2Cstructure-src_schema.ts-4554-4581-src_schema.ts-4524-4583-src_schema.ts-4491-4584-src_schema.ts-0-7715%3E"
+      "$ref": "#/definitions/BaseNode%3C%22widgetInstance%22%2Cstructure-src_schema.ts-4555-4582-src_schema.ts-4525-4584-src_schema.ts-4492-4585-src_schema.ts-0-7718%3E"
     }
   }
 }

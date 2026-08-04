@@ -1,4 +1,4 @@
-import { TableNode } from "@formcast/core";
+import { TableNode } from "@papercast/core";
 import { MeasureContext, SplitContext } from "../registry";
 import { resolvePath } from "../resolver";
 

@@ -4,7 +4,7 @@ Content widgets are the visible elements of your document: the words, paragraphs
 
 ## Text Node
 
-The `Text` widget is the most versatile node in FormCast. It supports static text, dynamic data binding, string interpolation, and even hyperlinking!
+The `Text` widget is the most versatile node in PaperCast. It supports static text, dynamic data binding, string interpolation, and even hyperlinking!
 
 ### Core Properties
 
@@ -47,9 +47,9 @@ The `RichText` widget is designed for users who want to paste formatted content 
 
 ### How it works
 
-Under the hood, FormCast does not actually save raw HTML. If it did, the Pagination Engine wouldn't be able to split long paragraphs across pages.
+Under the hood, PaperCast does not actually save raw HTML. If it did, the Pagination Engine wouldn't be able to split long paragraphs across pages.
 
-Instead, when you paste into a Rich Text widget, the FormCast engine **intercepts the HTML**, parses the DOM tree, and automatically converts `<p>`, `<strong>`, and `<em>` tags into native FormCast AST nodes! This ensures your pasted content remains paginatable and adheres to the document's global styling rules.
+Instead, when you paste into a Rich Text widget, the PaperCast engine **intercepts the HTML**, parses the DOM tree, and automatically converts `<p>`, `<strong>`, and `<em>` tags into native PaperCast AST nodes! This ensures your pasted content remains paginatable and adheres to the document's global styling rules.
 
 ```json
 {
@@ -60,7 +60,7 @@ Instead, when you paste into a Rich Text widget, the FormCast engine **intercept
 }
 ```
 
-_(Note: FormCast will internally transform this into a `column` containing a `row` of `text` nodes!)_
+_(Note: PaperCast will internally transform this into a `column` containing a `row` of `text` nodes!)_
 
 ## Image Node
 
@@ -73,7 +73,7 @@ The `Image` widget allows you to embed graphics, logos, and photos.
 
 ### Sizing and Aspect Ratio
 
-Images in FormCast will attempt to respect their container's bounds. It is highly recommended to set an explicit `width` or `height` on the Image widget (or its parent `Row`/`Column`) to prevent the image from blowing out the layout.
+Images in PaperCast will attempt to respect their container's bounds. It is highly recommended to set an explicit `width` or `height` on the Image widget (or its parent `Row`/`Column`) to prevent the image from blowing out the layout.
 
 <Callout type="warning" title="Atomic Splitting">
   Unlike Text nodes (which can mathematically split their characters across

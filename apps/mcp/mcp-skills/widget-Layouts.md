@@ -1,6 +1,6 @@
 # Layout Widgets
 
-Layout widgets are the backbone of FormCast. They are the **only** widgets (alongside `root` and `orderedList`) that accept a `children` array.
+Layout widgets are the backbone of PaperCast. They are the **only** widgets (alongside `root` and `orderedList`) that accept a `children` array.
 
 ## RowNode
 

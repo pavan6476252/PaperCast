@@ -1,6 +1,6 @@
 # AST Manipulation Rules
 
-When modifying the FormCast JSON AST, you must follow strict schema guidelines.
+When modifying the PaperCast JSON AST, you must follow strict schema guidelines.
 
 ## 1. Node Structure
 
@@ -26,7 +26,7 @@ When adding a basic Text or Table, ALWAYS use the provided MCP tools (`add_text_
 
 ## 4. Atomic Node Overflow
 
-**CRITICAL RULE:** The FormCast engine does NOT magically scale down elements to fit onto a single page. If an atomic node (like an `image`, a `spacer`, or a massive block of basic `text`) is taller than the physical `pageHeight`, the Pagination Engine will be forced to push it onto the page without splitting it, causing it to violently overflow and clip at the bottom of the PDF.
+**CRITICAL RULE:** The PaperCast engine does NOT magically scale down elements to fit onto a single page. If an atomic node (like an `image`, a `spacer`, or a massive block of basic `text`) is taller than the physical `pageHeight`, the Pagination Engine will be forced to push it onto the page without splitting it, causing it to violently overflow and clip at the bottom of the PDF.
 
 - Always apply sensible `height` constraints or `fit: "contain"` to images.
 - If you have a massive block of HTML text that must split across pages, you MUST use the `richText` widget instead of standard `text`, and ensure `autoDeconstruct` is enabled.

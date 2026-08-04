@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import { useFormCastEditor } from "../EditorProvider";
-import { AnyNode } from "@formcast/core";
+import { usePaperCastEditor } from "../EditorProvider";
+import { AnyNode } from "@papercast/core";
 import {
   Type,
   Image,
@@ -37,7 +37,7 @@ const WIDGETS = [
 export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
   onSettingsClick,
 }) => {
-  const { selectedNodeId, document: parsedDocument } = useFormCastEditor();
+  const { selectedNodeId, document: parsedDocument } = usePaperCastEditor();
 
   const selectedNodeType = useMemo(() => {
     if (!selectedNodeId || !parsedDocument) return null;
@@ -134,7 +134,7 @@ export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
                 draggable={true}
                 onDragStart={(e) => {
                   e.dataTransfer.setData(
-                    "application/formcast-widget",
+                    "application/papercast-widget",
                     widget.type
                   );
                   e.dataTransfer.effectAllowed = "copy";

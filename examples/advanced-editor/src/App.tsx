@@ -5,7 +5,7 @@ import {
   WidgetsPanel,
   PropertyPanel,
   EditorProvider,
-} from "@formcast/react/editor";
+} from "@papercast/react/editor";
 import { useDocumentStore } from "./store/documentStore";
 import "./index.css";
 

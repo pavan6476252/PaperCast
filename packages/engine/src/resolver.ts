@@ -1,4 +1,4 @@
-import { DocumentSchema, PageRegion, RegionCondition } from "@formcast/core";
+import { DocumentSchema, PageRegion, RegionCondition } from "@papercast/core";
 import { DotPaths, DefaultTData } from "./types";
 
 export function resolvePath<TData = DefaultTData>(

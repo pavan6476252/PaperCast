@@ -4,7 +4,7 @@ description: Documentation for UnorderedListNode (ul) and OrderedListNode (ol) f
 
 # List Widgets (`ul` and `ol`)
 
-FormCast supports standard HTML-like lists using `ul` (Unordered List) and `ol` (Ordered List) widgets.
+PaperCast supports standard HTML-like lists using `ul` (Unordered List) and `ol` (Ordered List) widgets.
 
 Like `row` and `column`, these widgets act as layout containers and accept a `children` array. You can place any widget inside a list, but it is typically used with `text` or `listTile` nodes.
 

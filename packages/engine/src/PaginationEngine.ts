@@ -1,4 +1,4 @@
-import { DocumentSchema, AnyNode } from "@formcast/core";
+import { DocumentSchema, AnyNode } from "@papercast/core";
 import { resolvePageRegion } from "./resolver";
 import { SchemaRegistry } from "./registry";
 import { Measurements } from "./types";
@@ -46,10 +46,10 @@ function getNodeHeight(node: AnyNode, measurements: Measurements): number {
 }
 
 /**
- * Orchestrates the physical layout of a FormCast document by dividing its
+ * Orchestrates the physical layout of a PaperCast document by dividing its
  * continuous AST structure into discrete, print-ready pages.
  *
- * @param doc - The complete FormCast document schema to paginate.
+ * @param doc - The complete PaperCast document schema to paginate.
  * @param pageHeight - The physical height of the target page in pixels.
  * @param measurements - Dictionary of pre-calculated DOM heights for nodes.
  * @returns Array of page data objects, each containing the localized nodes and resolved regions for that specific page.

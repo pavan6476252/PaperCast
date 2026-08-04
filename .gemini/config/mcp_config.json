@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "formcast": {
+    "papercast": {
       "command": "npx",
       "args": ["tsx", "./apps/mcp/src/index.ts"],
-      "cwd": "/Users/pavankumar/Documents/formcast"
+      "cwd": "/Users/pavankumar/Documents/papercast"
     }
   }
 }

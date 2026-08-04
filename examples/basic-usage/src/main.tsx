@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { registerDefaultWidgets } from "@formcast/react/widgets";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
 
 // Register the standard node types (text, row, column, etc.)
 registerDefaultWidgets();

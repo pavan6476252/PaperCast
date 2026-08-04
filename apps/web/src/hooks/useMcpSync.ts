@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentStore } from "../store/documentStore";
 import { useWorkspaceStore } from "../store/workspaceStore";
-import { WsEventType, WsMessage } from "@formcast/core/ws";
+import { WsEventType, WsMessage } from "@papercast/core/ws";
 
 export function useMcpSync() {
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
@@ -21,14 +21,14 @@ export function useMcpSync() {
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log("Connected to FormCast MCP Sync Server");
+        console.log("Connected to PaperCast MCP Sync Server");
         setIsConnected(true);
         // Register this tab session
         ws.send(
           JSON.stringify({
             type: WsEventType.REGISTER_TAB,
             sessionId,
-            title: document.title || "FormCast Playground",
+            title: document.title || "PaperCast Playground",
             timestamp: Date.now(),
           })
         );
@@ -126,6 +126,22 @@ export function useMcpSync() {
               break;
             }
 
+            case WsEventType.WORKSPACE_CREATE: {
+              const workspaceStore = useWorkspaceStore.getState();
+              const newContent = message.schema
+                ? JSON.stringify(message.schema, null, 2)
+                : useDocumentStore.getState().jsonString;
+              const newId = await workspaceStore.createSchema(
+                message.name,
+                newContent
+              );
+              if (message.schema) {
+                setJsonString(newContent);
+              }
+              workspaceStore.setActiveSchema(newId);
+              break;
+            }
+
             default:
               break;
           }
@@ -138,7 +154,7 @@ export function useMcpSync() {
         setIsConnected((prev) => {
           if (prev) {
             console.log(
-              "Disconnected from FormCast MCP Sync Server. Reconnecting in 5s..."
+              "Disconnected from PaperCast MCP Sync Server. Reconnecting in 5s..."
             );
           }
           return false;

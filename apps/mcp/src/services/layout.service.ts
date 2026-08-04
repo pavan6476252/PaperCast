@@ -12,9 +12,9 @@ import {
   TableFooterRow,
   BoxModel,
   TypographyAndColor,
-} from "@formcast/core";
+} from "@papercast/core";
 import { DEFAULT_WIDGET_CONFIGS, WIDGET_DOCUMENTATION } from "../constants.js";
-import { WsEventType } from "@formcast/core/ws";
+import { WsEventType } from "@papercast/core/ws";
 
 export async function getLayoutElement(nodeId: string) {
   const state = await sendCommandToActiveSession({

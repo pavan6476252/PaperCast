@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FormCast Builder",
-  description: "FormCast Schema-First Document Builder",
+  title: "PaperCast Builder",
+  description: "PaperCast Schema-First Document Builder",
 };
 
 export default function RootLayout({

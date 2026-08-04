@@ -1,7 +1,7 @@
 {
-  "name": "@formcast/engine",
+  "name": "@papercast/engine",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "main": "src/index.ts",
   "types": "src/index.ts",
   "exports": {
@@ -18,9 +18,17 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@formcast/core": "workspace:*"
+    "@papercast/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pavan6476252/papercast"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

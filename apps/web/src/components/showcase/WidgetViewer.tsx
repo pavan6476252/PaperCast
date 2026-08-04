@@ -5,7 +5,7 @@ import { Copy, Check, Terminal } from "lucide-react";
 import { codeToHtml } from "shiki";
 import { motion, AnimatePresence } from "framer-motion";
 import { DocumentPreview } from "../renderer/DocumentPreview";
-import { DocumentSchema } from "@formcast/core";
+import { DocumentSchema } from "@papercast/core";
 
 interface WidgetViewerProps {
   title: string;

@@ -5,5 +5,5 @@ export default defineConfig({
   format: ["cjs"],
   target: "node20",
   clean: true,
-  noExternal: ["@formcast/core"],
+  noExternal: ["@papercast/core"],
 });

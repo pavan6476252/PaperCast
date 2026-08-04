@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { AnyNode } from "@formcast/core";
+import { AnyNode } from "@papercast/core";
 import { getStyle } from "../utils/styleUtils";
 import React from "react";
 

@@ -163,7 +163,7 @@ export default function LandingPage() {
                   F
                 </div>
                 <span className="inline-block font-extrabold text-2xl tracking-tight text-slate-900">
-                  FormCast
+                  PaperCast
                 </span>
               </Link>
               <p className="text-slate-500 text-base leading-relaxed max-w-sm mb-8">
@@ -318,7 +318,7 @@ export default function LandingPage() {
 
           <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-500">
-              © {new Date().getFullYear()} FormCast Inc. All rights reserved.
+              © {new Date().getFullYear()} PaperCast Inc. All rights reserved.
             </p>
             <div className="flex items-center gap-1.5 text-sm text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
               <span>Made with</span>

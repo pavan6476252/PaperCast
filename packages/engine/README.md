@@ -1,8 +1,8 @@
-# @formcast/engine
+# @papercast/engine
 
-Welcome to **@formcast/engine**!
+Welcome to **@papercast/engine**!
 
-This is the main calculator (engine) of FormCast. It takes your long document and figures out exactly how to cut it into separate pages so it can be printed or saved as a PDF properly.
+This is the main calculator (engine) of PaperCast. It takes your long document and figures out exactly how to cut it into separate pages so it can be printed or saved as a PDF properly.
 
 ## What is inside?
 
@@ -19,24 +19,24 @@ By keeping the pagination (page splitting) logic separate from React, we make su
 Run this command in your terminal:
 
 ```bash
-npm install @formcast/engine
+npm install @papercast/engine
 ```
 
-_Note: You will also need to install `@formcast/core` because the engine uses its types._
+_Note: You will also need to install `@papercast/core` because the engine uses its types._
 
 ## Basic Usage
 
 Here is a simple example showing how to run the engine:
 
 ```typescript
-import { PaginationEngine } from "@formcast/engine";
-import { DocumentSchema } from "@formcast/core";
+import { PaginationEngine } from "@papercast/engine";
+import { DocumentSchema } from "@papercast/core";
 
 // 1. You give it your document
 const myDoc: DocumentSchema = {/* ... */};
 
 // 2. You create a simple measurer that tells the engine how tall each text is.
-// (In a real app, @formcast/react gives you a ready-made Measurer using the real browser DOM).
+// (In a real app, @papercast/react gives you a ready-made Measurer using the real browser DOM).
 const fakeMeasurer = {
   measureNode: (node) => ({ height: 20 }),
   measureText: (text) => ({ height: 15, width: 100 }),
@@ -52,4 +52,4 @@ console.log("Total pages created: ", paginatedResult.pages.length);
 
 ## Need Help?
 
-If you want to use this easily in your React application without writing your own Measurer, please check our `@formcast/react` package!
+If you want to use this easily in your React application without writing your own Measurer, please check our `@papercast/react` package!

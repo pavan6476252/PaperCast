@@ -1,4 +1,4 @@
-import { DocumentSchema, BaseNode } from "@formcast/core";
+import { DocumentSchema, BaseNode } from "@papercast/core";
 
 export function generateDataPaths(
   data: any,
