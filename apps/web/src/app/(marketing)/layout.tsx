@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { PlaygroundButton } from "../../components/marketing/PlaygroundButton";
+import { ThemeToggle } from "../../components/ThemeToggle";
 
 export default function MarketingLayout({
   children,
@@ -8,8 +9,8 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-screen flex flex-col bg-slate-50 text-slate-900 overflow-hidden">
-      <header className="shrink-0 sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
+    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden transition-colors">
+      <header className="shrink-0 sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
         <div className="container mx-auto flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0 px-4 md:px-8">
           <div className="flex gap-6 md:gap-10">
             <Link href="/" className="flex items-center space-x-2">
@@ -18,25 +19,25 @@ export default function MarketingLayout({
             <nav className="hidden gap-6 md:flex">
               <Link
                 href="/widgets"
-                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
               >
                 Widgets
               </Link>
               <Link
                 href="/snippets"
-                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
               >
                 Snippets
               </Link>
               <Link
                 href="/docs"
-                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
               >
                 Documentation
               </Link>
               <Link
                 href="/docs/mcp-introduction"
-                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
               >
                 MCP Server
               </Link>
@@ -44,6 +45,7 @@ export default function MarketingLayout({
           </div>
           <div className="flex flex-1 items-center justify-end space-x-4">
             <nav className="flex items-center space-x-4">
+              <ThemeToggle />
               <PlaygroundButton />
             </nav>
           </div>

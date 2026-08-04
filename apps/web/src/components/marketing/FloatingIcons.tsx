@@ -22,7 +22,7 @@ export function FloatingIcons() {
           times: [0, 0.4, 0.6, 1],
           delay: 0,
         }}
-        className="absolute -top-12 -left-16 w-20 h-20 text-blue-200"
+        className="absolute -top-12 -left-16 w-20 h-20 text-blue-200 dark:text-white/10"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -51,7 +51,7 @@ export function FloatingIcons() {
           times: [0, 0.4, 0.6, 1],
           delay: 2,
         }}
-        className="absolute top-4 -right-16 w-24 h-24 text-indigo-200"
+        className="absolute top-4 -right-16 w-24 h-24 text-indigo-200 dark:text-white/10"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -80,7 +80,7 @@ export function FloatingIcons() {
           times: [0, 0.4, 0.6, 1],
           delay: 4,
         }}
-        className="absolute -bottom-16 left-10 w-16 h-16 text-purple-200"
+        className="absolute -bottom-16 left-10 w-16 h-16 text-purple-200 dark:text-white/10"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -109,7 +109,7 @@ export function FloatingIcons() {
           times: [0, 0.4, 0.6, 1],
           delay: 1,
         }}
-        className="absolute -bottom-10 right-10 w-14 h-14 text-pink-200"
+        className="absolute -bottom-10 right-10 w-14 h-14 text-pink-200 dark:text-white/10"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

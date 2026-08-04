@@ -91,7 +91,7 @@ export const PropertyPanel: React.FC = () => {
 
   if (!selectedNodeId) {
     return (
-      <div className="p-4 text-gray-500 text-sm">
+      <div className="p-4 text-foreground/50 text-sm">
         No element selected. Click on an element in the preview to edit its
         properties.
       </div>
@@ -124,11 +124,11 @@ export const PropertyPanel: React.FC = () => {
 
   if (!isValid) {
     return (
-      <div className="flex flex-col h-full bg-white overflow-y-auto text-sm text-gray-800">
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-red-50 sticky top-0 z-10">
-          <h3 className="font-semibold text-red-900">Properties (Locked)</h3>
+      <div className="flex flex-col h-full bg-background overflow-y-auto text-sm text-foreground/90">
+        <div className="p-4 border-b border-border flex justify-between items-center bg-destructive/10 sticky top-0 z-10">
+          <h3 className="font-semibold text-foreground">Properties (Locked)</h3>
         </div>
-        <div className="p-6 text-center text-red-600">
+        <div className="p-6 text-center text-destructive">
           <p>
             Please fix JSON syntax errors in the editor to use the visual
             property panel.
@@ -139,8 +139,8 @@ export const PropertyPanel: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-y-auto text-sm text-gray-800">
-      <div className="p-3 border-b border-gray-200 bg-gray-50 sticky top-0 z-10 flex justify-between items-center">
+    <div className="flex flex-col h-full bg-background overflow-y-auto text-sm text-foreground/90">
+      <div className="p-3 border-b border-border bg-surface sticky top-0 z-10 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
@@ -178,14 +178,16 @@ export const PropertyPanel: React.FC = () => {
                 }
               }
             }}
-            className="text-gray-400 hover:text-blue-600 transition-colors"
+            className="text-foreground/40 hover:text-accent transition-colors"
             title="Scroll to element in preview"
           >
             <Focus size={14} />
           </button>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-foreground/50">
             ID:{" "}
-            <span className="font-mono text-gray-800">{selectedNode.id}</span>
+            <span className="font-mono text-foreground/90">
+              {selectedNode.id}
+            </span>
           </p>
         </div>
         <span className="px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs">
@@ -193,15 +195,15 @@ export const PropertyPanel: React.FC = () => {
         </span>
       </div>
 
-      <div className="flex border-b border-gray-200 sticky top-[45px] z-10 bg-white">
+      <div className="flex border-b border-border sticky top-[45px] z-10 bg-background">
         <button
-          className={`flex-1 py-2 text-xs font-medium text-center ${activeTab === "styling" ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50" : "text-gray-500 hover:bg-gray-50"}`}
+          className={`flex-1 py-2 text-xs font-medium text-center ${activeTab === "styling" ? "text-accent border-b-2 border-accent bg-accent/10" : "text-foreground/50 hover:bg-surface"}`}
           onClick={() => setActiveTab("styling")}
         >
           Styling
         </button>
         <button
-          className={`flex-1 py-2 text-xs font-medium text-center ${activeTab === "data" ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50" : "text-gray-500 hover:bg-gray-50"}`}
+          className={`flex-1 py-2 text-xs font-medium text-center ${activeTab === "data" ? "text-accent border-b-2 border-accent bg-accent/10" : "text-foreground/50 hover:bg-surface"}`}
           onClick={() => setActiveTab("data")}
         >
           Data Binding
@@ -240,7 +242,7 @@ export const PropertyPanel: React.FC = () => {
                     (col: TableColumnConfig, idx: number) => (
                       <div
                         key={idx}
-                        className={`border rounded overflow-hidden ${draggedColumnIdx === idx ? "opacity-50 border-blue-400" : "border-gray-200"}`}
+                        className={`border rounded overflow-hidden ${draggedColumnIdx === idx ? "opacity-50 border-blue-400" : "border-border"}`}
                         draggable
                         onDragStart={(e) => {
                           setDraggedColumnIdx(idx);
@@ -272,7 +274,7 @@ export const PropertyPanel: React.FC = () => {
                         onDragEnd={() => setDraggedColumnIdx(null)}
                       >
                         <div
-                          className={`flex justify-between items-center p-2 cursor-pointer ${selectedColumnIndex === idx ? "bg-blue-50" : "bg-gray-50"}`}
+                          className={`flex justify-between items-center p-2 cursor-pointer ${selectedColumnIndex === idx ? "bg-blue-50" : "bg-surface"}`}
                           onClick={() =>
                             setSelectedColumnIndex(
                               selectedColumnIndex === idx ? null : idx
@@ -280,7 +282,7 @@ export const PropertyPanel: React.FC = () => {
                           }
                         >
                           <div className="flex items-center gap-2">
-                            <div className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600">
+                            <div className="cursor-grab active:cursor-grabbing text-foreground/40 hover:text-foreground/70">
                               <GripVertical size={14} />
                             </div>
                             <div className="text-xs font-medium truncate max-w-[120px]">
@@ -300,7 +302,7 @@ export const PropertyPanel: React.FC = () => {
                                 };
                                 handleUpdate("props", "columns", newCols);
                               }}
-                              className="text-xs text-gray-500 hover:text-gray-800"
+                              className="text-xs text-foreground/50 hover:text-foreground/90"
                               title="Toggle Visibility"
                             >
                               {col.hidden ? "Show" : "Hide"}
@@ -308,7 +310,7 @@ export const PropertyPanel: React.FC = () => {
                           </div>
                         </div>
                         {selectedColumnIndex === idx && (
-                          <div className="p-3 bg-white border-t border-gray-100 space-y-2">
+                          <div className="p-3 bg-background border-t border-gray-100 space-y-2">
                             <StringProp
                               label="headerText"
                               value={col.headerText}
@@ -373,7 +375,7 @@ export const PropertyPanel: React.FC = () => {
                       handleUpdate("props", "columns", newCols);
                       setSelectedColumnIndex(newCols.length - 1);
                     }}
-                    className="w-full py-1.5 border border-dashed border-gray-300 text-gray-500 rounded text-xs hover:bg-gray-50 hover:text-gray-800"
+                    className="w-full py-1.5 border border-dashed border-border/80 text-foreground/50 rounded text-xs hover:bg-surface hover:text-foreground/90"
                   >
                     + Add Column
                   </button>
@@ -387,7 +389,7 @@ export const PropertyPanel: React.FC = () => {
                   {(props.footerRows || []).map((row: any, rIdx: number) => (
                     <div
                       key={row.id || rIdx}
-                      className="border border-gray-200 rounded p-2 bg-gray-50"
+                      className="border border-border rounded p-2 bg-surface"
                     >
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-semibold">
@@ -408,10 +410,10 @@ export const PropertyPanel: React.FC = () => {
                         {row.cells.map((cell: any, cIdx: number) => (
                           <div
                             key={cIdx}
-                            className="flex flex-col gap-2 p-2 bg-white border border-gray-100 rounded text-xs"
+                            className="flex flex-col gap-2 p-2 bg-background border border-gray-100 rounded text-xs"
                           >
                             <div className="flex gap-2 items-center">
-                              <span className="w-10 text-gray-500 font-medium">
+                              <span className="w-10 text-foreground/50 font-medium">
                                 Cell {cIdx + 1}
                               </span>
                               <NumberProp
@@ -446,7 +448,7 @@ export const PropertyPanel: React.FC = () => {
                               />
                             </div>
                             <div className="flex flex-wrap gap-2 pt-1 border-t border-gray-50">
-                              <span className="text-gray-400 w-10">
+                              <span className="text-foreground/40 w-10">
                                 Borders:
                               </span>
                               {["Top", "Right", "Bottom", "Left"].map(
@@ -516,7 +518,7 @@ export const PropertyPanel: React.FC = () => {
                       });
                       handleUpdate("props", "footerRows", newRows);
                     }}
-                    className="w-full py-1.5 border border-dashed border-gray-300 text-gray-500 rounded text-xs hover:bg-gray-50 hover:text-gray-800"
+                    className="w-full py-1.5 border border-dashed border-border/80 text-foreground/50 rounded text-xs hover:bg-surface hover:text-foreground/90"
                   >
                     + Add Footer Row
                   </button>
@@ -527,7 +529,7 @@ export const PropertyPanel: React.FC = () => {
             {selectedNode.type === "table" && (
               <PropertyGroup title="Static Data">
                 <div className="space-y-4">
-                  <div className="text-[11px] text-gray-500 leading-relaxed">
+                  <div className="text-[11px] text-foreground/50 leading-relaxed">
                     Tables render <code>props.data</code> when data binding is
                     not used. Add a static data row here to test rendering
                     without data binding.
@@ -548,7 +550,7 @@ export const PropertyPanel: React.FC = () => {
                       newData.push(newRow);
                       handleUpdate("props", "data", newData);
                     }}
-                    className="w-full py-1.5 border border-dashed border-gray-300 text-gray-500 rounded text-xs hover:bg-gray-50 hover:text-gray-800"
+                    className="w-full py-1.5 border border-dashed border-border/80 text-foreground/50 rounded text-xs hover:bg-surface hover:text-foreground/90"
                   >
                     + Add Static Row
                   </button>
@@ -557,7 +559,7 @@ export const PropertyPanel: React.FC = () => {
                       onClick={() => {
                         handleUpdate("props", "data", undefined);
                       }}
-                      className="w-full py-1.5 border border-gray-300 text-red-500 rounded text-xs hover:bg-red-50"
+                      className="w-full py-1.5 border border-border/80 text-red-500 rounded text-xs hover:bg-red-50"
                     >
                       Clear Static Data
                     </button>
@@ -680,7 +682,7 @@ export const PropertyPanel: React.FC = () => {
                   onChange={(v) => handleUpdate("props", "htmlBind", v)}
                 />
                 <div className="flex flex-col text-sm group mt-3">
-                  <label className="text-gray-600 mb-1 text-xs font-medium">
+                  <label className="text-foreground/70 mb-1 text-xs font-medium">
                     htmlLiteral (Markup)
                   </label>
                   <textarea
@@ -688,16 +690,16 @@ export const PropertyPanel: React.FC = () => {
                     onChange={(e) =>
                       handleUpdate("props", "htmlLiteral", e.target.value)
                     }
-                    className="w-full min-w-0 border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono text-xs bg-white text-black h-32"
+                    className="w-full min-w-0 border border-border/80 rounded px-2 py-2 focus:outline-none focus:ring-1 focus:ring-accent font-mono text-xs bg-background text-foreground h-32"
                     placeholder="<b>Bold</b> and <i>Italic</i>"
                   />
                 </div>
 
                 <div className="border-t border-gray-150 my-4 pt-3.5">
-                  <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                  <div className="text-[10px] font-bold text-foreground/40 uppercase tracking-wider mb-1.5">
                     Page Setup & Layout
                   </div>
-                  <p className="text-[11px] text-gray-500 mb-3 leading-relaxed">
+                  <p className="text-[11px] text-foreground/50 mb-3 leading-relaxed">
                     A single Rich Text block cannot split across page
                     boundaries. Convert its HTML paragraphs, headers, and lists
                     into separate PaperCast widgets inside a layout container to
@@ -837,7 +839,7 @@ export const PropertyPanel: React.FC = () => {
                 onChange={(v) => handleUpdate("layout", "backgroundColor", v)}
               />
 
-              <div className="text-xs font-medium text-gray-500 mb-1 mt-4">
+              <div className="text-xs font-medium text-foreground/50 mb-1 mt-4">
                 Margins
               </div>
               <div className="grid grid-cols-2 gap-2 mb-3">
@@ -867,7 +869,7 @@ export const PropertyPanel: React.FC = () => {
                 />
               </div>
 
-              <div className="text-xs font-medium text-gray-500 mb-1">
+              <div className="text-xs font-medium text-foreground/50 mb-1">
                 Padding
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -1035,8 +1037,8 @@ export const PropertyPanel: React.FC = () => {
             {selectedNode.type === "table" && (
               <PropertyGroup title="Table Styling">
                 <div className="space-y-4">
-                  <div className="p-2 border border-gray-100 rounded bg-gray-50">
-                    <div className="text-xs font-medium text-gray-500 mb-2">
+                  <div className="p-2 border border-gray-100 rounded bg-surface">
+                    <div className="text-xs font-medium text-foreground/50 mb-2">
                       Grid & Padding
                     </div>
                     <SelectProp
@@ -1088,8 +1090,8 @@ export const PropertyPanel: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="p-2 border border-gray-100 rounded bg-gray-50">
-                    <div className="text-xs font-medium text-gray-500 mb-2">
+                  <div className="p-2 border border-gray-100 rounded bg-surface">
+                    <div className="text-xs font-medium text-foreground/50 mb-2">
                       Header
                     </div>
                     <ColorProp
@@ -1145,8 +1147,8 @@ export const PropertyPanel: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="p-2 border border-gray-100 rounded bg-gray-50">
-                    <div className="text-xs font-medium text-gray-500 mb-2">
+                  <div className="p-2 border border-gray-100 rounded bg-surface">
+                    <div className="text-xs font-medium text-foreground/50 mb-2">
                       Rows
                     </div>
                     <ColorProp
@@ -1199,8 +1201,8 @@ export const PropertyPanel: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="p-2 border border-gray-100 rounded bg-gray-50">
-                    <div className="text-xs font-medium text-gray-500 mb-2">
+                  <div className="p-2 border border-gray-100 rounded bg-surface">
+                    <div className="text-xs font-medium text-foreground/50 mb-2">
                       Footer
                     </div>
                     <ColorProp
@@ -1264,9 +1266,9 @@ export const PropertyPanel: React.FC = () => {
                 {["Top", "Right", "Bottom", "Left"].map((side) => (
                   <div
                     key={side}
-                    className="p-2 border border-gray-100 rounded bg-gray-50"
+                    className="p-2 border border-gray-100 rounded bg-surface"
                   >
-                    <div className="text-xs font-medium text-gray-500 mb-2">
+                    <div className="text-xs font-medium text-foreground/50 mb-2">
                       {side}
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -1302,7 +1304,7 @@ export const PropertyPanel: React.FC = () => {
               </div>
 
               <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
-                <div className="text-xs font-medium text-gray-500">
+                <div className="text-xs font-medium text-foreground/50">
                   Border Radius
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -1384,7 +1386,7 @@ const PropertyGroup: React.FC<{ title: string; children: React.ReactNode }> = ({
   children,
 }) => (
   <div className="mb-6">
-    <h4 className="font-semibold text-gray-700 border-b border-gray-200 pb-1 mb-3">
+    <h4 className="font-semibold text-foreground/80 border-b border-border pb-1 mb-3">
       {title}
     </h4>
     <div className="space-y-2">{children}</div>
@@ -1432,7 +1434,7 @@ const CheckboxProp: React.FC<{
   return (
     <div className="flex items-center text-sm group h-8">
       <label
-        className={`${labelWidth} text-gray-600 truncate mr-2 text-xs shrink-0 cursor-pointer`}
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0 cursor-pointer`}
         title={label}
         onClick={() => onChange(!value)}
       >
@@ -1448,7 +1450,7 @@ const CheckboxProp: React.FC<{
         {!isInherited && (
           <button
             onClick={() => onChange(undefined)}
-            className="ml-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-white flex items-center justify-center"
+            className="ml-2 text-foreground/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-background flex items-center justify-center"
           >
             <XCircle size={14} />
           </button>
@@ -1472,7 +1474,7 @@ const SizeProp: React.FC<{
   return (
     <div className="flex items-center text-sm group">
       <label
-        className={`${labelWidth} text-gray-600 truncate mr-2 text-xs shrink-0`}
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0`}
         title={label}
       >
         {label}
@@ -1487,13 +1489,13 @@ const SizeProp: React.FC<{
             else if (!isNaN(Number(val))) setLocalValue(Number(val));
             else setLocalValue(val);
           }}
-          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white ${isInherited ? "border-dashed border-gray-300 text-gray-400 italic" : "border-gray-300"}`}
+          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-accent text-foreground bg-background ${isInherited ? "border-dashed border-border/80 text-foreground/40 italic" : "border-border/80"}`}
           placeholder="inherited"
         />
         {!isInherited && (
           <button
             onClick={handleClear}
-            className="absolute right-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-white"
+            className="absolute right-1 text-foreground/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-background"
           >
             <XCircle size={14} />
           </button>
@@ -1517,7 +1519,7 @@ const NumberProp: React.FC<{
   return (
     <div className="flex items-center text-sm group">
       <label
-        className={`${labelWidth} text-gray-600 truncate mr-2 text-xs shrink-0`}
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0`}
         title={label}
       >
         {label}
@@ -1531,13 +1533,13 @@ const NumberProp: React.FC<{
               e.target.value === "" ? undefined : Number(e.target.value)
             )
           }
-          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isInherited ? "border-dashed border-gray-300 text-gray-400 italic" : "border-gray-300"}`}
+          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-accent text-foreground bg-background [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${isInherited ? "border-dashed border-border/80 text-foreground/40 italic" : "border-border/80"}`}
           placeholder="inherited"
         />
         {!isInherited && (
           <button
             onClick={handleClear}
-            className="absolute right-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-white"
+            className="absolute right-1 text-foreground/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-background"
           >
             <XCircle size={14} />
           </button>
@@ -1563,7 +1565,7 @@ const StringProp: React.FC<{
   return (
     <div className="flex items-center text-sm group">
       <label
-        className={`${labelWidth} text-gray-600 truncate mr-2 text-xs shrink-0`}
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0`}
         title={label}
       >
         {label}
@@ -1576,7 +1578,7 @@ const StringProp: React.FC<{
           onChange={(e) =>
             setLocalValue(e.target.value === "" ? undefined : e.target.value)
           }
-          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white ${isInherited ? "border-dashed border-gray-300 text-gray-400 italic" : "border-gray-300"}`}
+          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-accent text-foreground bg-background ${isInherited ? "border-dashed border-border/80 text-foreground/40 italic" : "border-border/80"}`}
           placeholder="inherited"
         />
         {suggestions?.length ? (
@@ -1589,7 +1591,7 @@ const StringProp: React.FC<{
         {!isInherited && (
           <button
             onClick={handleClear}
-            className="absolute right-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-white"
+            className="absolute right-1 text-foreground/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-background"
           >
             <XCircle size={14} />
           </button>
@@ -1614,7 +1616,7 @@ const SelectProp: React.FC<{
   return (
     <div className="flex items-center text-sm group">
       <label
-        className={`${labelWidth} text-gray-600 truncate mr-2 text-xs shrink-0`}
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0`}
         title={label}
       >
         {label}
@@ -1625,7 +1627,7 @@ const SelectProp: React.FC<{
           onChange={(e) =>
             setLocalValue(e.target.value === "" ? undefined : e.target.value)
           }
-          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white ${isInherited ? "border-dashed border-gray-300 text-gray-500 italic" : "border-gray-300"}`}
+          className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-accent text-foreground bg-background ${isInherited ? "border-dashed border-border/80 text-foreground/50 italic" : "border-border/80"}`}
         >
           <option value="" disabled hidden>
             inherited
@@ -1640,7 +1642,7 @@ const SelectProp: React.FC<{
         {!isInherited && (
           <button
             onClick={handleClear}
-            className="absolute right-5 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-white"
+            className="absolute right-5 text-foreground/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-background"
           >
             <XCircle size={14} />
           </button>
@@ -1664,7 +1666,7 @@ const ColorProp: React.FC<{
   return (
     <div className="flex items-center text-sm group">
       <label
-        className={`${labelWidth} text-gray-600 truncate mr-2 text-xs shrink-0`}
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0`}
         title={label}
       >
         {label}
@@ -1683,13 +1685,13 @@ const ColorProp: React.FC<{
             onChange={(e) =>
               setLocalValue(e.target.value === "" ? undefined : e.target.value)
             }
-            className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono text-xs text-black bg-white ${isInherited ? "border-dashed border-gray-300 text-gray-400 italic" : "border-gray-300"}`}
+            className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-accent font-mono text-xs text-foreground bg-background ${isInherited ? "border-dashed border-border/80 text-foreground/40 italic" : "border-border/80"}`}
             placeholder="inherited"
           />
           {!isInherited && (
             <button
               onClick={handleClear}
-              className="absolute right-1 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-white"
+              className="absolute right-1 text-foreground/40 hover:text-red-500 opacity-0 group-hover:opacity-100 p-1 bg-background"
             >
               <XCircle size={14} />
             </button>

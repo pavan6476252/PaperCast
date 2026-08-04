@@ -73,7 +73,7 @@ export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
   }, [selectedNodeId, parsedDocument]);
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-y-auto text-sm text-gray-800">
+    <div className="flex flex-col h-full bg-background overflow-y-auto text-sm text-foreground/90 transition-colors">
       <div className="p-4 space-y-3">
         <div className="flex items-center gap-2 mb-4">
           {selectedNodeId && (
@@ -114,13 +114,13 @@ export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
                   }
                 }
               }}
-              className="text-gray-400 hover:text-blue-600 transition-colors"
+              className="text-foreground/50 hover:text-accent transition-colors"
               title="Scroll to element in preview"
             >
               <Focus size={14} />
             </button>
           )}
-          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+          <p className="text-xs text-foreground/50 font-medium uppercase tracking-wider">
             Available Widgets
           </p>
         </div>
@@ -143,8 +143,8 @@ export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
                   flex items-center p-2 border rounded-md cursor-grab transition-colors group
                   ${
                     isSelectedType
-                      ? "border-blue-500 bg-blue-50 text-blue-800 shadow-sm"
-                      : "border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 hover:bg-gray-100"
+                      ? "border-accent bg-accent/20 text-accent shadow-sm"
+                      : "border-border bg-surface text-foreground/80 hover:border-border/80 hover:bg-surface/80"
                   }
                 `}
                 title={`Drag to add ${widget.label}`}
@@ -154,8 +154,8 @@ export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
                     size={16}
                     className={
                       isSelectedType
-                        ? "text-blue-600 mr-3"
-                        : "text-gray-500 mr-3"
+                        ? "text-accent mr-3"
+                        : "text-foreground/50 mr-3"
                     }
                   />
                   <span className="text-sm font-medium">{widget.label}</span>
@@ -167,7 +167,7 @@ export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({
                       e.stopPropagation();
                       if (onSettingsClick) onSettingsClick();
                     }}
-                    className="ml-2 px-2 py-2 rounded-full bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700 transition-colors"
+                    className="ml-2 px-2 py-2 rounded-full bg-accent text-white rounded text-xs font-medium hover:bg-accent/90 transition-colors"
                   >
                     <Settings size={13} />
                   </button>

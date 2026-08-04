@@ -43,10 +43,10 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
       {toast && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-bottom-4 duration-200">
-          <div className="bg-gray-900 text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium flex items-center gap-2">
+          <div className="bg-foreground text-background px-4 py-2 rounded-full shadow-lg text-sm font-medium flex items-center gap-2">
             {toast.message}
             {toast.count > 1 && (
-              <span className="bg-gray-700 text-xs px-1.5 py-0.5 rounded-full ml-1">
+              <span className="bg-background/20 text-xs px-1.5 py-0.5 rounded-full ml-1">
                 x{toast.count}
               </span>
             )}

@@ -8,14 +8,14 @@ export function PlaygroundButton() {
   return (
     <Link
       href="/playground"
-      className="group relative inline-flex h-9 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+      className="group relative inline-flex h-9 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:focus-visible:ring-slate-600 focus-visible:ring-offset-2"
     >
       <motion.div
-        className="absolute inset-[-1000%] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#3b82f6_50%,#e2e8f0_100%)] opacity-50 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute inset-[-1000%] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#3b82f6_50%,#e2e8f0_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#1e293b_0%,#3b82f6_50%,#1e293b_100%)] opacity-50 group-hover:opacity-100 transition-opacity duration-500"
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
       />
-      <div className="relative flex h-full w-full items-center justify-center rounded-full bg-slate-900 px-5 py-1 text-sm font-semibold text-white backdrop-blur-3xl transition-colors group-hover:bg-slate-800">
+      <div className="relative flex h-full w-full items-center justify-center rounded-full bg-blue-600 px-5 py-1 text-sm font-semibold text-white backdrop-blur-3xl transition-colors group-hover:bg-blue-700">
         Go to Playground
         <motion.svg
           className="ml-1.5 w-3.5 h-3.5"

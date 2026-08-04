@@ -158,7 +158,7 @@ export const SectionToolbar: React.FC<SectionToolbarProps> = ({
   };
 
   return (
-    <div className="flex items-center space-x-4 bg-gray-100 p-2 border-b border-gray-200 w-full shrink-0">
+    <div className="flex items-center space-x-4 bg-gray-100 p-2 border-b border-gray-200 w-full shrink-0 transition-colors">
       <div className="flex flex-col space-y-1">
         <label className="text-[10px] font-medium text-gray-500 uppercase">
           Name
@@ -167,7 +167,7 @@ export const SectionToolbar: React.FC<SectionToolbarProps> = ({
           type="text"
           value={section.name || ""}
           onChange={(e) => handlePropertyChange("name", e.target.value)}
-          className="text-xs border border-gray-300 rounded px-1.5 py-1 w-24 outline-none focus:border-blue-500"
+          className="text-xs border border-gray-300 bg-white text-gray-900 rounded px-1.5 py-1 w-24 outline-none focus:border-blue-500 transition-colors"
           placeholder={`${type} name`}
         />
       </div>
@@ -185,7 +185,7 @@ export const SectionToolbar: React.FC<SectionToolbarProps> = ({
           onChange={(e) =>
             handlePropertyChange("condition", e.target.value as any)
           }
-          className={`text-xs border rounded px-1.5 py-1 w-20 outline-none ${
+          className={`text-xs border bg-white text-gray-900 rounded px-1.5 py-1 w-20 outline-none transition-colors ${
             conditionError
               ? "border-red-500 focus:border-red-500"
               : "border-gray-300 focus:border-blue-500"
@@ -218,7 +218,7 @@ export const SectionToolbar: React.FC<SectionToolbarProps> = ({
               e.target.value === "" ? undefined : Number(e.target.value)
             )
           }
-          className="text-xs border border-gray-300 rounded px-1.5 py-1 w-16 outline-none focus:border-blue-500"
+          className="text-xs border border-gray-300 bg-white text-gray-900 rounded px-1.5 py-1 w-16 outline-none focus:border-blue-500 transition-colors"
           placeholder="auto"
         />
       </div>
@@ -233,7 +233,7 @@ export const SectionToolbar: React.FC<SectionToolbarProps> = ({
           onChange={(e) => setPageInput(e.target.value)}
           onBlur={handlePageOverridesSubmit}
           onKeyDown={handlePageOverridesSubmit}
-          className={`text-xs border rounded px-1.5 py-1 w-40 outline-none ${
+          className={`text-xs border bg-white text-gray-900 rounded px-1.5 py-1 w-40 outline-none transition-colors ${
             error
               ? "border-red-500 focus:border-red-500"
               : "border-gray-300 focus:border-blue-500"
