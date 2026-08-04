@@ -6,23 +6,23 @@ export default function LandingPage() {
   return (
     <div className="relative flex flex-col items-center overflow-x-hidden">
       {/* Background glowing blobs */}
-      <div className="absolute top-0 -left-10 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-blob"></div>
+      <div className="absolute top-0 -left-10 w-96 h-96 bg-purple-300 dark:bg-purple-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-40 animate-blob"></div>
       <div
-        className="absolute top-0 -right-10 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-blob"
+        className="absolute top-0 -right-10 w-96 h-96 bg-blue-300 dark:bg-blue-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-40 animate-blob"
         style={{ animationDelay: "2s" }}
       ></div>
       <div
-        className="absolute top-40 left-1/2 -translate-x-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob"
+        className="absolute top-40 left-1/2 -translate-x-1/2 w-96 h-96 bg-pink-200 dark:bg-pink-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-30 animate-blob"
         style={{ animationDelay: "4s" }}
       ></div>
 
       {/* Hero Section */}
       <div className="relative z-10 w-full max-w-5xl px-4 pt-32 pb-20 text-center flex flex-col items-center">
         <div
-          className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-blue-700 mb-8 opacity-0 animate-fade-in-up"
+          className="inline-flex items-center rounded-full border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/20 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-blue-700 dark:text-blue-300 mb-8 opacity-0 animate-fade-in-up"
           style={{ animationDelay: "0.1s" }}
         >
-          <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2 animate-pulse"></span>
+          <span className="flex h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400 mr-2 animate-pulse"></span>
           Now available in early access
         </div>
 
@@ -53,9 +53,9 @@ export default function LandingPage() {
         >
           <Link
             href="/playground"
-            className="group relative w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl bg-foreground px-8 py-3 text-base font-semibold text-white shadow-xl shadow-foreground/20 transition-all hover:bg-foreground/90 hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 overflow-hidden"
+            className="group relative w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl bg-blue-600 px-8 py-3 text-base font-semibold shadow-xl shadow-blue-600/20 transition-all hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 overflow-hidden"
           >
-            <span className="relative z-10 flex items-center">
+            <span className="relative z-10 flex items-center text-white">
               Start Building
               <svg
                 className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"
@@ -74,7 +74,7 @@ export default function LandingPage() {
           </Link>
           <Link
             href="/widgets"
-            className="w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl border border-border bg-background/80 backdrop-blur-sm px-8 py-3 text-base font-semibold text-foreground/80 shadow-sm transition-all hover:bg-surface hover:border-border/80 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2"
+            className="w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl border border-border bg-background/80 backdrop-blur-sm px-8 py-3 text-base font-semibold text-foreground/80 shadow-sm transition-all hover:bg-surface hover:border-border/80 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:ring-offset-2"
           >
             Browse Widgets
           </Link>
@@ -92,22 +92,22 @@ export default function LandingPage() {
               title: "Visual Playground",
               desc: "Drag, drop, and configure components in real-time with our interactive Monaco-powered editor.",
               icon: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
-              color: "text-blue-600",
-              bg: "bg-blue-100",
+              color: "text-blue-600 dark:text-blue-400",
+              bg: "bg-blue-100 dark:bg-blue-900/30",
             },
             {
               title: "JSON Schema Driven",
               desc: "Every document is backed by a strict JSON Schema, meaning 100% reproducible and programmatic generation.",
               icon: "M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4",
-              color: "text-violet-600",
-              bg: "bg-violet-100",
+              color: "text-violet-600 dark:text-violet-400",
+              bg: "bg-violet-100 dark:bg-violet-900/30",
             },
             {
               title: "Auto-Pagination Engine",
               desc: "Our engine intelligently measures elements offscreen and paginates your content seamlessly.",
               icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
-              color: "text-pink-600",
-              bg: "bg-pink-100",
+              color: "text-pink-600 dark:text-pink-400",
+              bg: "bg-pink-100 dark:bg-pink-900/30",
             },
           ].map((feature, i) => (
             <div
@@ -115,12 +115,12 @@ export default function LandingPage() {
               className="group relative rounded-3xl p-[1px] shadow-sm hover:shadow-xl hover:shadow-foreground/10/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden bg-background/60"
             >
               {/* Spinning conic gradient border effect */}
-              <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#e2e8f0_50%,#3b82f6_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#e2e8f0_50%,#3b82f6_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#1e293b_0%,#1e293b_50%,#3b82f6_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               {/* Default static border */}
               <div className="absolute inset-0 rounded-3xl border border-border/50 group-hover:opacity-0 transition-opacity duration-500"></div>
 
               <div className="relative h-full w-full bg-background/90 backdrop-blur-xl rounded-[23px] p-8 z-10 flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[23px]"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 dark:from-blue-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[23px]"></div>
                 <div className="relative z-10">
                   <div
                     className={`w-14 h-14 ${feature.bg} ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}
@@ -160,13 +160,13 @@ export default function LandingPage() {
             <div className="md:col-span-5">
               <Link href="/" className="flex items-center space-x-2 mb-6 group">
                 <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
-                  F
+                  P
                 </div>
                 <span className="inline-block font-extrabold text-2xl tracking-tight text-foreground">
                   PaperCast
                 </span>
               </Link>
-              <p className="text-slate-500 text-base leading-relaxed max-w-sm mb-8">
+              <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed max-w-sm mb-8">
                 The modern, schema-first document builder for creating
                 pixel-perfect, auto-paginated PDFs and reports with ease.
               </p>
@@ -267,7 +267,7 @@ export default function LandingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={social.name}
-                    className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all hover:-translate-y-1"
+                    className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 dark:hover:bg-blue-900/30 dark:hover:text-blue-400 dark:hover:border-blue-800 transition-all hover:-translate-y-1"
                   >
                     <span className="sr-only">{social.name}</span>
                     {social.icon}
@@ -288,7 +288,7 @@ export default function LandingPage() {
                   <li key={i}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-500 hover:text-blue-600 hover:translate-x-1 transition-all inline-block"
+                      className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:translate-x-1 transition-all inline-block"
                     >
                       {link.label}
                     </Link>
@@ -305,7 +305,7 @@ export default function LandingPage() {
                     <li key={i}>
                       <a
                         href="#"
-                        className="text-sm text-slate-500 hover:text-blue-600 hover:translate-x-1 transition-all inline-block"
+                        className="text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:translate-x-1 transition-all inline-block"
                       >
                         {link}
                       </a>
@@ -316,11 +316,11 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-500">
+          <div className="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               © {new Date().getFullYear()} PaperCast Inc. All rights reserved.
             </p>
-            <div className="flex items-center gap-1.5 text-sm text-slate-500 bg-surface px-3 py-1.5 rounded-full border border-slate-100">
+            <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 bg-surface px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-800">
               <span>Made with</span>
               <span className="text-red-500 animate-pulse">♥</span>
               <span>by Pavan kumar</span>

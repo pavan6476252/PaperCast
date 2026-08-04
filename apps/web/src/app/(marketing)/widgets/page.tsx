@@ -38,8 +38,8 @@ function WidgetsContent() {
   return (
     <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-full md:w-72 shrink-0 border-r border-slate-200 bg-white p-6 overflow-y-auto">
-        <h2 className="text-xl font-bold text-slate-900 mb-8">
+      <aside className="w-full md:w-72 shrink-0 border-r border-slate-200 dark:border-border bg-white dark:bg-background p-6 overflow-y-auto">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-foreground mb-8">
           Widget Registry
         </h2>
         <nav className="space-y-10">
@@ -56,7 +56,7 @@ function WidgetsContent() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1, duration: 0.4 }}
               >
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 sticky top-0 bg-white/90 backdrop-blur-sm py-2 z-10">
+                <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 sticky top-0 bg-white/90 dark:bg-background/90 backdrop-blur-sm py-2 z-10">
                   {category.label}
                 </h3>
                 <ul className="space-y-1 relative">
@@ -67,7 +67,7 @@ function WidgetsContent() {
                         {isActive && (
                           <motion.div
                             layoutId="activeWidgetBackground"
-                            className="absolute inset-0 bg-blue-50 border border-blue-100 rounded-lg z-0"
+                            className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg z-0"
                             initial={false}
                             transition={{
                               type: "spring",
@@ -80,8 +80,8 @@ function WidgetsContent() {
                           onClick={() => handleWidgetChange(widget.id)}
                           className={`relative z-10 w-full text-left px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
                             isActive
-                              ? "text-blue-700"
-                              : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                              ? "text-blue-700 dark:text-blue-300"
+                              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-surface"
                           }`}
                         >
                           {widget.title}
@@ -97,7 +97,7 @@ function WidgetsContent() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden bg-slate-50/50">
+      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden bg-slate-50/50 dark:bg-background">
         <div className="max-w-6xl mx-auto w-full h-full flex flex-col overflow-y-auto pr-2">
           {activeWidget ? (
             <motion.div
@@ -114,9 +114,9 @@ function WidgetsContent() {
               />
             </motion.div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
+            <div className="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
               <svg
-                className="w-16 h-16 mb-4 text-slate-300"
+                className="w-16 h-16 mb-4 text-slate-300 dark:text-slate-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -141,7 +141,7 @@ export default function WidgetsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex items-center justify-center p-8 text-slate-500">
+        <div className="flex-1 flex items-center justify-center p-8 text-slate-500 dark:text-slate-400">
           Loading widgets...
         </div>
       }
