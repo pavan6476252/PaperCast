@@ -26,7 +26,7 @@ FormCast uses Turborepo and `pnpm` for package management.
 ## Repository Structure
 
 - `apps/web`: Next.js web application (Visual Editor & Playground).
-- `apps/cli`: CLI and MCP Server.
+- `apps/mcp`: CLI and MCP Server.
 - `packages/core`: Shared business logic, types, and schema definitions.
 - `packages/engine`: Core rendering and calculation engines.
 - `packages/react`: React headless bindings.

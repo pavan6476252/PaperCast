@@ -29,11 +29,59 @@ export const DEFAULT_WIDGET_CONFIGS = {
     layout: {},
     props: { columns: [{ headerText: "Col 1", bindPath: "col1" }] },
   },
-  input: {
-    type: "input",
-    id: "input-temp",
+  spacer: {
+    type: "spacer",
+    id: "spacer-temp",
     layout: {},
-    props: { label: "Input Label", placeholder: "Enter text..." },
+    props: { sizePx: 16 },
+  },
+  richText: {
+    type: "richText",
+    id: "rich-text-temp",
+    layout: {},
+    props: { htmlLiteral: "<p>Sample HTML text</p>" },
+  },
+  listTile: {
+    type: "listTile",
+    id: "list-tile-temp",
+    layout: {},
+    props: { titleLiteral: "Title", subtitleLiteral: "Subtitle" },
+  },
+  checkbox: {
+    type: "checkbox",
+    id: "checkbox-temp",
+    layout: {},
+    props: { labelLiteral: "Checkbox Option", checkedLiteral: false },
+  },
+  radio: {
+    type: "radio",
+    id: "radio-temp",
+    layout: {},
+    props: { labelLiteral: "Radio Option", value: "option1" },
+  },
+  radioGroup: {
+    type: "radioGroup",
+    id: "radio-group-temp",
+    layout: {},
+    props: { name: "group1" },
+  },
+  ul: {
+    type: "ul",
+    id: "ul-temp",
+    layout: {},
+    children: [],
+  },
+  ol: {
+    type: "ol",
+    id: "ol-temp",
+    layout: {},
+    children: [],
+  },
+  widgetInstance: {
+    type: "widgetInstance",
+    id: "widget-instance-temp",
+    layout: {},
+    props: { definitionId: "" },
   },
 };
 
@@ -94,6 +142,32 @@ export const WIDGET_DOCUMENTATION = {
           { headerText: "Col 1", bindPath: "field1", flex: 1, align: "left" },
         ],
       },
+    },
+    radio: {
+      type: "radio",
+      id: "radio-id",
+      layout: {},
+      props: { labelLiteral: "Label", value: "val1" },
+    },
+    radioGroup: {
+      type: "radioGroup",
+      id: "radio-group-id",
+      layout: {},
+      props: { name: "groupName" },
+    },
+    ul: { type: "ul", id: "ul-id", layout: {}, children: [] },
+    ol: { type: "ol", id: "ol-id", layout: {}, children: [] },
+    spacer: {
+      type: "spacer",
+      id: "spacer-id",
+      layout: {},
+      props: { sizePx: 16 },
+    },
+    widgetInstance: {
+      type: "widgetInstance",
+      id: "widget-inst-id",
+      layout: {},
+      props: { definitionId: "myWidget" },
     },
   },
 };

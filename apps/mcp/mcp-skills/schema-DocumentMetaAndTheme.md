@@ -11,6 +11,7 @@ The FormCast engine allows controlling global page settings via `document.meta` 
 - `baseUnit`: `"px"`
 - `dpi`: `number` (typically 96)
 - `richTextPreferences`: Defines default typography and box models for specific HTML tags when rendering rich text widgets.
+  - **CRITICAL PAGINATION RULE**: By default, `richText` nodes are treated as atomic blocks and will NOT split across pages. If you have a massive block of HTML that must span multiple pages, you **MUST** set `richTextPreferences: { autoDeconstruct: true }`. This signals the engine to break the HTML down into splittable text chunks during pagination.
 
 ### Managing via MCP
 

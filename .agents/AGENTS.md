@@ -69,8 +69,8 @@ This repository is a Turborepo monorepo structured as follows:
   - [src/astManipulators.ts](packages/core/src/astManipulators.ts): Functions to manipulate the AST securely.
   - [src/ws.ts](packages/core/src/ws.ts): Shared WebSocket event types (`WsEventType`) and payload interfaces for end-to-end sync between playground and MCP server.
 
-- [apps/cli](apps/cli): CLI and MCP Server.
-  - [src/index.ts](apps/cli/src/index.ts): Model Context Protocol server exposing FormCast actions and resources to LLMs.
+- [apps/mcp](apps/mcp): CLI and MCP Server.
+  - [src/index.ts](apps/mcp/src/index.ts): Model Context Protocol server exposing FormCast actions and resources to LLMs.
 
 ## Key Architectures & Flows
 
@@ -87,7 +87,7 @@ This repository is a Turborepo monorepo structured as follows:
    - **React Performance**: Never attach global, passive event listeners (like `mousemove` or `mouseup`) on component mount using generic `useEffect` if they only apply conditionally (like during drag operations). Use localized pointer events or conditionally attach them based on dragging state to avoid unnecessary handler invocations per frame. Keep heavy dependencies like Monaco Editor dynamically imported (`next/dynamic` with `ssr: false`).
 4. **Monorepo Workspaces**:
    - `apps/web` consumes `@formcast/core` via standard imports and compiles it using `transpilePackages` in `next.config.ts`.
-   - `apps/cli` is bundled with `tsup`, embedding the schemas directly from `@formcast/core` to provide a portable MCP server.
+   - `apps/mcp` is bundled with `tsup`, embedding the schemas directly from `@formcast/core` to provide a portable MCP server.
 
 ## Build and Tests
 
@@ -112,6 +112,9 @@ To ensure code quality and schema validity:
   1. **Headless Logic**: Core business logic and engines (e.g., parsing, pagination, state management) must remain completely framework-agnostic.
   2. **Framework-Specific Implementations**: React/Next.js layers should merely consume the headless logic without embedding business rules.
   3. **Final Usage**: The playground and end-user interfaces should compose these cleanly separated layers.
+
+- **Custom Widget Typing (Module Augmentation)**: If `apps/web` introduces custom widgets that the MCP server must support, DO NOT import types from `apps/web` or `@formcast/react` into `apps/mcp`. Doing so violates the headless separation of concerns. Instead, use TypeScript Module Augmentation to extend the `CustomNodesRegistry` interface exported by `@formcast/core`. This ensures both the Web app and the MCP server inherit strict typing without circular dependencies.
+
 - **Future-Proofing**: Code must be highly understandable and extendable. Any new architectural additions must be designed such that they don't block future extensibility (e.g., adding a new document Node type must not require changes to the core engine).
 
 ## Subsystems & Architectural Rules

@@ -1,0 +1,74 @@
+# Installation & Setup
+
+Configure your AI agent to connect to the FormCast Model Context Protocol (MCP) server. You can run the server directly via `npx` (recommended for most users) or from a local source clone (for developers).
+
+## End-User Setup (Recommended)
+
+You do not need to clone the repository to use the FormCast MCP. You can instruct your AI agent to download and run the published package on demand using `npx`.
+
+### Claude Desktop
+
+To use FormCast with Claude Desktop, add the following to your `claude_desktop_config.json` file:
+
+```json
+{
+  "mcpServers": {
+    "formcast": {
+      "command": "npx",
+      "args": ["-y", "formcast-mcp"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop. The `formcast` server will appear in the MCP connections list.
+
+### Cursor
+
+To use FormCast in Cursor:
+
+1. Open **Cursor Settings** > **Features** > **MCP**.
+2. Click **+ Add New MCP Server**.
+3. Name it `formcast`.
+4. Set the type to `command`.
+5. Set the command to `npx -y formcast-mcp`.
+
+## Developer Setup
+
+If you are contributing to FormCast or need to run a modified version of the server, configure your agent to execute the local source files instead of the published package.
+
+### 1. Clone and Install
+
+Clone the FormCast monorepo and install the dependencies:
+
+```bash
+git clone https://github.com/your-org/formcast.git
+cd formcast
+pnpm install
+```
+
+### 2. Configure Your Agent
+
+Update your agent's configuration file (e.g., `.gemini/config/mcp_config.json` or `claude_desktop_config.json`) to point to the local `index.ts` file.
+
+Replace `/absolute/path/to/formcast` with the actual path on your machine:
+
+```json
+{
+  "mcpServers": {
+    "formcast": {
+      "command": "npx",
+      "args": ["tsx", "./apps/mcp/src/index.ts"],
+      "cwd": "/absolute/path/to/formcast"
+    }
+  }
+}
+```
+
+This configuration ensures your agent executes the bleeding-edge TypeScript source code directly.
+
+## Verifying the Connection
+
+Once configured, open the FormCast playground in your browser at `http://localhost:8000/playground`.
+
+If your agent is running the MCP server, the indicator at the top of the playground will show **Local MCP Server: Online**.

@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "formcast": {
-      "command": "node",
-      "args": ["./apps/cli/dist/index.js"],
+      "command": "npx",
+      "args": ["tsx", "./apps/mcp/src/index.ts"],
       "cwd": "/Users/pavankumar/Documents/formcast"
     }
   }

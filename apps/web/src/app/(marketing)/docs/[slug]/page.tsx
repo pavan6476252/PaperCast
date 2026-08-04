@@ -12,6 +12,7 @@ import { DocsFooterNav } from "../../../../components/docs/DocsFooterNav";
 
 import { Callout } from "../../../../components/docs/Callout";
 import { TableOfContents } from "@/components/docs/TableOfContents";
+import { codeToHtml } from "shiki";
 
 // Helper to extract text from children and generate slug
 function generateSlug(children: any): string {
@@ -82,12 +83,41 @@ const components = {
       {...props}
     />
   ),
-  pre: (props: any) => (
-    <pre
-      className="mb-4 mt-6 overflow-x-auto rounded-xl bg-slate-900 py-4 px-4 font-mono text-sm text-slate-50 shadow-lg"
-      {...props}
-    />
-  ),
+  pre: async (props: any) => {
+    if (
+      React.isValidElement(props.children) &&
+      props.children.type === "code"
+    ) {
+      const codeProps = props.children.props as any;
+      const match = /language-(\w+)/.exec(codeProps.className || "");
+      const lang = match ? match[1] : "";
+      const code = String(codeProps.children).replace(/\n$/, "");
+
+      if (lang) {
+        try {
+          const html = await codeToHtml(code, {
+            lang,
+            theme: "github-dark",
+          });
+          return (
+            <div
+              dangerouslySetInnerHTML={{ __html: html }}
+              className="[&>pre]:!mb-4 [&>pre]:!mt-6 [&>pre]:!overflow-x-auto [&>pre]:!rounded-xl [&>pre]:!py-4 [&>pre]:!px-4 [&>pre]:!shadow-lg [&>pre]:!text-sm [&>pre]:!font-mono [&>pre]:!bg-slate-900"
+            />
+          );
+        } catch (e) {
+          // Ignore error and fallback to default unhighlighted block
+        }
+      }
+    }
+
+    return (
+      <pre
+        className="mb-4 mt-6 overflow-x-auto rounded-xl bg-slate-900 py-4 px-4 font-mono text-sm text-slate-50 shadow-lg"
+        {...props}
+      />
+    );
+  },
 };
 
 export function generateStaticParams() {

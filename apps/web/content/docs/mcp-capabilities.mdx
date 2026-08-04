@@ -1,65 +1,50 @@
-# Agent Capabilities and Tools
+# Agent Capabilities
 
-When an AI agent connects to FormCast via the Model Context Protocol, it gains access to a comprehensive suite of tools, resources, and skills. These capabilities empower the agent to build, modify, and style document layouts directly, acting as your automated co-developer.
+The FormCast MCP Server provides five core tool modules. Agents use these tools to manipulate the document state, orchestrate pagination, and manage browser sessions without modifying the underlying JSON AST directly.
 
-## FormCast MCP Tools
+## Session tools
 
-The FormCast MCP server exposes specific executable tools that agents can invoke to interact with your active session.
+Session tools manage the WebSocket connection between the AI agent and the browser tab.
 
-### Session and State Management
+- **`get_active_sessions`**: Retrieves a list of all currently connected browser tabs.
+- **`select_active_session`**: Binds the agent to a specific browser tab so mutations broadcast to the correct window.
 
-- **`get_active_sessions`**: Retrieves a list of all currently active browser tabs connected to the MCP server.
-- **`select_active_session`**: Focuses the agent's actions on a specific browser tab.
-- **`get_document_state`**: Fetches the complete JSON schema (AST) of the active document.
-- **`set_document_state`**: Replaces the entire document state.
-- **`replace_document_body`**: Replaces only the `body` section of the document, leaving headers, footers, and meta-information intact.
-- **`update_document_data`**: Injects new test data for data-binding (e.g., updating `{ "customerName": "John" }`).
+## Document tools
 
-### Node and AST Manipulation
+Document tools handle the global document schema, metadata, and structural headers.
 
-- **`get_layout_element`**: Retrieves a specific node from the AST by its ID.
-- **`insert_layout_element`**: Inserts a new node (row, column, text, image, etc.) into the document tree.
-- **`delete_layout_element`**: Removes a specific node and its children.
-- **`patch_element_properties` / `update_element_properties`**: Safely updates specific properties of a node (e.g., changing text color, padding, or typography) without overwriting the entire node.
+- **`get_document_state`**: Retrieves the current JSON schema from the browser.
+- **`set_document_state`**: Replaces the entire schema (rarely used, prefer surgical edits).
+- **`update_document_meta`**: Modifies the document metadata (title, author, paper size).
+- **`update_document_theme`**: Adjusts global typography and color variables.
+- **`set_document_section`**: Creates or updates page regions (headers and footers).
+- **`delete_document_section`**: Removes a header or footer definition.
+- **`set_page_override`**: Assigns a specific header or footer to a specific page number.
 
-### Widget-Specific Helpers
+## Layout tools
 
-- **`get_available_widgets`**: Lists all registered widgets and their basic schemas.
-- **`add_text_widget`**: A convenience tool to quickly append a text node.
-- **`add_table_widget`**: Generates a complex data table and inserts it into the layout.
+Layout tools provide safe, surgical AST manipulation for the main document body.
 
-### Document Level Configuration
+- **`get_available_widgets`**: Lists the widgets registered in the browser's component registry.
+- **`get_layout_element`**: Retrieves a specific node by its ID.
+- **`insert_layout_element`**: Injects structural containers (`row`, `column`).
+- **`add_text_widget`**: Injects text and rich text elements.
+- **`add_table_widget`**: Scaffolds a complex data table.
+- **`delete_layout_element`**: Safely removes a node and cleans up references.
+- **`update_element_properties`**: Modifies a node's visual properties or data binding path.
+- **`patch_element_properties`**: Applies a partial update to a node's properties.
+- **`set_table_footer_rows`**: Configures calculation rows at the bottom of a data table.
+- **`add_node_to_table_footer_cell`**: Injects widgets into specific table footer cells.
 
-- **`set_document_section`**: Configures a Header or Footer (e.g., creating a "first-page only" cover header).
-- **`delete_document_section`**: Removes a specific Header or Footer.
-- **`update_document_meta`**: Updates meta properties like page size (A4, Letter) and orientation.
-- **`update_document_theme`**: Modifies the global document theme and color palette.
-- **`set_page_override`**: Configures page-specific margins or paddings.
-- **`generate_pdf`**: Triggers a backend PDF generation to test output fidelity.
+## PDF tools
 
-## FormCast Skills
+PDF tools orchestrate document generation and export.
 
-The true power of the MCP integration lies in **Skills**. Skills are markdown-based guides that teach the agent the specific "rules of the game" for FormCast. By reading these skills, the agent learns how to generate valid, compliant JSON that the FormCast engine can render flawlessly.
+- **`generate_pdf`**: Triggers the serverless Puppeteer flow to render the current document state as a downloadable PDF.
 
-The agent can discover and read skills using:
+## Skills tools
 
-- **`list_formcast_skills`**: Returns the index of available skills.
-- **`read_formcast_skill`**: Reads the full markdown content of a specific skill.
+Skills tools allow agents to self-document and discover complex workflows.
 
-### Available Skills
-
-1. **Schema Basics**: `schema-BaseNode.md`, `schema-BoxModel.md`, `schema-TypographyAndColor.md` (Explains paddings, margins, flexbox properties, and font styling).
-2. **Widgets**: `widget-Layouts.md`, `widget-TextNode.md`, `widget-TableNode.md`, `widget-ImageNode.md`, `widget-FormControls.md`, `widget-ListTileNode.md` (Explains the required properties for each widget type).
-3. **Engine & Logic**: `engine-HeadersAndFooters.md`, `schema-DataBinding.md`, `ast-manipulation.md` (Teaches the agent how to inject dynamic data, create repeating headers, and safely traverse the JSON tree).
-4. **Troubleshooting**: `troubleshooting.md`, `engine-Troubleshooting.md` (Provides the agent with solutions to common errors like missing IDs or invalid parent-child relationships).
-
-## How Agents Use Capabilities
-
-When you ask an agent to "make a pricing table", it will:
-
-1. Call `read_formcast_skill` to understand the table schema (`widget-TableNode.md`).
-2. Call `get_document_state` to see the current layout.
-3. Formulate the JSON for the new table.
-4. Call `insert_layout_element` to place it safely inside the document.
-
-Check out the [Examples & Workflows](/docs/mcp-examples) page to see these tools in action.
+- **`list_formcast_skills`**: Returns a list of available AI skills (markdown files containing domain rules).
+- **`read_formcast_skill`**: Reads the content of a specific skill file to teach the agent how to perform a task.

@@ -1,9 +1,6 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { sendCommandToActiveSession } from "../services/ws.js";
-import { deepMerge, validateAndSend } from "../services/ast.js";
-import { WsEventType } from "@formcast/core/ws";
-// to-replace
+import * as documentService from "../services/document.service.js";
 
 export function registerDocumentTools(server: McpServer) {
   server.registerTool(
@@ -13,19 +10,7 @@ export function registerDocumentTools(server: McpServer) {
         "Get the complete active FormCast document schema JSON currently opened in the browser. IMPORTANT: If there are multiple active sessions, use get_active_sessions to check and select_active_session to explicitly target one.",
       annotations: { readOnlyHint: true },
     },
-    async () => {
-      const state = await sendCommandToActiveSession({
-        type: WsEventType.GET_CURRENT_SCHEMA,
-      });
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify(state.schema, null, 2),
-          },
-        ],
-      };
-    }
+    async () => documentService.getDocumentState()
   );
 
   server.registerTool(
@@ -40,19 +25,14 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ schema }) => {
-      return validateAndSend(
-        schema,
-        "Successfully sent validated updated schema layout to browser tab."
-      );
-    }
+    async ({ schema }) => documentService.setDocumentState(schema)
   );
 
   server.registerTool(
     "replace_document_body",
     {
       description:
-        "Clears all existing children in the document body and inserts a new array of nodes.",
+        "Clears all existing children in the document body and inserts a new array of nodes. DO NOT place Header or Footer elements inside the body. Use set_document_section for true repeating page headers and footers.",
       inputSchema: {
         children: z
           .array(z.record(z.string(), z.any()))
@@ -62,17 +42,7 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ children }) => {
-      const state = await sendCommandToActiveSession({
-        type: WsEventType.GET_CURRENT_SCHEMA,
-      });
-      const newSchema = structuredClone(state.schema);
-      newSchema.document.body.children = children;
-      return validateAndSend(
-        newSchema,
-        "Successfully replaced document body children and passed validation."
-      );
-    }
+    async ({ children }) => documentService.replaceDocumentBody(children)
   );
 
   server.registerTool(
@@ -87,18 +57,7 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ data }) => {
-      const state = await sendCommandToActiveSession({
-        type: WsEventType.GET_CURRENT_SCHEMA,
-      });
-      const newSchema = structuredClone(state.schema);
-      newSchema.data = newSchema.data || {};
-      deepMerge(newSchema.data, data);
-      return validateAndSend(
-        newSchema,
-        "Successfully merged new data into document state."
-      );
-    }
+    async ({ data }) => documentService.updateDocumentData(data)
   );
 
   server.registerTool(
@@ -123,18 +82,8 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ sectionType, sectionKey, sectionData }) => {
-      const state = await sendCommandToActiveSession({
-        type: WsEventType.GET_CURRENT_SCHEMA,
-      });
-      const newSchema = structuredClone(state.schema);
-      newSchema.document[sectionType] = newSchema.document[sectionType] || {};
-      newSchema.document[sectionType][sectionKey] = sectionData;
-      return validateAndSend(
-        newSchema,
-        `Successfully set document ${sectionType} section: ${sectionKey}`
-      );
-    }
+    async ({ sectionType, sectionKey, sectionData }) =>
+      documentService.setDocumentSection(sectionType, sectionKey, sectionData)
   );
 
   server.registerTool(
@@ -148,22 +97,8 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ sectionType, sectionKey }) => {
-      const state = await sendCommandToActiveSession({
-        type: WsEventType.GET_CURRENT_SCHEMA,
-      });
-      const newSchema = structuredClone(state.schema);
-      if (
-        newSchema.document[sectionType] &&
-        newSchema.document[sectionType][sectionKey]
-      ) {
-        delete newSchema.document[sectionType][sectionKey];
-      }
-      return validateAndSend(
-        newSchema,
-        `Successfully deleted document ${sectionType} section: ${sectionKey}`
-      );
-    }
+    async ({ sectionType, sectionKey }) =>
+      documentService.deleteDocumentSection(sectionType, sectionKey)
   );
 
   server.registerTool(
@@ -178,18 +113,7 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ patch }) => {
-      const state = await sendCommandToActiveSession({
-        type: WsEventType.GET_CURRENT_SCHEMA,
-      });
-      const newSchema = structuredClone(state.schema);
-      newSchema.meta = newSchema.meta || {};
-      deepMerge(newSchema.meta, patch);
-      return validateAndSend(
-        newSchema,
-        "Successfully merged properties into document.meta."
-      );
-    }
+    async ({ patch }) => documentService.updateDocumentMeta(patch)
   );
 
   server.registerTool(
@@ -204,18 +128,6 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ patch }) => {
-      const state = await sendCommandToActiveSession({
-        type: "GET_CURRENT_SCHEMA",
-      });
-      const newSchema = structuredClone(state.schema);
-      newSchema.theme = newSchema.theme || {};
-      newSchema.theme.defaults = newSchema.theme.defaults || {};
-      deepMerge(newSchema.theme.defaults, patch);
-      return validateAndSend(
-        newSchema,
-        "Successfully merged properties into document.theme.defaults."
-      );
-    }
+    async ({ patch }) => documentService.updateDocumentTheme(patch)
   );
 }

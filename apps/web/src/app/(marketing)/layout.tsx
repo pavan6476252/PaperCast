@@ -34,6 +34,12 @@ export default function MarketingLayout({
               >
                 Documentation
               </Link>
+              <Link
+                href="/docs/mcp-introduction"
+                className="flex items-center text-sm font-medium text-slate-600 hover:text-slate-900"
+              >
+                MCP Server
+              </Link>
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-4">

@@ -13,8 +13,10 @@
     "prepare": "husky",
     "postCreateCommand": "sudo apt-get update && sudo apt-get install -y libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64 libpango-1.0-0 libcairo2 libnss3 libnspr4 libx11-xcb1 libxss1 fonts-liberation libgtk-3-0t64 xdg-utils && npx puppeteer browsers install chrome",
     "schema:validate": "pnpm --filter @formcast/core run schema:validate",
-    "mcp:start": "pnpm --filter formcast-cli run dev",
-    "mcp:build": "pnpm --filter formcast-cli run build"
+    "web:dev": "pnpm --filter formcast-web run dev",
+    "mcp:dev": "pnpm --filter formcast-mcp run dev",
+    "mcp:start": "pnpm --filter formcast-mcp run dev",
+    "mcp:build": "pnpm --filter formcast-mcp run build"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -23,3 +23,10 @@ Only layout widgets (`row`, `column`, `root`) accept the `children` array. Conte
 ## 3. High-Level Tools vs Manual Insertion
 
 When adding a basic Text or Table, ALWAYS use the provided MCP tools (`add_text_widget`, `add_table_widget`). These tools securely wrap the nodes in the necessary `layout` and prevent validation errors. Only construct raw JSON objects if you are dealing with complex layouts (e.g., nesting rows inside columns).
+
+## 4. Atomic Node Overflow
+
+**CRITICAL RULE:** The FormCast engine does NOT magically scale down elements to fit onto a single page. If an atomic node (like an `image`, a `spacer`, or a massive block of basic `text`) is taller than the physical `pageHeight`, the Pagination Engine will be forced to push it onto the page without splitting it, causing it to violently overflow and clip at the bottom of the PDF.
+
+- Always apply sensible `height` constraints or `fit: "contain"` to images.
+- If you have a massive block of HTML text that must split across pages, you MUST use the `richText` widget instead of standard `text`, and ensure `autoDeconstruct` is enabled.

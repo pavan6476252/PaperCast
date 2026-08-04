@@ -183,6 +183,11 @@ export const DOC_CATEGORIES: DocCategory[] = [
         description: "Understanding FormCast's integration with AI agents.",
       },
       {
+        id: "mcp-setup",
+        title: "Installation & Setup",
+        description: "How to configure your AI agent to connect to FormCast.",
+      },
+      {
         id: "mcp-capabilities",
         title: "Agent Capabilities",
         description:

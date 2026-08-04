@@ -63,7 +63,7 @@ To clean a specific app or package, use Turborepo's filter flag:
 pnpm --filter formcast-web run clean
 
 # Clean the CLI app
-pnpm --filter formcast-cli run clean
+pnpm --filter formcast-mcp run clean
 
 # Clean the core package
 pnpm --filter @formcast/core run clean
