@@ -66,7 +66,13 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
   const canUndo = pastStates.length > 0;
   const canRedo = futureStates.length > 0;
-  const hasUnsavedChanges = lastSavedJsonString !== storeJsonString;
+
+  const isReadOnly = !!schemaData;
+  const nodeWrapper = isReadOnly ? undefined : EditorNodeWrapper;
+
+  const hasUnsavedChanges = isReadOnly
+    ? false
+    : lastSavedJsonString !== storeJsonString;
 
   const handleSave = () => {
     if (activeSchemaId) {
@@ -613,7 +619,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                           pageCount: pages.length,
                         }}
                         activeTab="content"
-                        NodeWrapper={EditorNodeWrapper}
+                        NodeWrapper={nodeWrapper}
                       >
                         {/* Header */}
                         {header && header.root && (
@@ -757,7 +763,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                         data={parsedDocument.data}
                         activeTab="headers"
                         location="header"
-                        NodeWrapper={EditorNodeWrapper}
+                        NodeWrapper={nodeWrapper}
                       >
                         <NodeRenderer node={header.root} />
                       </PaperCastProvider>
@@ -833,7 +839,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                         data={parsedDocument.data}
                         activeTab="footers"
                         location="footer"
-                        NodeWrapper={EditorNodeWrapper}
+                        NodeWrapper={nodeWrapper}
                       >
                         <NodeRenderer node={footer.root} />
                       </PaperCastProvider>

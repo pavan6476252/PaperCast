@@ -5,6 +5,9 @@ import { Copy, Check } from "lucide-react";
 import { codeToHtml } from "shiki";
 import { DocumentPreview } from "../renderer/DocumentPreview";
 import { DocumentSchema } from "@papercast/core";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
+
+registerDefaultWidgets();
 
 interface WidgetCardProps {
   title: string;
