@@ -129,9 +129,9 @@ export const WorkspaceSidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col h-full print:hidden">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-4">
+    <div className="w-64 bg-background border-r border-border flex flex-col h-full print:hidden transition-colors">
+      <div className="p-4 border-b border-border">
+        <h2 className="text-sm font-semibold text-foreground/80 flex items-center gap-2 mb-4">
           <Folder size={16} /> Workspace
         </h2>
 
@@ -144,7 +144,7 @@ export const WorkspaceSidebar = () => {
           </button>
           <button
             onClick={() => setIsTemplateGalleryOpen(true)}
-            className="flex-1 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 text-xs py-1.5 px-2 rounded font-medium flex items-center justify-center gap-1 transition-colors"
+            className="flex-1 bg-surface hover:bg-surface/80 text-foreground/80 border border-border text-xs py-1.5 px-2 rounded font-medium flex items-center justify-center gap-1 transition-colors"
           >
             Templates
           </button>
@@ -153,12 +153,12 @@ export const WorkspaceSidebar = () => {
         <div className="flex gap-2">
           <button
             onClick={handleDownload}
-            className="flex-1 text-gray-600 hover:text-gray-900 border border-gray-200 bg-white hover:bg-gray-50 text-xs py-1.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
+            className="flex-1 text-foreground/70 hover:text-foreground border border-border bg-surface hover:bg-surface/80 text-xs py-1.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
             title="Download JSON"
           >
             <Download size={14} /> Export
           </button>
-          <label className="flex-1 text-gray-600 hover:text-gray-900 border border-gray-200 bg-white hover:bg-gray-50 text-xs py-1.5 px-2 rounded flex items-center justify-center gap-1 cursor-pointer transition-colors">
+          <label className="flex-1 text-foreground/70 hover:text-foreground border border-border bg-surface hover:bg-surface/80 text-xs py-1.5 px-2 rounded flex items-center justify-center gap-1 cursor-pointer transition-colors">
             <Upload size={14} /> Import
             <input
               type="file"
@@ -171,12 +171,12 @@ export const WorkspaceSidebar = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto p-2">
-        <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 px-2 mt-2">
+        <div className="text-xs font-medium text-foreground/50 uppercase tracking-wider mb-2 px-2 mt-2">
           Saved Schemas
         </div>
 
         {schemas.length === 0 ? (
-          <div className="text-xs text-gray-500 italic px-2 text-center mt-4">
+          <div className="text-xs text-foreground/50 italic px-2 text-center mt-4">
             No saved schemas.
           </div>
         ) : (
@@ -190,8 +190,8 @@ export const WorkspaceSidebar = () => {
                   key={schema.id}
                   className={`group rounded-md flex flex-col p-2 cursor-pointer transition-colors ${
                     isActive
-                      ? "bg-blue-100 border border-blue-200"
-                      : "hover:bg-gray-100 border border-transparent"
+                      ? "bg-accent/20 border border-accent/40"
+                      : "hover:bg-surface border border-transparent"
                   }`}
                   onClick={() =>
                     !isEditing && !isActive && handleSwitchSchema(schema.id)
@@ -201,7 +201,9 @@ export const WorkspaceSidebar = () => {
                     <div className="flex items-center gap-2 overflow-hidden">
                       <File
                         size={14}
-                        className={isActive ? "text-blue-600" : "text-gray-400"}
+                        className={
+                          isActive ? "text-accent" : "text-foreground/50"
+                        }
                       />
                       {isEditing ? (
                         <input
@@ -220,11 +222,11 @@ export const WorkspaceSidebar = () => {
                               setEditingId(null);
                             }
                           }}
-                          className="text-sm bg-white border border-blue-400 rounded px-1 w-full outline-none"
+                          className="text-sm bg-background border border-accent rounded px-1 w-full outline-none text-foreground"
                         />
                       ) : (
                         <span
-                          className={`text-sm truncate ${isActive ? "font-medium text-blue-900" : "text-gray-700"}`}
+                          className={`text-sm truncate ${isActive ? "font-medium text-accent" : "text-foreground/80"}`}
                         >
                           {schema.name}
                         </span>
@@ -239,7 +241,7 @@ export const WorkspaceSidebar = () => {
                             setEditName(schema.name);
                             setEditingId(schema.id);
                           }}
-                          className="p-1 text-gray-400 hover:text-blue-600 rounded"
+                          className="p-1 text-foreground/50 hover:text-accent rounded"
                         >
                           <Edit2 size={12} />
                         </button>
@@ -248,7 +250,7 @@ export const WorkspaceSidebar = () => {
                             e.stopPropagation();
                             handleDuplicate(schema.id);
                           }}
-                          className="p-1 text-gray-400 hover:text-green-600 rounded"
+                          className="p-1 text-foreground/50 hover:text-green-500 rounded"
                         >
                           <Copy size={12} />
                         </button>
@@ -257,7 +259,7 @@ export const WorkspaceSidebar = () => {
                             e.stopPropagation();
                             deleteSchema(schema.id);
                           }}
-                          className="p-1 text-gray-400 hover:text-red-600 rounded"
+                          className="p-1 text-foreground/50 hover:text-red-500 rounded"
                         >
                           <Trash2 size={12} />
                         </button>
@@ -265,7 +267,7 @@ export const WorkspaceSidebar = () => {
                     )}
                   </div>
                   {!isEditing && (
-                    <div className="text-[10px] text-gray-400 pl-6 mt-0.5">
+                    <div className="text-[10px] text-foreground/50 pl-6 mt-0.5">
                       {new Date(schema.updatedAt).toLocaleString(undefined, {
                         month: "short",
                         day: "numeric",

@@ -4,10 +4,12 @@ import { useDocumentStore } from "../../store/documentStore";
 import docframeSchema from "@papercast/core/schema.json";
 import { Save, RefreshCw } from "lucide-react";
 import { getNodeContextPaths } from "../../utils/dataBinding";
+import { useTheme } from "next-themes";
 
 export const JsonEditor: React.FC = () => {
   const monaco = useMonaco();
   const editorRef = useRef<any>(null);
+  const { resolvedTheme } = useTheme();
 
   const jsonString = useDocumentStore((state) => state.jsonString);
   const setJsonString = useDocumentStore((state) => state.setJsonString);
@@ -267,10 +269,10 @@ export const JsonEditor: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#1e1e1e]">
+    <div className="flex flex-col h-full bg-surface border-r border-border">
       {/* Editor Toolbar */}
-      <div className="h-12 border-b border-gray-700 flex items-center px-4 justify-between shrink-0 bg-[#252526]">
-        <span className="text-sm font-semibold text-gray-300">
+      <div className="h-12 border-b border-border flex items-center px-4 justify-between shrink-0 bg-background">
+        <span className="text-sm font-semibold text-foreground/70">
           docframe.json
         </span>
         <div className="flex items-center space-x-3">
@@ -278,8 +280,8 @@ export const JsonEditor: React.FC = () => {
             onClick={toggleAutoSync}
             className={`flex items-center space-x-1 text-xs px-2 py-1 rounded transition-colors ${
               isAutoSync
-                ? "bg-blue-600/20 text-blue-400"
-                : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                ? "bg-accent/20 text-accent"
+                : "bg-background text-foreground/70 hover:bg-surface border border-border"
             }`}
           >
             <RefreshCw
@@ -292,7 +294,7 @@ export const JsonEditor: React.FC = () => {
           {!isAutoSync && (
             <button
               onClick={triggerManualSync}
-              className="flex items-center space-x-1 text-xs px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+              className="flex items-center space-x-1 text-xs px-3 py-1 bg-accent hover:opacity-90 text-white rounded transition-colors"
               title="Manual Sync (Ctrl+S)"
             >
               <Save size={14} />
@@ -306,7 +308,7 @@ export const JsonEditor: React.FC = () => {
         <Editor
           height="100%"
           defaultLanguage="json"
-          theme="vs-dark"
+          theme={resolvedTheme === "dark" ? "vs-dark" : "vs"}
           value={jsonString}
           onChange={(val) => setJsonString(val || "")}
           onMount={handleEditorDidMount}

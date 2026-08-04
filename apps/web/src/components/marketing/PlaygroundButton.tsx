@@ -15,7 +15,7 @@ export function PlaygroundButton() {
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
       />
-      <div className="relative flex h-full w-full items-center justify-center rounded-full bg-slate-900 px-5 py-1 text-sm font-semibold text-white backdrop-blur-3xl transition-colors group-hover:bg-slate-800">
+      <div className="relative flex h-full w-full items-center justify-center rounded-full bg-foreground px-5 py-1 text-sm font-semibold text-background backdrop-blur-3xl transition-colors group-hover:bg-foreground/90">
         Go to Playground
         <motion.svg
           className="ml-1.5 w-3.5 h-3.5"
