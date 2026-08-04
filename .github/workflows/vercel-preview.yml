@@ -3,7 +3,7 @@ name: Vercel Preview Deploy
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
-    branches: ["main", "staged"]
+    branches: ["main", "staging"]
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
         run: |
           if [[ "${{ github.base_ref }}" == "main" ]]; then
             echo "deploy=true" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.base_ref }}" == "staged" && "${{ github.event.pull_request.title }}" == *"[deploy]"* ]]; then
+          elif [[ "${{ github.base_ref }}" == "staging" && "${{ github.event.pull_request.title }}" == *"[deploy]"* ]]; then
             echo "deploy=true" >> $GITHUB_OUTPUT
           else
             echo "deploy=false" >> $GITHUB_OUTPUT

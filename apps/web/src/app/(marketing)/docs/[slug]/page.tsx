@@ -37,7 +37,7 @@ const components = {
     return (
       <h1
         id={id}
-        className="text-4xl font-extrabold tracking-tight text-slate-900 mb-6 group flex items-center scroll-mt-24"
+        className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-foreground mb-6 group flex items-center scroll-mt-24"
         {...props}
       />
     );
@@ -47,7 +47,7 @@ const components = {
     return (
       <h2
         id={id}
-        className="text-2xl font-bold tracking-tight text-slate-900 mt-10 mb-4 border-b border-slate-200 pb-2 scroll-mt-24"
+        className="text-2xl font-bold tracking-tight text-slate-900 dark:text-foreground mt-10 mb-4 border-b border-slate-200 dark:border-border pb-2 scroll-mt-24"
         {...props}
       />
     );
@@ -57,14 +57,14 @@ const components = {
     return (
       <h3
         id={id}
-        className="text-xl font-semibold tracking-tight text-slate-900 mt-8 mb-3 scroll-mt-24"
+        className="text-xl font-semibold tracking-tight text-slate-900 dark:text-foreground mt-8 mb-3 scroll-mt-24"
         {...props}
       />
     );
   },
   p: (props: any) => (
     <p
-      className="leading-7 text-slate-600 [&:not(:first-child)]:mt-6"
+      className="leading-7 text-slate-600 dark:text-slate-400 [&:not(:first-child)]:mt-6"
       {...props}
     />
   ),
@@ -75,11 +75,14 @@ const components = {
     />
   ),
   ul: (props: any) => (
-    <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-slate-600" {...props} />
+    <ul
+      className="my-6 ml-6 list-disc [&>li]:mt-2 text-slate-600 dark:text-slate-400"
+      {...props}
+    />
   ),
   code: (props: any) => (
     <code
-      className="relative rounded bg-slate-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900"
+      className="relative rounded bg-slate-100 dark:bg-surface px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900 dark:text-foreground"
       {...props}
     />
   ),
@@ -203,18 +206,18 @@ export default async function DocPage({
       {/* Main Content Area */}
       <article className="flex-1 min-w-0 max-w-4xl mx-auto px-6 py-12 md:px-12 md:py-16">
         <div className="mb-8">
-          <p className="text-blue-600 font-semibold tracking-wide text-sm uppercase mb-2">
+          <p className="text-blue-600 dark:text-blue-400 font-semibold tracking-wide text-sm uppercase mb-2">
             Documentation
           </p>
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-4xl font-extrabold text-slate-900 dark:text-foreground tracking-tight">
             {docPage.title}
           </h1>
-          <p className="text-lg text-slate-600 mt-4 leading-relaxed">
+          <p className="text-lg text-slate-600 dark:text-slate-400 mt-4 leading-relaxed">
             {docPage.description}
           </p>
         </div>
 
-        <div className="prose prose-slate prose-blue max-w-none">
+        <div className="prose prose-slate dark:prose-invert prose-blue max-w-none">
           <MDXRemote source={mdxSource} components={components} />
         </div>
 

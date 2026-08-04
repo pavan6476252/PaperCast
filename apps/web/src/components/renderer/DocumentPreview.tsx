@@ -502,13 +502,13 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
             {/* Save & Export Dropdown */}
             <div
-              className="relative flex items-center shadow-sm rounded-lg ml-2"
+              className="relative flex items-stretch shadow-sm rounded-lg ml-2"
               ref={saveMenuRef}
             >
               <button
                 onClick={handleSave}
                 disabled={!hasUnsavedChanges && !!activeSchemaId}
-                className={`flex items-center px-3 py-1.5 text-sm font-medium rounded-l-lg border border-transparent transition-colors ${
+                className={`flex items-center px-3 py-1 text-sm font-medium rounded-l-lg border border-transparent transition-colors ${
                   !hasUnsavedChanges && !!activeSchemaId
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
@@ -530,7 +530,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
               <button
                 onClick={() => setIsSaveMenuOpen(!isSaveMenuOpen)}
-                className={`flex items-center px-1.5 py-1.5 rounded-r-lg transition-colors cursor-pointer ${
+                className={`flex items-center px-1.5 py-1 rounded-r-lg transition-colors cursor-pointer ${
                   !hasUnsavedChanges && !!activeSchemaId
                     ? "bg-gray-100 text-gray-400 hover:bg-gray-200"
                     : "bg-blue-600 text-white hover:bg-blue-700"

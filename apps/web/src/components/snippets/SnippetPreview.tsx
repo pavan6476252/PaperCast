@@ -83,7 +83,7 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden bg-slate-50"
+      className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-surface"
     >
       <OffscreenMeasurer
         document={schema}
@@ -111,7 +111,7 @@ export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
             return (
               <div
                 key={`page-${idx}`}
-                className="bg-white shadow-md flex flex-col relative shrink-0 overflow-hidden"
+                className="bg-white text-black shadow-md flex flex-col relative shrink-0 overflow-hidden"
                 style={{ width, height }}
               >
                 <PaperCastProvider

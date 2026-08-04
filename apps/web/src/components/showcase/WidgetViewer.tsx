@@ -48,22 +48,22 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="flex flex-col h-full bg-white dark:bg-background rounded-2xl shadow-sm border border-slate-200 dark:border-border overflow-hidden">
       {/* Header Area */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 bg-white p-6 shrink-0 z-20">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-border bg-white dark:bg-background p-6 shrink-0 z-20">
         <div>
-          <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-foreground tracking-tight">
             {title}
           </h3>
           {description && (
-            <p className="text-sm text-slate-500 mt-2 max-w-2xl leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-2xl leading-relaxed">
               {description}
             </p>
           )}
         </div>
 
         <div className="flex items-center space-x-3 mt-4 sm:mt-0">
-          <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/60 relative">
+          <div className="flex bg-slate-100 dark:bg-surface p-1 rounded-xl border border-slate-200/60 dark:border-border relative">
             {["preview", "code"].map((tab) => {
               const isActive = activeTab === tab;
               return (
@@ -72,14 +72,14 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({
                   onClick={() => setActiveTab(tab as any)}
                   className={`relative px-5 py-2 text-sm font-semibold rounded-lg transition-colors z-10 capitalize ${
                     isActive
-                      ? "text-slate-900"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "text-slate-900 dark:text-foreground"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeTabPill"
-                      className="absolute inset-0 bg-white rounded-lg shadow-sm border border-slate-200/50"
+                      className="absolute inset-0 bg-white dark:bg-background rounded-lg shadow-sm border border-slate-200/50 dark:border-border"
                       initial={false}
                       transition={{
                         type: "spring",
@@ -95,7 +95,7 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({
           </div>
           <button
             onClick={handleCopy}
-            className="group relative flex items-center justify-center p-2.5 text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 shadow-sm rounded-xl transition-all active:scale-95"
+            className="group relative flex items-center justify-center p-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground bg-white dark:bg-background border border-slate-200 dark:border-border hover:border-slate-300 dark:hover:border-slate-600 shadow-sm rounded-xl transition-all active:scale-95"
             title="Copy JSON Schema"
           >
             {copied ? (
@@ -108,9 +108,9 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 flex flex-col relative bg-slate-50/30 overflow-hidden min-h-[500px] z-10">
+      <div className="flex-1 flex flex-col relative bg-slate-50/30 dark:bg-background overflow-hidden min-h-[500px] z-10">
         {/* Dot Grid Background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         <AnimatePresence mode="wait">
           {activeTab === "preview" ? (
@@ -122,11 +122,11 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({
               transition={{ duration: 0.2 }}
               className="absolute inset-0 flex flex-col items-center justify-center p-8 overflow-auto z-10"
             >
-              <div className="w-full max-w-3xl bg-white border border-slate-200/80 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] rounded-sm overflow-hidden flex flex-col transition-all hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)]">
+              <div className="w-full max-w-3xl bg-white dark:bg-background border border-slate-200/80 dark:border-border shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(255,255,255,0.05)] rounded-sm overflow-hidden flex flex-col transition-all hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_30px_60px_-15px_rgba(255,255,255,0.1)]">
                 {isClient ? (
                   <DocumentPreview schemaData={schema} hideToolbar={true} />
                 ) : (
-                  <div className="flex-1 flex items-center justify-center p-12 text-slate-400">
+                  <div className="flex-1 flex items-center justify-center p-12 text-slate-400 dark:text-slate-500">
                     Loading Preview...
                   </div>
                 )}

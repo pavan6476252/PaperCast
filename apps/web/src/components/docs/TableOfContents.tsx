@@ -61,7 +61,7 @@ export function TableOfContents({ source }: { source: string }) {
 
   return (
     <div className="w-full">
-      <h3 className="text-sm font-semibold text-slate-900 mb-4">
+      <h3 className="text-sm font-semibold text-slate-900 dark:text-foreground mb-4">
         On this page
       </h3>
       <nav className="flex flex-col space-y-2.5">
@@ -73,8 +73,8 @@ export function TableOfContents({ source }: { source: string }) {
               heading.level === 3 ? "ml-4" : ""
             } ${
               activeId === heading.id
-                ? "text-blue-600 font-medium"
-                : "text-slate-600 hover:text-slate-900"
+                ? "text-blue-600 dark:text-blue-400 font-medium"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground"
             }`}
           >
             {heading.title}
