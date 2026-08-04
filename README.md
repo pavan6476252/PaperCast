@@ -23,6 +23,10 @@ Install Husky git hooks and set executable permissions:
 ./scripts/setup-husky.sh
 ```
 
+```
+chmod +x scripts/setup-husky.sh && find .husky -type f -exec chmod +x {} \; && ls -l scripts/setup-husky.sh .husky .husky/_
+```
+
 Run the development server:
 
 ```bash
