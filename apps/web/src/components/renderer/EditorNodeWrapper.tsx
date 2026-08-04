@@ -221,7 +221,7 @@ export const EditorNodeWrapper: React.FC<{
         />
       )}
       {!isEditable && isHovered && (
-        <div className="absolute top-2 right-2 bg-gray-950/95 text-white text-[10px] font-semibold px-2 py-1 rounded-md shadow-md z-50 pointer-events-none whitespace-nowrap border border-gray-800/80 backdrop-blur-sm print-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute top-2 right-2 bg-foreground text-background text-[10px] font-semibold px-2 py-1 rounded-md shadow-md z-50 pointer-events-none whitespace-nowrap border border-border/80 backdrop-blur-sm print-hidden animate-in fade-in zoom-in-95 duration-100">
           🔒 Editing disabled. Go to "{location}s" screen or enable "Edit
           Header/Footer" in Page Setup.
         </div>

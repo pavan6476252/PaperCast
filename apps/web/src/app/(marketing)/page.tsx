@@ -27,7 +27,7 @@ export default function LandingPage() {
         </div>
 
         <h1
-          className="relative text-5xl font-extrabold tracking-tight sm:text-7xl lg:text-[5.5rem] leading-[1.1] text-slate-900 mb-8 opacity-0 animate-fade-in-up"
+          className="relative text-5xl font-extrabold tracking-tight sm:text-7xl lg:text-[5.5rem] leading-[1.1] text-foreground mb-8 opacity-0 animate-fade-in-up"
           style={{ animationDelay: "0.2s" }}
         >
           {/* Floating Background Icons */}
@@ -39,7 +39,7 @@ export default function LandingPage() {
         </h1>
 
         <p
-          className="max-w-2xl text-lg text-slate-600 sm:text-xl leading-relaxed opacity-0 animate-fade-in-up"
+          className="max-w-2xl text-lg text-foreground/70 sm:text-xl leading-relaxed opacity-0 animate-fade-in-up"
           style={{ animationDelay: "0.3s" }}
         >
           Design, validate, and render complex documents and PDFs dynamically.
@@ -53,7 +53,7 @@ export default function LandingPage() {
         >
           <Link
             href="/playground"
-            className="group relative w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-base font-semibold text-white shadow-xl shadow-slate-900/20 transition-all hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 overflow-hidden"
+            className="group relative w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl bg-foreground px-8 py-3 text-base font-semibold text-white shadow-xl shadow-foreground/20 transition-all hover:bg-foreground/90 hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 overflow-hidden"
           >
             <span className="relative z-10 flex items-center">
               Start Building
@@ -74,7 +74,7 @@ export default function LandingPage() {
           </Link>
           <Link
             href="/widgets"
-            className="w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl border border-slate-200 bg-white/80 backdrop-blur-sm px-8 py-3 text-base font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2"
+            className="w-full sm:w-auto inline-flex h-14 items-center justify-center rounded-xl border border-border bg-background/80 backdrop-blur-sm px-8 py-3 text-base font-semibold text-foreground/80 shadow-sm transition-all hover:bg-surface hover:border-border/80 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2"
           >
             Browse Widgets
           </Link>
@@ -112,14 +112,14 @@ export default function LandingPage() {
           ].map((feature, i) => (
             <div
               key={i}
-              className="group relative rounded-3xl p-[1px] shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden bg-white/60"
+              className="group relative rounded-3xl p-[1px] shadow-sm hover:shadow-xl hover:shadow-foreground/10/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden bg-background/60"
             >
               {/* Spinning conic gradient border effect */}
               <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#e2e8f0_50%,#3b82f6_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               {/* Default static border */}
-              <div className="absolute inset-0 rounded-3xl border border-slate-200/50 group-hover:opacity-0 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 rounded-3xl border border-border/50 group-hover:opacity-0 transition-opacity duration-500"></div>
 
-              <div className="relative h-full w-full bg-white/90 backdrop-blur-xl rounded-[23px] p-8 z-10 flex flex-col">
+              <div className="relative h-full w-full bg-background/90 backdrop-blur-xl rounded-[23px] p-8 z-10 flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[23px]"></div>
                 <div className="relative z-10">
                   <div
@@ -139,10 +139,10 @@ export default function LandingPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">
+                  <h3 className="text-xl font-bold text-foreground mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-slate-600 leading-relaxed">
+                  <p className="text-foreground/70 leading-relaxed">
                     {feature.desc}
                   </p>
                 </div>
@@ -153,7 +153,7 @@ export default function LandingPage() {
       </div>
 
       {/* Large Modern Footer (moved from layout to scroll with the page) */}
-      <footer className="w-full shrink-0 border-t border-slate-200 bg-white pt-16 pb-8 relative z-20 mt-12">
+      <footer className="w-full shrink-0 border-t border-border bg-background pt-16 pb-8 relative z-20 mt-12">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent"></div>
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-12">
@@ -162,7 +162,7 @@ export default function LandingPage() {
                 <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
                   F
                 </div>
-                <span className="inline-block font-extrabold text-2xl tracking-tight text-slate-900">
+                <span className="inline-block font-extrabold text-2xl tracking-tight text-foreground">
                   PaperCast
                 </span>
               </Link>
@@ -267,7 +267,7 @@ export default function LandingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={social.name}
-                    className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all hover:-translate-y-1"
+                    className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all hover:-translate-y-1"
                   >
                     <span className="sr-only">{social.name}</span>
                     {social.icon}
@@ -277,7 +277,7 @@ export default function LandingPage() {
             </div>
 
             <div className="md:col-span-2 md:col-start-8">
-              <h3 className="font-bold text-slate-900 mb-5">Product</h3>
+              <h3 className="font-bold text-foreground mb-5">Product</h3>
               <ul className="space-y-3.5">
                 {[
                   { label: "Playground", href: "/playground" },
@@ -298,7 +298,7 @@ export default function LandingPage() {
             </div>
 
             <div className="md:col-span-2">
-              <h3 className="font-bold text-slate-900 mb-5">Legal</h3>
+              <h3 className="font-bold text-foreground mb-5">Legal</h3>
               <ul className="space-y-3.5">
                 {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
                   (link, i) => (
@@ -320,7 +320,7 @@ export default function LandingPage() {
             <p className="text-sm text-slate-500">
               © {new Date().getFullYear()} PaperCast Inc. All rights reserved.
             </p>
-            <div className="flex items-center gap-1.5 text-sm text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+            <div className="flex items-center gap-1.5 text-sm text-slate-500 bg-surface px-3 py-1.5 rounded-full border border-slate-100">
               <span>Made with</span>
               <span className="text-red-500 animate-pulse">♥</span>
               <span>by Pavan kumar</span>

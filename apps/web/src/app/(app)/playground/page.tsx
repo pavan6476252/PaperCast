@@ -11,8 +11,8 @@ const JsonEditor = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex flex-col items-center justify-center h-full bg-[#1e1e1e] text-gray-400 w-full min-w-[300px]">
-        <div className="w-8 h-8 border-4 border-gray-600 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+      <div className="flex flex-col items-center justify-center h-full bg-background text-foreground/70 w-full min-w-[300px]">
+        <div className="w-8 h-8 border-4 border-border border-t-accent rounded-full animate-spin mb-4"></div>
         <p className="text-sm font-medium animate-pulse">
           Initializing Editor...
         </p>
@@ -174,9 +174,9 @@ const LeftSidebar = ({ children }: { children: React.ReactNode }) => {
       </div>
       <div
         onMouseDown={handleMouseDown}
-        className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
+        className="w-2 bg-surface border-x border-border hover:bg-accent transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden group"
       >
-        <div className="h-8 w-1 bg-gray-400 rounded-full" />
+        <div className="h-8 w-1 bg-foreground/20 rounded-full group-hover:bg-white" />
       </div>
     </>
   );
@@ -230,23 +230,23 @@ const RightSidebar = () => {
     <>
       <div
         onMouseDown={handleMouseDown}
-        className="w-2 bg-gray-200 hover:bg-blue-500 transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden"
+        className="w-2 bg-surface border-x border-border hover:bg-accent transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden group"
       >
-        <div className="h-8 w-1 bg-gray-400 rounded-full" />
+        <div className="h-8 w-1 bg-foreground/20 rounded-full group-hover:bg-white" />
       </div>
       <div
         style={{ width: rightWidth, minWidth: 260 }}
-        className="flex flex-col z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.1)] relative shrink-0 print:hidden bg-white h-full"
+        className="flex flex-col z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.1)] relative shrink-0 print:hidden bg-background border-l border-border h-full"
       >
-        <div className="flex border-b border-gray-200 shrink-0">
+        <div className="flex border-b border-border shrink-0">
           <button
-            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "widgets" ? "border-b-2 border-blue-500 text-blue-600 bg-white" : "text-gray-500 hover:text-gray-700 bg-gray-50"}`}
+            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "widgets" ? "border-b-2 border-accent text-accent bg-background" : "text-foreground/70 hover:text-foreground bg-surface"}`}
             onClick={() => setRightPanelMode("widgets")}
           >
             Widgets
           </button>
           <button
-            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "properties" ? "border-b-2 border-blue-500 text-blue-600 bg-white" : "text-gray-500 hover:text-gray-700 bg-gray-50"}`}
+            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "properties" ? "border-b-2 border-accent text-accent bg-background" : "text-foreground/70 hover:text-foreground bg-surface"}`}
             onClick={() => setRightPanelMode("properties")}
           >
             Properties {selectedNodeId ? "•" : ""}
@@ -339,8 +339,8 @@ export function PlaygroundContent() {
 
   if (!mounted) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#1e1e1e] text-gray-400">
-        <div className="w-8 h-8 border-4 border-gray-600 border-t-blue-500 rounded-full animate-spin"></div>
+      <div className="flex items-center justify-center h-screen bg-background text-foreground/70">
+        <div className="w-8 h-8 border-4 border-border border-t-accent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -357,16 +357,16 @@ export function PlaygroundContent() {
         moveNode,
       }}
     >
-      <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
+      <main className="flex h-screen w-screen overflow-hidden bg-background text-foreground font-sans print:h-auto print:w-auto print:overflow-visible transition-colors">
         {/* Activity Bar */}
-        <div className="w-12 bg-[#1e1e1e] flex flex-col items-center py-4 gap-4 shrink-0 z-20 print:hidden shadow-md relative">
+        <div className="w-12 bg-surface border-r border-border flex flex-col items-center py-4 gap-4 shrink-0 z-20 print:hidden shadow-md relative">
           <button
             onClick={() =>
               setActiveLeftPanel((p) =>
                 p === "workspace" ? null : "workspace"
               )
             }
-            className={`p-2 rounded-lg transition-colors ${activeLeftPanel === "workspace" ? "text-white bg-blue-600" : "text-gray-400 hover:text-white"}`}
+            className={`p-2 rounded-lg transition-colors ${activeLeftPanel === "workspace" ? "text-accent bg-accent/10" : "text-foreground/50 hover:text-foreground"}`}
             title="Workspace Explorer"
           >
             <Folder size={20} />
@@ -375,7 +375,7 @@ export function PlaygroundContent() {
             onClick={() =>
               setActiveLeftPanel((p) => (p === "editor" ? null : "editor"))
             }
-            className={`p-2 rounded-lg transition-colors ${activeLeftPanel === "editor" ? "text-white bg-blue-600" : "text-gray-400 hover:text-white"}`}
+            className={`p-2 rounded-lg transition-colors ${activeLeftPanel === "editor" ? "text-accent bg-accent/10" : "text-foreground/50 hover:text-foreground"}`}
             title="JSON Schema Editor"
           >
             <Code2 size={20} />
@@ -384,7 +384,7 @@ export function PlaygroundContent() {
           <div className="mt-auto">
             <button
               onClick={() => setActiveLeftPanel(null)}
-              className={`p-2 rounded-lg transition-colors ${activeLeftPanel === null ? "text-gray-600 cursor-default" : "text-gray-400 hover:text-white"}`}
+              className={`p-2 rounded-lg transition-colors ${activeLeftPanel === null ? "text-foreground/20 cursor-default" : "text-foreground/50 hover:text-foreground"}`}
               title="Close Left Panel"
             >
               <PanelLeftClose size={20} />

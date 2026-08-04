@@ -22,9 +22,10 @@ import {
   Plus,
   Undo2,
   Redo2,
-  Save,
   SaveAll,
+  Save,
 } from "lucide-react";
+import { ThemeToggle } from "../ThemeToggle";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { EditorNodeWrapper } from "./EditorNodeWrapper";
 import { DocumentSchema } from "@papercast/core";
@@ -270,7 +271,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-gray-100 overflow-hidden">
+    <div className="flex flex-col h-full bg-surface overflow-hidden">
       <style>
         {`
           @media print {
@@ -293,13 +294,13 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
       {/* Top Toolbar */}
       {!hideToolbar && (
-        <div className="h-14 border-b bg-white flex items-center px-4 justify-between shrink-0 print-hidden shadow-sm z-10 relative">
+        <div className="h-14 border-b border-border bg-background flex items-center px-4 justify-between shrink-0 print-hidden shadow-sm z-10 relative">
           {/* Left: View Modes */}
           <div className="flex items-center space-x-2 shrink-0">
             {onToggleEditor && (
               <button
                 onClick={onToggleEditor}
-                className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 bg-white cursor-pointer"
+                className="p-1.5 text-foreground/70 hover:text-foreground hover:bg-surface rounded-lg transition-colors border border-border bg-background cursor-pointer"
                 title={
                   isEditorVisible
                     ? "Hide Schema Editor (Cmd+\\)"
@@ -316,15 +317,15 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 )}
               </button>
             )}
-            <div className="flex space-x-0.5 bg-gray-100 p-0.5 rounded-lg border border-gray-200/50">
+            <div className="flex space-x-0.5 bg-surface p-0.5 rounded-lg border border-border">
               {(["content", "headers", "footers"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`px-2.5 py-1 text-xs font-semibold rounded-md capitalize transition-all duration-200 ${
                     activeTab === tab
-                      ? "bg-white shadow-sm text-blue-600 font-bold"
-                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
+                      ? "bg-background shadow-sm text-accent font-bold"
+                      : "text-foreground/70 hover:text-foreground hover:bg-background/50"
                   }`}
                 >
                   {tab}
@@ -341,11 +342,11 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           {/* Right: Actions, Zoom & Settings Popover */}
           <div className="flex items-center space-x-2.5 shrink-0">
             {/* Undo/Redo */}
-            <div className="flex items-center space-x-0.5 border-r border-gray-200 pr-2 mr-0.5">
+            <div className="flex items-center space-x-0.5 border-r border-border pr-2 mr-0.5">
               <button
                 onClick={() => canUndo && undo()}
                 disabled={!canUndo}
-                className={`p-1.5 rounded-lg transition-colors ${canUndo ? "text-gray-700 hover:bg-gray-100 hover:text-blue-600 cursor-pointer" : "text-gray-300 cursor-not-allowed"}`}
+                className={`p-1.5 rounded-lg transition-colors ${canUndo ? "text-foreground/70 hover:bg-surface hover:text-accent cursor-pointer" : "text-foreground/30 cursor-not-allowed"}`}
                 title="Undo (Cmd+Z)"
               >
                 <Undo2 size={14} />
@@ -353,7 +354,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               <button
                 onClick={() => canRedo && redo()}
                 disabled={!canRedo}
-                className={`p-1.5 rounded-lg transition-colors ${canRedo ? "text-gray-700 hover:bg-gray-100 hover:text-blue-600 cursor-pointer" : "text-gray-300 cursor-not-allowed"}`}
+                className={`p-1.5 rounded-lg transition-colors ${canRedo ? "text-foreground/70 hover:bg-surface hover:text-accent cursor-pointer" : "text-foreground/30 cursor-not-allowed"}`}
                 title="Redo (Cmd+Shift+Z)"
               >
                 <Redo2 size={14} />
@@ -364,7 +365,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             <div className="relative ml-2" ref={menuRef}>
               <button
                 onClick={() => setIsMenuOpen((s) => !s)}
-                className="flex items-center space-x-1 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-900 focus:outline-none transition-colors cursor-pointer"
+                className="flex items-center space-x-1 px-2.5 py-1.5 text-xs font-medium text-foreground bg-surface border border-border rounded-lg hover:bg-surface/80 hover:text-foreground focus:outline-none transition-colors cursor-pointer"
                 title="Page Setup & Zoom"
               >
                 <Settings size={14} />
@@ -375,17 +376,17 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 />
               </button>
               {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-30 p-3 space-y-3.5 origin-top-right">
+                <div className="absolute right-0 mt-2 w-56 bg-background border border-border rounded-xl shadow-xl z-30 p-3 space-y-3.5 origin-top-right">
                   {activeTab === "content" && (
                     <div className="space-y-2">
-                      <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                      <div className="text-[10px] font-bold text-foreground/50 uppercase tracking-wider">
                         Page Settings
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="flex flex-col space-y-1">
                           <label
                             htmlFor="pageSize"
-                            className="text-[10px] font-medium text-gray-500"
+                            className="text-[10px] font-medium text-foreground/70"
                           >
                             Size
                           </label>
@@ -400,7 +401,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                                 updateMeta({ pageSize: val });
                               }
                             }}
-                            className="text-xs bg-gray-50 border border-gray-200 rounded-md p-1 outline-none focus:ring-1 focus:ring-blue-500 text-gray-700 font-medium cursor-pointer"
+                            className="text-xs bg-background border border-border/80 rounded-md p-1 outline-none focus:ring-1 focus:ring-accent text-foreground font-medium cursor-pointer"
                           >
                             <option value="A4">A4</option>
                             <option value="A3">A3</option>
@@ -413,7 +414,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                         <div className="flex flex-col space-y-1">
                           <label
                             htmlFor="orientation"
-                            className="text-[10px] font-medium text-gray-500"
+                            className="text-[10px] font-medium text-foreground/70"
                           >
                             Orient
                           </label>
@@ -423,19 +424,19 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                             onChange={(e) =>
                               updateMeta({ orientation: e.target.value })
                             }
-                            className="text-xs bg-gray-50 border border-gray-200 rounded-md p-1 outline-none focus:ring-1 focus:ring-blue-500 text-gray-700 font-medium cursor-pointer"
+                            className="text-xs bg-background border border-border/80 rounded-md p-1 outline-none focus:ring-1 focus:ring-accent text-foreground font-medium cursor-pointer"
                           >
                             <option value="portrait">Portrait</option>
                             <option value="landscape">Landscape</option>
                           </select>
                         </div>
                       </div>
-                      <div className="border-t border-gray-100 my-2 pt-2" />
+                      <div className="border-t border-border my-2 pt-2" />
                       <div className="flex flex-col space-y-3">
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor="toggleEditHeaderFooter"
-                            className="text-xs text-gray-600 font-medium"
+                            className="text-xs text-foreground/90 font-medium"
                           >
                             Edit Header/Footer
                           </label>
@@ -446,7 +447,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                             onChange={(e) =>
                               setAllowHeaderFooterEditing(e.target.checked)
                             }
-                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                            className="w-4 h-4 rounded border-border/80 text-accent focus:ring-accent cursor-pointer"
                           />
                         </div>
                         <button
@@ -579,6 +580,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 </div>
               )}
             </div>
+            <ThemeToggle />
           </div>
         </div>
       )}
@@ -609,7 +611,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   >
                     <div
                       key={`page-${idx}`}
-                      className="bg-white shadow-xl flex flex-col relative shrink-0 overflow-hidden print-page"
+                      className="bg-white text-black shadow-xl flex flex-col relative shrink-0 overflow-hidden print-page"
                       style={{ width, height }}
                     >
                       <PaperCastProvider
@@ -743,7 +745,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               ([id, header]) => (
                 <div
                   key={id}
-                  className="flex flex-col shadow-xl rounded-md bg-white border border-gray-200"
+                  className="flex flex-col shadow-xl rounded-md bg-white text-black border border-gray-200"
                   style={{ width }}
                 >
                   <SectionToolbar type="header" id={id} section={header} />
@@ -819,7 +821,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               ([id, footer]) => (
                 <div
                   key={id}
-                  className="flex flex-col shadow-xl rounded-md bg-white border border-gray-200"
+                  className="flex flex-col shadow-xl rounded-md bg-white text-black border border-gray-200"
                   style={{ width }}
                 >
                   <SectionToolbar type="footer" id={id} section={footer} />
