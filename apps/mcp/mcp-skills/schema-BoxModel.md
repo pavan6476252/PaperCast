@@ -8,12 +8,17 @@ The `layout` object on a `BaseNode` controls flexbox positioning, dimensions, sp
 - `marginTop`, `marginRight`, `marginBottom`, `marginLeft`: `number` (px).
 - `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`: `number` (px).
 
+## Background
+
+- `backgroundColor`: `string` (Hex)
+
 ## Flex / Flow Controls
 
 FormCast translates layout directions directly into CSS flexbox behaviors.
 
 - `direction`: `"row"` | `"column"`
-- `wrap`: `boolean`
+- `wrap`: `boolean` (Legacy)
+- `flexWrap`: `"nowrap" | "wrap" | "wrap-reverse"`
 - `justifyContent`: `"flex-start" | "center" | "flex-end" | "space-between" | "space-around"`
 - `alignItems`: `"flex-start" | "center" | "flex-end" | "stretch"`
 - `rowGap`, `columnGap`: `number` (px)
@@ -25,6 +30,7 @@ FormCast translates layout directions directly into CSS flexbox behaviors.
 - `borderTopWidth`, `borderRightWidth`, `borderBottomWidth`, `borderLeftWidth`: `number`
 - `borderTopStyle`, `borderRightStyle`, `borderBottomStyle`, `borderLeftStyle`: `"solid" | "dashed" | "none"`
 - `borderTopColor`, `borderRightColor`, `borderBottomColor`, `borderLeftColor`: `string` (Hex)
+- `borderRadius`, `borderTopLeftRadius`, `borderTopRightRadius`, `borderBottomRightRadius`, `borderBottomLeftRadius`: `number`
 
 ## Pagination Hints
 

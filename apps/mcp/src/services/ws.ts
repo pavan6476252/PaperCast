@@ -14,8 +14,8 @@ export let activeSessionId: string | null = null;
 const pendingRequests = new Map<
   string,
   {
-    resolve: (value: any) => void;
-    reject: (reason: any) => void;
+    resolve: (value: unknown) => void;
+    reject: (reason: unknown) => void;
     timeoutId: NodeJS.Timeout;
   }
 >();
@@ -59,7 +59,10 @@ export function initWebSocketServer(port: number = 9000) {
           }
 
           case WsEventType.STATE_CHANGED: {
-            const { sessionId, schema, requestId } = message;
+            const { sessionId, schema, requestId } = message as Extract<
+              WsMessage,
+              { type: WsEventType.STATE_CHANGED }
+            >;
             if (sessions.has(sessionId)) {
               const session = sessions.get(sessionId)!;
               session.lastActive = Date.now();
@@ -70,6 +73,20 @@ export function initWebSocketServer(port: number = 9000) {
                 pendingRequests.delete(requestId);
                 pending.resolve({ schema, sessionId });
               }
+            }
+            break;
+          }
+
+          case WsEventType.WORKSPACE_LIST_RES: {
+            const { requestId, schemas } = message as Extract<
+              WsMessage,
+              { type: WsEventType.WORKSPACE_LIST_RES }
+            >;
+            if (requestId && pendingRequests.has(requestId)) {
+              const pending = pendingRequests.get(requestId)!;
+              clearTimeout(pending.timeoutId);
+              pendingRequests.delete(requestId);
+              pending.resolve({ schemas });
             }
             break;
           }
@@ -110,7 +127,9 @@ export function setActiveSessionId(sessionId: string | null) {
   activeSessionId = sessionId;
 }
 
-export function sendCommandToActiveSession(message: any): Promise<any> {
+export function sendCommandToActiveSession(
+  message: Record<string, unknown>
+): Promise<any> {
   return new Promise((resolve, reject) => {
     const targetSessionId = activeSessionId;
     if (!targetSessionId || !sessions.has(targetSessionId)) {
@@ -134,7 +153,7 @@ export function sendCommandToActiveSession(message: any): Promise<any> {
   });
 }
 
-export function fireCommandToActiveSession(message: any) {
+export function fireCommandToActiveSession(message: Record<string, unknown>) {
   const targetSessionId = activeSessionId;
   if (!targetSessionId || !sessions.has(targetSessionId)) {
     throw new Error(

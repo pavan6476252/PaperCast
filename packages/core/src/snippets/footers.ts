@@ -188,7 +188,6 @@ export const footerSnippets: SchemaSnippet[] = [
                 paddingBottom: 15,
                 paddingLeft: 30,
                 paddingRight: 30,
-                backgroundColor: "#f8fafc",
               },
               children: [
                 {
@@ -249,7 +248,6 @@ export const footerSnippets: SchemaSnippet[] = [
                 paddingBottom: 10,
                 paddingLeft: 20,
                 paddingRight: 20,
-                backgroundColor: "#0f172a",
               },
               children: [
                 {
@@ -650,7 +648,6 @@ export const footerSnippets: SchemaSnippet[] = [
               id: "f8-r",
               type: "row",
               layout: {
-                backgroundColor: "#e91e63",
                 paddingTop: 15,
                 paddingBottom: 15,
                 paddingLeft: 30,
@@ -685,7 +682,7 @@ export const footerSnippets: SchemaSnippet[] = [
                         srcLiteral: "https://picsum.photos/16",
                         fit: "contain",
                       },
-                      layout: { width: 16, height: 16, borderRadius: 8 },
+                      layout: { width: 16, height: 16 },
                     },
                     {
                       id: "f8-i2",
@@ -694,7 +691,7 @@ export const footerSnippets: SchemaSnippet[] = [
                         srcLiteral: "https://picsum.photos/16",
                         fit: "contain",
                       },
-                      layout: { width: 16, height: 16, borderRadius: 8 },
+                      layout: { width: 16, height: 16 },
                     },
                   ],
                 },
@@ -732,7 +729,6 @@ export const footerSnippets: SchemaSnippet[] = [
               id: "f9-r",
               type: "column",
               layout: {
-                backgroundColor: "#f3f4f6",
                 alignItems: "center",
                 paddingTop: 20,
                 paddingBottom: 20,

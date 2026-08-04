@@ -831,6 +831,12 @@ export const PropertyPanel: React.FC = () => {
                 onChange={(v) => handleUpdate("layout", "minHeight", v)}
               />
 
+              <ColorProp
+                label="backgroundColor"
+                value={layout.backgroundColor}
+                onChange={(v) => handleUpdate("layout", "backgroundColor", v)}
+              />
+
               <div className="text-xs font-medium text-gray-500 mb-1 mt-4">
                 Margins
               </div>
@@ -918,16 +924,10 @@ export const PropertyPanel: React.FC = () => {
                 onChange={(v) => handleUpdate("layout", "alignItems", v)}
               />
               <SelectProp
-                label="wrap"
-                value={layout.wrap?.toString()}
-                options={["true", "false"]}
-                onChange={(v) =>
-                  handleUpdate(
-                    "layout",
-                    "wrap",
-                    v === "true" ? true : v === "false" ? false : undefined
-                  )
-                }
+                label="flexWrap"
+                value={layout.flexWrap || (layout.wrap ? "wrap" : undefined)}
+                options={["nowrap", "wrap", "wrap-reverse"]}
+                onChange={(v) => handleUpdate("layout", "flexWrap", v)}
               />
 
               <div className="grid grid-cols-2 gap-2 mt-2">
@@ -978,11 +978,6 @@ export const PropertyPanel: React.FC = () => {
                 label="color"
                 value={style.color}
                 onChange={(v) => handleUpdate("style", "color", v)}
-              />
-              <ColorProp
-                label="backgroundColor"
-                value={style.backgroundColor}
-                onChange={(v) => handleUpdate("style", "backgroundColor", v)}
               />
 
               <div className="grid grid-cols-2 gap-2 mt-2">
@@ -1304,6 +1299,54 @@ export const PropertyPanel: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
+                <div className="text-xs font-medium text-gray-500">
+                  Border Radius
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <NumberProp
+                    label="all"
+                    labelWidth="w-10"
+                    value={layout.borderRadius}
+                    onChange={(v) => handleUpdate("layout", "borderRadius", v)}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <NumberProp
+                    label="TL"
+                    labelWidth="w-10"
+                    value={layout.borderTopLeftRadius}
+                    onChange={(v) =>
+                      handleUpdate("layout", "borderTopLeftRadius", v)
+                    }
+                  />
+                  <NumberProp
+                    label="TR"
+                    labelWidth="w-10"
+                    value={layout.borderTopRightRadius}
+                    onChange={(v) =>
+                      handleUpdate("layout", "borderTopRightRadius", v)
+                    }
+                  />
+                  <NumberProp
+                    label="BL"
+                    labelWidth="w-10"
+                    value={layout.borderBottomLeftRadius}
+                    onChange={(v) =>
+                      handleUpdate("layout", "borderBottomLeftRadius", v)
+                    }
+                  />
+                  <NumberProp
+                    label="BR"
+                    labelWidth="w-10"
+                    value={layout.borderBottomRightRadius}
+                    onChange={(v) =>
+                      handleUpdate("layout", "borderBottomRightRadius", v)
+                    }
+                  />
+                </div>
               </div>
             </PropertyGroup>
 

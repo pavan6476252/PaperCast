@@ -509,8 +509,6 @@ export const _TEST_DOCUMENT: DocumentSchema = {
             paddingRight: 40,
             paddingTop: 12,
             paddingBottom: 12,
-          },
-          style: {
             backgroundColor: "teal",
           },
           children: [
@@ -2011,10 +2009,14 @@ export function injectTestRichText(doc: DocumentSchema): DocumentSchema {
         style: { color: "#1e40af", fontSizePx: 20 },
         layout: { marginTop: 16 },
       },
-      code: { style: { backgroundColor: "#fee2e2", color: "#991b1b" } },
+      code: {
+        style: { color: "#991b1b" },
+        layout: { backgroundColor: "#fee2e2" },
+      },
       blockquote: {
-        style: { backgroundColor: "#f3f4f6", fontStyle: "italic" },
+        style: { fontStyle: "italic" },
         layout: {
+          backgroundColor: "#f3f4f6",
           borderLeftWidth: 4,
           borderLeftColor: "#3b82f6",
           paddingLeft: 12,

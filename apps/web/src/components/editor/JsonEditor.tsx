@@ -27,6 +27,26 @@ export const JsonEditor: React.FC = () => {
   // Track if a selection change was initiated by the editor or externally
   const isEditorInitiatedSelection = useRef(false);
 
+  // Suppress harmless Monaco cancelation errors that occur during fast re-renders
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      if (
+        event.reason &&
+        event.reason.type === "cancelation" &&
+        event.reason.msg === "operation is manually canceled"
+      ) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+    return () =>
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection
+      );
+  }, []);
+
   // Configure JSON Schema validation and autocomplete
   useEffect(() => {
     if (monaco) {

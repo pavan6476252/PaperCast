@@ -22,9 +22,21 @@ export interface BoxModel {
   paddingTop?: number;
   // ... right, bottom, left
 
+  // background
+  backgroundColor?: string;
+
+  // border
+  borderTopWidth?: number;
+  borderTopStyle?: "solid" | "dashed" | "none";
+  borderTopColor?: string;
+  // ... right, bottom, left
+  borderRadius?: number;
+  // ... top-left, top-right, bottom-right, bottom-left
+
   // flex/flow controls
   direction?: "row" | "column";
   wrap?: boolean;
+  flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
   justifyContent?:
     "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
   alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
@@ -45,7 +57,6 @@ export interface TypographyAndColor {
   textDecoration?: "none" | "underline";
   textAlign?: "left" | "center" | "right" | "justify";
   color?: string;
-  backgroundColor?: string;
   lineHeight?: number;
 }
 ```

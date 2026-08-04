@@ -126,10 +126,10 @@ export function convertHtmlToNodes(
         props: { literal: element.textContent || "" },
         style: getStyle(tagName, element, {
           fontFamily: "monospace",
-          backgroundColor: "#f3f4f6",
           color: "#1f2937",
         }),
         layout: getLayout(tagName, element, {
+          backgroundColor: "#f3f4f6",
           paddingLeft: 4,
           paddingRight: 4,
           paddingTop: 2,
@@ -189,9 +189,9 @@ export function convertHtmlToNodes(
         style: getStyle(tagName, element, {
           fontStyle: "italic",
           color: "#374151",
-          backgroundColor: "#f9fafb",
         }),
         layout: getLayout(tagName, element, {
+          backgroundColor: "#f9fafb",
           paddingLeft: 12,
           borderLeftWidth: 4,
           borderLeftColor: "#9ca3af",

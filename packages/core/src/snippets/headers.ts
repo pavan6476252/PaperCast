@@ -289,7 +289,7 @@ export const headerSnippets: SchemaSnippet[] = [
                 alignItems: "center",
                 justifyContent: "center",
                 borderBottomWidth: 4,
-                borderBottomStyle: "double",
+                borderBottomStyle: "solid",
                 borderBottomColor: "#000",
                 paddingBottom: 10,
                 paddingTop: 10,
@@ -309,7 +309,7 @@ export const headerSnippets: SchemaSnippet[] = [
                   type: "text",
                   props: { literal: "Department of Internal Affairs" },
                   style: { fontSizePx: 12 },
-                  layout: { marginTop: 5 },
+                  layout: {},
                 },
               ],
             },
@@ -347,7 +347,7 @@ export const headerSnippets: SchemaSnippet[] = [
               layout: {
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#f8fafc",
+
                 paddingLeft: 20,
                 paddingRight: 20,
                 paddingTop: 15,
@@ -366,7 +366,7 @@ export const headerSnippets: SchemaSnippet[] = [
                         srcLiteral: "https://picsum.photos/32",
                         fit: "contain",
                       },
-                      layout: { width: 32, height: 32, borderRadius: 8 },
+                      layout: { width: 32, height: 32 },
                     },
                     {
                       id: "h2-name",
@@ -429,7 +429,6 @@ export const headerSnippets: SchemaSnippet[] = [
               id: "h3-r",
               type: "column",
               layout: {
-                backgroundColor: "#0a0a0a",
                 paddingLeft: 20,
                 paddingRight: 20,
                 paddingTop: 15,
@@ -461,7 +460,7 @@ export const headerSnippets: SchemaSnippet[] = [
                 {
                   id: "h3-r2",
                   type: "row",
-                  layout: { justifyContent: "space-between", marginTop: 5 },
+                  layout: { justifyContent: "space-between" },
                   children: [
                     {
                       id: "h3-env",
@@ -620,7 +619,6 @@ export const headerSnippets: SchemaSnippet[] = [
           base: {
             fontFamily: "monospace",
             fontSizePx: 11,
-            textAlign: "center",
           },
         },
       },
@@ -671,7 +669,7 @@ export const headerSnippets: SchemaSnippet[] = [
                   id: "h5-div",
                   type: "text",
                   props: { literal: "------------------------" },
-                  layout: { marginTop: 10 },
+                  layout: {},
                 },
               ],
             },
@@ -707,7 +705,6 @@ export const headerSnippets: SchemaSnippet[] = [
               id: "h6-r",
               type: "row",
               layout: {
-                backgroundColor: "#e0f2fe",
                 paddingLeft: 20,
                 paddingRight: 20,
                 paddingTop: 15,
@@ -854,7 +851,6 @@ export const headerSnippets: SchemaSnippet[] = [
               id: "h8-r",
               type: "column",
               layout: {
-                backgroundColor: "#ffeb3b",
                 paddingTop: 40,
                 paddingBottom: 20,
                 paddingLeft: 40,
@@ -865,8 +861,8 @@ export const headerSnippets: SchemaSnippet[] = [
                   id: "h8-t1",
                   type: "text",
                   props: { literal: "STUDIO" },
-                  style: { fontSizePx: 48, fontWeight: "900", color: "#000" },
-                  layout: { lineHeight: 1 },
+                  style: { fontSizePx: 48, fontWeight: 900, color: "#000" },
+                  layout: { minHeight: 1 },
                 },
                 {
                   id: "h8-t2",
@@ -925,7 +921,6 @@ export const headerSnippets: SchemaSnippet[] = [
               id: "h9-r",
               type: "column",
               layout: {
-                backgroundColor: "#4f46e5",
                 alignItems: "center",
                 justifyContent: "center",
                 paddingTop: 30,
@@ -940,7 +935,6 @@ export const headerSnippets: SchemaSnippet[] = [
                     fontSizePx: 32,
                     fontWeight: "bold",
                     color: "#ffffff",
-                    textAlign: "center",
                   },
                   layout: {},
                 },
@@ -953,8 +947,6 @@ export const headerSnippets: SchemaSnippet[] = [
                   style: {
                     fontSizePx: 14,
                     color: "#c7d2fe",
-                    textAlign: "center",
-                    marginTop: 10,
                   },
                   layout: {},
                 },
@@ -1032,7 +1024,7 @@ export const headerSnippets: SchemaSnippet[] = [
                       type: "text",
                       props: { literal: "OFFICIAL DECLARATION OF ASSETS" },
                       style: { fontSizePx: 18, fontWeight: "bold" },
-                      layout: { marginTop: 5 },
+                      layout: {},
                     },
                   ],
                 },
@@ -1060,7 +1052,7 @@ export const headerSnippets: SchemaSnippet[] = [
                       type: "text",
                       props: { literal: "OMB No. 1234-5678" },
                       style: { fontSizePx: 10 },
-                      layout: { marginTop: 5 },
+                      layout: {},
                     },
                   ],
                 },

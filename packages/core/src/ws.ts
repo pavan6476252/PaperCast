@@ -7,6 +7,11 @@ export enum WsEventType {
   GET_CURRENT_SCHEMA = "GET_CURRENT_SCHEMA",
   UPDATE_SCHEMA = "UPDATE_SCHEMA",
   AST_ACTION = "AST_ACTION",
+  WORKSPACE_LIST_REQ = "WORKSPACE_LIST_REQ",
+  WORKSPACE_LIST_RES = "WORKSPACE_LIST_RES",
+  WORKSPACE_LOAD = "WORKSPACE_LOAD",
+  WORKSPACE_SAVE = "WORKSPACE_SAVE",
+  WORKSPACE_DELETE = "WORKSPACE_DELETE",
 }
 
 export interface RegisterTabPayload {
@@ -45,10 +50,46 @@ export interface AstActionPayload {
   args: any[];
 }
 
+export interface WorkspaceListReqPayload {
+  type: WsEventType.WORKSPACE_LIST_REQ;
+  requestId: string;
+}
+
+export interface WorkspaceSchemaMetadata {
+  id: string;
+  name: string;
+  updatedAt: number;
+}
+
+export interface WorkspaceListResPayload {
+  type: WsEventType.WORKSPACE_LIST_RES;
+  requestId: string;
+  schemas: WorkspaceSchemaMetadata[];
+}
+
+export interface WorkspaceLoadPayload {
+  type: WsEventType.WORKSPACE_LOAD;
+  id: string;
+}
+
+export interface WorkspaceSavePayload {
+  type: WsEventType.WORKSPACE_SAVE;
+}
+
+export interface WorkspaceDeletePayload {
+  type: WsEventType.WORKSPACE_DELETE;
+  id: string;
+}
+
 export type WsMessage =
   | RegisterTabPayload
   | TabFocusPayload
   | StateChangedPayload
   | GetCurrentSchemaPayload
   | UpdateSchemaPayload
-  | AstActionPayload;
+  | AstActionPayload
+  | WorkspaceListReqPayload
+  | WorkspaceListResPayload
+  | WorkspaceLoadPayload
+  | WorkspaceSavePayload
+  | WorkspaceDeletePayload;

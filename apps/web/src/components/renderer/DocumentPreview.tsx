@@ -1,5 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { useDocumentStore } from "../../store/documentStore";
+import {
+  useDocumentStore,
+  useDocumentTemporalStore,
+} from "../../store/documentStore";
 import {
   NodeRenderer,
   FormCastProvider,
@@ -17,10 +20,15 @@ import {
   Settings,
   ChevronDown,
   Plus,
+  Undo2,
+  Redo2,
+  Save,
+  SaveAll,
 } from "lucide-react";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { EditorNodeWrapper } from "./EditorNodeWrapper";
 import { DocumentSchema } from "@formcast/core";
+import { useWorkspaceStore } from "../../store/workspaceStore";
 
 type PreviewTab = "content" | "headers" | "footers";
 
@@ -41,6 +49,44 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const storeIsValid = useDocumentStore((state) => state.isValid);
   const setJsonString = useDocumentStore((state) => state.setJsonString);
   const storeJsonString = useDocumentStore((state) => state.jsonString);
+  const { undo, redo, pastStates, futureStates } = useDocumentTemporalStore(
+    (state) => state
+  );
+
+  const {
+    activeSchemaId,
+    schemas,
+    saveSchema,
+    createSchema,
+    isWorkspaceAutoSave,
+    setIsWorkspaceAutoSave,
+    lastSavedJsonString,
+    setLastSavedJsonString,
+  } = useWorkspaceStore();
+
+  const canUndo = pastStates.length > 0;
+  const canRedo = futureStates.length > 0;
+  const hasUnsavedChanges = lastSavedJsonString !== storeJsonString;
+
+  const handleSave = () => {
+    if (activeSchemaId) {
+      const active = schemas.find((s) => s.id === activeSchemaId);
+      if (active) {
+        saveSchema(activeSchemaId, active.name, storeJsonString);
+        setLastSavedJsonString(storeJsonString);
+      }
+    } else {
+      handleSaveAs();
+    }
+  };
+
+  const handleSaveAs = async () => {
+    const name = window.prompt("Enter template name:", "Untitled Schema");
+    if (name) {
+      await createSchema(name, storeJsonString);
+      setLastSavedJsonString(storeJsonString);
+    }
+  };
 
   const parsedDocument = schemaData || storeParsedDocument;
   const isValid = schemaData ? true : storeIsValid;
@@ -61,20 +107,55 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const [activeTab, setActiveTab] = useState<PreviewTab>("content");
   const [pages, setPages] = useState<PageData[] | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const saveMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isMenuOpen) return;
     const handleOutsideClick = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
+      }
+      if (
+        saveMenuRef.current &&
+        !saveMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsSaveMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [isMenuOpen]);
+  }, []);
+
+  // Handle unsaved changes warning on window close
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges && !isWorkspaceAutoSave) {
+        e.preventDefault();
+        e.returnValue =
+          "You have unsaved changes. Are you sure you want to leave?";
+        return e.returnValue;
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasUnsavedChanges, isWorkspaceAutoSave]);
+
+  // Keyboard shortcut for Save (Cmd+S)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        if (hasUnsavedChanges || !activeSchemaId) {
+          handleSave();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleSave, hasUnsavedChanges, activeSchemaId]);
 
   const updateMeta = (updates: any) => {
     try {
@@ -250,8 +331,28 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
           {/* Right: Actions, Zoom & Settings Popover */}
           <div className="flex items-center space-x-2.5 shrink-0">
+            {/* Undo/Redo */}
+            <div className="flex items-center space-x-0.5 border-r border-gray-200 pr-2 mr-0.5">
+              <button
+                onClick={() => canUndo && undo()}
+                disabled={!canUndo}
+                className={`p-1.5 rounded-lg transition-colors ${canUndo ? "text-gray-700 hover:bg-gray-100 hover:text-blue-600 cursor-pointer" : "text-gray-300 cursor-not-allowed"}`}
+                title="Undo (Cmd+Z)"
+              >
+                <Undo2 size={14} />
+              </button>
+              <button
+                onClick={() => canRedo && redo()}
+                disabled={!canRedo}
+                className={`p-1.5 rounded-lg transition-colors ${canRedo ? "text-gray-700 hover:bg-gray-100 hover:text-blue-600 cursor-pointer" : "text-gray-300 cursor-not-allowed"}`}
+                title="Redo (Cmd+Shift+Z)"
+              >
+                <Redo2 size={14} />
+              </button>
+            </div>
+
             {/* Settings & Zoom Dropdown */}
-            <div className="relative" ref={menuRef}>
+            <div className="relative ml-2" ref={menuRef}>
               <button
                 onClick={() => setIsMenuOpen((s) => !s)}
                 className="flex items-center space-x-1 px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-900 focus:outline-none transition-colors cursor-pointer"
@@ -389,34 +490,85 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               )}
             </div>
 
-            <div className="flex items-center space-x-1.5 pl-2.5 border-l border-gray-200">
+            {/* Save & Export Dropdown */}
+            <div
+              className="relative flex items-center shadow-sm rounded-lg ml-2"
+              ref={saveMenuRef}
+            >
               <button
-                onClick={handlePrint}
-                className="flex items-center justify-center space-x-1 p-1.5 sm:px-2.5 sm:py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
-                title="Print Document (Cmd+P)"
-              >
-                <Printer size={14} />
-                <span className="hidden sm:inline">Print</span>
-              </button>
-              <button
-                onClick={handleDownload}
-                disabled={isSaving || !isValid}
-                className={`flex items-center justify-center space-x-1 p-1.5 sm:px-2.5 sm:py-1 text-xs font-medium text-white border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer ${
-                  isSaving || !isValid
-                    ? "bg-blue-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
+                onClick={handleSave}
+                disabled={!hasUnsavedChanges && !!activeSchemaId}
+                className={`flex items-center px-3 py-1.5 text-sm font-medium rounded-l-lg border border-transparent transition-colors ${
+                  !hasUnsavedChanges && !!activeSchemaId
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
                 }`}
-                title="Save PDF (Cmd+S)"
+                title={
+                  activeSchemaId
+                    ? "Save Schema (Cmd+S)"
+                    : "Save As New Template"
+                }
               >
-                {isSaving ? (
-                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <Download size={14} />
+                <Save size={14} className="mr-1.5" />
+                Save
+                {hasUnsavedChanges && activeSchemaId && (
+                  <span className="ml-1 font-bold text-lg leading-none">*</span>
                 )}
-                <span className="hidden sm:inline">
-                  {isSaving ? "Saving..." : "Save"}
-                </span>
               </button>
+
+              <div className="w-px h-full bg-blue-700/50" />
+
+              <button
+                onClick={() => setIsSaveMenuOpen(!isSaveMenuOpen)}
+                className={`flex items-center px-1.5 py-1.5 rounded-r-lg transition-colors cursor-pointer ${
+                  !hasUnsavedChanges && !!activeSchemaId
+                    ? "bg-gray-100 text-gray-400 hover:bg-gray-200"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                }`}
+              >
+                <ChevronDown size={14} />
+              </button>
+
+              {isSaveMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+                  <button
+                    onClick={() => {
+                      handleSaveAs();
+                      setIsSaveMenuOpen(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg flex items-center transition-colors cursor-pointer"
+                  >
+                    <SaveAll size={14} className="mr-2 text-gray-500" />
+                    Save As Template...
+                  </button>
+                  <div className="border-t border-gray-100 my-1" />
+                  <button
+                    onClick={() => {
+                      handleDownload();
+                      setIsSaveMenuOpen(false);
+                    }}
+                    disabled={isSaving || !isValid}
+                    className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg flex items-center transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    {isSaving ? (
+                      <div className="w-3.5 h-3.5 mr-2 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin" />
+                    ) : (
+                      <Download size={14} className="mr-2 text-gray-500" />
+                    )}
+                    Export PDF
+                  </button>
+                  <button
+                    onClick={() => {
+                      handlePrint();
+                      setIsSaveMenuOpen(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg flex items-center transition-colors cursor-pointer"
+                  >
+                    <Printer size={14} className="mr-2 text-gray-500" />
+                    Print
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

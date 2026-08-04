@@ -64,7 +64,7 @@ export const advanced: WidgetRegistryItem[] = [
                 paddingBottom: 16,
               }
             ),
-            style: { backgroundColor: "#f8fafc" },
+            layout: { backgroundColor: "#f8fafc" },
           },
         ],
         { alignItems: "flex-start" }

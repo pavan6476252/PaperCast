@@ -58,8 +58,8 @@ const modernTechInvoice: DocumentSchema = {
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 20,
+            backgroundColor: "#121212",
           },
-          style: { backgroundColor: "#121212" },
           children: [
             {
               id: "logo",
@@ -648,8 +648,8 @@ const medicalLabReport: DocumentSchema = {
             paddingBottom: 15,
             paddingLeft: 15,
             paddingRight: 15,
+            backgroundColor: "#f0f8ff",
           },
-          style: { backgroundColor: "#f0f8ff" },
           children: [
             {
               id: "pi-left",
@@ -1276,7 +1276,7 @@ const medicalIntakeForm: DocumentSchema = {
         {
           id: "grid",
           type: "row",
-          layout: { flexWrap: "wrap", rowGap: 10, columnGap: 20 },
+          layout: { rowGap: 10, columnGap: 20 },
           children: [
             {
               id: "c1",
@@ -1429,25 +1429,25 @@ const evaluationRubric: DocumentSchema = {
             {
               id: "th-poor",
               type: "text",
-              layout: { width: 80, textAlign: "center" },
+              layout: { width: 80 },
               props: { literal: "Poor (1)" },
             },
             {
               id: "th-fair",
               type: "text",
-              layout: { width: 80, textAlign: "center" },
+              layout: { width: 80 },
               props: { literal: "Fair (2)" },
             },
             {
               id: "th-good",
               type: "text",
-              layout: { width: 80, textAlign: "center" },
+              layout: { width: 80 },
               props: { literal: "Good (3)" },
             },
             {
               id: "th-exc",
               type: "text",
-              layout: { width: 80, textAlign: "center" },
+              layout: { width: 80 },
               props: { literal: "Excellent (4)" },
             },
           ],

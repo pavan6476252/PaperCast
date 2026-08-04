@@ -65,7 +65,7 @@ export const footers: WidgetRegistryItem[] = [
             paddingRight: 16,
           }
         ),
-        style: { backgroundColor: "#f8fafc" },
+        layout: { backgroundColor: "#f8fafc" },
       },
       140
     ),
@@ -205,7 +205,7 @@ export const footers: WidgetRegistryItem[] = [
             { justifyContent: "space-between" }
           ),
         ]),
-        style: { backgroundColor: "#f8fafc" },
+        layout: { backgroundColor: "#f8fafc" },
       },
       140
     ),
@@ -237,7 +237,7 @@ export const footers: WidgetRegistryItem[] = [
           ],
           { alignItems: "center", paddingTop: 16, paddingBottom: 16 }
         ),
-        style: { backgroundColor: "#0f172a" },
+        layout: { backgroundColor: "#0f172a" },
       },
       120
     ),

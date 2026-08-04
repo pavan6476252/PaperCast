@@ -118,8 +118,6 @@ export const layoutSnippets: SchemaSnippet[] = [
                 paddingBottom: 16,
                 paddingLeft: 24,
                 paddingRight: 24,
-              },
-              style: {
                 backgroundColor: "#f9f9f9",
               },
               children: [

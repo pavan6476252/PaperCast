@@ -6,7 +6,7 @@
       "$ref": "#/definitions/BuiltInNode",
       "description": "Comprehensive union representing any valid node (built-in or custom)."
     },
-    "BaseNode<\"checkbox\",structure-src_schema.ts-4809-4924-src_schema.ts-4785-4926-src_schema.ts-4757-4927-src_schema.ts-0-7488>": {
+    "BaseNode<\"checkbox\",structure-src_schema.ts-5036-5151-src_schema.ts-5012-5153-src_schema.ts-4984-5154-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -101,7 +101,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"image\",structure-src_schema.ts-4042-4140-src_schema.ts-4021-4142-src_schema.ts-3997-4143-src_schema.ts-0-7488>": {
+    "BaseNode<\"image\",structure-src_schema.ts-4269-4367-src_schema.ts-4248-4369-src_schema.ts-4224-4370-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -154,7 +154,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"listTile\",structure-src_schema.ts-4409-4525-src_schema.ts-4385-4527-src_schema.ts-4357-4528-src_schema.ts-0-7488>": {
+    "BaseNode<\"listTile\",structure-src_schema.ts-4636-4752-src_schema.ts-4612-4754-src_schema.ts-4584-4755-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -249,7 +249,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"radio\",structure-src_schema.ts-4973-5127-src_schema.ts-4952-5129-src_schema.ts-4927-5130-src_schema.ts-0-7488>": {
+    "BaseNode<\"radio\",structure-src_schema.ts-5200-5354-src_schema.ts-5179-5356-src_schema.ts-5154-5357-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -310,7 +310,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"radioGroup\",structure-src_schema.ts-5186-5264-src_schema.ts-5160-5266-src_schema.ts-5130-5267-src_schema.ts-0-7488>": {
+    "BaseNode<\"radioGroup\",structure-src_schema.ts-5413-5491-src_schema.ts-5387-5493-src_schema.ts-5357-5494-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -362,7 +362,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"richText\",structure-src_schema.ts-4580-4637-src_schema.ts-4556-4639-src_schema.ts-4528-4640-src_schema.ts-0-7488>": {
+    "BaseNode<\"richText\",structure-src_schema.ts-4807-4864-src_schema.ts-4783-4866-src_schema.ts-4755-4867-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -491,7 +491,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"spacer\",structure-src_schema.ts-4187-4207-src_schema.ts-4168-4208-src_schema.ts-4143-4209-src_schema.ts-0-7488>": {
+    "BaseNode<\"spacer\",structure-src_schema.ts-4414-4434-src_schema.ts-4395-4435-src_schema.ts-4370-4436-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -577,7 +577,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"text\",structure-src_schema.ts-3891-3994-src_schema.ts-3871-3996-src_schema.ts-3848-3997-src_schema.ts-0-7488>": {
+    "BaseNode<\"text\",structure-src_schema.ts-4118-4221-src_schema.ts-4098-4223-src_schema.ts-4075-4224-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -672,7 +672,7 @@
       "required": ["id", "type", "layout"],
       "type": "object"
     },
-    "BaseNode<\"widgetInstance\",structure-src_schema.ts-4327-4354-src_schema.ts-4297-4356-src_schema.ts-4264-4357-src_schema.ts-0-7488>": {
+    "BaseNode<\"widgetInstance\",structure-src_schema.ts-4554-4581-src_schema.ts-4524-4583-src_schema.ts-4491-4584-src_schema.ts-0-7715>": {
       "additionalProperties": false,
       "description": "The foundational shape of every node in the FormCast AST.",
       "properties": {
@@ -727,8 +727,17 @@
           "enum": ["flex-start", "center", "flex-end", "stretch"],
           "type": "string"
         },
+        "backgroundColor": {
+          "type": "string"
+        },
         "borderBottomColor": {
           "type": "string"
+        },
+        "borderBottomLeftRadius": {
+          "type": "number"
+        },
+        "borderBottomRightRadius": {
+          "type": "number"
         },
         "borderBottomStyle": {
           "enum": ["solid", "dashed", "none"],
@@ -747,6 +756,9 @@
         "borderLeftWidth": {
           "type": "number"
         },
+        "borderRadius": {
+          "type": "number"
+        },
         "borderRightColor": {
           "type": "string"
         },
@@ -759,6 +771,12 @@
         },
         "borderTopColor": {
           "type": "string"
+        },
+        "borderTopLeftRadius": {
+          "type": "number"
+        },
+        "borderTopRightRadius": {
+          "type": "number"
         },
         "borderTopStyle": {
           "enum": ["solid", "dashed", "none"],
@@ -789,6 +807,10 @@
         },
         "flexShrink": {
           "type": "number"
+        },
+        "flexWrap": {
+          "enum": ["nowrap", "wrap", "wrap-reverse"],
+          "type": "string"
         },
         "height": {
           "type": ["number", "string"]
@@ -899,7 +921,7 @@
       "description": "Union of all native FormCast nodes."
     },
     "CheckboxNode": {
-      "$ref": "#/definitions/BaseNode%3C%22checkbox%22%2Cstructure-src_schema.ts-4809-4924-src_schema.ts-4785-4926-src_schema.ts-4757-4927-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22checkbox%22%2Cstructure-src_schema.ts-5036-5151-src_schema.ts-5012-5153-src_schema.ts-4984-5154-src_schema.ts-0-7715%3E"
     },
     "ColumnNode": {
       "$ref": "#/definitions/BaseNode%3C%22column%22%2Cundefined%3E"
@@ -1048,10 +1070,10 @@
       "type": "object"
     },
     "ImageNode": {
-      "$ref": "#/definitions/BaseNode%3C%22image%22%2Cstructure-src_schema.ts-4042-4140-src_schema.ts-4021-4142-src_schema.ts-3997-4143-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22image%22%2Cstructure-src_schema.ts-4269-4367-src_schema.ts-4248-4369-src_schema.ts-4224-4370-src_schema.ts-0-7715%3E"
     },
     "ListTileNode": {
-      "$ref": "#/definitions/BaseNode%3C%22listTile%22%2Cstructure-src_schema.ts-4409-4525-src_schema.ts-4385-4527-src_schema.ts-4357-4528-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22listTile%22%2Cstructure-src_schema.ts-4636-4752-src_schema.ts-4612-4754-src_schema.ts-4584-4755-src_schema.ts-0-7715%3E"
     },
     "OrderedListNode": {
       "$ref": "#/definitions/BaseNode%3C%22ol%22%2Cundefined%3E"
@@ -1079,10 +1101,10 @@
       "type": "object"
     },
     "RadioGroupNode": {
-      "$ref": "#/definitions/BaseNode%3C%22radioGroup%22%2Cstructure-src_schema.ts-5186-5264-src_schema.ts-5160-5266-src_schema.ts-5130-5267-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22radioGroup%22%2Cstructure-src_schema.ts-5413-5491-src_schema.ts-5387-5493-src_schema.ts-5357-5494-src_schema.ts-0-7715%3E"
     },
     "RadioNode": {
-      "$ref": "#/definitions/BaseNode%3C%22radio%22%2Cstructure-src_schema.ts-4973-5127-src_schema.ts-4952-5129-src_schema.ts-4927-5130-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22radio%22%2Cstructure-src_schema.ts-5200-5354-src_schema.ts-5179-5356-src_schema.ts-5154-5357-src_schema.ts-0-7715%3E"
     },
     "RegionCondition": {
       "anyOf": [
@@ -1123,7 +1145,7 @@
       ]
     },
     "RichTextNode": {
-      "$ref": "#/definitions/BaseNode%3C%22richText%22%2Cstructure-src_schema.ts-4580-4637-src_schema.ts-4556-4639-src_schema.ts-4528-4640-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22richText%22%2Cstructure-src_schema.ts-4807-4864-src_schema.ts-4783-4866-src_schema.ts-4755-4867-src_schema.ts-0-7715%3E"
     },
     "RichTextPreferences": {
       "additionalProperties": false,
@@ -1156,7 +1178,7 @@
       "$ref": "#/definitions/BaseNode%3C%22row%22%2Cundefined%3E"
     },
     "SpacerNode": {
-      "$ref": "#/definitions/BaseNode%3C%22spacer%22%2Cstructure-src_schema.ts-4187-4207-src_schema.ts-4168-4208-src_schema.ts-4143-4209-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22spacer%22%2Cstructure-src_schema.ts-4414-4434-src_schema.ts-4395-4435-src_schema.ts-4370-4436-src_schema.ts-0-7715%3E"
     },
     "TableColumnConfig": {
       "additionalProperties": false,
@@ -1332,7 +1354,7 @@
       "type": "object"
     },
     "TextNode": {
-      "$ref": "#/definitions/BaseNode%3C%22text%22%2Cstructure-src_schema.ts-3891-3994-src_schema.ts-3871-3996-src_schema.ts-3848-3997-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22text%22%2Cstructure-src_schema.ts-4118-4221-src_schema.ts-4098-4223-src_schema.ts-4075-4224-src_schema.ts-0-7715%3E"
     },
     "Theme": {
       "additionalProperties": false,
@@ -1353,6 +1375,12 @@
                   "borderBottomColor": {
                     "type": "string"
                   },
+                  "borderBottomLeftRadius": {
+                    "type": "number"
+                  },
+                  "borderBottomRightRadius": {
+                    "type": "number"
+                  },
                   "borderBottomStyle": {
                     "enum": ["solid", "dashed", "none"],
                     "type": "string"
@@ -1370,6 +1398,9 @@
                   "borderLeftWidth": {
                     "type": "number"
                   },
+                  "borderRadius": {
+                    "type": "number"
+                  },
                   "borderRightColor": {
                     "type": "string"
                   },
@@ -1382,6 +1413,12 @@
                   },
                   "borderTopColor": {
                     "type": "string"
+                  },
+                  "borderTopLeftRadius": {
+                    "type": "number"
+                  },
+                  "borderTopRightRadius": {
+                    "type": "number"
                   },
                   "borderTopStyle": {
                     "enum": ["solid", "dashed", "none"],
@@ -1415,6 +1452,10 @@
                   },
                   "flexShrink": {
                     "type": "number"
+                  },
+                  "flexWrap": {
+                    "enum": ["nowrap", "wrap", "wrap-reverse"],
+                    "type": "string"
                   },
                   "fontFamily": {
                     "type": "string"
@@ -1529,6 +1570,12 @@
                 "borderBottomColor": {
                   "type": "string"
                 },
+                "borderBottomLeftRadius": {
+                  "type": "number"
+                },
+                "borderBottomRightRadius": {
+                  "type": "number"
+                },
                 "borderBottomStyle": {
                   "enum": ["solid", "dashed", "none"],
                   "type": "string"
@@ -1546,6 +1593,9 @@
                 "borderLeftWidth": {
                   "type": "number"
                 },
+                "borderRadius": {
+                  "type": "number"
+                },
                 "borderRightColor": {
                   "type": "string"
                 },
@@ -1558,6 +1608,12 @@
                 },
                 "borderTopColor": {
                   "type": "string"
+                },
+                "borderTopLeftRadius": {
+                  "type": "number"
+                },
+                "borderTopRightRadius": {
+                  "type": "number"
                 },
                 "borderTopStyle": {
                   "enum": ["solid", "dashed", "none"],
@@ -1591,6 +1647,10 @@
                 },
                 "flexShrink": {
                   "type": "number"
+                },
+                "flexWrap": {
+                  "enum": ["nowrap", "wrap", "wrap-reverse"],
+                  "type": "string"
                 },
                 "fontFamily": {
                   "type": "string"
@@ -1696,9 +1756,6 @@
     "TypographyAndColor": {
       "additionalProperties": false,
       "properties": {
-        "backgroundColor": {
-          "type": "string"
-        },
         "color": {
           "type": "string"
         },
@@ -1765,7 +1822,7 @@
       "type": "object"
     },
     "WidgetInstanceNode": {
-      "$ref": "#/definitions/BaseNode%3C%22widgetInstance%22%2Cstructure-src_schema.ts-4327-4354-src_schema.ts-4297-4356-src_schema.ts-4264-4357-src_schema.ts-0-7488%3E"
+      "$ref": "#/definitions/BaseNode%3C%22widgetInstance%22%2Cstructure-src_schema.ts-4554-4581-src_schema.ts-4524-4583-src_schema.ts-4491-4584-src_schema.ts-0-7715%3E"
     }
   }
 }

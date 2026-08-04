@@ -26,35 +26,79 @@ import {
   PropertyPanel,
   WidgetsPanel,
 } from "@formcast/react/editor";
-import { useDocumentStore } from "../../../store/documentStore";
+import {
+  useDocumentStore,
+  useDocumentTemporalStore,
+} from "../../../store/documentStore";
 import { useMcpSync } from "../../../hooks/useMcpSync";
 import { registerDefaultWidgets } from "@formcast/react/widgets";
+
+const WorkspaceSidebar = dynamic(
+  () =>
+    import("../../../components/workspace/WorkspaceSidebar").then(
+      (mod) => mod.WorkspaceSidebar
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="p-4 text-sm text-gray-500 flex items-center gap-2">
+        <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        Loading workspace...
+      </div>
+    ),
+  }
+);
 
 // Register default FormCast widgets on client load
 registerDefaultWidgets();
 
 const usePlaygroundShortcuts = (
-  setShowEditor: React.Dispatch<React.SetStateAction<boolean>>
+  setShowEditor: React.Dispatch<React.SetStateAction<boolean>>,
+  showToast: (msg: string) => void
 ) => {
   const setZoom = useDocumentStore((state) => state.setZoom);
+  const { undo, redo } = useDocumentTemporalStore((state) => state);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Do not hijack undo/redo if typing in an input field
+      const target = e.target as HTMLElement;
+      const isInput =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT";
+
       const isMod = e.metaKey || e.ctrlKey;
       if (isMod) {
+        if (e.key.toLowerCase() === "z") {
+          if (!isInput) {
+            e.preventDefault();
+            if (e.shiftKey) {
+              redo();
+              showToast("Redo");
+            } else {
+              undo();
+              showToast("Undo");
+            }
+          }
+          return;
+        }
         switch (e.key) {
           case "=":
           case "+":
             e.preventDefault();
             setZoom((z) => Math.min(2, z + 0.1));
+            showToast("Zoom In");
             break;
           case "-":
             e.preventDefault();
             setZoom((z) => Math.max(0.25, z - 0.1));
+            showToast("Zoom Out");
             break;
           case "0":
             e.preventDefault();
             setZoom(1);
+            showToast("Reset Zoom");
             break;
           case "\\":
           case "b":
@@ -65,7 +109,7 @@ const usePlaygroundShortcuts = (
           case "s":
           case "S":
             e.preventDefault();
-            window.dispatchEvent(new CustomEvent("formcast-download-pdf"));
+            // handled by DocumentPreview for saving schema
             break;
           case "p":
           case "P":
@@ -79,7 +123,7 @@ const usePlaygroundShortcuts = (
     return () => {
       window.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [setZoom, setShowEditor]);
+  }, [setZoom, setShowEditor, showToast, undo, redo]);
 };
 
 const LeftSidebar = ({ children }: { children: React.ReactNode }) => {
@@ -221,9 +265,26 @@ const RightSidebar = () => {
   );
 };
 
-export default function Home() {
+import { useToast, ToastProvider } from "../../../components/ui/Toast";
+import { useWorkspaceStore } from "../../../store/workspaceStore";
+import { Folder, Code2, PanelLeftClose } from "lucide-react";
+
+const TemplateGalleryDialog = dynamic(
+  () =>
+    import("../../../components/workspace/TemplateGalleryDialog").then(
+      (mod) => mod.TemplateGalleryDialog
+    ),
+  { ssr: false }
+);
+
+export function PlaygroundContent() {
+  const { showToast } = useToast();
+  const { isTemplateGalleryOpen, setIsTemplateGalleryOpen } =
+    useWorkspaceStore();
   const { isConnected, sessionId } = useMcpSync();
-  const [showEditor, setShowEditor] = useState(true);
+  const [activeLeftPanel, setActiveLeftPanel] = useState<
+    "workspace" | "editor" | null
+  >(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -243,7 +304,17 @@ export default function Home() {
     }
   }, []);
 
-  usePlaygroundShortcuts(setShowEditor);
+  // Map old showEditor to activeLeftPanel for the shortcut hook
+  const setShowEditor = useCallback((action: React.SetStateAction<boolean>) => {
+    setActiveLeftPanel((prev) => {
+      const isCurrentlyEditor = prev === "editor";
+      const nextState =
+        typeof action === "function" ? action(isCurrentlyEditor) : action;
+      return nextState ? "editor" : null;
+    });
+  }, []);
+
+  usePlaygroundShortcuts(setShowEditor, showToast);
 
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
   const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
@@ -287,7 +358,46 @@ export default function Home() {
       }}
     >
       <main className="flex h-screen w-screen overflow-hidden bg-white text-black font-sans print:h-auto print:w-auto print:overflow-visible">
-        {showEditor && (
+        {/* Activity Bar */}
+        <div className="w-12 bg-[#1e1e1e] flex flex-col items-center py-4 gap-4 shrink-0 z-20 print:hidden shadow-md relative">
+          <button
+            onClick={() =>
+              setActiveLeftPanel((p) =>
+                p === "workspace" ? null : "workspace"
+              )
+            }
+            className={`p-2 rounded-lg transition-colors ${activeLeftPanel === "workspace" ? "text-white bg-blue-600" : "text-gray-400 hover:text-white"}`}
+            title="Workspace Explorer"
+          >
+            <Folder size={20} />
+          </button>
+          <button
+            onClick={() =>
+              setActiveLeftPanel((p) => (p === "editor" ? null : "editor"))
+            }
+            className={`p-2 rounded-lg transition-colors ${activeLeftPanel === "editor" ? "text-white bg-blue-600" : "text-gray-400 hover:text-white"}`}
+            title="JSON Schema Editor"
+          >
+            <Code2 size={20} />
+          </button>
+
+          <div className="mt-auto">
+            <button
+              onClick={() => setActiveLeftPanel(null)}
+              className={`p-2 rounded-lg transition-colors ${activeLeftPanel === null ? "text-gray-600 cursor-default" : "text-gray-400 hover:text-white"}`}
+              title="Close Left Panel"
+            >
+              <PanelLeftClose size={20} />
+            </button>
+          </div>
+        </div>
+
+        {activeLeftPanel === "workspace" && (
+          <div className="flex flex-col z-10 shadow-xl relative shrink-0 print:hidden h-full">
+            <WorkspaceSidebar />
+          </div>
+        )}
+        {activeLeftPanel === "editor" && (
           <LeftSidebar>
             <JsonEditor />
           </LeftSidebar>
@@ -295,7 +405,7 @@ export default function Home() {
 
         <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
           <DocumentPreview
-            isEditorVisible={showEditor}
+            isEditorVisible={activeLeftPanel === "editor"}
             onToggleEditor={() => setShowEditor((s) => !s)}
           />
         </div>
@@ -313,7 +423,21 @@ export default function Home() {
             {isConnected ? `MCP Connected: ${sessionId}` : "MCP Disconnected"}
           </div>
         </div>
+
+        {isTemplateGalleryOpen && (
+          <TemplateGalleryDialog
+            onClose={() => setIsTemplateGalleryOpen(false)}
+          />
+        )}
       </main>
     </EditorProvider>
+  );
+}
+
+export default function Home() {
+  return (
+    <ToastProvider>
+      <PlaygroundContent />
+    </ToastProvider>
   );
 }

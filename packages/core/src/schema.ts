@@ -20,6 +20,9 @@ export interface BoxModel {
   paddingBottom?: number;
   paddingLeft?: number;
 
+  // background
+  backgroundColor?: string;
+
   // border
   borderTopWidth?: number;
   borderTopStyle?: "solid" | "dashed" | "none";
@@ -33,10 +36,16 @@ export interface BoxModel {
   borderLeftWidth?: number;
   borderLeftStyle?: "solid" | "dashed" | "none";
   borderLeftColor?: string;
+  borderRadius?: number;
+  borderTopLeftRadius?: number;
+  borderTopRightRadius?: number;
+  borderBottomRightRadius?: number;
+  borderBottomLeftRadius?: number;
 
   // flex/flow controls
   direction?: "row" | "column";
   wrap?: boolean;
+  flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
   justifyContent?:
     "flex-start" | "center" | "flex-end" | "space-between" | "space-around";
   alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
@@ -61,7 +70,6 @@ export interface TypographyAndColor {
   textDecoration?: "none" | "underline";
   textAlign?: "left" | "center" | "right" | "justify";
   color?: string;
-  backgroundColor?: string;
   lineHeight?: number;
 }
 

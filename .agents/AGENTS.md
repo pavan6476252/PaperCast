@@ -82,10 +82,17 @@ This repository is a Turborepo monorepo structured as follows:
    - `OffscreenMeasurer` renders elements offscreen to measure their heights.
    - `PaginationEngine` uses these measurements to compute which elements fit on page 1, page 2, etc., based on page size and margins.
    - `DocumentPreview` displays pages side-by-side or stacked on the screen.
-3. **Next.js & React Conventions (Crucial)**:
+3. **Persistence & History**:
+   - **Local Storage (IndexedDB)**: User schemas and templates are saved locally in the browser using IndexedDB via `workspaceStore` (backed by `idb-keyval`). This supports creating, duplicating, and switching between multiple schemas.
+   - **Auto-Save Mechanism**: The workspace supports an opt-in auto-save feature (`isWorkspaceAutoSave`), which relies on a debounced listener (e.g., in `WorkspaceSidebar.tsx`) to avoid UI blocking and IndexedDB thrashing while typing in the JSON editor.
+   - **Undo/Redo**: Document history tracking is handled by `zundo` integrating seamlessly with the Zustand `documentStore`. The Monaco Editor maintains its own undo stack natively, but UI-driven visual edits programmatically push undo stops into Monaco (`editor.pushUndoStop`) to ensure both stacks stay perfectly synced.
+4. **UI & Bundle Optimization**:
+   - **Lazy Loading**: Heavy UI components that are not visible on initial load (like the `WorkspaceSidebar` and `TemplateGalleryDialog`) MUST be dynamically imported (`next/dynamic` with `ssr: false`) to avoid polluting the initial JavaScript bundle with massive default schema templates or explorer logic.
+   - **Unified Actions**: Avoid scattered, redundant action buttons. Related actions (e.g., Save Schema, Save As, Export PDF, Print) should be grouped logically (e.g., Split-Button or Dropdown) to save toolbar space and prevent user confusion.
+5. **Next.js & React Conventions (Crucial)**:
    - **Next.js 15/16 Async APIs**: When creating Server Components for dynamic routes (e.g. `[slug]/page.tsx`), you MUST await the `params` prop since it is a Promise in Next 16. For `searchParams` in client components, always wrap `useSearchParams()` in a `<Suspense>` boundary.
    - **React Performance**: Never attach global, passive event listeners (like `mousemove` or `mouseup`) on component mount using generic `useEffect` if they only apply conditionally (like during drag operations). Use localized pointer events or conditionally attach them based on dragging state to avoid unnecessary handler invocations per frame. Keep heavy dependencies like Monaco Editor dynamically imported (`next/dynamic` with `ssr: false`).
-4. **Monorepo Workspaces**:
+6. **Monorepo Workspaces**:
    - `apps/web` consumes `@formcast/core` via standard imports and compiles it using `transpilePackages` in `next.config.ts`.
    - `apps/mcp` is bundled with `tsup`, embedding the schemas directly from `@formcast/core` to provide a portable MCP server.
 

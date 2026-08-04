@@ -297,8 +297,6 @@ export const tableSnippets: SchemaSnippet[] = [
                     paddingLeft: 12,
                     paddingRight: 12,
                     rowGap: 8,
-                  },
-                  style: {
                     backgroundColor: "#fefefe",
                   },
                   children: [

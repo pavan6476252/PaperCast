@@ -5,6 +5,9 @@ FormCast is a powerful, dynamic Document Builder built with Next.js. It allows y
 ## Features
 
 - **Live Preview:** Real-time rendering of your document based on JSON input.
+- **Local Workspaces:** Save and manage multiple document schemas natively in your browser via IndexedDB.
+- **Template Gallery:** Quickly jumpstart your designs using built-in snippets or your own saved documents.
+- **Undo & Redo:** Full history tracking across all document edits.
 - **Customizable Layouts:** Select standard page sizes (A4, A3, Letter) or set custom dimensions.
 - **Orientation Control:** Toggle instantly between Portrait and Landscape modes.
 - **PDF Generation:** Save your documents as high-quality PDFs seamlessly.
@@ -12,6 +15,10 @@ FormCast is a powerful, dynamic Document Builder built with Next.js. It allows y
 ## Getting Started
 
 First, ensure you have dependencies installed (this project uses `pnpm`):
+
+```bash
+pnpm install
+```
 
 ```bash
 pnpm install

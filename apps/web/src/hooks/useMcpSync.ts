@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDocumentStore } from "../store/documentStore";
+import { useWorkspaceStore } from "../store/workspaceStore";
 import { WsEventType, WsMessage } from "@formcast/core/ws";
-// to-replace
 
 export function useMcpSync() {
   const parsedDocument = useDocumentStore((state) => state.parsedDocument);
@@ -34,7 +34,7 @@ export function useMcpSync() {
         );
       };
 
-      ws.onmessage = (event) => {
+      ws.onmessage = async (event) => {
         try {
           const message = JSON.parse(event.data) as WsMessage;
 
@@ -60,15 +60,69 @@ export function useMcpSync() {
 
             case WsEventType.AST_ACTION: {
               const { action, args } = message;
-              const store = useDocumentStore.getState();
-              if (typeof (store as any)[action] === "function") {
+              const store = useDocumentStore.getState() as unknown as Record<
+                string,
+                unknown
+              >;
+              if (typeof store[action] === "function") {
                 console.log(`Executing AST action from MCP: ${action}`, args);
-                (store as any)[action](...args);
+                (store[action] as (...args: unknown[]) => void)(...args);
               } else {
                 console.warn(
                   `AST action ${action} not found on useDocumentStore`
                 );
               }
+              break;
+            }
+
+            case WsEventType.WORKSPACE_LIST_REQ: {
+              const schemas = useWorkspaceStore.getState().schemas;
+              ws.send(
+                JSON.stringify({
+                  type: WsEventType.WORKSPACE_LIST_RES,
+                  requestId: message.requestId,
+                  schemas,
+                })
+              );
+              break;
+            }
+
+            case WsEventType.WORKSPACE_LOAD: {
+              const content = await useWorkspaceStore
+                .getState()
+                .loadSchemaContent(message.id);
+              if (content) {
+                setJsonString(content);
+                useWorkspaceStore.getState().setActiveSchema(message.id);
+              }
+              break;
+            }
+
+            case WsEventType.WORKSPACE_SAVE: {
+              const workspaceStore = useWorkspaceStore.getState();
+              const activeId = workspaceStore.activeSchemaId;
+              const currentJson = useDocumentStore.getState().jsonString;
+              if (activeId) {
+                const active = workspaceStore.schemas.find(
+                  (s) => s.id === activeId
+                );
+                await workspaceStore.saveSchema(
+                  activeId,
+                  active ? active.name : "Saved Schema",
+                  currentJson
+                );
+              } else {
+                const newId = await workspaceStore.createSchema(
+                  "Saved Schema",
+                  currentJson
+                );
+                workspaceStore.setActiveSchema(newId);
+              }
+              break;
+            }
+
+            case WsEventType.WORKSPACE_DELETE: {
+              await useWorkspaceStore.getState().deleteSchema(message.id);
               break;
             }
 

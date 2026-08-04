@@ -147,7 +147,7 @@ export const headers: WidgetRegistryItem[] = [
                   width: 300,
                 }
               ),
-              style: { backgroundColor: "#1f2937" },
+              layout: { backgroundColor: "#1f2937" },
             },
             spacer(12),
             text("company.address1", {
@@ -242,7 +242,7 @@ export const headers: WidgetRegistryItem[] = [
               marginTop: -20,
             }
           ),
-          style: { backgroundColor: "#0f172a" },
+          layout: { backgroundColor: "#0f172a" },
         },
 
         spacer(60),
@@ -722,7 +722,7 @@ export const headers: WidgetRegistryItem[] = [
               borderBottomColor: "#38bdf8",
             }
           ),
-          style: { backgroundColor: "#1e293b" },
+          layout: { backgroundColor: "#1e293b" },
         },
 
         spacer(40),
@@ -766,7 +766,7 @@ export const headers: WidgetRegistryItem[] = [
               borderTopColor: "#10b981",
             }
           ),
-          style: { backgroundColor: "#111827" },
+          layout: { backgroundColor: "#111827" },
         },
       ]),
       400
@@ -868,7 +868,7 @@ export const headers: WidgetRegistryItem[] = [
                     borderRightColor: "#dc2626",
                   }
                 ),
-                style: { backgroundColor: "#fef2f2" },
+                layout: { backgroundColor: "#fef2f2" },
               },
             ],
             { alignItems: "center", justifyContent: "space-between" }
@@ -1012,7 +1012,7 @@ export const headers: WidgetRegistryItem[] = [
               paddingRight: 40,
             }
           ),
-          style: { backgroundColor: "#111827" },
+          layout: { backgroundColor: "#111827" },
         },
       ]),
       400

@@ -4,6 +4,7 @@ import { registerDocumentTools } from "./document.js";
 import { registerLayoutTools } from "./layout.js";
 import { registerSkillsTools } from "./skills.js";
 import { registerPdfTools } from "./pdf.js";
+import { registerWorkspaceTools } from "./workspace.js";
 
 export function registerTools(server: McpServer) {
   registerSessionTools(server);
@@ -11,4 +12,5 @@ export function registerTools(server: McpServer) {
   registerLayoutTools(server);
   registerSkillsTools(server);
   registerPdfTools(server);
+  registerWorkspaceTools(server);
 }

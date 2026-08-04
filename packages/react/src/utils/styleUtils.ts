@@ -36,11 +36,20 @@ export function getStyle(node: AnyNode): CSSProperties {
     borderLeftWidth: layout.borderLeftWidth,
     borderLeftStyle: layout.borderLeftStyle,
     borderLeftColor: layout.borderLeftColor,
+    borderRadius: layout.borderRadius,
+    borderTopLeftRadius: layout.borderTopLeftRadius,
+    borderTopRightRadius: layout.borderTopRightRadius,
+    borderBottomRightRadius: layout.borderBottomRightRadius,
+    borderBottomLeftRadius: layout.borderBottomLeftRadius,
 
     // Flex/Flow
     display: "flex",
     flexDirection: layout.direction,
-    flexWrap: layout.wrap ? "wrap" : "nowrap",
+    flexWrap: layout.flexWrap
+      ? layout.flexWrap
+      : layout.wrap
+        ? "wrap"
+        : "nowrap",
     justifyContent: layout.justifyContent,
     alignItems: layout.alignItems,
     rowGap: layout.rowGap,
@@ -58,7 +67,7 @@ export function getStyle(node: AnyNode): CSSProperties {
     textDecoration: style.textDecoration,
     textAlign: style.textAlign,
     color: style.color,
-    backgroundColor: style.backgroundColor,
+    backgroundColor: layout.backgroundColor,
     lineHeight: style.lineHeight,
 
     // Pagination hints are omitted from CSS, used during pagination computation

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { paginateDocument, Measurements } from "../PaginationEngine";
+import { paginateDocument } from "../PaginationEngine";
+import type { Measurements } from "../types";
 import { DocumentSchema } from "@formcast/core";
 
 describe("PaginationEngine", () => {

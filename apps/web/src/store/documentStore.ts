@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, useStore } from "zustand";
 import { DocumentSchema, AnyNode, PageRegion } from "@formcast/core";
 // to-replace
 import { TEST_DOCUMENT } from "@formcast/core/test";
@@ -13,6 +13,7 @@ import {
   moveNodeToSibling,
 } from "@formcast/core";
 import { autoDeconstructRichTextAst } from "@formcast/react";
+import { temporal } from "zundo";
 
 const INITIAL_DOCUMENT: DocumentSchema = {
   version: 1,
@@ -187,321 +188,373 @@ interface DocumentStore {
   deconstructAllRichText: () => void;
 }
 
-export const useDocumentStore = create<DocumentStore>((set, get) => ({
-  jsonString: INITIAL_JSON_STRING,
-  parsedDocument: DECONSTRUCTED_INITIAL,
-  isValid: true,
-  parseError: null,
-  isAutoSync: true,
-  selectedNodeId: null,
-  rightPanelMode: "widgets",
-  lastVisualEdit: null,
-  zoom: 1,
-  allowHeaderFooterEditing: false,
+export const useDocumentStore = create<DocumentStore>()(
+  temporal(
+    (set, get) => ({
+      jsonString: INITIAL_JSON_STRING,
+      parsedDocument: DECONSTRUCTED_INITIAL,
+      isValid: true,
+      parseError: null,
+      isAutoSync: true,
+      selectedNodeId: null,
+      rightPanelMode: "widgets",
+      lastVisualEdit: null,
+      zoom: 1,
+      allowHeaderFooterEditing: false,
 
-  setSelectedNodeId: (id: string | null) => {
-    set({ selectedNodeId: id });
-  },
+      setSelectedNodeId: (id: string | null) => {
+        set({ selectedNodeId: id });
+      },
 
-  setRightPanelMode: (mode: "widgets" | "properties") => {
-    set({ rightPanelMode: mode });
-  },
+      setRightPanelMode: (mode: "widgets" | "properties") => {
+        set({ rightPanelMode: mode });
+      },
 
-  setAllowHeaderFooterEditing: (allowed) => {
-    set({ allowHeaderFooterEditing: allowed });
-  },
+      setAllowHeaderFooterEditing: (allowed) => {
+        set({ allowHeaderFooterEditing: allowed });
+      },
 
-  setZoom: (zoom) => {
-    if (typeof zoom === "function") {
-      set((state) => ({ zoom: zoom(state.zoom) }));
-    } else {
-      set({ zoom });
-    }
-  },
+      setZoom: (zoom) => {
+        if (typeof zoom === "function") {
+          set((state) => ({ zoom: zoom(state.zoom) }));
+        } else {
+          set({ zoom });
+        }
+      },
 
-  setJsonString: (value: string) => {
-    set({ jsonString: value });
-    if (get().isAutoSync) {
-      get().triggerManualSync();
-    }
-  },
+      setJsonString: (value: string) => {
+        if (!get().isAutoSync) {
+          set({ jsonString: value });
+          return;
+        }
 
-  toggleAutoSync: () => {
-    set((state) => ({ isAutoSync: !state.isAutoSync }));
-    // If we just turned auto-sync ON, immediately sync
-    if (get().isAutoSync) {
-      get().triggerManualSync();
-    }
-  },
-
-  updateNodeProperty: <
-    G extends "layout" | "style" | "props" | "bind",
-    K extends string,
-  >(
-    nodeId: string,
-    propertyGroup: G,
-    propertyKey: K,
-    newValue: unknown
-  ) => {
-    const { parsedDocument, jsonString, isAutoSync } = get();
-    if (!parsedDocument) return;
-
-    const baseNodeId = nodeId.split("-part")[0];
-
-    import("../utils/jsonUpdater").then(({ findNodePath }) => {
-      const nodePath = findNodePath(parsedDocument, baseNodeId);
-      if (nodePath) {
         try {
-          const updatedJsonString = updateJsonNodeProperty(
-            jsonString,
-            nodePath,
-            propertyGroup,
-            propertyKey,
-            newValue
-          );
-          // Set both jsonString and lastVisualEdit so Monaco can intercept if mounted
-          set({
-            jsonString: updatedJsonString,
-            lastVisualEdit: {
-              timestamp: Date.now(),
-              newString: updatedJsonString,
-            },
-          });
-          if (isAutoSync) {
-            get().triggerManualSync();
+          let parsed = JSON.parse(value) as DocumentSchema;
+          if (parsed.meta?.richTextPreferences?.autoDeconstruct) {
+            parsed = applyAutoDeconstruct(parsed);
           }
-        } catch (e) {
-          console.error("Failed to update node property visually", e);
+          const newJsonString = JSON.stringify(parsed, null, 2);
+
+          set({
+            jsonString: newJsonString,
+            parsedDocument: parsed,
+            isValid: true,
+            parseError: null,
+          });
+        } catch (e: any) {
+          set({
+            jsonString: value,
+            isValid: false,
+            parseError: e.message,
+          });
         }
-      } else {
-        console.warn(`Node with id ${baseNodeId} not found in parsedDocument.`);
-      }
-    });
-  },
+      },
 
-  triggerManualSync: () => {
-    try {
-      let parsed = JSON.parse(get().jsonString) as DocumentSchema;
+      toggleAutoSync: () => {
+        set((state) => ({ isAutoSync: !state.isAutoSync }));
+        // If we just turned auto-sync ON, immediately sync
+        if (get().isAutoSync) {
+          get().triggerManualSync();
+        }
+      },
 
-      // Destructively apply autoDeconstruct synchronously
-      if (parsed.meta?.richTextPreferences?.autoDeconstruct) {
-        parsed = applyAutoDeconstruct(parsed);
-      }
+      updateNodeProperty: <
+        G extends "layout" | "style" | "props" | "bind",
+        K extends string,
+      >(
+        nodeId: string,
+        propertyGroup: G,
+        propertyKey: K,
+        newValue: unknown
+      ) => {
+        const { parsedDocument, jsonString, isAutoSync } = get();
+        if (!parsedDocument) return;
 
-      const newJsonString = JSON.stringify(parsed, null, 2);
+        const baseNodeId = nodeId.split("-part")[0];
 
-      set({
-        parsedDocument: parsed,
-        jsonString: newJsonString,
-        isValid: true,
-        parseError: null,
-      });
-    } catch (e: any) {
-      set({
-        isValid: false,
-        parseError: e.message,
-      });
+        import("../utils/jsonUpdater").then(({ findNodePath }) => {
+          const nodePath = findNodePath(parsedDocument, baseNodeId);
+          if (nodePath) {
+            try {
+              const updatedJsonString = updateJsonNodeProperty(
+                jsonString,
+                nodePath,
+                propertyGroup,
+                propertyKey,
+                newValue
+              );
+              // Set both jsonString and lastVisualEdit so Monaco can intercept if mounted
+              set({
+                jsonString: updatedJsonString,
+                lastVisualEdit: {
+                  timestamp: Date.now(),
+                  newString: updatedJsonString,
+                },
+              });
+              if (isAutoSync) {
+                get().triggerManualSync();
+              }
+            } catch (e) {
+              console.error("Failed to update node property visually", e);
+            }
+          } else {
+            console.warn(
+              `Node with id ${baseNodeId} not found in parsedDocument.`
+            );
+          }
+        });
+      },
+
+      triggerManualSync: () => {
+        try {
+          let parsed = JSON.parse(get().jsonString) as DocumentSchema;
+
+          // Destructively apply autoDeconstruct synchronously
+          if (parsed.meta?.richTextPreferences?.autoDeconstruct) {
+            parsed = applyAutoDeconstruct(parsed);
+          }
+
+          const newJsonString = JSON.stringify(parsed, null, 2);
+
+          set({
+            parsedDocument: parsed,
+            jsonString: newJsonString,
+            isValid: true,
+            parseError: null,
+          });
+        } catch (e: any) {
+          set({
+            isValid: false,
+            parseError: e.message,
+          });
+        }
+      },
+
+      deleteNode: (id) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseId = id.split("-part")[0];
+        const newAst = deleteNodeFromAst(parsedDocument, baseId);
+        setJsonString(JSON.stringify(newAst, null, 2));
+
+        if (get().selectedNodeId?.split("-part")[0] === baseId) {
+          get().setSelectedNodeId(null);
+        }
+      },
+
+      moveNode: (id, direction) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseId = id.split("-part")[0];
+        const newAst = moveNodeInAst(parsedDocument, baseId, direction);
+        setJsonString(JSON.stringify(newAst, null, 2));
+      },
+
+      insertNode: (parentId, index, node) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseParentId = parentId.split("-part")[0];
+        const newAst = insertNodeIntoAst(
+          parsedDocument,
+          baseParentId,
+          node,
+          index
+        );
+        setJsonString(JSON.stringify(newAst, null, 2));
+      },
+
+      moveNodeToParent: (id, newParentId, index) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseId = id.split("-part")[0];
+        const baseParentId = newParentId.split("-part")[0];
+        const newAst = moveNodeToNewParent(
+          parsedDocument,
+          baseId,
+          baseParentId,
+          index
+        );
+        setJsonString(JSON.stringify(newAst, null, 2));
+      },
+
+      insertNodeSibling: (targetSiblingId, position, node) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseSiblingId = targetSiblingId.split("-part")[0];
+        const newAst = insertNodeSibling(
+          parsedDocument,
+          baseSiblingId,
+          position,
+          node
+        );
+        setJsonString(JSON.stringify(newAst, null, 2));
+      },
+
+      moveNodeToSibling: (id, targetSiblingId, position) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseId = id.split("-part")[0];
+        const baseSiblingId = targetSiblingId.split("-part")[0];
+        const newAst = moveNodeToSibling(
+          parsedDocument,
+          baseId,
+          baseSiblingId,
+          position
+        );
+        setJsonString(JSON.stringify(newAst, null, 2));
+      },
+
+      replaceNode: (id, newNode) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const baseId = id.split("-part")[0];
+        import("@formcast/core").then(({ replaceNodeInAst }) => {
+          const newAst = replaceNodeInAst(parsedDocument, baseId, newNode);
+          setJsonString(JSON.stringify(newAst, null, 2));
+        });
+      },
+
+      deconstructAllRichText: () => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const prefs = parsedDocument.meta.richTextPreferences;
+
+        // Create deep copy
+        const newDoc: DocumentSchema = structuredClone(parsedDocument);
+
+        newDoc.document.body = autoDeconstructRichTextAst(
+          newDoc.document.body,
+          prefs
+        );
+
+        // Also process headers and footers
+        Object.keys(newDoc.document.headers).forEach((id) => {
+          newDoc.document.headers[id].root = autoDeconstructRichTextAst(
+            newDoc.document.headers[id].root,
+            prefs
+          );
+        });
+        Object.keys(newDoc.document.footers).forEach((id) => {
+          newDoc.document.footers[id].root = autoDeconstructRichTextAst(
+            newDoc.document.footers[id].root,
+            prefs
+          );
+        });
+
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      addHeader: (id, headerData) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const newDoc = { ...parsedDocument };
+        newDoc.document.headers = {
+          ...newDoc.document.headers,
+          [id]: headerData,
+        };
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      updateHeaderProperty: (id, key, value) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument || !parsedDocument.document.headers[id]) return;
+        const newDoc = { ...parsedDocument };
+        newDoc.document.headers[id] = {
+          ...newDoc.document.headers[id],
+          [key]: value,
+        };
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      deleteHeader: (id) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument || !parsedDocument.document.headers[id]) return;
+        const newDoc = { ...parsedDocument };
+        const newHeaders = { ...newDoc.document.headers };
+        delete newHeaders[id];
+        newDoc.document.headers = newHeaders;
+
+        // Also remove any pageOverrides for this header
+        const newOverrides = { ...newDoc.document.pageOverrides };
+        Object.keys(newOverrides).forEach((page) => {
+          if (newOverrides[page].headerId === id) {
+            newOverrides[page] = { ...newOverrides[page], headerId: null };
+            if (!newOverrides[page].headerId && !newOverrides[page].footerId) {
+              delete newOverrides[page];
+            }
+          }
+        });
+        newDoc.document.pageOverrides = newOverrides;
+
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      addFooter: (id, footerData) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const newDoc = { ...parsedDocument };
+        newDoc.document.footers = {
+          ...newDoc.document.footers,
+          [id]: footerData,
+        };
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      updateFooterProperty: (id, key, value) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument || !parsedDocument.document.footers[id]) return;
+        const newDoc = { ...parsedDocument };
+        newDoc.document.footers[id] = {
+          ...newDoc.document.footers[id],
+          [key]: value,
+        };
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      deleteFooter: (id) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument || !parsedDocument.document.footers[id]) return;
+        const newDoc = { ...parsedDocument };
+        const newFooters = { ...newDoc.document.footers };
+        delete newFooters[id];
+        newDoc.document.footers = newFooters;
+
+        // Also remove any pageOverrides for this footer
+        const newOverrides = { ...newDoc.document.pageOverrides };
+        Object.keys(newOverrides).forEach((page) => {
+          if (newOverrides[page].footerId === id) {
+            newOverrides[page] = { ...newOverrides[page], footerId: null };
+            if (!newOverrides[page].headerId && !newOverrides[page].footerId) {
+              delete newOverrides[page];
+            }
+          }
+        });
+        newDoc.document.pageOverrides = newOverrides;
+
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+
+      updatePageOverrides: (overrides) => {
+        const { parsedDocument, setJsonString } = get();
+        if (!parsedDocument) return;
+        const newDoc = { ...parsedDocument };
+        newDoc.document.pageOverrides = overrides;
+        setJsonString(JSON.stringify(newDoc, null, 2));
+      },
+    }),
+    {
+      partialize: (state) => ({
+        jsonString: state.jsonString,
+        parsedDocument: state.parsedDocument,
+        isValid: state.isValid,
+        parseError: state.parseError,
+      }),
+      equality: (a, b) => a.jsonString === b.jsonString,
+      limit: 50,
     }
-  },
+  )
+);
 
-  deleteNode: (id) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseId = id.split("-part")[0];
-    const newAst = deleteNodeFromAst(parsedDocument, baseId);
-    setJsonString(JSON.stringify(newAst, null, 2));
-
-    if (get().selectedNodeId?.split("-part")[0] === baseId) {
-      get().setSelectedNodeId(null);
-    }
-  },
-
-  moveNode: (id, direction) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseId = id.split("-part")[0];
-    const newAst = moveNodeInAst(parsedDocument, baseId, direction);
-    setJsonString(JSON.stringify(newAst, null, 2));
-  },
-
-  insertNode: (parentId, index, node) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseParentId = parentId.split("-part")[0];
-    const newAst = insertNodeIntoAst(parsedDocument, baseParentId, node, index);
-    setJsonString(JSON.stringify(newAst, null, 2));
-  },
-
-  moveNodeToParent: (id, newParentId, index) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseId = id.split("-part")[0];
-    const baseParentId = newParentId.split("-part")[0];
-    const newAst = moveNodeToNewParent(
-      parsedDocument,
-      baseId,
-      baseParentId,
-      index
-    );
-    setJsonString(JSON.stringify(newAst, null, 2));
-  },
-
-  insertNodeSibling: (targetSiblingId, position, node) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseSiblingId = targetSiblingId.split("-part")[0];
-    const newAst = insertNodeSibling(
-      parsedDocument,
-      baseSiblingId,
-      position,
-      node
-    );
-    setJsonString(JSON.stringify(newAst, null, 2));
-  },
-
-  moveNodeToSibling: (id, targetSiblingId, position) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseId = id.split("-part")[0];
-    const baseSiblingId = targetSiblingId.split("-part")[0];
-    const newAst = moveNodeToSibling(
-      parsedDocument,
-      baseId,
-      baseSiblingId,
-      position
-    );
-    setJsonString(JSON.stringify(newAst, null, 2));
-  },
-
-  replaceNode: (id, newNode) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const baseId = id.split("-part")[0];
-    import("@formcast/core").then(({ replaceNodeInAst }) => {
-      const newAst = replaceNodeInAst(parsedDocument, baseId, newNode);
-      setJsonString(JSON.stringify(newAst, null, 2));
-    });
-  },
-
-  deconstructAllRichText: () => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const prefs = parsedDocument.meta.richTextPreferences;
-
-    // Create deep copy
-    const newDoc: DocumentSchema = structuredClone(parsedDocument);
-
-    newDoc.document.body = autoDeconstructRichTextAst(
-      newDoc.document.body,
-      prefs
-    );
-
-    // Also process headers and footers
-    Object.keys(newDoc.document.headers).forEach((id) => {
-      newDoc.document.headers[id].root = autoDeconstructRichTextAst(
-        newDoc.document.headers[id].root,
-        prefs
-      );
-    });
-    Object.keys(newDoc.document.footers).forEach((id) => {
-      newDoc.document.footers[id].root = autoDeconstructRichTextAst(
-        newDoc.document.footers[id].root,
-        prefs
-      );
-    });
-
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  addHeader: (id, headerData) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const newDoc = { ...parsedDocument };
-    newDoc.document.headers = { ...newDoc.document.headers, [id]: headerData };
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  updateHeaderProperty: (id, key, value) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument || !parsedDocument.document.headers[id]) return;
-    const newDoc = { ...parsedDocument };
-    newDoc.document.headers[id] = {
-      ...newDoc.document.headers[id],
-      [key]: value,
-    };
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  deleteHeader: (id) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument || !parsedDocument.document.headers[id]) return;
-    const newDoc = { ...parsedDocument };
-    const newHeaders = { ...newDoc.document.headers };
-    delete newHeaders[id];
-    newDoc.document.headers = newHeaders;
-
-    // Also remove any pageOverrides for this header
-    const newOverrides = { ...newDoc.document.pageOverrides };
-    Object.keys(newOverrides).forEach((page) => {
-      if (newOverrides[page].headerId === id) {
-        newOverrides[page] = { ...newOverrides[page], headerId: null };
-        if (!newOverrides[page].headerId && !newOverrides[page].footerId) {
-          delete newOverrides[page];
-        }
-      }
-    });
-    newDoc.document.pageOverrides = newOverrides;
-
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  addFooter: (id, footerData) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const newDoc = { ...parsedDocument };
-    newDoc.document.footers = { ...newDoc.document.footers, [id]: footerData };
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  updateFooterProperty: (id, key, value) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument || !parsedDocument.document.footers[id]) return;
-    const newDoc = { ...parsedDocument };
-    newDoc.document.footers[id] = {
-      ...newDoc.document.footers[id],
-      [key]: value,
-    };
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  deleteFooter: (id) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument || !parsedDocument.document.footers[id]) return;
-    const newDoc = { ...parsedDocument };
-    const newFooters = { ...newDoc.document.footers };
-    delete newFooters[id];
-    newDoc.document.footers = newFooters;
-
-    // Also remove any pageOverrides for this footer
-    const newOverrides = { ...newDoc.document.pageOverrides };
-    Object.keys(newOverrides).forEach((page) => {
-      if (newOverrides[page].footerId === id) {
-        newOverrides[page] = { ...newOverrides[page], footerId: null };
-        if (!newOverrides[page].headerId && !newOverrides[page].footerId) {
-          delete newOverrides[page];
-        }
-      }
-    });
-    newDoc.document.pageOverrides = newOverrides;
-
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-
-  updatePageOverrides: (overrides) => {
-    const { parsedDocument, setJsonString } = get();
-    if (!parsedDocument) return;
-    const newDoc = { ...parsedDocument };
-    newDoc.document.pageOverrides = overrides;
-    setJsonString(JSON.stringify(newDoc, null, 2));
-  },
-}));
+// Export the temporal store hook for undo/redo actions
+export const useDocumentTemporalStore = <T>(selector: (state: any) => T) =>
+  useStore(useDocumentStore.temporal, selector);
