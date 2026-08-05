@@ -106,15 +106,22 @@ export function MarketingHeader({ version }: { version: string }) {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex gap-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center text-sm transition-colors ${
+                      isActive
+                        ? "font-bold text-foreground"
+                        : "font-medium text-foreground/70 hover:text-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
           </div>
 
@@ -155,16 +162,23 @@ export function MarketingHeader({ version }: { version: string }) {
             className="fixed inset-0 z-40 bg-background md:hidden pt-20 px-6 flex flex-col h-[100dvh]"
           >
             <nav className="flex flex-col gap-6 mt-8 flex-1 overflow-y-auto">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-2xl font-bold tracking-tight text-foreground/80 hover:text-foreground transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-2xl tracking-tight transition-colors ${
+                      isActive
+                        ? "font-extrabold text-foreground"
+                        : "font-bold text-foreground/80 hover:text-foreground"
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
             <div className="pb-10 pt-6 border-t border-border mt-auto flex flex-col items-center gap-4">
               <div className="w-full flex justify-center">

@@ -66,7 +66,7 @@ function WidgetsContent() {
                       {isActive && (
                         <motion.div
                           layoutId="activeWidgetBackground"
-                          className="absolute inset-0 bg-blue-600 dark:bg-blue-900/20 border border-blue-600 dark:border-blue-800 rounded-lg z-0"
+                          className="absolute inset-0 bg-slate-100 dark:bg-surface rounded-lg z-0"
                           initial={false}
                           transition={{
                             type: "spring",
@@ -77,13 +77,13 @@ function WidgetsContent() {
                       )}
                       <button
                         onClick={() => handleWidgetChange(widget.id)}
-                        className={`relative z-10 w-full text-left px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                        className={`relative z-10 w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
                           isActive
-                            ? "text-white dark:text-blue-300"
+                            ? "text-slate-900 dark:text-foreground"
                             : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-surface"
                         }`}
                       >
-                        {widget.title}
+                        <span>{widget.title}</span>
                       </button>
                     </li>
                   );
