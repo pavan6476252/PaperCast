@@ -99,3 +99,4 @@ By keeping the business logic and layout orchestration strictly separated from t
 PaperCast includes custom AI agent skills (stored in `.agents/skills/`) to help maintain code quality and consistency:
 
 - **UI Consistency Guidelines** (`ui-consistency-guidelines`): Enforces pure CSS and Tailwind usage in alignment with PaperCast's design tokens and dark mode standards. Ensure your agents run this skill when building or reviewing UI components.
+- **Web Changelogs** (`adding-web-changelogs`): Guidelines for updating the user-facing marketing Changelog (`apps/web/content/changelog.mdx`). Ensure agents use this skill to write curated, benefit-driven release notes instead of technical git logs.
