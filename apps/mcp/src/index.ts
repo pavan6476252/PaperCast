@@ -17,13 +17,37 @@ initWebSocketServer(9000);
 registerResources(server);
 registerTools(server);
 
+import { generateCrashReport } from "./services/crash.js";
+
+process.on("uncaughtException", (error) =>
+  generateCrashReport(error, "uncaughtException")
+);
+process.on("unhandledRejection", (reason) =>
+  generateCrashReport(reason, "unhandledRejection")
+);
+
+// Catch internal MCP protocol and transport errors (e.g., serialization failures, EOFs)
+server.server.onerror = (error) => {
+  generateCrashReport(error, "mcpProtocolError");
+};
+
 async function run() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("PaperCast MCP Server running on stdio transport");
+
+  // Ensure the Node process exits when the IDE disconnects the stdio transport
+  process.stdin.on("close", () => {
+    console.error("MCP Server stdio closed by IDE. Exiting process...");
+    process.exit(0);
+  });
+
+  process.stdin.on("end", () => {
+    console.error("MCP Server stdio ended by IDE. Exiting process...");
+    process.exit(0);
+  });
 }
 
 run().catch((error) => {
-  console.error("Fatal error running MCP Server:", error);
-  process.exit(1);
+  generateCrashReport(error, "startupError");
 });

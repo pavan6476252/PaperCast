@@ -138,7 +138,13 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({
         ))}
 
         {/* Measure Top-level Body Blocks */}
-        <div style={{ ...getStyle(doc.document.body), width: "100%" }}>
+        <div
+          style={{
+            flexDirection: doc.document.body.type === "row" ? "row" : "column",
+            ...getStyle(doc.document.body),
+            width: "100%",
+          }}
+        >
           {doc.document.body.children?.map((child, index) => (
             <div
               key={`block-${child.id || index}`}

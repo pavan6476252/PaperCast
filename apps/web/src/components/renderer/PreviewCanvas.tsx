@@ -104,7 +104,13 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                       >
                         <div
                           className="flex-1 overflow-hidden"
-                          style={{ ...getStyle(parsedDocument.document.body) }}
+                          style={{
+                            flexDirection:
+                              parsedDocument.document.body.type === "row"
+                                ? "row"
+                                : "column",
+                            ...getStyle(parsedDocument.document.body),
+                          }}
                         >
                           {page.bodyNodes.map((node, i) => (
                             <NodeRenderer

@@ -1,15 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
-import { sendCommandToActiveSession } from "./ws.js";
-import { WsEventType } from "@papercast/core/ws";
+import { getCurrentSchemaFromSession } from "./ws.js";
 
 export async function generatePdf(providedSchema?: any, outputPath?: string) {
   let finalSchema = providedSchema;
 
   if (!finalSchema) {
-    const wsResponse = await sendCommandToActiveSession({
-      type: WsEventType.GET_CURRENT_SCHEMA,
-    });
+    const wsResponse = await getCurrentSchemaFromSession();
     finalSchema = wsResponse.schema;
   }
 

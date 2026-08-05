@@ -7,7 +7,7 @@ import { WsEventType } from "@papercast/core/ws";
 import papercastSchema from "@papercast/core/schema.json";
 import { fireCommandToActiveSession } from "./ws.js";
 
-const ajv = new Ajv({ allErrors: true, strict: false });
+const ajv = new Ajv({ allErrors: false, strict: false });
 addFormats(ajv);
 export const validatePapercast = ajv.compile(papercastSchema);
 

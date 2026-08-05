@@ -204,7 +204,7 @@ export function useMcpSync() {
         })
       );
     }
-  }, [parsedDocument, selectedNodeId, sessionId]);
+  }, [parsedDocument, selectedNodeId, sessionId, isConnected]);
 
   return { isConnected, sessionId };
 }

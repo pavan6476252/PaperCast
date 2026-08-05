@@ -1,10 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { sendCommandToActiveSession } from "../services/ws.js";
+import { getCurrentSchemaFromSession } from "../services/ws.js";
 
-import papercastSchema from "@papercast/core/schema.json";
 import invoiceTemplate from "@papercast/core/invoice.template.json";
 import reportTemplate from "@papercast/core/report.template.json";
-import { WsEventType } from "@papercast/core/ws";
+import papercastSchema from "@papercast/core/schema.json";
 // to-replace
 
 export function registerResources(server: McpServer) {
@@ -35,9 +34,7 @@ export function registerResources(server: McpServer) {
     },
     async (uri) => {
       try {
-        const state = await sendCommandToActiveSession({
-          type: WsEventType.GET_CURRENT_SCHEMA,
-        });
+        const state = await getCurrentSchemaFromSession();
         return {
           contents: [
             {
