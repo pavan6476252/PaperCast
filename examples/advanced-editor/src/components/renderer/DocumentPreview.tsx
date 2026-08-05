@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { EditorNodeWrapper } from "./EditorNodeWrapper";
-import { DocumentSchema } from "@papercast/core";
+import { DocumentSchema, PAGE_SIZES } from "@papercast/core";
 
 type PreviewTab = "content" | "headers" | "footers";
 
