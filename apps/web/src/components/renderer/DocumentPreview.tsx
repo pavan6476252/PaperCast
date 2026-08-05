@@ -13,6 +13,7 @@ interface DocumentPreviewProps {
   onToggleWorkspace?: () => void;
   schemaData?: DocumentSchema | null;
   hideToolbar?: boolean;
+  zoom?: number;
 }
 
 export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
@@ -21,6 +22,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   onToggleWorkspace,
   schemaData,
   hideToolbar = false,
+  zoom: controlledZoom,
 }) => {
   const isReadOnly = !!schemaData;
   const nodeWrapper = isReadOnly ? undefined : EditorNodeWrapper;
@@ -28,8 +30,10 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const [activeTab, setActiveTab] = useState<PreviewTab>("content");
 
   const setJsonString = useDocumentStore((state) => state.setJsonString);
-  const zoom = useDocumentStore((state) => state.zoom);
+  const storeZoom = useDocumentStore((state) => state.zoom);
   const setZoom = useDocumentStore((state) => state.setZoom);
+
+  const zoom = controlledZoom !== undefined ? controlledZoom : storeZoom;
   const addHeader = useDocumentStore((state) => state.addHeader);
   const addFooter = useDocumentStore((state) => state.addFooter);
 
@@ -63,13 +67,14 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   };
 
   useEffect(() => {
+    if (controlledZoom !== undefined) return;
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       const availableWidth = window.innerWidth - 32; // 16px padding on sides
       if (width > availableWidth) {
         setZoom(availableWidth / width);
       }
     }
-  }, [width, setZoom]); // Run when width changes (or initial mount)
+  }, [width, setZoom, controlledZoom]); // Run when width changes (or initial mount)
 
   if (!parsedDocument) {
     return (

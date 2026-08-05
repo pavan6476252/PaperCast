@@ -137,6 +137,37 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleSave, hasUnsavedChanges, activeSchemaId]);
 
+  const handleZoomDragStart = (e: React.PointerEvent<HTMLSpanElement>) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startZoom = zoom;
+    let frameId: number;
+
+    const handlePointerMove = (moveEvent: PointerEvent) => {
+      // Throttle with rAF
+      if (frameId) cancelAnimationFrame(frameId);
+
+      frameId = requestAnimationFrame(() => {
+        const deltaX = moveEvent.clientX - startX;
+        // 1px = 1% zoom, but step by 2% at a time to reduce updates
+        const rawNewZoom = startZoom + deltaX * 0.01;
+        // Round to nearest 0.02 (2%)
+        const steppedZoom = Math.round(rawNewZoom * 50) / 50;
+        const clampedZoom = Math.max(0.25, Math.min(2.0, steppedZoom));
+        setZoom(clampedZoom);
+      });
+    };
+
+    const handlePointerUp = () => {
+      if (frameId) cancelAnimationFrame(frameId);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+  };
+
   return (
     <div className="flex flex-col border-b border-border bg-background shrink-0 print:hidden shadow-sm z-10 relative">
       {/* Main Row */}
@@ -328,7 +359,11 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
                     >
                       <ZoomOut size={14} />
                     </button>
-                    <span className="text-xs font-semibold text-gray-700">
+                    <span
+                      className="text-xs font-semibold text-gray-700 cursor-ew-resize select-none px-2 py-1 hover:bg-gray-200/50 rounded transition-colors touch-none"
+                      onPointerDown={handleZoomDragStart}
+                      title="Drag to zoom"
+                    >
                       {Math.round(zoom * 100)}%
                     </span>
                     <button
