@@ -4,10 +4,9 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, PartyPopper } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 import { PlaygroundButton } from "./PlaygroundButton";
-import pkg from "../../../../../package.json";
 
 const navLinks = [
   { label: "Widgets", href: "/widgets" },
@@ -17,9 +16,21 @@ const navLinks = [
   { label: "MCP Server", href: "/docs/mcp-introduction" },
 ];
 
-export function MarketingHeader() {
+export function MarketingHeader({ version }: { version: string }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
   const pathname = usePathname();
+
+  // Handle What's New version tracking
+  useEffect(() => {
+    const lastSeen = localStorage.getItem("last_seen_version");
+    if (lastSeen && lastSeen !== version) {
+      setShowWhatsNew(true);
+    }
+    if (version) {
+      localStorage.setItem("last_seen_version", version);
+    }
+  }, [version]);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -40,6 +51,49 @@ export function MarketingHeader() {
 
   return (
     <>
+      <AnimatePresence>
+        {showWhatsNew && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-background/40 backdrop-blur-sm p-4"
+          >
+            <div className="relative overflow-hidden bg-surface/60 backdrop-blur-3xl border border-border/50 p-8 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] max-w-sm w-full flex flex-col items-center text-center ring-1 ring-border/20">
+              {/* Subtle glass gradient highlight */}
+              <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-transparent pointer-events-none rounded-[2rem]" />
+
+              <div className="relative z-10 w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-6 ring-4 ring-border/30 shadow-inner">
+                <PartyPopper className="w-8 h-8" />
+              </div>
+              <h2 className="relative z-10 text-xl font-bold tracking-tight mb-3 text-foreground">
+                PaperCast {version} is here!
+              </h2>
+              <p className="relative z-10 text-foreground/70 mb-8 text-sm leading-relaxed">
+                We've just released some exciting new features and improvements.
+                Check out the changelog to see what's new.
+              </p>
+              <div className="relative z-10 flex flex-col w-full gap-2">
+                <Link
+                  href="/changelog"
+                  onClick={() => setShowWhatsNew(false)}
+                  className="w-full bg-accent/10 backdrop-blur-md border border-accent/20 text-accent py-3 rounded-xl font-medium shadow-sm hover:bg-accent/20 hover:border-accent/30 hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  Read the Changelog
+                </Link>
+                <button
+                  onClick={() => setShowWhatsNew(false)}
+                  className="w-full py-2.5 rounded-xl font-medium text-foreground/60 hover:text-foreground hover:bg-foreground/5 transition-colors"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <header className="shrink-0 sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-6 md:gap-10">
@@ -117,7 +171,7 @@ export function MarketingHeader() {
                 <PlaygroundButton />
               </div>
               <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                v{pkg.version}
+                v{version}
               </span>
             </div>
           </motion.div>
