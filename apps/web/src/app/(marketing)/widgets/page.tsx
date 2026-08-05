@@ -38,7 +38,7 @@ function WidgetsContent() {
 
   const sidebarContent = (
     <>
-      <h2 className="text-xl font-bold text-slate-900 dark:text-foreground mb-8">
+      <h2 className="text-xl font-bold text-foreground mb-8">
         Widget Registry
       </h2>
       <nav className="space-y-10">
@@ -55,7 +55,7 @@ function WidgetsContent() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.1, duration: 0.4 }}
             >
-              <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 sticky top-0 bg-white/90 dark:bg-background/90 backdrop-blur-sm py-2 z-10">
+              <h3 className="text-xs font-bold text-foreground/50 uppercase tracking-widest mb-4 sticky top-0 bg-background/90 backdrop-blur-sm py-2 z-10">
                 {category.label}
               </h3>
               <ul className="space-y-1 relative">
@@ -66,7 +66,7 @@ function WidgetsContent() {
                       {isActive && (
                         <motion.div
                           layoutId="activeWidgetBackground"
-                          className="absolute inset-0 bg-slate-100 dark:bg-surface rounded-lg z-0"
+                          className="absolute inset-0 bg-surface rounded-lg z-0"
                           initial={false}
                           transition={{
                             type: "spring",
@@ -79,8 +79,8 @@ function WidgetsContent() {
                         onClick={() => handleWidgetChange(widget.id)}
                         className={`relative z-10 w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
                           isActive
-                            ? "text-slate-900 dark:text-foreground"
-                            : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-surface"
+                            ? "text-foreground"
+                            : "text-foreground/70 hover:text-foreground hover:bg-surface/50"
                         }`}
                       >
                         <span>{widget.title}</span>
@@ -103,12 +103,12 @@ function WidgetsContent() {
       </MobileSidebarDrawer>
 
       {/* Sidebar */}
-      <aside className="hidden md:block w-72 shrink-0 border-r border-slate-200 dark:border-border bg-white dark:bg-background p-6 overflow-y-auto">
+      <aside className="hidden md:block w-72 shrink-0 border-r border-border bg-background p-6 overflow-y-auto">
         {sidebarContent}
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden bg-slate-50/50 dark:bg-background">
+      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden bg-background">
         <div className="max-w-6xl mx-auto w-full h-full flex flex-col overflow-y-auto pr-2">
           {activeWidget ? (
             <motion.div
@@ -125,9 +125,9 @@ function WidgetsContent() {
               />
             </motion.div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
+            <div className="flex-1 flex flex-col items-center justify-center text-foreground/60">
               <svg
-                className="w-16 h-16 mb-4 text-slate-300 dark:text-slate-600"
+                className="w-16 h-16 mb-4 text-foreground/40"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

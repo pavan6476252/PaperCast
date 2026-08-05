@@ -38,7 +38,7 @@ const components = {
     return (
       <h1
         id={id}
-        className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-foreground mb-6 group flex items-center scroll-mt-24"
+        className="text-4xl font-extrabold tracking-tight text-foreground mb-6 group flex items-center scroll-mt-24"
         {...props}
       />
     );
@@ -48,7 +48,7 @@ const components = {
     return (
       <h2
         id={id}
-        className="text-2xl font-bold tracking-tight text-slate-900 dark:text-foreground mt-10 mb-4 border-b border-slate-200 dark:border-border pb-2 scroll-mt-24"
+        className="text-2xl font-bold tracking-tight text-foreground mt-10 mb-4 border-b border-border pb-2 scroll-mt-24"
         {...props}
       />
     );
@@ -58,54 +58,52 @@ const components = {
     return (
       <h3
         id={id}
-        className="text-xl font-semibold tracking-tight text-slate-900 dark:text-foreground mt-8 mb-3 scroll-mt-24"
+        className="text-xl font-semibold tracking-tight text-foreground mt-8 mb-3 scroll-mt-24"
         {...props}
       />
     );
   },
   p: (props: any) => (
     <p
-      className="leading-7 text-slate-600 dark:text-slate-400 [&:not(:first-child)]:mt-6"
+      className="leading-7 text-foreground/80 [&:not(:first-child)]:mt-6"
       {...props}
     />
   ),
   a: (props: any) => (
     <a
-      className="font-medium text-blue-600 underline underline-offset-4 hover:text-blue-500"
+      className="font-medium text-accent underline underline-offset-4 hover:text-accent/80 transition-colors"
       {...props}
     />
   ),
   ul: (props: any) => (
     <ul
-      className="my-6 ml-6 list-disc [&>li]:mt-2 text-slate-600 dark:text-slate-400"
+      className="my-6 ml-6 list-disc [&>li]:mt-2 text-foreground/80"
       {...props}
     />
   ),
   ol: (props: any) => (
     <ol
-      className="my-6 ml-6 list-decimal [&>li]:mt-2 text-slate-600 dark:text-slate-400"
+      className="my-6 ml-6 list-decimal [&>li]:mt-2 text-foreground/80"
       {...props}
     />
   ),
   li: (props: any) => <li className="leading-7" {...props} />,
   blockquote: (props: any) => (
     <blockquote
-      className="border-l-4 border-blue-500 pl-6 py-2 my-6 italic text-slate-700 dark:text-slate-300 bg-blue-50/50 dark:bg-blue-900/20 rounded-r-lg"
+      className="border-l-4 border-accent pl-6 py-2 my-6 italic text-foreground/70 bg-accent/10 rounded-r-lg"
       {...props}
     />
   ),
   img: (props: any) => (
     <img
-      className="rounded-xl border border-slate-200 dark:border-border shadow-md my-8 max-w-full"
+      className="rounded-xl border border-border shadow-md my-8 max-w-full"
       {...props}
     />
   ),
-  hr: (props: any) => (
-    <hr className="my-10 border-slate-200 dark:border-border" {...props} />
-  ),
+  hr: (props: any) => <hr className="my-10 border-border" {...props} />,
   code: (props: any) => (
     <code
-      className="relative rounded bg-slate-100 dark:bg-surface px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900 dark:text-foreground"
+      className="relative rounded bg-surface px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground"
       {...props}
     />
   ),
@@ -150,39 +148,28 @@ const components = {
 
 Object.assign(components, {
   table: (props: any) => (
-    <div className="w-full overflow-x-auto my-6 rounded-lg border border-slate-200 dark:border-border shadow-sm">
+    <div className="w-full overflow-x-auto my-6 rounded-lg border border-border shadow-sm">
       <table
         className="w-full text-left border-collapse min-w-[500px]"
         {...props}
       />
     </div>
   ),
-  thead: (props: any) => (
-    <thead className="bg-slate-50 dark:bg-surface/50" {...props} />
-  ),
+  thead: (props: any) => <thead className="bg-surface/50" {...props} />,
   tbody: (props: any) => (
-    <tbody
-      className="divide-y divide-slate-100 dark:divide-border/50"
-      {...props}
-    />
+    <tbody className="divide-y divide-border/50" {...props} />
   ),
   tr: (props: any) => (
-    <tr
-      className="hover:bg-slate-50/50 dark:hover:bg-surface/20 transition-colors"
-      {...props}
-    />
+    <tr className="hover:bg-surface/40 transition-colors" {...props} />
   ),
   th: (props: any) => (
     <th
-      className="border-b border-slate-200 dark:border-border py-3 px-4 text-sm font-semibold text-slate-900 dark:text-foreground"
+      className="border-b border-border py-3 px-4 text-sm font-semibold text-foreground"
       {...props}
     />
   ),
   td: (props: any) => (
-    <td
-      className="py-3 px-4 text-sm text-slate-600 dark:text-slate-400 align-top"
-      {...props}
-    />
+    <td className="py-3 px-4 text-sm text-foreground/80 align-top" {...props} />
   ),
 });
 
@@ -269,18 +256,18 @@ export default async function DocPage({
       {/* Main Content Area */}
       <article className="flex-1 min-w-0 w-full max-w-4xl mx-auto px-6 py-12 md:px-12 md:py-16">
         <div className="mb-8">
-          <p className="text-blue-600 dark:text-blue-400 font-semibold tracking-wide text-sm uppercase mb-2">
+          <p className="text-accent font-semibold tracking-wide text-sm uppercase mb-2">
             Documentation
           </p>
-          <h1 className="text-4xl font-extrabold text-slate-900 dark:text-foreground tracking-tight">
+          <h1 className="text-4xl font-extrabold text-foreground tracking-tight">
             {docPage.title}
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 mt-4 leading-relaxed">
+          <p className="text-lg text-foreground/80 mt-4 leading-relaxed">
             {docPage.description}
           </p>
         </div>
 
-        <div className="prose prose-slate dark:prose-invert prose-blue max-w-none w-full max-w-full break-words overflow-x-hidden">
+        <div className="prose prose-slate dark:prose-invert prose-blue max-w-none w-full max-w-full break-words overflow-x-hidden prose-headings:text-foreground prose-p:text-foreground/80 prose-a:text-accent prose-strong:text-foreground prose-code:text-foreground">
           <MDXRemote
             source={mdxSource}
             components={components}
