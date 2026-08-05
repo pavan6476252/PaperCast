@@ -284,6 +284,7 @@ export default function LandingPage() {
                   { label: "Widget Registry", href: "/widgets" },
                   { label: "Documentation", href: "/docs" },
                   { label: "Templates", href: "/templates" },
+                  { label: "Changelog", href: "/changelog" },
                 ].map((link, i) => (
                   <li key={i}>
                     <Link
