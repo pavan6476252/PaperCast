@@ -30,7 +30,7 @@ export default async function LandingPage() {
         </div>
 
         <h1
-          className="relative text-5xl font-extrabold tracking-tight sm:text-7xl lg:text-[5.5rem] leading-[1.1] text-foreground mb-8 opacity-0 animate-fade-in-up"
+          className="relative text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight leading-[1.1] text-foreground mb-8 opacity-0 animate-fade-in-up"
           style={{ animationDelay: "0.2s" }}
         >
           {/* Floating Background Icons */}
@@ -122,7 +122,7 @@ export default async function LandingPage() {
               {/* Default static border */}
               <div className="absolute inset-0 rounded-3xl border border-border/50 group-hover:opacity-0 transition-opacity duration-500"></div>
 
-              <div className="relative h-full w-full bg-background/90 backdrop-blur-xl rounded-[23px] p-8 z-10 flex flex-col">
+              <div className="relative h-full w-full bg-background/90 backdrop-blur-xl rounded-[23px] p-6 sm:p-8 z-10 flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 dark:from-blue-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[23px]"></div>
                 <div className="relative z-10">
                   <div

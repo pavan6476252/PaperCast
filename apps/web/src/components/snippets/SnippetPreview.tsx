@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { DocumentSchema } from "@papercast/core";
+import { DocumentSchema, PAGE_SIZES } from "@papercast/core";
 import { Measurements, paginateDocument, PageData } from "@papercast/engine";
 import {
   NodeRenderer,
@@ -18,12 +18,6 @@ interface SnippetPreviewProps {
   schema: DocumentSchema;
   scale?: number | "auto";
 }
-
-const PAGE_SIZES = {
-  A4: { width: 794, height: 1123 },
-  A3: { width: 1123, height: 1587 },
-  Letter: { width: 816, height: 1056 },
-} as const;
 
 export const SnippetPreview: React.FC<SnippetPreviewProps> = ({
   schema,
