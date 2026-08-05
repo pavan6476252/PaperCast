@@ -32,12 +32,12 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
   return (
     <div
       id="preview-scroll-container"
-      className="flex-1 overflow-auto p-8 relative flex flex-col items-center print:p-0 print:bg-white print:block"
+      className="flex-1 overflow-auto p-8 relative flex flex-col print:p-0 print:bg-white print:block"
     >
       {activeTab === "content" && (
         <div
-          className="flex flex-col items-center gap-8 transition-transform origin-top print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"
-          style={{ transform: `scale(${zoom})` }}
+          className="flex flex-col items-center mx-auto gap-8 transition-all print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"
+          style={{ zoom }}
         >
           {pages &&
             pages.map((page, idx) => {
@@ -150,8 +150,8 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 
       {activeTab === "headers" && (
         <div
-          className="flex flex-col gap-8 transition-transform origin-top"
-          style={{ transform: `scale(${zoom})` }}
+          className="flex flex-col mx-auto gap-8 transition-all"
+          style={{ zoom }}
         >
           <div
             className="flex justify-between items-center w-full max-w-[100%] print-hidden"
@@ -225,8 +225,8 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 
       {activeTab === "footers" && (
         <div
-          className="flex flex-col gap-8 transition-transform origin-top"
-          style={{ transform: `scale(${zoom})` }}
+          className="flex flex-col mx-auto gap-8 transition-all"
+          style={{ zoom }}
         >
           <div
             className="flex justify-between items-center w-full max-w-[100%] print-hidden"
