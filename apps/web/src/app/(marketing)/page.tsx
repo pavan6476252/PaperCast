@@ -1,9 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import { FloatingIcons } from "../../components/marketing/FloatingIcons";
-import pkg from "../../../../../package.json";
+import { getLatestVersion } from "../../lib/version";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const version = await getLatestVersion();
+
   return (
     <div className="relative flex flex-col items-center overflow-x-hidden">
       {/* Background glowing blobs */}
@@ -20,10 +22,10 @@ export default function LandingPage() {
       {/* Hero Section */}
       <div className="relative z-10 w-full max-w-5xl px-4 pt-32 pb-20 text-center flex flex-col items-center">
         <div
-          className="inline-flex items-center rounded-full border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/20 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-blue-700 dark:text-blue-300 mb-8 opacity-0 animate-fade-in-up"
+          className="inline-flex items-center rounded-full border border-border/50 bg-surface/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-foreground mb-8 opacity-0 animate-fade-in-up shadow-sm ring-1 ring-black/5 dark:ring-white/5"
           style={{ animationDelay: "0.1s" }}
         >
-          <span className="flex h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400 mr-2 animate-pulse"></span>
+          <span className="flex h-2 w-2 rounded-full bg-accent mr-2 animate-pulse"></span>
           Now available in early access
         </div>
 
@@ -324,7 +326,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center gap-4">
               <span className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-default">
-                v{pkg.version}
+                v{version}
               </span>
               <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 bg-surface px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-800">
                 <span>Made with</span>

@@ -17,6 +17,7 @@ Use this skill when you are asked to draft release notes, update the changelog, 
 2. **Create a New Version Block**: Insert a new `<Version>` component at the top of the file (just below the title).
 3. **Write Curated Copy**: Do not simply dump git commit logs. Write exciting, benefit-driven copy that highlights the value of the new features.
 4. **Use Semantic Badges**: Tag each bullet point with the appropriate `<Badge>` component.
+5. **Sync Package Version**: Open `apps/web/package.json` and update the `"version"` field to match the exact version number you just added to the changelog. This ensures the technical package version always mirrors the marketing version.
 
 ## Required MDX Structure
 
