@@ -6,4 +6,7 @@ export default defineConfig({
   target: "node20",
   clean: true,
   noExternal: ["@papercast/core"],
+  banner: {
+    js: "#!/usr/bin/env node",
+  },
 });

@@ -6,9 +6,12 @@ This page demonstrates practical workflows for using AI agents with the PaperCas
 
 Because the AI agent can read your local playground state, you can give it high-level, declarative commands.
 
-**Example Prompt:**
-
-> "Connect to my active PaperCast session. Build an invoice template. Start by creating a header with our company logo on the left and the word 'INVOICE' in large, bold text on the right. Then, add a data table bound to `invoice.lineItems`."
+<Callout type="tip" title="Example Prompt">
+  "Connect to my active PaperCast session. Build an invoice template. Start by
+  creating a header with our company logo on the left and the word 'INVOICE' in
+  large, bold text on the right. Then, add a data table bound to
+  `invoice.lineItems`."
+</Callout>
 
 ### Execution flow
 
@@ -23,9 +26,10 @@ As the agent performs these tool calls, the changes instantly appear in your bro
 
 If a layout fails to wrap or a table overflows off the page, instruct the agent to fix it visually.
 
-**Example Prompt:**
-
-> "The line items table overflows off the right edge of the page. Inspect the schema and fix the column widths."
+<Callout type="tip" title="Example Prompt">
+  "The line items table overflows off the right edge of the page. Inspect the
+  schema and fix the column widths."
+</Callout>
 
 ### Execution flow
 

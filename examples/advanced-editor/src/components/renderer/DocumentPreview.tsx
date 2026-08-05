@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { EditorNodeWrapper } from "./EditorNodeWrapper";
-import { DocumentSchema } from "@papercast/core";
+import { DocumentSchema, PAGE_SIZES } from "@papercast/core";
 
 type PreviewTab = "content" | "headers" | "footers";
 
@@ -97,11 +97,6 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
   // Extract meta for page sizing
   const { pageSize, orientation } = parsedDocument.meta;
-  const PAGE_SIZES = {
-    A4: { width: 794, height: 1123 },
-    A3: { width: 1123, height: 1587 },
-    Letter: { width: 816, height: 1056 },
-  } as const;
 
   let width: number;
   let height: number;

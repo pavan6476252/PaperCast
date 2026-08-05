@@ -1,56 +1,17 @@
-import Link from "next/link";
 import React from "react";
-import { PlaygroundButton } from "../../components/marketing/PlaygroundButton";
-import { ThemeToggle } from "../../components/ThemeToggle";
+import { MarketingHeader } from "../../components/marketing/MarketingHeader";
+import { getLatestVersion } from "../../lib/version";
 
-export default function MarketingLayout({
+export default async function MarketingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const version = await getLatestVersion();
+
   return (
     <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden transition-colors">
-      <header className="shrink-0 sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0 px-4 md:px-8">
-          <div className="flex gap-6 md:gap-10">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="inline-block font-bold">PaperCast</span>
-            </Link>
-            <nav className="hidden gap-6 md:flex">
-              <Link
-                href="/widgets"
-                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
-              >
-                Widgets
-              </Link>
-              <Link
-                href="/snippets"
-                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
-              >
-                Snippets
-              </Link>
-              <Link
-                href="/docs"
-                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
-              >
-                Documentation
-              </Link>
-              <Link
-                href="/docs/mcp-introduction"
-                className="flex items-center text-sm font-medium text-foreground/70 hover:text-foreground"
-              >
-                MCP Server
-              </Link>
-            </nav>
-          </div>
-          <div className="flex flex-1 items-center justify-end space-x-4">
-            <nav className="flex items-center space-x-4">
-              <ThemeToggle />
-              <PlaygroundButton />
-            </nav>
-          </div>
-        </div>
-      </header>
+      <MarketingHeader version={version} />
       <main className="flex-1 flex flex-col overflow-y-auto relative z-10">
         {children}
       </main>

@@ -7,10 +7,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Active Review Pipelines
 
-Whenever a repository review or component evaluation is requested, always route the analysis through these three specific skill configurations in tandem:
+Whenever a repository review or component evaluation is requested, always route the analysis through these specific skill configurations in tandem:
 
 - vercel-react-best-practices (for framework performance and strict React/TS standards)
-- web-design-guidelines (for visual, layout, and UX compliance)
+- ui-consistency-guidelines (for PaperCast-specific CSS and Tailwind UI consistency)
+- web-design-guidelines (for general accessibility and UX compliance)
 - writing-guidelines (for codebase documentation and UI copy standards)
 
 ---

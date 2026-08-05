@@ -1,7 +1,22 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { Folder, Code2, PanelLeftClose, X } from "lucide-react";
+
+import { EditorProvider } from "@papercast/react/editor";
+import { useDocumentStore } from "../../../store/documentStore";
+import { useMcpSync } from "../../../hooks/useMcpSync";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
+import { useToast, ToastProvider } from "../../../components/ui/Toast";
+import { useWorkspaceStore } from "../../../store/workspaceStore";
+
+import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
+import { LeftSidebar } from "../../../components/playground/LeftSidebar";
+import { RightSidebar } from "../../../components/playground/RightSidebar";
+import { MobileWidgetsBar } from "../../../components/playground/MobileWidgetsBar";
+import { MobilePropertiesSheet } from "../../../components/playground/MobilePropertiesSheet";
+import { usePlaygroundShortcuts } from "../../../hooks/usePlaygroundShortcuts";
 
 const JsonEditor = dynamic(
   () =>
@@ -20,18 +35,6 @@ const JsonEditor = dynamic(
     ),
   }
 );
-import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
-import {
-  EditorProvider,
-  PropertyPanel,
-  WidgetsPanel,
-} from "@papercast/react/editor";
-import {
-  useDocumentStore,
-  useDocumentTemporalStore,
-} from "../../../store/documentStore";
-import { useMcpSync } from "../../../hooks/useMcpSync";
-import { registerDefaultWidgets } from "@papercast/react/widgets";
 
 const WorkspaceSidebar = dynamic(
   () =>
@@ -49,226 +52,6 @@ const WorkspaceSidebar = dynamic(
   }
 );
 
-// Register default PaperCast widgets on client load
-registerDefaultWidgets();
-
-const usePlaygroundShortcuts = (
-  setShowEditor: React.Dispatch<React.SetStateAction<boolean>>,
-  showToast: (msg: string) => void
-) => {
-  const setZoom = useDocumentStore((state) => state.setZoom);
-  const { undo, redo } = useDocumentTemporalStore((state) => state);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Do not hijack undo/redo if typing in an input field
-      const target = e.target as HTMLElement;
-      const isInput =
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.tagName === "SELECT";
-
-      const isMod = e.metaKey || e.ctrlKey;
-      if (isMod) {
-        if (e.key.toLowerCase() === "z") {
-          if (!isInput) {
-            e.preventDefault();
-            if (e.shiftKey) {
-              redo();
-              showToast("Redo");
-            } else {
-              undo();
-              showToast("Undo");
-            }
-          }
-          return;
-        }
-        switch (e.key) {
-          case "=":
-          case "+":
-            e.preventDefault();
-            setZoom((z) => Math.min(2, z + 0.1));
-            showToast("Zoom In");
-            break;
-          case "-":
-            e.preventDefault();
-            setZoom((z) => Math.max(0.25, z - 0.1));
-            showToast("Zoom Out");
-            break;
-          case "0":
-            e.preventDefault();
-            setZoom(1);
-            showToast("Reset Zoom");
-            break;
-          case "\\":
-          case "b":
-          case "e":
-            e.preventDefault();
-            setShowEditor((s) => !s);
-            break;
-          case "s":
-          case "S":
-            e.preventDefault();
-            // handled by DocumentPreview for saving schema
-            break;
-          case "p":
-          case "P":
-            e.preventDefault();
-            window.print();
-            break;
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [setZoom, setShowEditor, showToast, undo, redo]);
-};
-
-const LeftSidebar = ({ children }: { children: React.ReactNode }) => {
-  const [leftWidth, setLeftWidth] = useState(400);
-  const isLeftDragging = useRef(false);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleMouseDown = useCallback(() => {
-    isLeftDragging.current = true;
-    setIsDragging(true);
-    document.body.style.cursor = "col-resize";
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    isLeftDragging.current = false;
-    setIsDragging(false);
-    document.body.style.cursor = "default";
-  }, []);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (isLeftDragging.current) {
-      const newWidth = Math.max(
-        200,
-        Math.min(e.clientX, window.innerWidth - 400)
-      );
-      setLeftWidth(newWidth);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
-
-  return (
-    <>
-      <div
-        style={{ width: leftWidth }}
-        className="flex flex-col z-10 shadow-xl relative shrink-0 print:hidden"
-      >
-        {children}
-      </div>
-      <div
-        onMouseDown={handleMouseDown}
-        className="w-2 bg-surface border-x border-border hover:bg-accent transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden group"
-      >
-        <div className="h-8 w-1 bg-foreground/20 rounded-full group-hover:bg-white" />
-      </div>
-    </>
-  );
-};
-
-const RightSidebar = () => {
-  const [rightWidth, setRightWidth] = useState(320);
-  const isRightDragging = useRef(false);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleMouseDown = useCallback(() => {
-    isRightDragging.current = true;
-    setIsDragging(true);
-    document.body.style.cursor = "col-resize";
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    isRightDragging.current = false;
-    setIsDragging(false);
-    document.body.style.cursor = "default";
-  }, []);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (isRightDragging.current) {
-      const newWidth = Math.max(
-        200,
-        Math.min(window.innerWidth - e.clientX, window.innerWidth - 400)
-      );
-      setRightWidth(newWidth);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
-
-  const rightPanelMode = useDocumentStore((state) => state.rightPanelMode);
-  const setRightPanelMode = useDocumentStore(
-    (state) => state.setRightPanelMode
-  );
-  const selectedNodeId = useDocumentStore((state) => state.selectedNodeId);
-
-  return (
-    <>
-      <div
-        onMouseDown={handleMouseDown}
-        className="w-2 bg-surface border-x border-border hover:bg-accent transition-colors cursor-col-resize z-20 flex items-center justify-center shrink-0 print:hidden group"
-      >
-        <div className="h-8 w-1 bg-foreground/20 rounded-full group-hover:bg-white" />
-      </div>
-      <div
-        style={{ width: rightWidth, minWidth: 260 }}
-        className="flex flex-col z-10 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.1)] relative shrink-0 print:hidden bg-background border-l border-border h-full"
-      >
-        <div className="flex border-b border-border shrink-0">
-          <button
-            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "widgets" ? "border-b-2 border-accent text-accent bg-background" : "text-foreground/70 hover:text-foreground bg-surface"}`}
-            onClick={() => setRightPanelMode("widgets")}
-          >
-            Widgets
-          </button>
-          <button
-            className={`flex-1 py-3 text-xs font-medium text-center focus:outline-none ${rightPanelMode === "properties" ? "border-b-2 border-accent text-accent bg-background" : "text-foreground/70 hover:text-foreground bg-surface"}`}
-            onClick={() => setRightPanelMode("properties")}
-          >
-            Properties {selectedNodeId ? "•" : ""}
-          </button>
-        </div>
-        <div className="flex-1 overflow-hidden">
-          {rightPanelMode === "widgets" && (
-            <WidgetsPanel
-              onSettingsClick={() => setRightPanelMode("properties")}
-            />
-          )}
-          {rightPanelMode === "properties" && <PropertyPanel />}
-        </div>
-      </div>
-    </>
-  );
-};
-
-import { useToast, ToastProvider } from "../../../components/ui/Toast";
-import { useWorkspaceStore } from "../../../store/workspaceStore";
-import { Folder, Code2, PanelLeftClose } from "lucide-react";
-
 const TemplateGalleryDialog = dynamic(
   () =>
     import("../../../components/workspace/TemplateGalleryDialog").then(
@@ -276,6 +59,9 @@ const TemplateGalleryDialog = dynamic(
     ),
   { ssr: false }
 );
+
+// Register default PaperCast widgets on client load
+registerDefaultWidgets();
 
 export function PlaygroundContent() {
   const { showToast } = useToast();
@@ -286,6 +72,7 @@ export function PlaygroundContent() {
     "workspace" | "editor" | null
   >(null);
   const [mounted, setMounted] = useState(false);
+  const [isMobilePropertiesOpen, setIsMobilePropertiesOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -328,8 +115,8 @@ export function PlaygroundContent() {
   const setSelectedNodeId = useDocumentStore(
     (state) => state.setSelectedNodeId
   );
-
   const storeInsertNode = useDocumentStore((state) => state.insertNode);
+
   const insertNode = useCallback(
     (parentId: string, node: any, index?: number) => {
       storeInsertNode(parentId, index, node);
@@ -357,9 +144,9 @@ export function PlaygroundContent() {
         moveNode,
       }}
     >
-      <main className="flex h-screen w-screen overflow-hidden bg-background text-foreground font-sans print:h-auto print:w-auto print:overflow-visible transition-colors">
+      <main className="flex h-[100dvh] w-screen overflow-hidden bg-background text-foreground font-sans print:h-auto print:w-auto print:overflow-visible transition-colors">
         {/* Activity Bar */}
-        <div className="w-12 bg-surface border-r border-border flex flex-col items-center py-4 gap-4 shrink-0 z-20 print:hidden shadow-md relative">
+        <div className="w-12 bg-surface border-r border-border hidden md:flex flex-col items-center py-4 gap-4 shrink-0 z-20 print:hidden shadow-md relative">
           <button
             onClick={() =>
               setActiveLeftPanel((p) =>
@@ -393,27 +180,61 @@ export function PlaygroundContent() {
         </div>
 
         {activeLeftPanel === "workspace" && (
-          <div className="flex flex-col z-10 shadow-xl relative shrink-0 print:hidden h-full">
+          <div className="flex flex-col z-40 absolute inset-0 md:relative md:z-10 shadow-xl shrink-0 print:hidden h-full w-full md:w-80 bg-background animate-in slide-in-from-left-8 fade-in duration-300 ease-out">
+            <div className="md:hidden flex items-center justify-between p-3 border-b border-border bg-surface shrink-0 z-50 relative">
+              <h3 className="font-bold text-sm text-foreground">Workspace</h3>
+              <button
+                onClick={() => setActiveLeftPanel(null)}
+                className="p-1.5 rounded-full bg-background border border-border hover:bg-surface text-foreground/70"
+              >
+                <X size={16} />
+              </button>
+            </div>
             <WorkspaceSidebar />
           </div>
         )}
         {activeLeftPanel === "editor" && (
           <LeftSidebar>
-            <JsonEditor />
+            <div className="md:hidden flex items-center justify-between p-3 border-b border-border bg-surface shrink-0 z-50 relative">
+              <h3 className="font-bold text-sm text-foreground">JSON Editor</h3>
+              <button
+                onClick={() => setActiveLeftPanel(null)}
+                className="p-1.5 rounded-full bg-background border border-border hover:bg-surface text-foreground/70"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden relative z-0">
+              <JsonEditor />
+            </div>
           </LeftSidebar>
         )}
 
-        <div className="flex-1 flex flex-col h-full relative z-0 overflow-hidden print:overflow-visible">
-          <DocumentPreview
-            isEditorVisible={activeLeftPanel === "editor"}
-            onToggleEditor={() => setShowEditor((s) => !s)}
+        <div className="flex-1 flex flex-col h-full relative overflow-hidden print:overflow-visible">
+          <div className="flex-1 overflow-hidden relative">
+            <DocumentPreview
+              isEditorVisible={activeLeftPanel === "editor"}
+              onToggleEditor={() => setShowEditor((s) => !s)}
+              onToggleWorkspace={() =>
+                setActiveLeftPanel((p) =>
+                  p === "workspace" ? null : "workspace"
+                )
+              }
+            />
+          </div>
+          <MobileWidgetsBar
+            onSettingsClick={() => setIsMobilePropertiesOpen(true)}
           />
         </div>
 
         <RightSidebar />
+        <MobilePropertiesSheet
+          isOpen={isMobilePropertiesOpen}
+          onClose={() => setIsMobilePropertiesOpen(false)}
+        />
 
         {/* MCP Connection Status Badge */}
-        <div className="absolute bottom-4 left-4 z-50 print:hidden">
+        <div className="absolute bottom-4 left-4 z-50 print:hidden hidden md:block">
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-full shadow-lg border text-xs font-medium bg-white ${isConnected ? "border-green-200 text-green-700" : "border-gray-200 text-gray-500"}`}
           >

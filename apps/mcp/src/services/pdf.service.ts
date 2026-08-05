@@ -20,7 +20,7 @@ export async function generatePdf(providedSchema?: any, outputPath?: string) {
     process.env.NEXT_PUBLIC_APP_URL ||
     (process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:8000");
+      : "https://paper-cast-web.vercel.app");
 
   const response = await fetch(`${appUrl}/api/pdf`, {
     method: "POST",

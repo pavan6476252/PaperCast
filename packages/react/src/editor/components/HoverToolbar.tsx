@@ -114,7 +114,7 @@ export const HoverToolbar: React.FC<{
     position: "fixed",
     top: positionAtBottom ? rect.bottom + 4 : rect.top - 28,
     left: rect.right - 120, // Approximate width of toolbar
-    zIndex: 9999,
+    zIndex: 9,
   };
 
   return createPortal(

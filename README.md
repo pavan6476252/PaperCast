@@ -43,7 +43,7 @@ Run the development server:
 pnpm run dev
 ```
 
-Open [http://localhost:8000](http://localhost:8000) with your browser to see the application in action.
+Open [http://localhost:8000](http://localhost:8000) with your browser to see the application in action. You can also view the live version at [https://paper-cast-web.vercel.app/](https://paper-cast-web.vercel.app/).
 
 ## How to Use
 
@@ -93,3 +93,10 @@ PaperCast is a Schema-First Document Builder and Renderer, split across multiple
 - **Schema & Component Registries**: A lightweight registry in the Core Engine stores node metadata, while a Component Registry in the Headless Binding maps node types to actual UI components.
 
 By keeping the business logic and layout orchestration strictly separated from the rendering framework, PaperCast remains fast, flexible, and portable.
+
+## Agent Skills
+
+PaperCast includes custom AI agent skills (stored in `.agents/skills/`) to help maintain code quality and consistency:
+
+- **UI Consistency Guidelines** (`ui-consistency-guidelines`): Enforces pure CSS and Tailwind usage in alignment with PaperCast's design tokens and dark mode standards. Ensure your agents run this skill when building or reviewing UI components.
+- **Web Changelogs** (`adding-web-changelogs`): Guidelines for updating the user-facing marketing Changelog (`apps/web/content/changelog.mdx`). Ensure agents use this skill to write curated, benefit-driven release notes instead of technical git logs.
