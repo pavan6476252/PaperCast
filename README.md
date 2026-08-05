@@ -93,3 +93,9 @@ PaperCast is a Schema-First Document Builder and Renderer, split across multiple
 - **Schema & Component Registries**: A lightweight registry in the Core Engine stores node metadata, while a Component Registry in the Headless Binding maps node types to actual UI components.
 
 By keeping the business logic and layout orchestration strictly separated from the rendering framework, PaperCast remains fast, flexible, and portable.
+
+## Agent Skills
+
+PaperCast includes custom AI agent skills (stored in `.agents/skills/`) to help maintain code quality and consistency:
+
+- **UI Consistency Guidelines** (`ui-consistency-guidelines`): Enforces pure CSS and Tailwind usage in alignment with PaperCast's design tokens and dark mode standards. Ensure your agents run this skill when building or reviewing UI components.
