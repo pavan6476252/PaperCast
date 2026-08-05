@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, PartyPopper } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 import { PlaygroundButton } from "./PlaygroundButton";
+import { McpLink } from "./McpLink";
 
 const navLinks = [
   { label: "Widgets", href: "/widgets" },
@@ -105,14 +106,26 @@ export function MarketingHeader({ version }: { version: string }) {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex gap-6">
+            <nav className="hidden md:flex gap-6 items-center">
               {navLinks.map((link) => {
                 const isActive = pathname.startsWith(link.href);
+                const isMcp = link.label === "MCP Server";
+
+                if (isMcp) {
+                  return (
+                    <McpLink
+                      key={link.href}
+                      href={link.href}
+                      label={link.label}
+                    />
+                  );
+                }
+
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center text-sm transition-colors ${
+                    className={`relative flex items-center text-sm transition-all duration-300 ${
                       isActive
                         ? "font-bold text-foreground"
                         : "font-medium text-foreground/70 hover:text-foreground"
@@ -164,11 +177,25 @@ export function MarketingHeader({ version }: { version: string }) {
             <nav className="flex flex-col gap-6 mt-8 flex-1 overflow-y-auto">
               {navLinks.map((link) => {
                 const isActive = pathname.startsWith(link.href);
+                const isMcp = link.label === "MCP Server";
+
+                if (isMcp) {
+                  return (
+                    <McpLink
+                      key={link.href}
+                      href={link.href}
+                      label={link.label}
+                      isMobile
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    />
+                  );
+                }
+
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`text-2xl tracking-tight transition-colors ${
+                    className={`text-2xl tracking-tight transition-colors flex items-center ${
                       isActive
                         ? "font-extrabold text-foreground"
                         : "font-bold text-foreground/80 hover:text-foreground"

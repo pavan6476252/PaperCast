@@ -12,12 +12,7 @@ export const metadata: Metadata = {
 
 // Custom MDX Components for the Changelog
 const components = {
-  h1: (props: any) => (
-    <h1
-      className="text-4xl font-extrabold tracking-tight text-foreground mb-8"
-      {...props}
-    />
-  ),
+  h1: () => null,
   h2: (props: any) => (
     <h2
       className="text-2xl font-bold tracking-tight text-foreground mt-12 mb-6 border-b border-border pb-2"

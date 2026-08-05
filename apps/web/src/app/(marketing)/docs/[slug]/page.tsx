@@ -33,16 +33,7 @@ const components = {
     <WidgetCard {...props} schema={props.schema || TEST_DOCUMENT} />
   ),
   Callout: (props: any) => <Callout {...props} />,
-  h1: (props: any) => {
-    const id = props.id || generateSlug(props.children);
-    return (
-      <h1
-        id={id}
-        className="text-4xl font-extrabold tracking-tight text-foreground mb-6 group flex items-center scroll-mt-24"
-        {...props}
-      />
-    );
-  },
+  h1: () => null,
   h2: (props: any) => {
     const id = props.id || generateSlug(props.children);
     return (
@@ -142,6 +133,28 @@ const components = {
           {...props}
         />
       </div>
+    );
+  },
+  Badge: ({ type, children }: { type: string; children: React.ReactNode }) => {
+    const typeStyles: Record<string, string> = {
+      feature:
+        "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20",
+      fix: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
+      improvement:
+        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
+      breaking:
+        "bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20",
+    };
+    const style =
+      typeStyles[type?.toLowerCase()] ||
+      "bg-surface text-foreground border-border";
+
+    return (
+      <span
+        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold border mr-2 uppercase tracking-wide ${style}`}
+      >
+        {children}
+      </span>
     );
   },
 };

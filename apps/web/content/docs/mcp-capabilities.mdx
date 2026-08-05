@@ -1,6 +1,10 @@
 # Agent Capabilities
 
-The PaperCast MCP Server provides five core tool modules. Agents use these tools to manipulate the document state, orchestrate pagination, and manage browser sessions without modifying the underlying JSON AST directly.
+<Callout type="warning" title="AST Integrity & Safety">
+  Agents should **never** modify the underlying JSON AST directly by writing
+  files. Always use the MCP tool modules provided below to manipulate the
+  document state, orchestrate pagination, and manage browser sessions safely.
+</Callout>
 
 ## Session tools
 

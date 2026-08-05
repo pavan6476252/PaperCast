@@ -1,6 +1,6 @@
 import Link from "next/link";
-import React from "react";
 import { FloatingIcons } from "../../components/marketing/FloatingIcons";
+import { Reveal } from "../../components/marketing/Reveal";
 import { getLatestVersion } from "../../lib/version";
 
 export default async function LandingPage() {
@@ -85,10 +85,7 @@ export default async function LandingPage() {
       </div>
 
       {/* Grid of features */}
-      <div
-        className="w-full max-w-6xl mx-auto px-4 py-24 opacity-0 animate-fade-in-up"
-        style={{ animationDelay: "0.6s" }}
-      >
+      <div className="w-full max-w-6xl mx-auto px-4 py-24">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
@@ -113,44 +110,43 @@ export default async function LandingPage() {
               bg: "bg-pink-100 dark:bg-pink-900/30",
             },
           ].map((feature, i) => (
-            <div
-              key={i}
-              className="group relative rounded-3xl p-[1px] shadow-sm hover:shadow-xl hover:shadow-foreground/10/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden bg-background/60"
-            >
-              {/* Spinning conic gradient border effect */}
-              <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#e2e8f0_50%,#3b82f6_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#1e293b_0%,#1e293b_50%,#3b82f6_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              {/* Default static border */}
-              <div className="absolute inset-0 rounded-3xl border border-border/50 group-hover:opacity-0 transition-opacity duration-500"></div>
+            <Reveal key={i} delay={i * 0.15}>
+              <div className="group relative rounded-3xl p-[1px] shadow-sm hover:shadow-xl hover:shadow-foreground/10/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden bg-background/60 h-full">
+                {/* Spinning conic gradient border effect */}
+                <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e2e8f0_0%,#e2e8f0_50%,#3b82f6_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#1e293b_0%,#1e293b_50%,#3b82f6_100%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {/* Default static border */}
+                <div className="absolute inset-0 rounded-3xl border border-border/50 group-hover:opacity-0 transition-opacity duration-500"></div>
 
-              <div className="relative h-full w-full bg-background/90 backdrop-blur-xl rounded-[23px] p-6 sm:p-8 z-10 flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 dark:from-blue-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[23px]"></div>
-                <div className="relative z-10">
-                  <div
-                    className={`w-14 h-14 ${feature.bg} ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}
-                  >
-                    <svg
-                      className="w-7 h-7"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                <div className="relative h-full w-full bg-background/90 backdrop-blur-xl rounded-[23px] p-6 sm:p-8 z-10 flex flex-col">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 dark:from-blue-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[23px]"></div>
+                  <div className="relative z-10">
+                    <div
+                      className={`w-14 h-14 ${feature.bg} ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d={feature.icon}
-                      />
-                    </svg>
+                      <svg
+                        className="w-7 h-7"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d={feature.icon}
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-3">
+                      {feature.title}
+                    </h3>
+                    <p className="text-foreground/70 leading-relaxed">
+                      {feature.desc}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-foreground/70 leading-relaxed">
-                    {feature.desc}
-                  </p>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

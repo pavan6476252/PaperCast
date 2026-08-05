@@ -43,7 +43,7 @@ Run the development server:
 pnpm run dev
 ```
 
-Open [http://localhost:8000](http://localhost:8000) with your browser to see the application in action.
+Open [http://localhost:8000](http://localhost:8000) with your browser to see the application in action. You can also view the live version at [https://paper-cast-web.vercel.app/](https://paper-cast-web.vercel.app/).
 
 ## How to Use
 

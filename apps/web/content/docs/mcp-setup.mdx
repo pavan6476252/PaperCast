@@ -2,9 +2,79 @@
 
 Configure your AI agent to connect to the PaperCast Model Context Protocol (MCP) server. You can run the server directly via `npx` (recommended for most users) or from a local source clone (for developers).
 
-## End-User Setup (Recommended)
+<Callout type="info" title="Node.js Version Requirements">
+  The PaperCast MCP server requires{" "}
+  <span className="font-bold text-blue-500 dark:text-blue-400">
+    Node.js v18
+  </span>{" "}
+  or newer. If your agent fails to connect or throws an immediate error, verify
+  that your global Node version meets this requirement.
+</Callout>
+
+## End-User Setup <Badge type="feature">Recommended</Badge>
 
 You do not need to clone the repository to use the PaperCast MCP. You can instruct your AI agent to download and run the published package on demand using `npx`.
+
+<Callout type="tip" title="The -y Flag in npx">
+  Notice the `-y` flag in the recommended{" "}
+  <code className="text-accent font-bold">npx -y @papercast/mcp</code> command.
+  This flag automatically accepts the NPM installation prompt. If you omit this
+  flag, the agent's background process will silently hang waiting for you to
+  type "y" to install the package. Always include it.
+</Callout>
+
+### Antigravity
+
+To use PaperCast in the Antigravity IDE:
+
+1. Open your workspace's `.agents/skills.json` or global `.gemini/config/mcp_config.json`.
+2. Add the PaperCast configuration:
+
+```json
+{
+  "mcpServers": {
+    "papercast": {
+      "command": "npx",
+      "args": ["-y", "@papercast/mcp"]
+    }
+  }
+}
+```
+
+<Callout type="danger" title="Absolute Paths in Antigravity">
+  Antigravity environments might not resolve global NPM binaries correctly if
+  you use `nvm` or `n`. If the connection fails with `npx: command not found`,
+  replace `"npx"` in the config with the absolute path from running `which npx`
+  in your terminal (e.g., `"/Users/yourname/.nvm/versions/node/v20/bin/npx"`).
+</Callout>
+
+### VSCode (Cline / RooCode)
+
+To use PaperCast with popular VSCode MCP extensions like Cline or RooCode:
+
+1. Open the extension's MCP configuration file (usually accessible by clicking the MCP settings icon in the extension panel, or editing `mcp_settings.json` directly).
+2. Add the PaperCast configuration:
+
+```json
+{
+  "mcpServers": {
+    "papercast": {
+      "command": "npx",
+      "args": ["-y", "@papercast/mcp"]
+    }
+  }
+}
+```
+
+### Cursor
+
+To use PaperCast in Cursor:
+
+1. Open **Cursor Settings** > **Features** > **MCP**.
+2. Click **+ Add New MCP Server**.
+3. Name it `papercast`.
+4. Set the type to `command`.
+5. Set the command to `npx -y @papercast/mcp`.
 
 ### Claude Desktop
 
@@ -15,7 +85,7 @@ To use PaperCast with Claude Desktop, add the following to your `claude_desktop_
   "mcpServers": {
     "papercast": {
       "command": "npx",
-      "args": ["-y", "papercast-mcp"]
+      "args": ["-y", "@papercast/mcp"]
     }
   }
 }
@@ -23,17 +93,9 @@ To use PaperCast with Claude Desktop, add the following to your `claude_desktop_
 
 Restart Claude Desktop. The `papercast` server will appear in the MCP connections list.
 
-### Cursor
+---
 
-To use PaperCast in Cursor:
-
-1. Open **Cursor Settings** > **Features** > **MCP**.
-2. Click **+ Add New MCP Server**.
-3. Name it `papercast`.
-4. Set the type to `command`.
-5. Set the command to `npx -y papercast-mcp`.
-
-## Developer Setup
+## Developer Setup <Badge type="improvement">Advanced</Badge>
 
 If you are contributing to PaperCast or need to run a modified version of the server, configure your agent to execute the local source files instead of the published package.
 
@@ -49,9 +111,7 @@ pnpm install
 
 ### 2. Configure Your Agent
 
-Update your agent's configuration file (e.g., `.gemini/config/mcp_config.json` or `claude_desktop_config.json`) to point to the local `index.ts` file.
-
-Replace `/absolute/path/to/papercast` with the actual path on your machine:
+Update your agent's configuration file to point to the local `index.ts` file. Replace `/absolute/path/to/papercast` with the actual path on your machine:
 
 ```json
 {
@@ -67,8 +127,44 @@ Replace `/absolute/path/to/papercast` with the actual path on your machine:
 
 This configuration ensures your agent executes the bleeding-edge TypeScript source code directly.
 
+---
+
 ## Verifying the Connection
 
-Once configured, open the PaperCast playground in your browser at `http://localhost:8000/playground`.
+Once configured, open the PaperCast playground in your browser at `https://paper-cast-web.vercel.app/playground`.
 
 If your agent is running the MCP server, the indicator at the top of the playground will show **Local MCP Server: Online**.
+
+<Callout type="success" title="Local vs. Deployed Environments">
+  For the best experience, match your MCP server environment to your Web App
+  environment: - **Deployed Web App:** Use the published package
+  (`@papercast/mcp` via `npx`) when you are interacting with the live site at
+  `https://paper-cast-web.vercel.app`. - **Local Web App:** Use the **Developer
+  Setup** (running `tsx ./apps/mcp/src/index.ts` from a local clone) when you
+  are running the Next.js app locally. This ensures all local features and
+  experimental preview syncs are unlocked without cross-origin or version
+  mismatches.
+</Callout>
+
+---
+
+## Troubleshooting & Best Practices
+
+<Callout type="warning" title="Multiple Agent/IDE Collisions">
+  If you have multiple AI agents or IDEs (like Cursor and Claude Desktop) open
+  simultaneously with the same MCP configuration,{" "}
+  <span className="font-bold text-amber-600 dark:text-amber-400">
+    only the first one to launch will successfully connect
+  </span>
+  . The MCP server binds to a specific WebSocket/stdio configuration. If one
+  agent is already holding the connection lock, subsequent agents will fail to
+  connect. Always ensure only one agent is actively running the PaperCast MCP
+  server.
+</Callout>
+
+<Callout type="info" title="Configuration Updates Require Restarts">
+  Most AI agents (like Claude Desktop and Cursor) only read their MCP
+  configuration files on startup. If you change your `command`, `args`, or
+  switch between the local and deployed environments, you **must completely quit
+  and restart** the agent application for the changes to take effect.
+</Callout>
