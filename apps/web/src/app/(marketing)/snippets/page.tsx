@@ -77,7 +77,7 @@ function SnippetsContent() {
                 {isActive && (
                   <motion.div
                     layoutId="activeCategoryBackground"
-                    className="absolute inset-0 bg-blue-600 dark:bg-surface rounded-lg z-0"
+                    className="absolute inset-0 bg-slate-100 dark:bg-surface rounded-lg z-0"
                     initial={false}
                     transition={{
                       type: "spring",
@@ -90,13 +90,13 @@ function SnippetsContent() {
                   onClick={() => handleCategoryChange(category.id)}
                   className={`relative z-10 w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
                     isActive
-                      ? "text-white dark:text-foreground"
+                      ? "text-slate-900 dark:text-foreground"
                       : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-surface"
                   }`}
                 >
                   <span>{category.label}</span>
                   <span
-                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? "bg-white dark:bg-background text-blue-600 dark:text-foreground shadow-sm" : "bg-slate-100 dark:bg-surface text-slate-500 dark:text-slate-400 group-hover:bg-white dark:group-hover:bg-background"}`}
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? "bg-white dark:bg-background text-slate-900 dark:text-foreground shadow-sm" : "bg-slate-100 dark:bg-surface text-slate-500 dark:text-slate-400 group-hover:bg-white dark:group-hover:bg-background"}`}
                   >
                     {count}
                   </span>
