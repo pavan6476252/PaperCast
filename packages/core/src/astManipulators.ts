@@ -12,6 +12,8 @@ export function findNodeAndParent(
   targetId: string,
   parentInfo?: ParentInfo
 ): { node: AnyNode; parentInfo?: ParentInfo } | null {
+  if (!node) return null;
+
   if (node.id === targetId) {
     return { node, parentInfo };
   }

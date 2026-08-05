@@ -1,3 +1,4 @@
+import { withErrorBoundary } from "../utils/error.js";
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as pdfService from "../services/pdf.service.js";
@@ -23,6 +24,8 @@ export function registerPdfTools(server: McpServer) {
           ),
       },
     },
-    async ({ schema, outputPath }) => pdfService.generatePdf(schema, outputPath)
+    withErrorBoundary(async ({ schema, outputPath }) =>
+      pdfService.generatePdf(schema, outputPath)
+    )
   );
 }

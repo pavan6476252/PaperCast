@@ -1,31 +1,26 @@
-import { sendCommandToActiveSession } from "./ws.js";
-import { patchNodeProperties, validateAndSend } from "./ast.js";
 import {
+  AnyNode,
+  BoxModel,
+  deleteNodeFromAst,
   findNodeGlobal,
   insertNodeIntoAst,
-  deleteNodeFromAst,
-  AnyNode,
-  TextNode,
-  TableNode,
   TableColumnConfig,
-  TableStyleConfig,
   TableFooterRow,
-  BoxModel,
+  TableNode,
+  TableStyleConfig,
+  TextNode,
   TypographyAndColor,
 } from "@papercast/core";
 import { DEFAULT_WIDGET_CONFIGS, WIDGET_DOCUMENTATION } from "../constants.js";
-import { WsEventType } from "@papercast/core/ws";
+import { patchNodeProperties, validateAndSend } from "./ast.js";
+import { getCurrentSchemaFromSession } from "./ws.js";
 
 export async function getLayoutElement(nodeId: string) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const result = findNodeGlobal(state.schema, nodeId);
   if (!result) throw new Error(`Node ${nodeId} not found in active schema.`);
   return {
-    content: [
-      { type: "text" as const, text: JSON.stringify(result.node, null, 2) },
-    ],
+    content: [{ type: "text", text: JSON.stringify(result.node, null, 2) }],
   };
 }
 
@@ -33,9 +28,7 @@ export async function patchElementProperties(
   nodeId: string,
   patch: Partial<AnyNode>
 ) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = patchNodeProperties(state.schema, nodeId, patch);
   return validateAndSend(
     newSchema,
@@ -47,7 +40,7 @@ export async function getAvailableWidgets() {
   return {
     content: [
       {
-        type: "text" as const,
+        type: "text",
         text: JSON.stringify(WIDGET_DOCUMENTATION, null, 2),
       },
     ],
@@ -68,9 +61,7 @@ export async function addTextWidget(
     style,
     props: { literal },
   };
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = insertNodeIntoAst(state.schema, parentId, newNode);
   return validateAndSend(
     newSchema,
@@ -100,9 +91,7 @@ export async function addTableWidget(
       ...(tableSplitBehaviour && { tableSplitBehaviour }),
     },
   };
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = insertNodeIntoAst(state.schema, parentId, newNode);
   return validateAndSend(
     newSchema,
@@ -114,9 +103,7 @@ export async function setTableFooterRows(
   tableId: string,
   footerRows: TableFooterRow[]
 ) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = patchNodeProperties(state.schema, tableId, {
     props: { footerRows },
   });
@@ -144,9 +131,7 @@ export async function addNodeToTableFooterCell(
     ...props,
   } as AnyNode;
 
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
 
   const newSchema = structuredClone(state.schema);
   const result = findNodeGlobal(newSchema, tableId);
@@ -192,9 +177,7 @@ export async function insertLayoutElement(
     ...props,
   } as AnyNode;
 
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = insertNodeIntoAst(state.schema, parentId, newNode, index);
 
   return validateAndSend(
@@ -204,9 +187,7 @@ export async function insertLayoutElement(
 }
 
 export async function deleteLayoutElement(nodeId: string) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = deleteNodeFromAst(state.schema, nodeId);
   return validateAndSend(newSchema, `Successfully deleted node ${nodeId}`);
 }
@@ -218,9 +199,7 @@ export async function updateElementProperties(
   value: any
 ) {
   const patch = { [propertyGroup]: { [key]: value } };
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = patchNodeProperties(state.schema, nodeId, patch);
 
   return validateAndSend(
@@ -234,9 +213,7 @@ export async function setPageOverride(
   headerId?: string | null,
   footerId?: string | null
 ) {
-  const state = await sendCommandToActiveSession({
-    type: "GET_CURRENT_SCHEMA" as any,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   newSchema.document.pageOverrides = newSchema.document.pageOverrides || {};
   const pageKey = pageNumber.toString();

@@ -1,15 +1,12 @@
-import { sendCommandToActiveSession } from "./ws.js";
 import { deepMerge, validateAndSend } from "./ast.js";
-import { WsEventType } from "@papercast/core/ws";
+import { getCurrentSchemaFromSession } from "./ws.js";
 
 export async function getDocumentState() {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   return {
     content: [
       {
-        type: "text" as const,
+        type: "text",
         text: JSON.stringify(state.schema, null, 2),
       },
     ],
@@ -24,9 +21,7 @@ export async function setDocumentState(schema: any) {
 }
 
 export async function replaceDocumentBody(children: any[]) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   newSchema.document.body.children = children;
   return validateAndSend(
@@ -36,9 +31,7 @@ export async function replaceDocumentBody(children: any[]) {
 }
 
 export async function updateDocumentData(data: any) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   newSchema.data = newSchema.data || {};
   deepMerge(newSchema.data, data);
@@ -53,9 +46,7 @@ export async function setDocumentSection(
   sectionKey: string,
   sectionData: any
 ) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   newSchema.document[sectionType] = newSchema.document[sectionType] || {};
   newSchema.document[sectionType][sectionKey] = sectionData;
@@ -69,9 +60,7 @@ export async function deleteDocumentSection(
   sectionType: "headers" | "footers",
   sectionKey: string
 ) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   if (
     newSchema.document[sectionType] &&
@@ -86,9 +75,7 @@ export async function deleteDocumentSection(
 }
 
 export async function updateDocumentMeta(patch: any) {
-  const state = await sendCommandToActiveSession({
-    type: WsEventType.GET_CURRENT_SCHEMA,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   newSchema.meta = newSchema.meta || {};
   deepMerge(newSchema.meta, patch);
@@ -99,9 +86,7 @@ export async function updateDocumentMeta(patch: any) {
 }
 
 export async function updateDocumentTheme(patch: any) {
-  const state = await sendCommandToActiveSession({
-    type: "GET_CURRENT_SCHEMA" as any,
-  });
+  const state = await getCurrentSchemaFromSession();
   const newSchema = structuredClone(state.schema);
   newSchema.theme = newSchema.theme || {};
   newSchema.theme.defaults = newSchema.theme.defaults || {};
