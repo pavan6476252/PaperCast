@@ -1,3 +1,4 @@
+import { withErrorBoundary } from "../utils/error.js";
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as layoutService from "../services/layout.service.js";
@@ -13,7 +14,9 @@ export function registerLayoutTools(server: McpServer) {
       },
       annotations: { readOnlyHint: true },
     },
-    async ({ nodeId }) => layoutService.getLayoutElement(nodeId)
+    withErrorBoundary(async ({ nodeId }) =>
+      layoutService.getLayoutElement(nodeId)
+    )
   );
 
   server.registerTool(
@@ -31,8 +34,9 @@ export function registerLayoutTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ nodeId, patch }) =>
+    withErrorBoundary(async ({ nodeId, patch }) =>
       layoutService.patchElementProperties(nodeId, patch)
+    )
   );
 
   server.registerTool(
@@ -42,7 +46,7 @@ export function registerLayoutTools(server: McpServer) {
         "Get the list of valid node types/widgets and their detailed property structures. Call this tool to understand how to correctly construct `props` (like `literal`, `contentLiteral`, `columns`, etc) for different widgets before building AST nodes.",
       annotations: { readOnlyHint: true },
     },
-    async () => layoutService.getAvailableWidgets()
+    withErrorBoundary(async () => layoutService.getAvailableWidgets())
   );
 
   server.registerTool(
@@ -65,8 +69,9 @@ export function registerLayoutTools(server: McpServer) {
           .describe("Optional layout properties."),
       },
     },
-    async ({ parentId, literal, style, layout }) =>
+    withErrorBoundary(async ({ parentId, literal, style, layout }) =>
       layoutService.addTextWidget(parentId, literal, style, layout)
+    )
   );
 
   server.registerTool(
@@ -106,24 +111,26 @@ export function registerLayoutTools(server: McpServer) {
           .describe("How the table should behave when split across pages."),
       },
     },
-    async ({
-      parentId,
-      dataPath,
-      columns,
-      layout,
-      styleConfig,
-      footerRows,
-      tableSplitBehaviour,
-    }) =>
-      layoutService.addTableWidget(
+    withErrorBoundary(
+      async ({
         parentId,
         dataPath,
         columns,
         layout,
         styleConfig,
         footerRows,
-        tableSplitBehaviour
-      )
+        tableSplitBehaviour,
+      }) =>
+        layoutService.addTableWidget(
+          parentId,
+          dataPath,
+          columns,
+          layout,
+          styleConfig,
+          footerRows,
+          tableSplitBehaviour
+        )
+    )
   );
 
   server.registerTool(
@@ -140,8 +147,9 @@ export function registerLayoutTools(server: McpServer) {
           ),
       },
     },
-    async ({ tableId, footerRows }) =>
+    withErrorBoundary(async ({ tableId, footerRows }) =>
       layoutService.setTableFooterRows(tableId, footerRows)
+    )
   );
 
   server.registerTool(
@@ -183,14 +191,16 @@ export function registerLayoutTools(server: McpServer) {
           ),
       },
     },
-    async ({ tableId, rowIndex, cellIndex, widgetType, props }) =>
-      layoutService.addNodeToTableFooterCell(
-        tableId,
-        rowIndex,
-        cellIndex,
-        widgetType,
-        props
-      )
+    withErrorBoundary(
+      async ({ tableId, rowIndex, cellIndex, widgetType, props }) =>
+        layoutService.addNodeToTableFooterCell(
+          tableId,
+          rowIndex,
+          cellIndex,
+          widgetType,
+          props
+        )
+    )
   );
 
   server.registerTool(
@@ -230,8 +240,9 @@ export function registerLayoutTools(server: McpServer) {
           ),
       },
     },
-    async ({ parentId, widgetType, index, props }) =>
+    withErrorBoundary(async ({ parentId, widgetType, index, props }) =>
       layoutService.insertLayoutElement(parentId, widgetType, index, props)
+    )
   );
 
   server.registerTool(
@@ -244,7 +255,9 @@ export function registerLayoutTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ nodeId }) => layoutService.deleteLayoutElement(nodeId)
+    withErrorBoundary(async ({ nodeId }) =>
+      layoutService.deleteLayoutElement(nodeId)
+    )
   );
 
   server.registerTool(
@@ -264,8 +277,9 @@ export function registerLayoutTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ nodeId, propertyGroup, key, value }) =>
+    withErrorBoundary(async ({ nodeId, propertyGroup, key, value }) =>
       layoutService.updateElementProperties(nodeId, propertyGroup, key, value)
+    )
   );
 
   server.registerTool(
@@ -288,7 +302,8 @@ export function registerLayoutTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ pageNumber, headerId, footerId }) =>
+    withErrorBoundary(async ({ pageNumber, headerId, footerId }) =>
       layoutService.setPageOverride(pageNumber, headerId, footerId)
+    )
   );
 }

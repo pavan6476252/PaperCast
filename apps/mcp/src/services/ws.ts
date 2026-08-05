@@ -1,11 +1,13 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { WsEventType, WsMessage } from "@papercast/core/ws";
+import { DocumentSchema } from "@papercast/core";
 // to-replace
 
 export interface PaperCastSession {
   ws: WebSocket;
   title: string;
   lastActive: number;
+  schema?: DocumentSchema;
 }
 
 export const sessions = new Map<string, PaperCastSession>();
@@ -22,6 +24,18 @@ const pendingRequests = new Map<
 
 export function initWebSocketServer(port: number = 9000) {
   const wss = new WebSocketServer({ port });
+
+  wss.on("error", (error: unknown) => {
+    const err = error as Error & { code?: string };
+    if (err?.code === "EADDRINUSE") {
+      console.error(
+        `🚨 WARNING: Port ${port} is already in use. The MCP server is running, but browser sync is disabled. Make sure you don't have multiple IDEs running the server.`
+      );
+    } else {
+      console.error("WebSocket Server encountered a fatal error:", error);
+    }
+  });
+
   console.error(`Starting PaperCast Sync WebSocket Server on port ${port}...`);
 
   wss.on("connection", (ws) => {
@@ -66,6 +80,9 @@ export function initWebSocketServer(port: number = 9000) {
             if (sessions.has(sessionId)) {
               const session = sessions.get(sessionId)!;
               session.lastActive = Date.now();
+              if (schema) {
+                session.schema = schema;
+              }
 
               if (requestId && pendingRequests.has(requestId)) {
                 const pending = pendingRequests.get(requestId)!;
@@ -118,6 +135,10 @@ export function initWebSocketServer(port: number = 9000) {
         }
       }
     });
+
+    ws.on("error", (err) => {
+      console.error("WebSocket connection error:", err);
+    });
   });
 
   return wss;
@@ -145,8 +166,12 @@ export function sendCommandToActiveSession(
 
     const timeoutId = setTimeout(() => {
       pendingRequests.delete(requestId);
-      reject(new Error("Request timed out. Browser did not respond."));
-    }, 5000);
+      reject(
+        new Error(
+          "Request timed out. Browser did not respond within 15 seconds. (Is the Playground tab sleeping?)"
+        )
+      );
+    }, 15000);
 
     pendingRequests.set(requestId, { resolve, reject, timeoutId });
     session.ws.send(JSON.stringify({ ...message, requestId }));
@@ -162,4 +187,25 @@ export function fireCommandToActiveSession(message: Record<string, unknown>) {
   }
   const session = sessions.get(targetSessionId)!;
   session.ws.send(JSON.stringify(message));
+}
+
+export async function getCurrentSchemaFromSession(): Promise<{
+  schema: DocumentSchema;
+  sessionId: string;
+}> {
+  const targetSessionId = activeSessionId;
+  if (!targetSessionId || !sessions.has(targetSessionId)) {
+    throw new Error(
+      "No active browser session connected. Open the PaperCast Playground in your browser."
+    );
+  }
+  const session = sessions.get(targetSessionId)!;
+  if (session.schema) {
+    return { schema: session.schema, sessionId: targetSessionId };
+  }
+
+  // Fallback: If cache is empty (e.g. server just restarted), request it from the browser
+  return sendCommandToActiveSession({
+    type: WsEventType.GET_CURRENT_SCHEMA,
+  });
 }

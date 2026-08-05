@@ -1,3 +1,4 @@
+import { withErrorBoundary } from "../utils/error.js";
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as documentService from "../services/document.service.js";
@@ -10,7 +11,7 @@ export function registerDocumentTools(server: McpServer) {
         "Get the complete active PaperCast document schema JSON currently opened in the browser. IMPORTANT: If there are multiple active sessions, use get_active_sessions to check and select_active_session to explicitly target one.",
       annotations: { readOnlyHint: true },
     },
-    async () => documentService.getDocumentState()
+    withErrorBoundary(async () => documentService.getDocumentState())
   );
 
   server.registerTool(
@@ -25,7 +26,9 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ schema }) => documentService.setDocumentState(schema)
+    withErrorBoundary(async ({ schema }) =>
+      documentService.setDocumentState(schema)
+    )
   );
 
   server.registerTool(
@@ -42,7 +45,9 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ children }) => documentService.replaceDocumentBody(children)
+    withErrorBoundary(async ({ children }) =>
+      documentService.replaceDocumentBody(children)
+    )
   );
 
   server.registerTool(
@@ -57,7 +62,9 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ data }) => documentService.updateDocumentData(data)
+    withErrorBoundary(async ({ data }) =>
+      documentService.updateDocumentData(data)
+    )
   );
 
   server.registerTool(
@@ -82,8 +89,9 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ sectionType, sectionKey, sectionData }) =>
+    withErrorBoundary(async ({ sectionType, sectionKey, sectionData }) =>
       documentService.setDocumentSection(sectionType, sectionKey, sectionData)
+    )
   );
 
   server.registerTool(
@@ -97,8 +105,9 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true, destructiveHint: true },
     },
-    async ({ sectionType, sectionKey }) =>
+    withErrorBoundary(async ({ sectionType, sectionKey }) =>
       documentService.deleteDocumentSection(sectionType, sectionKey)
+    )
   );
 
   server.registerTool(
@@ -113,7 +122,9 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ patch }) => documentService.updateDocumentMeta(patch)
+    withErrorBoundary(async ({ patch }) =>
+      documentService.updateDocumentMeta(patch)
+    )
   );
 
   server.registerTool(
@@ -128,6 +139,8 @@ export function registerDocumentTools(server: McpServer) {
       },
       annotations: { idempotentHint: true },
     },
-    async ({ patch }) => documentService.updateDocumentTheme(patch)
+    withErrorBoundary(async ({ patch }) =>
+      documentService.updateDocumentTheme(patch)
+    )
   );
 }

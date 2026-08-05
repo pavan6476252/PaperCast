@@ -142,6 +142,12 @@ To ensure code quality and schema validity:
 - **Sync Architecture**: The Monaco `JsonEditor.tsx` acts as the definitive source of truth for the raw text schema. When a user makes changes in the visual UI (`PropertyPanel.tsx`), the React layer dispatches updates via Zustand (`useDocumentStore`). Zustand then re-serializes the JSON and pushes it back into the Monaco editor via `editor.executeEdits` to preserve the user's native undo history.
 - **AST Node Matching**: Visual property panels heavily rely on recursive AST searches (e.g., `findNodeGlobal` in `astManipulators.ts`) to match a user's `selectedNodeId` string to the active node properties for editing.
 
+### 4. MCP Server Error Handling & Validation
+
+- **Crash Reporting**: Unhandled exceptions and MCP protocol errors in the CLI are caught by a global error handler (`crash.ts`), which writes a JSON crash dump to the OS temp directory and outputs an LLM-friendly prompt to `stderr` to aid in debugging.
+- **Validation**: Schema validation via `Ajv` uses `allErrors: false` to prevent memory exhaustion (OOM) when parsing large, malformed payloads from the visual editor (e.g. missing `layout` objects).
+- **Error Boundaries**: All MCP tool handlers must be wrapped in `withErrorBoundary` to ensure that local errors return a graceful `isError: true` payload to the LLM rather than crashing the MCP server process.
+
 ## Release & CI/CD Workflow
 
 - **Trunk-Based Development**: This repository follows a strict Trunk-Based approach. You must NEVER push code directly to the `main` branch or create a `dev` branch. All work happens in feature branches that are merged into `main` via Pull Requests.
