@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 import { PlaygroundButton } from "./PlaygroundButton";
+import pkg from "../../../../../package.json";
 
 const navLinks = [
   { label: "Widgets", href: "/widgets" },
@@ -111,10 +112,13 @@ export function MarketingHeader() {
                 </Link>
               ))}
             </nav>
-            <div className="pb-10 pt-6 border-t border-border mt-auto flex justify-center">
-              <div className="w-full">
+            <div className="pb-10 pt-6 border-t border-border mt-auto flex flex-col items-center gap-4">
+              <div className="w-full flex justify-center">
                 <PlaygroundButton />
               </div>
+              <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
+                v{pkg.version}
+              </span>
             </div>
           </motion.div>
         )}
