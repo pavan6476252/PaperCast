@@ -120,9 +120,9 @@ export const WidgetViewer: React.FC<WidgetViewerProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 flex flex-col items-center justify-center p-8 overflow-auto z-10"
+              className="absolute inset-0 flex flex-col p-4 sm:p-8 overflow-auto z-10"
             >
-              <div className="w-full max-w-3xl bg-white dark:bg-background border border-slate-200/80 dark:border-border shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(255,255,255,0.05)] rounded-sm overflow-hidden flex flex-col transition-all hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_30px_60px_-15px_rgba(255,255,255,0.1)]">
+              <div className="w-full max-w-5xl mx-auto my-auto bg-white dark:bg-background border border-slate-200/80 dark:border-border shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(255,255,255,0.05)] rounded-sm overflow-hidden flex flex-col transition-all hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_30px_60px_-15px_rgba(255,255,255,0.1)] shrink-0">
                 {isClient ? (
                   <DocumentPreview schemaData={schema} hideToolbar={true} />
                 ) : (

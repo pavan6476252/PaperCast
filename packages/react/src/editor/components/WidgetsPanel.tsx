@@ -18,7 +18,7 @@ import {
   Focus,
 } from "lucide-react";
 
-const WIDGETS = [
+export const WIDGETS = [
   { type: "text", label: "Text", icon: Type },
   { type: "image", label: "Image", icon: Image },
   { type: "row", label: "Row", icon: Rows },

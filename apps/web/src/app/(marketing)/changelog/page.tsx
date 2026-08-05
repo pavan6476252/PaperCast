@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 
 export const metadata: Metadata = {
   title: "Changelog | PaperCast",
@@ -41,7 +42,28 @@ const components = {
       {...props}
     />
   ),
+  ol: (props: any) => (
+    <ol
+      className="my-6 ml-6 list-decimal [&>li]:mt-2 text-slate-600 dark:text-slate-400"
+      {...props}
+    />
+  ),
   li: (props: any) => <li className="leading-7" {...props} />,
+  blockquote: (props: any) => (
+    <blockquote
+      className="border-l-4 border-blue-500 pl-6 py-2 my-6 italic text-slate-700 dark:text-slate-300 bg-blue-50/50 dark:bg-blue-900/20 rounded-r-lg"
+      {...props}
+    />
+  ),
+  img: (props: any) => (
+    <img
+      className="rounded-xl border border-slate-200 dark:border-border shadow-md my-8 max-w-full"
+      {...props}
+    />
+  ),
+  hr: (props: any) => (
+    <hr className="my-10 border-slate-200 dark:border-border" {...props} />
+  ),
   code: (props: any) => (
     <code
       className="relative rounded bg-slate-100 dark:bg-surface px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-slate-900 dark:text-foreground"
@@ -113,6 +135,41 @@ const components = {
       </div>
     </div>
   ),
+  table: (props: any) => (
+    <div className="w-full overflow-x-auto my-6 rounded-lg border border-slate-200 dark:border-border shadow-sm">
+      <table
+        className="w-full text-left border-collapse min-w-[500px]"
+        {...props}
+      />
+    </div>
+  ),
+  thead: (props: any) => (
+    <thead className="bg-slate-50 dark:bg-surface/50" {...props} />
+  ),
+  tbody: (props: any) => (
+    <tbody
+      className="divide-y divide-slate-100 dark:divide-border/50"
+      {...props}
+    />
+  ),
+  tr: (props: any) => (
+    <tr
+      className="hover:bg-slate-50/50 dark:hover:bg-surface/20 transition-colors"
+      {...props}
+    />
+  ),
+  th: (props: any) => (
+    <th
+      className="border-b border-slate-200 dark:border-border py-3 px-4 text-sm font-semibold text-slate-900 dark:text-foreground"
+      {...props}
+    />
+  ),
+  td: (props: any) => (
+    <td
+      className="py-3 px-4 text-sm text-slate-600 dark:text-slate-400 align-top"
+      {...props}
+    />
+  ),
 };
 
 export default async function ChangelogPage() {
@@ -143,7 +200,11 @@ export default async function ChangelogPage() {
       {/* Main Content Area */}
       <article className="max-w-4xl mx-auto px-6 py-12 lg:px-8">
         <div className="prose prose-slate dark:prose-invert prose-blue max-w-none">
-          <MDXRemote source={mdxSource} components={components} />
+          <MDXRemote
+            source={mdxSource}
+            components={components}
+            options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+          />
         </div>
       </article>
     </div>

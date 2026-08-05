@@ -6,6 +6,7 @@ import { LayoutTemplate, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { SnippetCard } from "../../../components/snippets/SnippetCard";
+import { MobileSidebarDrawer } from "../../../components/marketing/MobileSidebarDrawer";
 
 // Derived categories from available snippets plus an "all" category
 const CATEGORIES = [
@@ -52,61 +53,71 @@ function SnippetsContent() {
     });
   }, [activeCategoryId, searchQuery]);
 
+  const sidebarContent = (
+    <>
+      <div className="flex items-center gap-2 mb-8">
+        <div className="p-2 bg-blue-600 rounded-lg text-white">
+          <LayoutTemplate size={20} />
+        </div>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-foreground">
+          Schema Library
+        </h2>
+      </div>
+      <nav className="space-y-4">
+        <ul className="space-y-1 relative">
+          {CATEGORIES.map((category) => {
+            const isActive = activeCategoryId === category.id;
+            const count =
+              category.id === "all"
+                ? SNIPPETS.length
+                : SNIPPETS.filter((s) => s.category === category.id).length;
+
+            return (
+              <li key={category.id} className="relative group">
+                {isActive && (
+                  <motion.div
+                    layoutId="activeCategoryBackground"
+                    className="absolute inset-0 bg-slate-100 dark:bg-surface rounded-lg z-0"
+                    initial={false}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 30,
+                    }}
+                  />
+                )}
+                <button
+                  onClick={() => handleCategoryChange(category.id)}
+                  className={`relative z-10 w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                    isActive
+                      ? "text-slate-900 dark:text-foreground"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-surface"
+                  }`}
+                >
+                  <span>{category.label}</span>
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? "bg-white dark:bg-background text-slate-900 dark:text-foreground shadow-sm" : "bg-slate-100 dark:bg-surface text-slate-500 dark:text-slate-400 group-hover:bg-white dark:group-hover:bg-background"}`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </>
+  );
+
   return (
     <div className="flex flex-col md:flex-row flex-1 overflow-hidden h-[calc(100vh-4rem)]">
-      {/* Sidebar */}
-      <aside className="w-full md:w-72 shrink-0 border-r border-slate-200 dark:border-border bg-white dark:bg-background p-6 overflow-y-auto">
-        <div className="flex items-center gap-2 mb-8">
-          <div className="p-2 bg-blue-600 rounded-lg text-white">
-            <LayoutTemplate size={20} />
-          </div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-foreground">
-            Schema Library
-          </h2>
-        </div>
-        <nav className="space-y-4">
-          <ul className="space-y-1 relative">
-            {CATEGORIES.map((category) => {
-              const isActive = activeCategoryId === category.id;
-              const count =
-                category.id === "all"
-                  ? SNIPPETS.length
-                  : SNIPPETS.filter((s) => s.category === category.id).length;
+      <MobileSidebarDrawer icon="snippets">
+        <div className="p-6">{sidebarContent}</div>
+      </MobileSidebarDrawer>
 
-              return (
-                <li key={category.id} className="relative group">
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeCategoryBackground"
-                      className="absolute inset-0 bg-slate-100 dark:bg-surface rounded-lg z-0"
-                      initial={false}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  <button
-                    onClick={() => handleCategoryChange(category.id)}
-                    className={`relative z-10 w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                      isActive
-                        ? "text-slate-900 dark:text-foreground"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-50 dark:hover:bg-surface"
-                    }`}
-                  >
-                    <span>{category.label}</span>
-                    <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isActive ? "bg-white dark:bg-background text-slate-900 dark:text-foreground shadow-sm" : "bg-slate-100 dark:bg-surface text-slate-500 dark:text-slate-400 group-hover:bg-white dark:group-hover:bg-background"}`}
-                    >
-                      {count}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      {/* Sidebar */}
+      <aside className="hidden md:block w-72 shrink-0 border-r border-slate-200 dark:border-border bg-white dark:bg-background p-6 overflow-y-auto">
+        {sidebarContent}
       </aside>
 
       {/* Main Content Area */}
