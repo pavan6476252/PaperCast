@@ -1,6 +1,7 @@
 import React from "react";
 import { usePaperCastEditor, WIDGETS } from "@papercast/react/editor";
-import { Settings } from "lucide-react";
+import { Settings, GripVertical } from "lucide-react";
+import { AnyNode } from "@papercast/core";
 
 export const MobileWidgetsBar = ({
   onSettingsClick,
@@ -14,7 +15,7 @@ export const MobileWidgetsBar = ({
 
     const baseNodeId = selectedNodeId.split("-part")[0];
 
-    const findNode = (node: any): any | null => {
+    const findNode = (node: AnyNode): AnyNode | null => {
       if (node.id === baseNodeId) return node;
       if (node.children) {
         for (const child of node.children) {
@@ -29,8 +30,8 @@ export const MobileWidgetsBar = ({
 
     if (!found && parsedDocument.document.headers) {
       for (const header of Object.values(parsedDocument.document.headers)) {
-        if ((header as any).root) {
-          found = findNode((header as any).root);
+        if (header.root) {
+          found = findNode(header.root);
           if (found) break;
         }
       }
@@ -38,8 +39,8 @@ export const MobileWidgetsBar = ({
 
     if (!found && parsedDocument.document.footers) {
       for (const footer of Object.values(parsedDocument.document.footers)) {
-        if ((footer as any).root) {
-          found = findNode((footer as any).root);
+        if (footer.root) {
+          found = findNode(footer.root);
           if (found) break;
         }
       }
@@ -49,27 +50,33 @@ export const MobileWidgetsBar = ({
   }, [selectedNodeId, parsedDocument]);
 
   return (
-    <div className="flex md:hidden items-center w-full bg-surface border-t border-border shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.1)] z-30 relative shrink-0 pb-4 pt-2">
+    <div className="flex md:hidden items-center w-full bg-surface border-t border-border shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.1)] z-30 relative shrink-0 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2">
       <div className="flex-1 flex items-center overflow-x-auto px-2 gap-2 hide-scrollbar">
         {WIDGETS.map((widget) => {
           const isSelected = selectedNodeType === widget.type;
           return (
             <div
               key={widget.type}
-              draggable={true}
-              onDragStart={(e) => {
-                e.dataTransfer.setData(
-                  "application/papercast-widget",
-                  widget.type
-                );
-                e.dataTransfer.effectAllowed = "copy";
-              }}
-              className={`flex items-center gap-2 px-3 py-2 border rounded-lg cursor-grab shrink-0 shadow-sm transition-colors ${
+              className={`flex items-center gap-2 px-3 py-2 border rounded-lg shrink-0 shadow-sm transition-colors ${
                 isSelected
                   ? "border-accent bg-accent/20 text-accent"
                   : "border-border bg-background text-foreground/80 hover:bg-surface/80"
               }`}
             >
+              <div
+                draggable={true}
+                onDragStart={(e) => {
+                  e.dataTransfer.setData(
+                    "application/papercast-widget",
+                    widget.type
+                  );
+                  e.dataTransfer.effectAllowed = "copy";
+                }}
+                className="cursor-grab hover:bg-black/5 rounded flex items-center justify-center p-0.5"
+                title="Drag to add"
+              >
+                <GripVertical size={14} className="text-foreground/40" />
+              </div>
               <widget.icon
                 size={16}
                 className={isSelected ? "text-accent" : "text-foreground/50"}

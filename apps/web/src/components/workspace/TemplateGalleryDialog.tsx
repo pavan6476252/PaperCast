@@ -3,10 +3,13 @@ import { SNIPPETS, SchemaSnippet } from "@papercast/core";
 import { useWorkspaceStore } from "../../store/workspaceStore";
 import { useDocumentStore } from "../../store/documentStore";
 import { X } from "lucide-react";
+import { useMobileBackHandler } from "../../hooks/useMobileBackHandler";
 
 export const TemplateGalleryDialog = ({ onClose }: { onClose: () => void }) => {
   const { setActiveSchema, setLastSavedJsonString } = useWorkspaceStore();
   const { setJsonString } = useDocumentStore();
+
+  useMobileBackHandler(true, onClose);
 
   const handleUseTemplate = async (snippet: SchemaSnippet) => {
     const content = JSON.stringify(snippet.schema, null, 2);

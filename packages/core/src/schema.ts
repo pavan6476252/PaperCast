@@ -355,6 +355,7 @@ export interface RichTextPreferences {
 export interface DocumentSchema {
   version: number;
   meta: {
+    title?: string;
     pageSize: "A4" | "A3" | "Letter" | { widthPx: number; heightPx: number };
     orientation: "portrait" | "landscape";
     baseUnit: "px";

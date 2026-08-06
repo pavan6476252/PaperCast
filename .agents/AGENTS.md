@@ -21,6 +21,9 @@ Whenever a repository review or component evaluation is requested, always route 
 > [!IMPORTANT]
 > **CRITICAL RULE**: You are FORBIDDEN from ending a turn or considering a task complete if you have made structural or feature changes without also updating the corresponding documentation in `AGENTS.md` (and any other relevant agent md files). Always review your file changes and update these files before stopping.
 
+> [!IMPORTANT]
+> **CRITICAL RULE - CHANGELOGS & DOCUMENTATION**: Whenever you complete a feature, fix a bug, or make any notable changes to the web application or engine, you MUST use the `adding-web-changelogs` skill to generate or update the user-facing changelog (`changelog.mdx`), and update any relevant `docs/` before you consider the task complete. Never skip this step.
+
 ## Repository Overview
 
 PaperCast is a Schema-First Document Builder and Renderer built with React, Next.js, and Monaco Editor. The user defines the layout using a JSON Schema (DocFrame Schema), and the engine renders it dynamically, pagination-enabled, and ready to print or download as a PDF.
@@ -101,6 +104,11 @@ This repository is a Turborepo monorepo structured as follows:
 
 - Run `pnpm run dev` to start the development servers for all workspaces via Turborepo.
 - Run `pnpm run build` to verify the production builds for the CLI and Next.js applications.
+
+### Vercel Deployment & Serverless Constraints
+
+- **Chromium Bundling**: When deploying the PDF generator (`@sparticuz/chromium`) to Vercel via `pnpm`, you must hoist the dependencies using `.npmrc` (`public-hoist-pattern[]=*sparticuz*` and `shamefully-hoist=true`). Otherwise, the `.pnpm` symlinked `bin` directory will be pruned during Vercel's build trace, causing a runtime `Directory not found` error in the serverless function.
+- **Mobile Drag & Drop**: Native HTML5 Drag and Drop is not supported on mobile browsers. The `@drag-drop-touch` polyfill is dynamically imported in the global layout to synthesize touch events into drag events.
 
 ## Pre-Commit Hooks & Validation
 

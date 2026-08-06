@@ -1,8 +1,16 @@
 import React from "react";
-import { DocumentSchema } from "@papercast/core";
+import { DocumentSchema, AnyNode, PageRegion } from "@papercast/core";
 import { PageData } from "@papercast/engine";
-import { PaperCastProvider, NodeRenderer, getStyle } from "@papercast/react";
-import { Plus } from "lucide-react";
+import {
+  PaperCastProvider,
+  NodeRenderer,
+  getStyle,
+  NodeRegistry,
+} from "@papercast/react";
+import { Trash2, Copy, Columns2, Settings2, Plus } from "lucide-react";
+
+const generateId = () => Math.random().toString(36).substring(2, 10);
+import { useDocumentStore } from "../../store/documentStore";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { PreviewTab } from "./PreviewToolbar";
 
@@ -13,9 +21,19 @@ interface PreviewCanvasProps {
   zoom: number;
   width: number;
   height: number;
-  nodeWrapper: React.ComponentType<any> | undefined;
-  addHeader: (id: string, header: any) => void;
-  addFooter: (id: string, footer: any) => void;
+  nodeWrapper:
+    | React.ComponentType<{
+        node: AnyNode;
+        renderContent: (
+          props?: React.HTMLAttributes<HTMLDivElement> & {
+            "data-selected"?: boolean;
+          },
+          overlays?: React.ReactNode
+        ) => React.ReactNode;
+      }>
+    | undefined;
+  addHeader: (id: string, header: PageRegion) => void;
+  addFooter: (id: string, footer: PageRegion) => void;
 }
 
 export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
@@ -111,7 +129,42 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 : "column",
                             ...getStyle(parsedDocument.document.body),
                           }}
+                          onDragOver={(e) => {
+                            if (activeTab === "content") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                          onDrop={(e) => {
+                            if (activeTab === "content") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const widgetType = e.dataTransfer.getData(
+                                "application/papercast-widget"
+                              );
+                              if (widgetType) {
+                                const newNode = NodeRegistry.createDefaultNode(
+                                  widgetType,
+                                  `node-${generateId()}`
+                                );
+
+                                useDocumentStore
+                                  .getState()
+                                  .insertNode(
+                                    parsedDocument.document.body.id,
+                                    undefined,
+                                    newNode
+                                  );
+                              }
+                            }
+                          }}
                         >
+                          {page.bodyNodes.length === 0 &&
+                            activeTab === "content" && (
+                              <div className="w-full h-full min-h-[100px] flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-200 rounded-lg m-4 pointer-events-none print-hidden">
+                                Drag and drop widgets here
+                              </div>
+                            )}
                           {page.bodyNodes.map((node, i) => (
                             <NodeRenderer
                               key={`body-${node.id || i}`}

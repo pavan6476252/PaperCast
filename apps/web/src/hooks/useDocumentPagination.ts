@@ -52,39 +52,48 @@ export function useDocumentPagination({
     [parsedDocument, height]
   );
 
-  const handleDownloadPdf = useCallback(async () => {
-    if (!isValid || !jsonString || isSaving) return;
+  const handleDownloadPdf = useCallback(
+    async (customFileName?: string) => {
+      if (!isValid || !jsonString || isSaving) return;
 
-    try {
-      setIsSaving(true);
-      const res = await fetch("/api/pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonString,
-      });
+      try {
+        setIsSaving(true);
+        const res = await fetch("/api/pdf", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonString,
+        });
 
-      if (!res.ok) {
-        throw new Error("Failed to generate PDF");
+        if (!res.ok) {
+          throw new Error("Failed to generate PDF");
+        }
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const baseName =
+          customFileName || parsedDocument?.meta?.title || "document";
+        a.download = baseName.toLowerCase().endsWith(".pdf")
+          ? baseName
+          : `${baseName}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 1000);
+      } catch (error) {
+        console.error("Download error:", error);
+        alert("Error generating PDF");
+      } finally {
+        setIsSaving(false);
       }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "document.pdf";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error("Download error:", error);
-      alert("Error generating PDF");
-    } finally {
-      setIsSaving(false);
-    }
-  }, [isValid, jsonString, isSaving]);
+    },
+    [isValid, jsonString, isSaving, parsedDocument]
+  );
 
   // Global listener for PDF download
   const handleDownloadRef = useRef(handleDownloadPdf);

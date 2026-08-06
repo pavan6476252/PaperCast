@@ -447,4 +447,20 @@ export const TableNodeDef: ComponentTypeDefinition<TableNode> = {
   measure: TableBehavior.measure,
   split: TableBehavior.split,
   render: TableComponent,
+  createDefaultNode: (id) => ({
+    id,
+    type: "table",
+    layout: {},
+    props: {
+      columns: [
+        { headerText: "Column 1", flex: 1 },
+        { headerText: "Column 2", flex: 1 },
+      ],
+      data: [
+        { col1: "Row 1 Cell 1", col2: "Row 1 Cell 2" },
+        { col1: "Row 2 Cell 1", col2: "Row 2 Cell 2" },
+      ],
+      styleConfig: { gridLines: "all", cellPaddingPx: 8 },
+    },
+  }),
 };

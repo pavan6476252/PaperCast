@@ -189,9 +189,48 @@ const RadioGroupComponent: React.FC<{ node: RadioGroupNode } & BaseProps> = ({
 };
 
 export const formNodes: ComponentTypeDefinition<any>[] = [
-  { type: "ul", measure: () => 0, render: UnorderedListComponent },
-  { type: "ol", measure: () => 0, render: OrderedListComponent },
-  { type: "checkbox", measure: () => 0, render: CheckboxComponent },
-  { type: "radio", measure: () => 0, render: RadioComponent },
-  { type: "radioGroup", measure: () => 0, render: RadioGroupComponent },
+  {
+    type: "ul",
+    measure: () => 0,
+    render: UnorderedListComponent,
+    createDefaultNode: (id) => ({ id, type: "ul", layout: { minHeight: 40 } }),
+  },
+  {
+    type: "ol",
+    measure: () => 0,
+    render: OrderedListComponent,
+    createDefaultNode: (id) => ({ id, type: "ol", layout: { minHeight: 40 } }),
+  },
+  {
+    type: "checkbox",
+    measure: () => 0,
+    render: CheckboxComponent,
+    createDefaultNode: (id) => ({
+      id,
+      type: "checkbox",
+      layout: {},
+      props: { labelLiteral: "Option" },
+    }),
+  },
+  {
+    type: "radio",
+    measure: () => 0,
+    render: RadioComponent,
+    createDefaultNode: (id) => ({
+      id,
+      type: "radio",
+      layout: {},
+      props: { labelLiteral: "Option" },
+    }),
+  },
+  {
+    type: "radioGroup",
+    measure: () => 0,
+    render: RadioGroupComponent,
+    createDefaultNode: (id) => ({
+      id,
+      type: "radioGroup",
+      layout: { minHeight: 40 },
+    }),
+  },
 ];

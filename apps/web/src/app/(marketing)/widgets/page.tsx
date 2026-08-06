@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 import { WidgetViewer } from "../../../components/showcase/WidgetViewer";
 import { widgets } from "../../../registry/widgets";
 import { MobileSidebarDrawer } from "../../../components/marketing/MobileSidebarDrawer";
+import { registerDefaultWidgets } from "@papercast/react/widgets";
+
+registerDefaultWidgets();
 
 // Group widgets by category
 const CATEGORIES = [

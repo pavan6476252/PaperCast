@@ -13,6 +13,7 @@ import { useWorkspaceStore } from "../../../store/workspaceStore";
 
 import { DocumentPreview } from "../../../components/renderer/DocumentPreview";
 import { LeftSidebar } from "../../../components/playground/LeftSidebar";
+import { MobileSidebar } from "../../../components/playground/MobileSidebar";
 import { RightSidebar } from "../../../components/playground/RightSidebar";
 import { MobileWidgetsBar } from "../../../components/playground/MobileWidgetsBar";
 import { MobilePropertiesSheet } from "../../../components/playground/MobilePropertiesSheet";
@@ -179,35 +180,38 @@ export function PlaygroundContent() {
           </div>
         </div>
 
+        {/* Desktop Workspace */}
         {activeLeftPanel === "workspace" && (
-          <div className="flex flex-col z-40 absolute inset-0 md:relative md:z-10 shadow-xl shrink-0 print:hidden h-full w-full md:w-80 bg-background animate-in slide-in-from-left-8 fade-in duration-300 ease-out">
-            <div className="md:hidden flex items-center justify-between p-3 border-b border-border bg-surface shrink-0 z-50 relative">
-              <h3 className="font-bold text-sm text-foreground">Workspace</h3>
-              <button
-                onClick={() => setActiveLeftPanel(null)}
-                className="p-1.5 rounded-full bg-background border border-border hover:bg-surface text-foreground/70"
-              >
-                <X size={16} />
-              </button>
-            </div>
+          <div className="hidden md:flex flex-col z-10 relative shadow-xl shrink-0 print:hidden w-64 bg-background animate-in slide-in-from-left-8 fade-in duration-300 ease-out border-r border-border">
             <WorkspaceSidebar />
           </div>
         )}
+
+        {/* Desktop Editor */}
         {activeLeftPanel === "editor" && (
           <LeftSidebar>
-            <div className="md:hidden flex items-center justify-between p-3 border-b border-border bg-surface shrink-0 z-50 relative">
-              <h3 className="font-bold text-sm text-foreground">JSON Editor</h3>
-              <button
-                onClick={() => setActiveLeftPanel(null)}
-                className="p-1.5 rounded-full bg-background border border-border hover:bg-surface text-foreground/70"
-              >
-                <X size={16} />
-              </button>
-            </div>
-            <div className="flex-1 overflow-hidden relative z-0">
-              <JsonEditor />
-            </div>
+            <JsonEditor />
           </LeftSidebar>
+        )}
+
+        {/* Mobile Workspace */}
+        {activeLeftPanel === "workspace" && (
+          <MobileSidebar
+            title="Workspace"
+            onClose={() => setActiveLeftPanel(null)}
+          >
+            <WorkspaceSidebar />
+          </MobileSidebar>
+        )}
+
+        {/* Mobile Editor */}
+        {activeLeftPanel === "editor" && (
+          <MobileSidebar
+            title="JSON Editor"
+            onClose={() => setActiveLeftPanel(null)}
+          >
+            <JsonEditor />
+          </MobileSidebar>
         )}
 
         <div className="flex-1 flex flex-col h-full relative overflow-hidden print:overflow-visible">
