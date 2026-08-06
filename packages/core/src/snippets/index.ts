@@ -4,6 +4,7 @@ import { footerSnippets } from "./footers";
 import { layoutSnippets } from "./layouts";
 import { invoiceSnippets } from "./invoices";
 import { tableSnippets } from "./tables";
+import { advancedTableSnippets } from "./advancedTables";
 import { templateSnippets } from "./templates";
 
 export const SNIPPETS = [
@@ -12,5 +13,6 @@ export const SNIPPETS = [
   ...layoutSnippets,
   ...invoiceSnippets,
   ...tableSnippets,
+  ...advancedTableSnippets,
   ...templateSnippets,
 ];
