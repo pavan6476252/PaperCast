@@ -1,5 +1,5 @@
 import React from "react";
-import { DocumentSchema } from "@papercast/core";
+import { DocumentSchema, AnyNode } from "@papercast/core";
 import { PageData } from "@papercast/engine";
 import { PaperCastProvider, NodeRenderer, getStyle } from "@papercast/react";
 import { Plus } from "lucide-react";
@@ -14,9 +14,9 @@ interface PreviewCanvasProps {
   zoom: number;
   width: number;
   height: number;
-  nodeWrapper: React.ComponentType<any> | undefined;
-  addHeader: (id: string, header: any) => void;
-  addFooter: (id: string, footer: any) => void;
+  nodeWrapper: React.ComponentType<Record<string, unknown>> | undefined;
+  addHeader: (id: string, header: Record<string, unknown>) => void;
+  addFooter: (id: string, footer: Record<string, unknown>) => void;
 }
 
 export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
@@ -126,8 +126,12 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 "application/papercast-widget"
                               );
                               if (widgetType) {
-                                let defaultProps: any = undefined;
-                                let defaultLayout: any = undefined;
+                                let defaultProps:
+                                  Record<string, unknown> | undefined =
+                                  undefined;
+                                let defaultLayout:
+                                  Record<string, unknown> | undefined =
+                                  undefined;
                                 if (widgetType === "text")
                                   defaultProps = { literal: "New Text" };
                                 if (widgetType === "richText")
@@ -155,14 +159,14 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 )
                                   defaultLayout = { minHeight: 40 };
 
-                                const newNode: any = {
+                                const newNode = {
                                   id: `node-${Date.now()}`,
                                   type: widgetType,
                                   layout: defaultLayout || {},
                                   ...(defaultProps
                                     ? { props: defaultProps }
                                     : {}),
-                                };
+                                } as AnyNode;
 
                                 useDocumentStore
                                   .getState()

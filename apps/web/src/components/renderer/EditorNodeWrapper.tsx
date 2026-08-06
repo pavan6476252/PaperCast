@@ -140,8 +140,8 @@ export const EditorNodeWrapper: React.FC<{
     );
 
     if (widgetType) {
-      let defaultProps: any = undefined;
-      let defaultLayout: any = undefined;
+      let defaultProps: Record<string, unknown> | undefined = undefined;
+      let defaultLayout: Record<string, unknown> | undefined = undefined;
       if (widgetType === "text") defaultProps = { literal: "New Text" };
       if (widgetType === "richText")
         defaultProps = { htmlLiteral: "<p>New Rich Text</p>" };
@@ -155,10 +155,10 @@ export const EditorNodeWrapper: React.FC<{
       const newNode: AnyNode = {
         // eslint-disable-next-line react-hooks/purity
         id: `node-${Date.now()}`,
-        type: widgetType as any,
+        type: widgetType as AnyNode["type"],
         layout: defaultLayout || {},
         ...(defaultProps ? { props: defaultProps } : {}),
-      };
+      } as AnyNode;
 
       if (currentDropPosition === "inside") {
         insertNode(node.id, undefined, newNode);

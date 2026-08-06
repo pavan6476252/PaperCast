@@ -102,6 +102,11 @@ This repository is a Turborepo monorepo structured as follows:
 - Run `pnpm run dev` to start the development servers for all workspaces via Turborepo.
 - Run `pnpm run build` to verify the production builds for the CLI and Next.js applications.
 
+### Vercel Deployment & Serverless Constraints
+
+- **Chromium Bundling**: When deploying the PDF generator (`@sparticuz/chromium`) to Vercel via `pnpm`, you must hoist the dependencies using `.npmrc` (`public-hoist-pattern[]=*sparticuz*` and `shamefully-hoist=true`). Otherwise, the `.pnpm` symlinked `bin` directory will be pruned during Vercel's build trace, causing a runtime `Directory not found` error in the serverless function.
+- **Mobile Drag & Drop**: Native HTML5 Drag and Drop is not supported on mobile browsers. The `@drag-drop-touch` polyfill is dynamically imported in the global layout to synthesize touch events into drag events.
+
 ## Pre-Commit Hooks & Validation
 
 To ensure code quality and schema validity:
