@@ -2,6 +2,34 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.2.0" date="2026-08-06">
+
+This massive release supercharges the Table widget, introducing advanced row spanning, dynamic data grouping, and a complete UI overhaul for table configuration!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Dynamic Cell Merging**: Introduced a
+  powerful new `mergeBy` configuration for columns, allowing intelligent row
+  spanning by grouping identical contiguous data.
+- <Badge type="feature">Feature</Badge> **Static Rows**: You can now build
+  advanced layouts inside tables using fixed Header, Body, and Footer rows
+  independent of mapped data.
+- <Badge type="feature">Feature</Badge> **Advanced Table Snippets**: Added 5 new
+  complex schema templates to the Template Gallery demonstrating multi-level
+  spanning, nested grouping, and invoice totals.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Property Panel UI**: Extracted
+  table row editors into a clean, reusable `<StaticRowsEditor />` and added a
+  seamless `<MultiSelectProp />` for array configuration, making the builder
+  faster and easier to use.
+- <Badge type="improvement">Improvement</Badge> **Pagination Safety**: Upgraded
+  the core pagination engine to ensure dynamic data groups are never severed by
+  a page break.
+
+</Version>
+
 <Version version="0.1.2" date="2026-08-05">
 
 This release introduces significant enhancements to our documentation layout, a refined Playground experience, and new workflow superpowers!

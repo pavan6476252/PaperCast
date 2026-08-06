@@ -80,3 +80,26 @@ If you do _not_ want the header to repeat when a table splits across pages, you 
   }
 }
 ```
+
+### Static Table Rows
+
+Tables don't always just render mapped array data. You can configure **Static Rows** at the top, middle, or bottom of the table using the `headerRows`, `bodyRows`, and `footerRows` properties.
+
+These static rows allow for advanced layouts like:
+
+- multi-level headers with manual `colSpan` and `rowSpan`.
+- custom summary rows at the bottom of your data (e.g. Subtotal, Tax, Grand Total).
+- embedding arbitrary Widgets (like a barcode or an image) inside a table cell.
+
+### Dynamic Cell Merging (`mergeBy`)
+
+For complex data grouping (e.g., grouping line items by Category), PaperCast offers a powerful **Value Grouping** feature via the `mergeBy` array on a `TableColumnConfig`.
+
+By specifying an array of data paths in `mergeBy` (e.g., `["category.id", "category.name"]`), the Pagination Engine will look ahead and group identical contiguous values, generating a `rowSpan` dynamically.
+
+<Callout type="info">
+  The Pagination Engine ensures that dynamic groups are never severed by a page
+  break. If a grouped block is too large for the current page, it will
+  gracefully slice the array so that the group span carries over accurately to
+  the next page!
+</Callout>

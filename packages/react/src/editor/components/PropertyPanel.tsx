@@ -361,6 +361,16 @@ export const PropertyPanel: React.FC = () => {
                                 handleUpdate("props", "columns", newCols);
                               }}
                             />
+                            <MultiSelectProp
+                              label="mergeBy"
+                              value={col.mergeBy || []}
+                              options={dataPaths}
+                              onChange={(v) => {
+                                const newCols = [...(props.columns || [])];
+                                newCols[idx] = { ...newCols[idx], mergeBy: v };
+                                handleUpdate("props", "columns", newCols);
+                              }}
+                            />
                           </div>
                         )}
                       </div>
@@ -384,146 +394,33 @@ export const PropertyPanel: React.FC = () => {
             )}
 
             {selectedNode.type === "table" && (
-              <PropertyGroup title="Table Footers">
-                <div className="space-y-4">
-                  {(props.footerRows || []).map((row: any, rIdx: number) => (
-                    <div
-                      key={row.id || rIdx}
-                      className="border border-border rounded p-2 bg-surface"
-                    >
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-semibold">
-                          Footer Row {rIdx + 1}
-                        </span>
-                        <button
-                          onClick={() => {
-                            const newRows = [...(props.footerRows || [])];
-                            newRows.splice(rIdx, 1);
-                            handleUpdate("props", "footerRows", newRows);
-                          }}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <XCircle size={14} />
-                        </button>
-                      </div>
-                      <div className="space-y-2">
-                        {row.cells.map((cell: any, cIdx: number) => (
-                          <div
-                            key={cIdx}
-                            className="flex flex-col gap-2 p-2 bg-background border border-gray-100 rounded text-xs"
-                          >
-                            <div className="flex gap-2 items-center">
-                              <span className="w-10 text-foreground/50 font-medium">
-                                Cell {cIdx + 1}
-                              </span>
-                              <NumberProp
-                                label="colSpan"
-                                labelWidth="w-12"
-                                value={cell.colSpan}
-                                onChange={(v) => {
-                                  const newRows = JSON.parse(
-                                    JSON.stringify(props.footerRows || [])
-                                  );
-                                  newRows[rIdx].cells[cIdx] = {
-                                    ...cell,
-                                    colSpan: v || 1,
-                                  };
-                                  handleUpdate("props", "footerRows", newRows);
-                                }}
-                              />
-                              <NumberProp
-                                label="rowSpan"
-                                labelWidth="w-12"
-                                value={cell.rowSpan}
-                                onChange={(v) => {
-                                  const newRows = JSON.parse(
-                                    JSON.stringify(props.footerRows || [])
-                                  );
-                                  newRows[rIdx].cells[cIdx] = {
-                                    ...cell,
-                                    rowSpan: v || 1,
-                                  };
-                                  handleUpdate("props", "footerRows", newRows);
-                                }}
-                              />
-                            </div>
-                            <div className="flex flex-wrap gap-2 pt-1 border-t border-gray-50">
-                              <span className="text-foreground/40 w-10">
-                                Borders:
-                              </span>
-                              {["Top", "Right", "Bottom", "Left"].map(
-                                (side) => {
-                                  const propName =
-                                    `border${side}` as keyof typeof cell;
-                                  return (
-                                    <label
-                                      key={side}
-                                      className="flex items-center gap-1 cursor-pointer"
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={!!cell[propName]}
-                                        onChange={(e) => {
-                                          const newRows = JSON.parse(
-                                            JSON.stringify(
-                                              props.footerRows || []
-                                            )
-                                          );
-                                          newRows[rIdx].cells[cIdx] = {
-                                            ...cell,
-                                            [propName]: e.target.checked,
-                                          };
-                                          handleUpdate(
-                                            "props",
-                                            "footerRows",
-                                            newRows
-                                          );
-                                        }}
-                                      />
-                                      {side}
-                                    </label>
-                                  );
-                                }
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => {
-                      const newRows = [...(props.footerRows || [])];
-                      const colsCount = (props.columns || []).length || 1;
-                      const newCells = Array.from({ length: colsCount }).map(
-                        (_, idx) => ({
-                          colSpan: 1,
-                          rowSpan: 1,
-                          content: [
-                            {
-                              id: `text-${Date.now()}-${idx}`,
-                              type: "text",
-                              props: { literal: "Footer Cell" },
-                              layout: {
-                                paddingTop: 4,
-                                paddingBottom: 4,
-                              },
-                            },
-                          ],
-                        })
-                      );
-                      newRows.push({
-                        id: `f-row-${Date.now()}`,
-                        cells: newCells,
-                      });
-                      handleUpdate("props", "footerRows", newRows);
-                    }}
-                    className="w-full py-1.5 border border-dashed border-border/80 text-foreground/50 rounded text-xs hover:bg-surface hover:text-foreground/90"
-                  >
-                    + Add Footer Row
-                  </button>
-                </div>
-              </PropertyGroup>
+              <StaticRowsEditor
+                title="Table Headers"
+                rows={props.headerRows || []}
+                colsCount={(props.columns || []).length || 1}
+                propKey="headerRows"
+                handleUpdate={handleUpdate}
+              />
+            )}
+
+            {selectedNode.type === "table" && (
+              <StaticRowsEditor
+                title="Table Body (Static Rows)"
+                rows={props.bodyRows || []}
+                colsCount={(props.columns || []).length || 1}
+                propKey="bodyRows"
+                handleUpdate={handleUpdate}
+              />
+            )}
+
+            {selectedNode.type === "table" && (
+              <StaticRowsEditor
+                title="Table Footers"
+                rows={props.footerRows || []}
+                colsCount={(props.columns || []).length || 1}
+                propKey="footerRows"
+                handleUpdate={handleUpdate}
+              />
             )}
 
             {selectedNode.type === "table" && (
@@ -1699,5 +1596,196 @@ const ColorProp: React.FC<{
         </div>
       </div>
     </div>
+  );
+};
+
+const MultiSelectProp: React.FC<{
+  label: string;
+  value: string[];
+  options: string[];
+  onChange: (val: string[] | undefined) => void;
+  labelWidth?: string;
+}> = ({ label, value, options, onChange, labelWidth = "w-24" }) => {
+  const isInherited = !value || value.length === 0;
+
+  const toggleOption = (opt: string) => {
+    const current = value || [];
+    if (current.includes(opt)) {
+      const next = current.filter((o) => o !== opt);
+      onChange(next.length ? next : undefined);
+    } else {
+      onChange([...current, opt]);
+    }
+  };
+
+  return (
+    <div className="flex flex-col text-sm group mt-2">
+      <div className="flex justify-between items-center mb-1">
+        <label
+          className={`${labelWidth} text-foreground/70 truncate text-xs`}
+          title={label}
+        >
+          {label}
+        </label>
+        {!isInherited && (
+          <button
+            onClick={() => onChange(undefined)}
+            className="text-foreground/40 hover:text-red-500 text-[10px]"
+          >
+            clear
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1 p-2 border rounded border-border/80 bg-background min-h-[36px]">
+        {options.map((opt) => {
+          const selected = (value || []).includes(opt);
+          return (
+            <button
+              key={opt}
+              onClick={() => toggleOption(opt)}
+              className={`px-2 py-0.5 text-[10px] rounded border ${selected ? "bg-accent/10 border-accent text-accent" : "bg-surface border-border text-foreground/60 hover:border-foreground/30"}`}
+            >
+              {opt}
+            </button>
+          );
+        })}
+        {options.length === 0 && (
+          <span className="text-foreground/40 italic text-[10px]">
+            No options available
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const StaticRowsEditor: React.FC<{
+  title: string;
+  rows: any[];
+  colsCount: number;
+  propKey: string;
+  handleUpdate: (group: "props", key: string, value: any) => void;
+}> = ({ title, rows, colsCount, propKey, handleUpdate }) => {
+  return (
+    <PropertyGroup title={title}>
+      <div className="space-y-4">
+        {rows.map((row: any, rIdx: number) => (
+          <div
+            key={row.id || rIdx}
+            className="border border-border rounded p-2 bg-surface"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-xs font-semibold">Row {rIdx + 1}</span>
+              <button
+                onClick={() => {
+                  const newRows = [...rows];
+                  newRows.splice(rIdx, 1);
+                  handleUpdate("props", propKey, newRows);
+                }}
+                className="text-red-500 hover:text-red-700"
+              >
+                <XCircle size={14} />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {row.cells.map((cell: any, cIdx: number) => (
+                <div
+                  key={cIdx}
+                  className="flex flex-col gap-2 p-2 bg-background border border-gray-100 rounded text-xs"
+                >
+                  <div className="flex gap-2 items-center">
+                    <span className="w-10 text-foreground/50 font-medium">
+                      Cell {cIdx + 1}
+                    </span>
+                    <NumberProp
+                      label="colSpan"
+                      labelWidth="w-12"
+                      value={cell.colSpan}
+                      onChange={(v) => {
+                        const newRows = JSON.parse(JSON.stringify(rows));
+                        newRows[rIdx].cells[cIdx] = {
+                          ...cell,
+                          colSpan: v || 1,
+                        };
+                        handleUpdate("props", propKey, newRows);
+                      }}
+                    />
+                    <NumberProp
+                      label="rowSpan"
+                      labelWidth="w-12"
+                      value={cell.rowSpan}
+                      onChange={(v) => {
+                        const newRows = JSON.parse(JSON.stringify(rows));
+                        newRows[rIdx].cells[cIdx] = {
+                          ...cell,
+                          rowSpan: v || 1,
+                        };
+                        handleUpdate("props", propKey, newRows);
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1 border-t border-gray-50">
+                    <span className="text-foreground/40 w-10">Borders:</span>
+                    {["Top", "Right", "Bottom", "Left"].map((side) => {
+                      const propName = `border${side}` as keyof typeof cell;
+                      return (
+                        <label
+                          key={side}
+                          className="flex items-center gap-1 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={!!cell[propName]}
+                            onChange={(e) => {
+                              const newRows = JSON.parse(JSON.stringify(rows));
+                              newRows[rIdx].cells[cIdx] = {
+                                ...cell,
+                                [propName]: e.target.checked,
+                              };
+                              handleUpdate("props", propKey, newRows);
+                            }}
+                          />
+                          {side}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <button
+          onClick={() => {
+            const newRows = [...rows];
+            const newCells = Array.from({ length: colsCount }).map(
+              (_, idx) => ({
+                colSpan: 1,
+                rowSpan: 1,
+                content: [
+                  {
+                    id: `text-${Date.now()}-${idx}`,
+                    type: "text",
+                    props: { literal: "Cell" },
+                    layout: {
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                    },
+                  },
+                ],
+              })
+            );
+            newRows.push({
+              id: `row-${Date.now()}`,
+              cells: newCells,
+            });
+            handleUpdate("props", propKey, newRows);
+          }}
+          className="w-full py-1.5 border border-dashed border-border/80 text-foreground/50 rounded text-xs hover:bg-surface hover:text-foreground/90"
+        >
+          + Add Row
+        </button>
+      </div>
+    </PropertyGroup>
   );
 };

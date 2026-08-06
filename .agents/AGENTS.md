@@ -136,6 +136,7 @@ To ensure code quality and schema validity:
 
 - **Pagination Process**: The `PaginationEngine.ts` processes a linear array of blocks (children of the body). It calculates if a block fits into the `availableHeight` of the current page. If it doesn't, it queries the node's `split` function (e.g., `ContainerBehavior.split`) to divide the block.
 - **Container Behavior**: Containers like `row` and `column` recursively sum their children's heights during the `measure` phase. During the `split` phase, they attempt to fit as many children as possible on the current page, slicing the `children` array to pass the remainder to the next page. A `richText` node must first be converted into a container of widgets to be splittable.
+- **Dynamic Table Row Spanning (Value Grouping)**: We strictly use a `mergeBy: string[]` property on `TableColumnConfig` instead of simple booleans to control cell merging dynamically. This enables hierarchical grouping (e.g., `["category", "item"]`). The headless pagination engine evaluates these paths natively during the `split` phase using `resolvePath()`, ensuring page breaks never sever a dynamically generated `rowSpan` block without complicating the core AST with specific `<Group>` nodes.
 
 ### 3. Editor & Context Workflows (State Sync)
 

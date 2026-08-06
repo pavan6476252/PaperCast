@@ -92,7 +92,9 @@ export const TableBehavior = {
     const actualRemaining = remainingHeight - marginTop - marginBottom - 1;
 
     let totalRows = 0;
-    if (node.bind?.path) {
+    if (node.props?.bodyRows) {
+      totalRows = node.props.bodyRows.length;
+    } else if (node.bind?.path) {
       const val = resolvePath(ctx.data, node.bind.path);
       if (Array.isArray(val)) {
         totalRows = val.length;
@@ -110,15 +112,97 @@ export const TableBehavior = {
     let reachedEndOfBody = false;
 
     if (rowHeights && rowHeights.length >= currentEndIndex) {
+      let activeRowSpans = 0;
+      let safeCutoff = 0;
+      let tempHeight = 0;
+
       for (let i = currentStartIndex; i < currentEndIndex; i++) {
         const rowH = rowHeights[i];
-        if (headerHeight + accumulatedHeight + rowH <= actualRemaining) {
-          accumulatedHeight += rowH;
+        if (headerHeight + tempHeight + rowH <= actualRemaining) {
+          tempHeight += rowH;
+
+          // Track rowSpans to ensure we don't break mid-merge
+          let maxSpanInRow = 1;
+          if (node.props?.bodyRows) {
+            const rowDef = node.props.bodyRows[i];
+            if (rowDef && rowDef.cells) {
+              for (const cell of rowDef.cells) {
+                if (cell.rowSpan && cell.rowSpan > maxSpanInRow) {
+                  maxSpanInRow = cell.rowSpan;
+                }
+              }
+            }
+          } else if ((node.bind?.path && ctx.data) || node.props?.data) {
+            const dataArray = node.bind?.path
+              ? resolvePath(ctx.data, node.bind.path)
+              : node.props?.data;
+            if (Array.isArray(dataArray) && node.props?.columns) {
+              const currentRowData = dataArray[i];
+              for (const col of node.props.columns) {
+                if (col.mergeBy && col.mergeBy.length > 0) {
+                  let isNewGroup = true;
+                  if (i > 0) {
+                    const prevRowData = dataArray[i - 1];
+                    let allMatched = true;
+                    for (const path of col.mergeBy) {
+                      if (
+                        resolvePath(currentRowData, path) !==
+                        resolvePath(prevRowData, path)
+                      ) {
+                        allMatched = false;
+                        break;
+                      }
+                    }
+                    if (allMatched) isNewGroup = false;
+                  }
+
+                  if (isNewGroup) {
+                    let span = 1;
+                    while (i + span < currentEndIndex) {
+                      const nextRowData = dataArray[i + span];
+                      let allMatched = true;
+                      for (const path of col.mergeBy) {
+                        if (
+                          resolvePath(nextRowData, path) !==
+                          resolvePath(currentRowData, path)
+                        ) {
+                          allMatched = false;
+                          break;
+                        }
+                      }
+                      if (allMatched) span++;
+                      else break;
+                    }
+                    if (span > maxSpanInRow) {
+                      maxSpanInRow = span;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (maxSpanInRow > 1 && activeRowSpans === 0) {
+            activeRowSpans = maxSpanInRow;
+          }
+
+          if (activeRowSpans > 0) activeRowSpans--;
+
           availableRows++;
+          if (activeRowSpans === 0) {
+            safeCutoff = availableRows;
+          }
         } else {
+          if (node.props?.bodyRows) {
+            availableRows = safeCutoff;
+          }
           break;
         }
       }
+
+      for (let i = 0; i < availableRows; i++) {
+        accumulatedHeight += rowHeights[currentStartIndex + i] || 38;
+      }
+
       reachedEndOfBody = currentStartIndex + availableRows >= currentEndIndex;
     } else {
       const rowHeight = 38;
