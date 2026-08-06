@@ -2,6 +2,28 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.2.3" date="2026-08-07">
+
+This release introduces an incredibly fluid, multi-touch canvas experience for mobile and trackpad users, making document editing feel like a native application!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Multi-Touch Gestures**: You can now
+  seamlessly pinch-to-zoom on mobile and trackpads!
+- <Badge type="feature">Feature</Badge> **Concurrent Pan & Zoom**: Panning and
+  zooming simultaneously is now fully supported. As you pinch to zoom, the
+  canvas naturally anchors and shifts based on the midpoint of your fingers,
+  creating a flawless infinite-canvas feel.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Silky Smooth 60FPS**: The new
+  gesture engine bypasses heavy React renders and updates the DOM directly
+  during your pinch, guaranteeing a buttery smooth scaling experience with zero
+  lag.
+
+</Version>
+
 <Version version="0.2.2" date="2026-08-07">
 
 This release fixes a visual layout issue in the Playground to ensure the Workspace Explorer aligns perfectly with the editor's boundaries.

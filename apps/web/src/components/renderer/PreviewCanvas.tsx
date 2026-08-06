@@ -12,6 +12,7 @@ import { Trash2, Copy, Columns2, Settings2, Plus } from "lucide-react";
 const generateId = () => Math.random().toString(36).substring(2, 10);
 import { useDocumentStore } from "../../store/documentStore";
 import { SectionToolbar } from "../editor/SectionToolbar";
+import { usePanZoomGesture } from "../../hooks/usePanZoomGesture";
 import { PreviewTab } from "./PreviewToolbar";
 
 interface PreviewCanvasProps {
@@ -34,6 +35,7 @@ interface PreviewCanvasProps {
     | undefined;
   addHeader: (id: string, header: PageRegion) => void;
   addFooter: (id: string, footer: PageRegion) => void;
+  onZoomChange?: (zoom: number) => void;
 }
 
 export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
@@ -46,14 +48,19 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
   nodeWrapper,
   addHeader,
   addFooter,
+  onZoomChange,
 }) => {
+  const scrollContainerRef = usePanZoomGesture({ zoom, onZoomChange });
+
   return (
     <div
       id="preview-scroll-container"
+      ref={scrollContainerRef}
       className="flex-1 overflow-auto p-8 relative flex flex-col print:p-0 print:bg-white print:block"
     >
       {activeTab === "content" && (
         <div
+          id="preview-zoom-container"
           className="flex flex-col items-center mx-auto gap-8 transition-all print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"
           style={{ zoom }}
         >
@@ -209,6 +216,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 
       {activeTab === "headers" && (
         <div
+          id="preview-zoom-container"
           className="flex flex-col mx-auto gap-8 transition-all"
           style={{ zoom }}
         >
@@ -284,6 +292,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 
       {activeTab === "footers" && (
         <div
+          id="preview-zoom-container"
           className="flex flex-col mx-auto gap-8 transition-all"
           style={{ zoom }}
         >
