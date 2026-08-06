@@ -75,7 +75,13 @@ export const RightSidebar = () => {
         </div>
 
         <div className="flex-1 overflow-auto relative">
-          {rightPanelMode === "widgets" ? <WidgetsPanel /> : <PropertyPanel />}
+          {rightPanelMode === "widgets" ? (
+            <WidgetsPanel
+              onSettingsClick={() => setRightPanelMode("properties")}
+            />
+          ) : (
+            <PropertyPanel />
+          )}
 
           {/* Quick theme toggle at the bottom of the right sidebar */}
           <div className="absolute bottom-4 right-4">
