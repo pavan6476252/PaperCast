@@ -1,7 +1,12 @@
 import React from "react";
-import { DocumentSchema, AnyNode } from "@papercast/core";
+import { DocumentSchema, AnyNode, PageRegion } from "@papercast/core";
 import { PageData } from "@papercast/engine";
-import { PaperCastProvider, NodeRenderer, getStyle } from "@papercast/react";
+import {
+  PaperCastProvider,
+  NodeRenderer,
+  getStyle,
+  NodeRegistry,
+} from "@papercast/react";
 import { Plus } from "lucide-react";
 import { useDocumentStore } from "../../store/documentStore";
 import { SectionToolbar } from "../editor/SectionToolbar";
@@ -14,9 +19,19 @@ interface PreviewCanvasProps {
   zoom: number;
   width: number;
   height: number;
-  nodeWrapper: React.ComponentType<Record<string, unknown>> | undefined;
-  addHeader: (id: string, header: Record<string, unknown>) => void;
-  addFooter: (id: string, footer: Record<string, unknown>) => void;
+  nodeWrapper:
+    | React.ComponentType<{
+        node: AnyNode;
+        renderContent: (
+          props?: React.HTMLAttributes<HTMLDivElement> & {
+            "data-selected"?: boolean;
+          },
+          overlays?: React.ReactNode
+        ) => React.ReactNode;
+      }>
+    | undefined;
+  addHeader: (id: string, header: PageRegion) => void;
+  addFooter: (id: string, footer: PageRegion) => void;
 }
 
 export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
@@ -126,47 +141,10 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 "application/papercast-widget"
                               );
                               if (widgetType) {
-                                let defaultProps:
-                                  Record<string, unknown> | undefined =
-                                  undefined;
-                                let defaultLayout:
-                                  Record<string, unknown> | undefined =
-                                  undefined;
-                                if (widgetType === "text")
-                                  defaultProps = { literal: "New Text" };
-                                if (widgetType === "richText")
-                                  defaultProps = {
-                                    htmlLiteral: "<p>New Rich Text</p>",
-                                  };
-                                if (widgetType === "listTile")
-                                  defaultProps = {
-                                    titleLiteral: "Title",
-                                    subtitleLiteral: "Subtitle",
-                                  };
-                                if (
-                                  widgetType === "checkbox" ||
-                                  widgetType === "radio"
-                                )
-                                  defaultProps = { labelLiteral: "Option" };
-                                if (
-                                  [
-                                    "row",
-                                    "column",
-                                    "ul",
-                                    "ol",
-                                    "radioGroup",
-                                  ].includes(widgetType)
-                                )
-                                  defaultLayout = { minHeight: 40 };
-
-                                const newNode = {
-                                  id: `node-${Date.now()}`,
-                                  type: widgetType,
-                                  layout: defaultLayout || {},
-                                  ...(defaultProps
-                                    ? { props: defaultProps }
-                                    : {}),
-                                } as AnyNode;
+                                const newNode = NodeRegistry.createDefaultNode(
+                                  widgetType,
+                                  `node-${crypto.randomUUID().substring(0, 8)}`
+                                );
 
                                 useDocumentStore
                                   .getState()

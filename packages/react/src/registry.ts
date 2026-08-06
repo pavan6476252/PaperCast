@@ -31,6 +31,18 @@ class Registry {
   get(type: string): ComponentTypeDefinition<any> | undefined {
     return this.definitions.get(type);
   }
+
+  createDefaultNode(type: string, id: string): AnyNode {
+    const def = this.get(type);
+    if (def && def.createDefaultNode) {
+      return def.createDefaultNode(id);
+    }
+    return {
+      id,
+      type: type as AnyNode["type"],
+      layout: {},
+    } satisfies AnyNode;
+  }
 }
 
 export const NodeRegistry = new Registry();

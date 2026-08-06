@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AnyNode } from "@papercast/core";
 import { useDocumentStore } from "../../store/documentStore";
 
-import { usePaperCastContext } from "@papercast/react";
+import { usePaperCastContext, NodeRegistry } from "@papercast/react";
 import { HoverToolbar } from "@papercast/react/editor";
 
 export const EditorNodeWrapper: React.FC<{
@@ -140,25 +140,10 @@ export const EditorNodeWrapper: React.FC<{
     );
 
     if (widgetType) {
-      let defaultProps: Record<string, unknown> | undefined = undefined;
-      let defaultLayout: Record<string, unknown> | undefined = undefined;
-      if (widgetType === "text") defaultProps = { literal: "New Text" };
-      if (widgetType === "richText")
-        defaultProps = { htmlLiteral: "<p>New Rich Text</p>" };
-      if (widgetType === "listTile")
-        defaultProps = { titleLiteral: "Title", subtitleLiteral: "Subtitle" };
-      if (widgetType === "checkbox" || widgetType === "radio")
-        defaultProps = { labelLiteral: "Option" };
-      if (["row", "column", "ul", "ol", "radioGroup"].includes(widgetType))
-        defaultLayout = { minHeight: 40 };
-
-      const newNode: AnyNode = {
-        // eslint-disable-next-line react-hooks/purity
-        id: `node-${Date.now()}`,
-        type: widgetType as AnyNode["type"],
-        layout: defaultLayout || {},
-        ...(defaultProps ? { props: defaultProps } : {}),
-      } as AnyNode;
+      const newNode = NodeRegistry.createDefaultNode(
+        widgetType,
+        `node-${crypto.randomUUID().substring(0, 8)}`
+      );
 
       if (currentDropPosition === "inside") {
         insertNode(node.id, undefined, newNode);
