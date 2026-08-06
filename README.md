@@ -23,10 +23,6 @@ First, ensure you have dependencies installed (this project uses `pnpm`):
 pnpm install
 ```
 
-```bash
-pnpm install
-```
-
 Install Husky git hooks and set executable permissions:
 
 ```bash

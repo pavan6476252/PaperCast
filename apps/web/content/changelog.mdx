@@ -2,6 +2,140 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.2.4" date="2026-08-07">
+
+This release focuses on quality-of-life improvements to the Playground, fixing visual flashes on load and refining the workspace connection experience!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Workspace Loading Flash**: Fixed an issue
+  where the Playground would briefly flash the default test document before
+  loading your saved workspace, ensuring a smooth and immediate entry into your
+  saved work.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **MCP Connection Badge**: The
+  MCP connection status indicator in the Playground has been redesigned to be
+  less distracting while maintaining clear visibility.
+
+</Version>
+
+<Version version="0.2.3" date="2026-08-07">
+
+This release introduces an incredibly fluid, multi-touch canvas experience for mobile and trackpad users, making document editing feel like a native application!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Multi-Touch Gestures**: You can now
+  seamlessly pinch-to-zoom on mobile and trackpads!
+- <Badge type="feature">Feature</Badge> **Concurrent Pan & Zoom**: Panning and
+  zooming simultaneously is now fully supported. As you pinch to zoom, the
+  canvas naturally anchors and shifts based on the midpoint of your fingers,
+  creating a flawless infinite-canvas feel.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Silky Smooth 60FPS**: The new
+  gesture engine bypasses heavy React renders and updates the DOM directly
+  during your pinch, guaranteeing a buttery smooth scaling experience with zero
+  lag.
+
+</Version>
+
+<Version version="0.2.2" date="2026-08-07">
+
+This release fixes a visual layout issue in the Playground to ensure the Workspace Explorer aligns perfectly with the editor's boundaries.
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Workspace Sidebar Gap**: Fixed an issue where
+  the Workspace Explorer would not expand to fill the entire sidebar width on
+  desktop and mobile screens, leaving an empty visual gap between the explorer
+  and the document canvas.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Mobile UX Polish**: Refined
+  the mobile Playground experience by adding smooth slide-in entry animations to
+  the Properties panel and respecting safe-area insets to prevent UI overlap
+  with the iOS Home Indicator.
+- <Badge type="improvement">Improvement</Badge> **Mobile Back Button
+  Navigation**: Opening a panel on mobile now automatically pushes state to your
+  browser history. Pressing the back button gracefully dismisses the top-most
+  panel instead of throwing you out of the playground entirely. Full support for
+  nested overlays included!
+
+</Version>
+
+<Version version="0.2.1" date="2026-08-07">
+
+This release focuses on solidifying the editor experience, resolving critical mobile interaction bugs, and squashing PDF export errors for a much smoother workflow!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Custom PDF Naming**: You can now give
+  your downloaded PDFs custom filenames right from the export prompt.
+- <Badge type="feature">Feature</Badge> **Visual Empty States**: Empty
+  containers like Rows and Columns now display a clear visual indicator
+  (diagonal stripes) in the editor, making them easy to spot without showing up
+  in your final print.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Mobile Drag & Drop UX**:
+  Drastically improved the mobile playground. Swiping the widget toolbar now
+  scrolls flawlessly without accidentally dragging widgets. Added a dedicated
+  drag handle for precise control.
+- <Badge type="improvement">Improvement</Badge> **Ghost Dragging UI**: Dropping
+  widgets now displays a clean, semi-transparent ghost image instead of a solid
+  block.
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **LAN Compatibility Crash**: Resolved a critical
+  crash (`crypto.randomUUID is not a function`) that occurred when accessing the
+  playground over a local IP network.
+- <Badge type="fix">Fix</Badge> **PDF Export Empty Text**: Fixed an issue where
+  the "Empty" visual placeholder text was incorrectly showing up in exported
+  PDFs. Empty widgets now maintain their size for spacing but are completely
+  invisible in print.
+- <Badge type="fix">Fix</Badge> **PDF Export Warnings**: Fixed console warnings
+  during PDF generation by properly managing Object URL cleanup lifetimes.
+- <Badge type="fix">Fix</Badge> **Type Strictness & Validation**: Patched
+  missing schema types and suppressed internal validation memory exhaustion
+  errors during PDF generation.
+
+</Version>
+
+<Version version="0.2.0" date="2026-08-06">
+
+This massive release supercharges the Table widget, introducing advanced row spanning, dynamic data grouping, and a complete UI overhaul for table configuration!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Dynamic Cell Merging**: Introduced a
+  powerful new `mergeBy` configuration for columns, allowing intelligent row
+  spanning by grouping identical contiguous data.
+- <Badge type="feature">Feature</Badge> **Static Rows**: You can now build
+  advanced layouts inside tables using fixed Header, Body, and Footer rows
+  independent of mapped data.
+- <Badge type="feature">Feature</Badge> **Advanced Table Snippets**: Added 5 new
+  complex schema templates to the Template Gallery demonstrating multi-level
+  spanning, nested grouping, and invoice totals.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Property Panel UI**: Extracted
+  table row editors into a clean, reusable `<StaticRowsEditor />` and added a
+  seamless `<MultiSelectProp />` for array configuration, making the builder
+  faster and easier to use.
+- <Badge type="improvement">Improvement</Badge> **Pagination Safety**: Upgraded
+  the core pagination engine to ensure dynamic data groups are never severed by
+  a page break.
+
+</Version>
+
 <Version version="0.1.2" date="2026-08-05">
 
 This release introduces significant enhancements to our documentation layout, a refined Playground experience, and new workflow superpowers!

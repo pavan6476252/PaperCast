@@ -53,3 +53,11 @@ When scaffolding or restructuring an MCP Server, use this general directory stru
 ## 6. Testing & Maintainability
 
 Ensure your service logic can be unit-tested without requiring the MCP `Server` instance to be mocked heavily. The MCP handlers should just be thin wrappers around the service functions.
+
+## 7. Complex Schema Features in Tools (PaperCast specifics)
+
+When creating or updating tools that interact with the PaperCast JSON schema (e.g., `update_element_properties` or `insert_layout_element`):
+
+- Explicitly document complex AST patterns in the tool's `description`.
+- **Tables**: Ensure the LLM understands the difference between bound arrays (`bindPath`) and static regions (`headerRows`, `bodyRows`, `footerRows`). Mention that dynamic row spanning should be achieved using `mergeBy: string[]` in the `TableColumnConfig`, and _not_ by manually injecting `rowSpan` properties on bound cells.
+- **Lists**: Clarify the usage of `UnorderedList` vs `OrderedList` and how children (like `Text` nodes) are automatically wrapped in list item tags during render.

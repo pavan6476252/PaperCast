@@ -1,9 +1,18 @@
 import React from "react";
-import { DocumentSchema } from "@papercast/core";
+import { DocumentSchema, AnyNode, PageRegion } from "@papercast/core";
 import { PageData } from "@papercast/engine";
-import { PaperCastProvider, NodeRenderer, getStyle } from "@papercast/react";
-import { Plus } from "lucide-react";
+import {
+  PaperCastProvider,
+  NodeRenderer,
+  getStyle,
+  NodeRegistry,
+} from "@papercast/react";
+import { Trash2, Copy, Columns2, Settings2, Plus } from "lucide-react";
+
+const generateId = () => Math.random().toString(36).substring(2, 10);
+import { useDocumentStore } from "../../store/documentStore";
 import { SectionToolbar } from "../editor/SectionToolbar";
+import { usePanZoomGesture } from "../../hooks/usePanZoomGesture";
 import { PreviewTab } from "./PreviewToolbar";
 
 interface PreviewCanvasProps {
@@ -13,9 +22,20 @@ interface PreviewCanvasProps {
   zoom: number;
   width: number;
   height: number;
-  nodeWrapper: React.ComponentType<any> | undefined;
-  addHeader: (id: string, header: any) => void;
-  addFooter: (id: string, footer: any) => void;
+  nodeWrapper:
+    | React.ComponentType<{
+        node: AnyNode;
+        renderContent: (
+          props?: React.HTMLAttributes<HTMLDivElement> & {
+            "data-selected"?: boolean;
+          },
+          overlays?: React.ReactNode
+        ) => React.ReactNode;
+      }>
+    | undefined;
+  addHeader: (id: string, header: PageRegion) => void;
+  addFooter: (id: string, footer: PageRegion) => void;
+  onZoomChange?: (zoom: number) => void;
 }
 
 export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
@@ -28,14 +48,19 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
   nodeWrapper,
   addHeader,
   addFooter,
+  onZoomChange,
 }) => {
+  const scrollContainerRef = usePanZoomGesture({ zoom, onZoomChange });
+
   return (
     <div
       id="preview-scroll-container"
+      ref={scrollContainerRef}
       className="flex-1 overflow-auto p-8 relative flex flex-col print:p-0 print:bg-white print:block"
     >
       {activeTab === "content" && (
         <div
+          id="preview-zoom-container"
           className="flex flex-col items-center mx-auto gap-8 transition-all print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"
           style={{ zoom }}
         >
@@ -111,7 +136,42 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 : "column",
                             ...getStyle(parsedDocument.document.body),
                           }}
+                          onDragOver={(e) => {
+                            if (activeTab === "content") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                          onDrop={(e) => {
+                            if (activeTab === "content") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const widgetType = e.dataTransfer.getData(
+                                "application/papercast-widget"
+                              );
+                              if (widgetType) {
+                                const newNode = NodeRegistry.createDefaultNode(
+                                  widgetType,
+                                  `node-${generateId()}`
+                                );
+
+                                useDocumentStore
+                                  .getState()
+                                  .insertNode(
+                                    parsedDocument.document.body.id,
+                                    undefined,
+                                    newNode
+                                  );
+                              }
+                            }
+                          }}
                         >
+                          {page.bodyNodes.length === 0 &&
+                            activeTab === "content" && (
+                              <div className="w-full h-full min-h-[100px] flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-200 rounded-lg m-4 pointer-events-none print-hidden">
+                                Drag and drop widgets here
+                              </div>
+                            )}
                           {page.bodyNodes.map((node, i) => (
                             <NodeRenderer
                               key={`body-${node.id || i}`}
@@ -156,6 +216,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 
       {activeTab === "headers" && (
         <div
+          id="preview-zoom-container"
           className="flex flex-col mx-auto gap-8 transition-all"
           style={{ zoom }}
         >
@@ -231,6 +292,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 
       {activeTab === "footers" && (
         <div
+          id="preview-zoom-container"
           className="flex flex-col mx-auto gap-8 transition-all"
           style={{ zoom }}
         >

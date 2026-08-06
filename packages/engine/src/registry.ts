@@ -36,6 +36,12 @@ export interface SchemaTypeDefinition<TNode extends AnyNode = AnyNode> {
     remainingHeight: number,
     ctx: SplitContext
   ) => [TNode, TNode | null, number?] | null;
+
+  /**
+   * Generates a strongly-typed default instance of this node type.
+   * Provides default styling, children, or literal props out of the box.
+   */
+  createDefaultNode?: (id: string) => TNode;
 }
 
 /**

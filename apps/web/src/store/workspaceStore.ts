@@ -61,7 +61,7 @@ export const useWorkspaceStore = create<WorkspaceState>(
     },
 
     createSchema: async (name: string, content: string) => {
-      const id = crypto.randomUUID();
+      const id = Math.random().toString(36).substring(2, 10);
       const newSchema: SchemaMetadata = {
         id,
         name,

@@ -21,6 +21,9 @@ Whenever a repository review or component evaluation is requested, always route 
 > [!IMPORTANT]
 > **CRITICAL RULE**: You are FORBIDDEN from ending a turn or considering a task complete if you have made structural or feature changes without also updating the corresponding documentation in `AGENTS.md` (and any other relevant agent md files). Always review your file changes and update these files before stopping.
 
+> [!IMPORTANT]
+> **CRITICAL RULE - CHANGELOGS & DOCUMENTATION**: Whenever you complete a feature, fix a bug, or make any notable changes to the web application or engine, you MUST use the `adding-web-changelogs` skill to generate or update the user-facing changelog (`changelog.mdx`), and update any relevant `docs/` before you consider the task complete. Never skip this step.
+
 ## Repository Overview
 
 PaperCast is a Schema-First Document Builder and Renderer built with React, Next.js, and Monaco Editor. The user defines the layout using a JSON Schema (DocFrame Schema), and the engine renders it dynamically, pagination-enabled, and ready to print or download as a PDF.
@@ -102,6 +105,11 @@ This repository is a Turborepo monorepo structured as follows:
 - Run `pnpm run dev` to start the development servers for all workspaces via Turborepo.
 - Run `pnpm run build` to verify the production builds for the CLI and Next.js applications.
 
+### Vercel Deployment & Serverless Constraints
+
+- **Chromium Bundling**: When deploying the PDF generator (`@sparticuz/chromium`) to Vercel via `pnpm`, you must hoist the dependencies using `.npmrc` (`public-hoist-pattern[]=*sparticuz*` and `shamefully-hoist=true`). Otherwise, the `.pnpm` symlinked `bin` directory will be pruned during Vercel's build trace, causing a runtime `Directory not found` error in the serverless function.
+- **Mobile Drag & Drop**: Native HTML5 Drag and Drop is not supported on mobile browsers. The `@drag-drop-touch` polyfill is dynamically imported in the global layout to synthesize touch events into drag events.
+
 ## Pre-Commit Hooks & Validation
 
 To ensure code quality and schema validity:
@@ -136,6 +144,7 @@ To ensure code quality and schema validity:
 
 - **Pagination Process**: The `PaginationEngine.ts` processes a linear array of blocks (children of the body). It calculates if a block fits into the `availableHeight` of the current page. If it doesn't, it queries the node's `split` function (e.g., `ContainerBehavior.split`) to divide the block.
 - **Container Behavior**: Containers like `row` and `column` recursively sum their children's heights during the `measure` phase. During the `split` phase, they attempt to fit as many children as possible on the current page, slicing the `children` array to pass the remainder to the next page. A `richText` node must first be converted into a container of widgets to be splittable.
+- **Dynamic Table Row Spanning (Value Grouping)**: We strictly use a `mergeBy: string[]` property on `TableColumnConfig` instead of simple booleans to control cell merging dynamically. This enables hierarchical grouping (e.g., `["category", "item"]`). The headless pagination engine evaluates these paths natively during the `split` phase using `resolvePath()`, ensuring page breaks never sever a dynamically generated `rowSpan` block without complicating the core AST with specific `<Group>` nodes.
 
 ### 3. Editor & Context Workflows (State Sync)
 

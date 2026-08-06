@@ -31,7 +31,7 @@ interface PreviewToolbarProps {
   setActiveTab: (tab: PreviewTab) => void;
   isValid: boolean;
   isSaving: boolean;
-  handleDownload: () => void;
+  handleDownload: (fileName?: string) => void;
   handlePrint: () => void;
   pageSize: any;
   orientation: string;
@@ -103,7 +103,15 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const handleSave = () => {
+  const handleSaveAs = React.useCallback(async () => {
+    const name = window.prompt("Enter template name:", "Untitled Schema");
+    if (name) {
+      await createSchema(name, storeJsonString);
+      setLastSavedJsonString(storeJsonString);
+    }
+  }, [createSchema, storeJsonString]);
+
+  const handleSave = React.useCallback(() => {
     if (activeSchemaId) {
       const active = schemas.find((s) => s.id === activeSchemaId);
       if (active) {
@@ -113,15 +121,7 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
     } else {
       handleSaveAs();
     }
-  };
-
-  const handleSaveAs = async () => {
-    const name = window.prompt("Enter template name:", "Untitled Schema");
-    if (name) {
-      await createSchema(name, storeJsonString);
-      setLastSavedJsonString(storeJsonString);
-    }
-  };
+  }, [activeSchemaId, schemas, saveSchema, storeJsonString, handleSaveAs]);
 
   // Keyboard shortcut for Save (Cmd+S)
   useEffect(() => {
@@ -424,7 +424,16 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
                 <div className="border-t border-gray-100 my-1" />
                 <button
                   onClick={() => {
-                    handleDownload();
+                    const defaultName =
+                      useDocumentStore.getState().parsedDocument?.meta?.title ||
+                      "document";
+                    const fileName = window.prompt(
+                      "Enter PDF file name:",
+                      defaultName
+                    );
+                    if (fileName) {
+                      handleDownload(fileName);
+                    }
                     setIsSaveMenuOpen(false);
                   }}
                   disabled={isSaving || !isValid}

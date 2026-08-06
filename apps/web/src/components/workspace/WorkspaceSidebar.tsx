@@ -129,7 +129,7 @@ export const WorkspaceSidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-background border-r border-border flex flex-col h-full print:hidden transition-colors">
+    <div className="w-full bg-background border-r border-border flex flex-col h-full print:hidden transition-colors">
       <div className="p-4 border-b border-border">
         <h2 className="text-sm font-semibold text-foreground/80 flex items-center gap-2 mb-4">
           <Folder size={16} /> Workspace
@@ -234,7 +234,7 @@ export const WorkspaceSidebar = () => {
                     </div>
 
                     {!isEditing && (
-                      <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

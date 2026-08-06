@@ -92,6 +92,37 @@ export interface TableColumnConfig {
   flex?: number;
   align?: "left" | "center" | "right";
   hidden?: boolean;
+  mergeBy?: string[];
+}
+
+export interface TableHeaderCell {
+  colSpan?: number;
+  rowSpan?: number;
+  content?: AnyNode[];
+  borderRight?: boolean;
+  borderLeft?: boolean;
+  borderTop?: boolean;
+  borderBottom?: boolean;
+}
+
+export interface TableHeaderRow {
+  id: string;
+  cells: TableHeaderCell[];
+}
+
+export interface TableBodyCell {
+  colSpan?: number;
+  rowSpan?: number;
+  content?: AnyNode[];
+  borderRight?: boolean;
+  borderLeft?: boolean;
+  borderTop?: boolean;
+  borderBottom?: boolean;
+}
+
+export interface TableBodyRow {
+  id: string;
+  cells: TableBodyCell[];
 }
 
 export interface TableFooterCell {
@@ -134,6 +165,8 @@ export interface TableStyleConfig {
 export interface TableProps {
   columns?: TableColumnConfig[];
   data?: any[];
+  headerRows?: TableHeaderRow[];
+  bodyRows?: TableBodyRow[];
   footerRows?: TableFooterRow[];
   footerSplitIndex?: number;
   footerEndIndex?: number;
@@ -322,6 +355,7 @@ export interface RichTextPreferences {
 export interface DocumentSchema {
   version: number;
   meta: {
+    title?: string;
     pageSize: "A4" | "A3" | "Letter" | { widthPx: number; heightPx: number };
     orientation: "portrait" | "landscape";
     baseUnit: "px";
