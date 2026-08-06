@@ -49,10 +49,13 @@ export async function POST(req: Request) {
 
     const url = new URL(req.url);
     // Vercel/proxies might route internally via http, force https in production
-    const isLocal =
-      url.host.includes("localhost") || url.host.includes("127.0.0.1");
-    const protocol = isLocal ? url.protocol : "https:";
-    const printUrl = `${protocol}//${url.host}/print`;
+    const forwardedHost = req.headers.get("x-forwarded-host");
+    const forwardedProto = req.headers.get("x-forwarded-proto");
+    
+    const host = forwardedHost || url.host;
+    const isLocal = host.includes("localhost") || host.includes("127.0.0.1");
+    const protocol = forwardedProto ? `${forwardedProto}:` : (isLocal ? url.protocol : "https:");
+    const printUrl = `${protocol}//${host}/print`;
 
     console.log(`Generating PDF. Navigation target: ${printUrl}`);
 

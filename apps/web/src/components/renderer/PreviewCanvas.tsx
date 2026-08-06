@@ -3,6 +3,7 @@ import { DocumentSchema } from "@papercast/core";
 import { PageData } from "@papercast/engine";
 import { PaperCastProvider, NodeRenderer, getStyle } from "@papercast/react";
 import { Plus } from "lucide-react";
+import { useDocumentStore } from "../../store/documentStore";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { PreviewTab } from "./PreviewToolbar";
 
@@ -111,7 +112,75 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 : "column",
                             ...getStyle(parsedDocument.document.body),
                           }}
+                          onDragOver={(e) => {
+                            if (activeTab === "content") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                          onDrop={(e) => {
+                            if (activeTab === "content") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const widgetType = e.dataTransfer.getData(
+                                "application/papercast-widget"
+                              );
+                              if (widgetType) {
+                                let defaultProps: any = undefined;
+                                let defaultLayout: any = undefined;
+                                if (widgetType === "text")
+                                  defaultProps = { literal: "New Text" };
+                                if (widgetType === "richText")
+                                  defaultProps = {
+                                    htmlLiteral: "<p>New Rich Text</p>",
+                                  };
+                                if (widgetType === "listTile")
+                                  defaultProps = {
+                                    titleLiteral: "Title",
+                                    subtitleLiteral: "Subtitle",
+                                  };
+                                if (
+                                  widgetType === "checkbox" ||
+                                  widgetType === "radio"
+                                )
+                                  defaultProps = { labelLiteral: "Option" };
+                                if (
+                                  [
+                                    "row",
+                                    "column",
+                                    "ul",
+                                    "ol",
+                                    "radioGroup",
+                                  ].includes(widgetType)
+                                )
+                                  defaultLayout = { minHeight: 40 };
+
+                                const newNode: any = {
+                                  id: `node-${Date.now()}`,
+                                  type: widgetType,
+                                  layout: defaultLayout || {},
+                                  ...(defaultProps
+                                    ? { props: defaultProps }
+                                    : {}),
+                                };
+
+                                useDocumentStore
+                                  .getState()
+                                  .insertNode(
+                                    parsedDocument.document.body.id,
+                                    undefined,
+                                    newNode
+                                  );
+                              }
+                            }
+                          }}
                         >
+                          {page.bodyNodes.length === 0 &&
+                            activeTab === "content" && (
+                              <div className="w-full h-full min-h-[100px] flex items-center justify-center text-gray-300 border-2 border-dashed border-gray-200 rounded-lg m-4 pointer-events-none print-hidden">
+                                Drag and drop widgets here
+                              </div>
+                            )}
                           {page.bodyNodes.map((node, i) => (
                             <NodeRenderer
                               key={`body-${node.id || i}`}
