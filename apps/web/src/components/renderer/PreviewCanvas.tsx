@@ -7,7 +7,9 @@ import {
   getStyle,
   NodeRegistry,
 } from "@papercast/react";
-import { Plus } from "lucide-react";
+import { Trash2, Copy, Columns2, Settings2, Plus } from "lucide-react";
+
+const generateId = () => Math.random().toString(36).substring(2, 10);
 import { useDocumentStore } from "../../store/documentStore";
 import { SectionToolbar } from "../editor/SectionToolbar";
 import { PreviewTab } from "./PreviewToolbar";
@@ -143,7 +145,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                               if (widgetType) {
                                 const newNode = NodeRegistry.createDefaultNode(
                                   widgetType,
-                                  `node-${crypto.randomUUID().substring(0, 8)}`
+                                  `node-${generateId()}`
                                 );
 
                                 useDocumentStore

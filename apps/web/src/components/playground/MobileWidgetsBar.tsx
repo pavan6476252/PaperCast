@@ -1,6 +1,6 @@
 import React from "react";
 import { usePaperCastEditor, WIDGETS } from "@papercast/react/editor";
-import { Settings } from "lucide-react";
+import { Settings, GripVertical } from "lucide-react";
 
 export const MobileWidgetsBar = ({
   onSettingsClick,
@@ -56,20 +56,26 @@ export const MobileWidgetsBar = ({
           return (
             <div
               key={widget.type}
-              draggable={true}
-              onDragStart={(e) => {
-                e.dataTransfer.setData(
-                  "application/papercast-widget",
-                  widget.type
-                );
-                e.dataTransfer.effectAllowed = "copy";
-              }}
-              className={`flex items-center gap-2 px-3 py-2 border rounded-lg cursor-grab shrink-0 shadow-sm transition-colors ${
+              className={`flex items-center gap-2 px-3 py-2 border rounded-lg shrink-0 shadow-sm transition-colors ${
                 isSelected
                   ? "border-accent bg-accent/20 text-accent"
                   : "border-border bg-background text-foreground/80 hover:bg-surface/80"
               }`}
             >
+              <div
+                draggable={true}
+                onDragStart={(e) => {
+                  e.dataTransfer.setData(
+                    "application/papercast-widget",
+                    widget.type
+                  );
+                  e.dataTransfer.effectAllowed = "copy";
+                }}
+                className="cursor-grab hover:bg-black/5 rounded flex items-center justify-center p-0.5"
+                title="Drag to add"
+              >
+                <GripVertical size={14} className="text-foreground/40" />
+              </div>
               <widget.icon
                 size={16}
                 className={isSelected ? "text-accent" : "text-foreground/50"}

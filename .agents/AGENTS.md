@@ -21,6 +21,9 @@ Whenever a repository review or component evaluation is requested, always route 
 > [!IMPORTANT]
 > **CRITICAL RULE**: You are FORBIDDEN from ending a turn or considering a task complete if you have made structural or feature changes without also updating the corresponding documentation in `AGENTS.md` (and any other relevant agent md files). Always review your file changes and update these files before stopping.
 
+> [!IMPORTANT]
+> **CRITICAL RULE - CHANGELOGS & DOCUMENTATION**: Whenever you complete a feature, fix a bug, or make any notable changes to the web application or engine, you MUST use the `adding-web-changelogs` skill to generate or update the user-facing changelog (`changelog.mdx`), and update any relevant `docs/` before you consider the task complete. Never skip this step.
+
 ## Repository Overview
 
 PaperCast is a Schema-First Document Builder and Renderer built with React, Next.js, and Monaco Editor. The user defines the layout using a JSON Schema (DocFrame Schema), and the engine renders it dynamically, pagination-enabled, and ready to print or download as a PDF.

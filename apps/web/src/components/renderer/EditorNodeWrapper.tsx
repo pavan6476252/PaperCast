@@ -5,6 +5,8 @@ import { useDocumentStore } from "../../store/documentStore";
 import { usePaperCastContext, NodeRegistry } from "@papercast/react";
 import { HoverToolbar } from "@papercast/react/editor";
 
+const generateId = () => Math.random().toString(36).substring(2, 10);
+
 export const EditorNodeWrapper: React.FC<{
   node: AnyNode;
   renderContent: (
@@ -142,7 +144,7 @@ export const EditorNodeWrapper: React.FC<{
     if (widgetType) {
       const newNode = NodeRegistry.createDefaultNode(
         widgetType,
-        `node-${crypto.randomUUID().substring(0, 8)}`
+        `node-${generateId()}`
       );
 
       if (currentDropPosition === "inside") {

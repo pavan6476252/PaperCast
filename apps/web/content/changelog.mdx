@@ -2,6 +2,46 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.2.1" date="2026-08-07">
+
+This release focuses on solidifying the editor experience, resolving critical mobile interaction bugs, and squashing PDF export errors for a much smoother workflow!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Custom PDF Naming**: You can now give
+  your downloaded PDFs custom filenames right from the export prompt.
+- <Badge type="feature">Feature</Badge> **Visual Empty States**: Empty
+  containers like Rows and Columns now display a clear visual indicator
+  (diagonal stripes) in the editor, making them easy to spot without showing up
+  in your final print.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Mobile Drag & Drop UX**:
+  Drastically improved the mobile playground. Swiping the widget toolbar now
+  scrolls flawlessly without accidentally dragging widgets. Added a dedicated
+  drag handle for precise control.
+- <Badge type="improvement">Improvement</Badge> **Ghost Dragging UI**: Dropping
+  widgets now displays a clean, semi-transparent ghost image instead of a solid
+  block.
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **LAN Compatibility Crash**: Resolved a critical
+  crash (`crypto.randomUUID is not a function`) that occurred when accessing the
+  playground over a local IP network.
+- <Badge type="fix">Fix</Badge> **PDF Export Empty Text**: Fixed an issue where
+  the "Empty" visual placeholder text was incorrectly showing up in exported
+  PDFs. Empty widgets now maintain their size for spacing but are completely
+  invisible in print.
+- <Badge type="fix">Fix</Badge> **PDF Export Warnings**: Fixed console warnings
+  during PDF generation by properly managing Object URL cleanup lifetimes.
+- <Badge type="fix">Fix</Badge> **Type Strictness & Validation**: Patched
+  missing schema types and suppressed internal validation memory exhaustion
+  errors during PDF generation.
+
+</Version>
+
 <Version version="0.2.0" date="2026-08-06">
 
 This massive release supercharges the Table widget, introducing advanced row spanning, dynamic data grouping, and a complete UI overhaul for table configuration!

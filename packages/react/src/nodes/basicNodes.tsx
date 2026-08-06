@@ -49,7 +49,11 @@ const RowComponent: React.FC<{ node: RowNode } & BaseProps> = ({
 }) => {
   const style = useNodeStyle(node, injectedProps);
   return (
-    <div {...injectedProps} style={{ ...style, flexDirection: "row" }}>
+    <div
+      {...injectedProps}
+      className={`${injectedProps?.className || ""} ${!node.children || node.children.length === 0 ? "empty-widget" : ""}`}
+      style={{ ...style, flexDirection: "row" }}
+    >
       {renderChildren(node)}
     </div>
   );
@@ -62,7 +66,11 @@ const ColumnComponent: React.FC<{ node: ColumnNode } & BaseProps> = ({
 }) => {
   const style = useNodeStyle(node, injectedProps);
   return (
-    <div {...injectedProps} style={{ ...style, flexDirection: "column" }}>
+    <div
+      {...injectedProps}
+      className={`${injectedProps?.className || ""} ${!node.children || node.children.length === 0 ? "empty-widget" : ""}`}
+      style={{ ...style, flexDirection: "column" }}
+    >
       {renderChildren(node)}
     </div>
   );
@@ -413,7 +421,7 @@ export const basicNodes: ComponentTypeDefinition<any>[] = [
     measure: ContainerBehavior.measure,
     split: ContainerBehavior.split,
     render: RowComponent,
-    createDefaultNode: (id) => ({ id, type: "row", layout: { minHeight: 40 } }),
+    createDefaultNode: (id) => ({ id, type: "row", layout: {} }),
   },
   {
     type: "column",
@@ -423,7 +431,7 @@ export const basicNodes: ComponentTypeDefinition<any>[] = [
     createDefaultNode: (id) => ({
       id,
       type: "column",
-      layout: { minHeight: 40 },
+      layout: {},
     }),
   },
   {
