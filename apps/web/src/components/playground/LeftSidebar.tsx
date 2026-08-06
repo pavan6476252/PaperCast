@@ -42,7 +42,7 @@ export const LeftSidebar = ({ children }: { children: React.ReactNode }) => {
     <>
       <div
         style={{ "--left-width": `${leftWidth}px` } as React.CSSProperties}
-        className="flex flex-col z-40 absolute inset-0 md:relative md:z-10 shadow-xl shrink-0 print:hidden w-full md:w-[var(--left-width)] bg-background animate-in slide-in-from-left-8 fade-in duration-300 ease-out"
+        className="hidden md:flex flex-col z-10 relative shadow-xl shrink-0 print:hidden w-[var(--left-width)] bg-background animate-in slide-in-from-left-8 fade-in duration-300 ease-out"
       >
         {children}
       </div>
