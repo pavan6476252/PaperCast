@@ -97,6 +97,10 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               };
               margin: 0;
             }
+            .print-scale-none {
+              zoom: 1 !important;
+              transform: scale(1) !important;
+            }
           }
         `}
       </style>
