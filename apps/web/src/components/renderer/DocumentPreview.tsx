@@ -138,6 +138,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         nodeWrapper={nodeWrapper}
         addHeader={addHeader}
         addFooter={addFooter}
+        onZoomChange={controlledZoom === undefined ? setZoom : undefined}
       />
     </div>
   );

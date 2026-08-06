@@ -6,7 +6,6 @@ import { Folder, Code2, PanelLeftClose, X } from "lucide-react";
 
 import { EditorProvider } from "@papercast/react/editor";
 import { useDocumentStore } from "../../../store/documentStore";
-import { useMcpSync } from "../../../hooks/useMcpSync";
 import { registerDefaultWidgets } from "@papercast/react/widgets";
 import { useToast, ToastProvider } from "../../../components/ui/Toast";
 import { useWorkspaceStore } from "../../../store/workspaceStore";
@@ -17,6 +16,7 @@ import { MobileSidebar } from "../../../components/playground/MobileSidebar";
 import { RightSidebar } from "../../../components/playground/RightSidebar";
 import { MobileWidgetsBar } from "../../../components/playground/MobileWidgetsBar";
 import { MobilePropertiesSheet } from "../../../components/playground/MobilePropertiesSheet";
+import { McpStatusBadge } from "../../../components/playground/McpStatusBadge";
 import { usePlaygroundShortcuts } from "../../../hooks/usePlaygroundShortcuts";
 
 const JsonEditor = dynamic(
@@ -68,7 +68,6 @@ export function PlaygroundContent() {
   const { showToast } = useToast();
   const { isTemplateGalleryOpen, setIsTemplateGalleryOpen } =
     useWorkspaceStore();
-  const { isConnected, sessionId } = useMcpSync();
   const [activeLeftPanel, setActiveLeftPanel] = useState<
     "workspace" | "editor" | null
   >(null);
@@ -76,20 +75,42 @@ export function PlaygroundContent() {
   const [isMobilePropertiesOpen, setIsMobilePropertiesOpen] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
-    // Load schema from session storage if available
-    try {
-      const storedSchema = sessionStorage.getItem("papercast_schema");
-      if (storedSchema) {
-        JSON.parse(storedSchema); // Validate JSON
-        useDocumentStore.getState().setJsonString(storedSchema);
-        // Clear it so it doesn't persist across fresh navigations later
-        sessionStorage.removeItem("papercast_schema");
+    const initWorkspace = async () => {
+      let loadedFromSession = false;
+      // Load schema from session storage if available
+      try {
+        const storedSchema = sessionStorage.getItem("papercast_schema");
+        if (storedSchema) {
+          JSON.parse(storedSchema); // Validate JSON
+          useDocumentStore.getState().setJsonString(storedSchema);
+          // Clear it so it doesn't persist across fresh navigations later
+          sessionStorage.removeItem("papercast_schema");
+          loadedFromSession = true;
+        }
+      } catch (e) {
+        console.error("Failed to load schema from session storage", e);
       }
-    } catch (e) {
-      console.error("Failed to load schema from session storage", e);
-    }
+
+      if (!loadedFromSession) {
+        await useWorkspaceStore.getState().loadWorkspace();
+        const currentStore = useWorkspaceStore.getState();
+        const schemas = currentStore.schemas;
+        if (schemas && schemas.length > 0) {
+          const latestSchema = [...schemas].sort(
+            (a, b) => b.updatedAt - a.updatedAt
+          )[0];
+          const content = await currentStore.loadSchemaContent(latestSchema.id);
+          if (content) {
+            useDocumentStore.getState().setJsonString(content);
+            currentStore.setActiveSchema(latestSchema.id);
+            currentStore.setLastSavedJsonString(content);
+          }
+        }
+      }
+      setMounted(true);
+    };
+
+    initWorkspace();
   }, []);
 
   // Map old showEditor to activeLeftPanel for the shortcut hook
@@ -237,17 +258,7 @@ export function PlaygroundContent() {
           onClose={() => setIsMobilePropertiesOpen(false)}
         />
 
-        {/* MCP Connection Status Badge */}
-        <div className="absolute bottom-4 left-4 z-50 print:hidden hidden md:block">
-          <div
-            className={`flex items-center gap-2 px-3 py-2 rounded-full shadow-lg border text-xs font-medium bg-white ${isConnected ? "border-green-200 text-green-700" : "border-gray-200 text-gray-500"}`}
-          >
-            <div
-              className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
-            />
-            {isConnected ? `MCP Connected: ${sessionId}` : "MCP Disconnected"}
-          </div>
-        </div>
+        <McpStatusBadge />
 
         {isTemplateGalleryOpen && (
           <TemplateGalleryDialog

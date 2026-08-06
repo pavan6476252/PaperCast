@@ -2,8 +2,7 @@
 import type { Browser } from "puppeteer-core";
 
 export async function getBrowser(): Promise<Browser> {
-  const isProd =
-    process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+  const isProd = process.env.VERCEL === "1";
 
   if (isProd) {
     const chromium = (await import("@sparticuz/chromium")).default;
