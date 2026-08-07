@@ -12,5 +12,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["papercast-web", "basic-usage-example", "advanced-editor"]
+  "ignore": ["@papercast/web", "basic-usage-example", "advanced-editor"]
 }

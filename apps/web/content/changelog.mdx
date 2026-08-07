@@ -2,6 +2,22 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.2.5" date="2026-08-07">
+
+This release restores PDF export functionality in production and resolves automated release workflow issues!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **PDF Export in Production**: Resolved a
+  critical issue where generating a PDF on Vercel would crash with a missing
+  binary error. The build process now correctly traces and includes the
+  Sparticuz Chromium binaries from the monorepo root.
+- <Badge type="fix">Fix</Badge> **Automated Release Workflows**: Fixed an issue
+  in the Changesets configuration where an incorrect package name was preventing
+  the automated release workflow from successfully publishing packages to NPM.
+
+</Version>
+
 <Version version="0.2.4" date="2026-08-07">
 
 This release focuses on quality-of-life improvements to the Playground, fixing visual flashes on load and refining the workspace connection experience!
