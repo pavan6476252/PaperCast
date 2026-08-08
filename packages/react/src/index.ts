@@ -5,3 +5,5 @@ export * from "./registry";
 export * from "./utils/styleUtils";
 export * from "./PaperCast";
 export * from "./utils/htmlParser";
+export * from "./nodes/basicNodes";
+export * from "./editor/components/PropertyControls";

@@ -7,7 +7,7 @@ import {
   autoDeconstructRichTextAst,
 } from "@papercast/react";
 import { Measurements, paginateDocument, PageData } from "@papercast/engine";
-import { DocumentSchema, AnyNode } from "@papercast/core";
+import { DocumentSchema } from "@papercast/core";
 import { TEST_DOCUMENT } from "@papercast/core/test";
 import "./index.css";
 
@@ -21,10 +21,7 @@ function App() {
       ...TEST_DOCUMENT,
       document: {
         ...TEST_DOCUMENT.document,
-        body: autoDeconstructRichTextAst(
-          TEST_DOCUMENT.document.body as AnyNode,
-          TEST_DOCUMENT.meta?.richTextPreferences
-        ),
+        body: autoDeconstructRichTextAst(TEST_DOCUMENT.document.body),
       },
     } as DocumentSchema;
   }, []);

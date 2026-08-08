@@ -13,6 +13,7 @@ PaperCast is a powerful, dynamic Document Builder built with Next.js. It allows 
 - **Undo & Redo:** Full history tracking across all document edits.
 - **Customizable Layouts:** Select standard page sizes (A4, A3, Letter) or set custom dimensions.
 - **Orientation Control:** Toggle instantly between Portrait and Landscape modes.
+- **Content Locking:** Secure individual nodes to prevent accidental data modification while still allowing styling adjustments.
 - **PDF Generation:** Save your documents as high-quality PDFs seamlessly.
 
 ## Getting Started

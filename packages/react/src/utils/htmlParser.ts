@@ -1,9 +1,4 @@
-import {
-  AnyNode,
-  RichTextPreferences,
-  TypographyAndColor,
-  BoxModel,
-} from "@papercast/core";
+import { AnyNode, TypographyAndColor, BoxModel } from "@papercast/core";
 import { SchemaRegistry } from "@papercast/engine";
 
 /**
@@ -16,7 +11,12 @@ import { SchemaRegistry } from "@papercast/engine";
  */
 export function convertHtmlToNodes(
   htmlString: string,
-  preferences?: RichTextPreferences
+  preferences?: {
+    tagStyles?: Record<
+      string,
+      { style?: TypographyAndColor; layout?: BoxModel }
+    >;
+  }
 ): AnyNode[] {
   if (typeof window === "undefined") return [];
   const parser = new DOMParser();
@@ -414,38 +414,48 @@ export function convertHtmlToNodes(
  * @param preferences - Global rich text preferences containing tag styles
  * @returns A new AST with rich text nodes deconstructed into primitives.
  */
-export function autoDeconstructRichTextAst(
-  node: AnyNode,
-  preferences?: RichTextPreferences
-): AnyNode {
-  if (node.type === "richText" && node.props?.htmlLiteral) {
-    const parsedNodes = convertHtmlToNodes(node.props.htmlLiteral, preferences);
+export function autoDeconstructRichTextAst(node: AnyNode): AnyNode {
+  // Use node-level config
+  const shouldDeconstruct = node.config?.autoDeconstruct;
 
-    // If it parsed into exactly one node, we can return it directly, keeping the original ID
-    if (parsedNodes.length === 1) {
-      return {
-        ...parsedNodes[0],
-        id: node.id,
-        layout: { ...parsedNodes[0].layout, ...node.layout },
-        style: { ...parsedNodes[0].style, ...node.style },
-      };
+  if (shouldDeconstruct) {
+    let htmlToParse: string | undefined;
+
+    if (node.type === "richText") {
+      htmlToParse = node.props?.htmlLiteral;
+    } else if (node.type === "text") {
+      htmlToParse = node.props?.literal;
     }
 
-    // Otherwise, wrap it in a column to maintain the single-node AST structure
-    return {
-      id: node.id,
-      type: "column",
-      children: parsedNodes,
-      layout: node.layout || { direction: "column", marginBottom: 8 },
-    };
+    if (htmlToParse) {
+      // Pass node.config.tagStyles
+      const tagStyles = node.config?.tagStyles;
+      const parsedNodes = convertHtmlToNodes(htmlToParse, { tagStyles });
+
+      // If it parsed into exactly one node, we can return it directly, keeping the original ID
+      if (parsedNodes.length === 1) {
+        return {
+          ...parsedNodes[0],
+          id: node.id,
+          layout: { ...parsedNodes[0].layout, ...node.layout },
+          style: { ...parsedNodes[0].style, ...node.style },
+        };
+      }
+
+      // Otherwise, wrap it in a column to maintain the single-node AST structure
+      return {
+        id: node.id,
+        type: "column",
+        children: parsedNodes,
+        layout: node.layout || { direction: "column", marginBottom: 8 },
+      };
+    }
   }
 
   if (node.children && node.children.length > 0) {
     return {
       ...node,
-      children: node.children.map((child) =>
-        autoDeconstructRichTextAst(child, preferences)
-      ),
+      children: node.children.map((child) => autoDeconstructRichTextAst(child)),
     };
   }
 

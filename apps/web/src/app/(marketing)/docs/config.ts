@@ -65,6 +65,12 @@ export const DOC_CATEGORIES: DocCategory[] = [
         title: "Headers & Footers",
         description: "Setting up recurring and cover-page headers.",
       },
+      {
+        id: "content-locking",
+        title: "Content Locking",
+        description:
+          "Prevent accidental textual modifications on specific nodes.",
+      },
     ],
   },
   {
@@ -151,6 +157,18 @@ export const DOC_CATEGORIES: DocCategory[] = [
         id: "property-panel",
         title: "Property Panel",
         description: "Visual binding and AST manipulation.",
+      },
+      {
+        id: "customizing-property-editors",
+        title: "Custom Property Editors",
+        description:
+          "How to override or extend pre-registered node configuration panels.",
+      },
+      {
+        id: "custom-nodes-registry",
+        title: "Custom Nodes Registry",
+        description:
+          "Register custom node types with full strict TypeScript support.",
       },
       {
         id: "ast-manipulation",

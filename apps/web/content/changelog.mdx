@@ -2,6 +2,72 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.3.0" date="2026-08-08">
+
+This release introduces fine-grained Content Locking, shifts Rich Text Preferences to the node level for better control, and significantly hardens our codebase's TypeScript strictness!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Content Lock (`lockContent`)**: You
+  can now lock specific nodes within the document to prevent accidental textual
+  edits while still allowing styling and layout adjustments.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Node-Level Rich Text
+  Preferences**: We migrated global `autoDeconstruct` configurations directly to
+  the node-level `config`, giving you much finer control over how individual
+  blocks of text behave.
+- <Badge type="improvement">Improvement</Badge> **Zero-Tolerance Type Safety**:
+  Entirely eliminated `any` types from our AST manipulation systems and added a
+  strict `typecheck` pre-commit hook to guarantee rock-solid type safety going
+  forward.
+
+</Version>
+
+<Version version="0.2.6" date="2026-08-08">
+
+This release significantly improves the core `@papercast/react` architecture by fully decoupling heavy rich-text dependencies from the headless library!
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Lightweight React Package**:
+  Extracted all `TipTap` dependencies from the core `@papercast/react` package
+  into the web application, dramatically reducing the bundle size for anyone
+  building custom renderers.
+- <Badge type="improvement">Improvement</Badge> **Dynamic Property Editors**:
+  Introduced a new `renderPropertyEditor` seam in the Node Registry, allowing
+  host applications to seamlessly inject custom property panels and editors.
+- <Badge type="improvement">Improvement</Badge> **Reusable UI Primitives**:
+  Exposed `PropertyGroup`, `StringProp`, `ColorProp`, and more from the core
+  package, making it effortless to build visually consistent custom node
+  configuration panels.
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Native Inline Formatting**: Upgraded
+  the `text` node within the Web App Playground to support native inline rich
+  text formatting (bold, italic, colors, highlight) while maintaining strict
+  headless engine compatibility.
+
+</Version>
+
+<Version version="0.2.5" date="2026-08-07">
+
+This release restores PDF export functionality in production and resolves automated release workflow issues!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **PDF Export in Production**: Resolved a
+  critical issue where generating a PDF on Vercel would crash with a missing
+  binary error. The build process now correctly traces and includes the
+  Sparticuz Chromium binaries from the monorepo root.
+- <Badge type="fix">Fix</Badge> **Automated Release Workflows**: Fixed an issue
+  in the Changesets configuration where an incorrect package name was preventing
+  the automated release workflow from successfully publishing packages to NPM.
+
+</Version>
+
 <Version version="0.2.4" date="2026-08-07">
 
 This release focuses on quality-of-life improvements to the Playground, fixing visual flashes on load and refining the workspace connection experience!

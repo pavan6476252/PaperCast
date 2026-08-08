@@ -65,11 +65,12 @@ One of the most complex state management tasks is handling Rich Text input from 
 
 PaperCast cannot simply store raw HTML strings because the Pagination Engine would not be able to split them across pages.
 
-Instead, we use a utility `autoDeconstructRichTextAst` (located in `src/utils/htmlParser.ts`).
+Instead, we use a utility `autoDeconstructRichTextAst` (located in `@papercast/react/src/utils/htmlParser.ts`).
 
-1. **Interception**: When a user pastes rich text into a `RichTextNode`, the editor captures the raw HTML.
-2. **Parsing**: The utility traverses the DOM of the pasted HTML.
-3. **Deconstruction**: It converts `<p>`, `<strong>`, `<em>`, and `<a>` tags into discrete PaperCast AST nodes (`text`, `row`, `column`).
-4. **Injection**: These new nodes replace the original single text node in the `parsedDocument`.
+1. **Opt-in Configuration**: The deconstruction process is opt-in at the node level. A node must explicitly have `config: { autoDeconstruct: true }` set.
+2. **Interception**: When a user pastes rich text into a configured `RichTextNode`, the editor captures the raw HTML.
+3. **Parsing**: The utility traverses the DOM of the pasted HTML.
+4. **Deconstruction**: It converts `<p>`, `<strong>`, `<em>`, and `<a>` tags into discrete PaperCast AST nodes (`text`, `row`, `column`).
+5. **Injection**: These new nodes replace the original single text node in the `parsedDocument`.
 
 Because the rich text is now represented as individual standard AST nodes, the `PaginationEngine` can seamlessly split paragraphs or wrap lines across multiple PDF pages!

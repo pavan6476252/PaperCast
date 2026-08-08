@@ -6,7 +6,7 @@ export async function getDocumentState() {
   return {
     content: [
       {
-        type: "text",
+        type: "text" as const,
         text: JSON.stringify(state.schema, null, 2),
       },
     ],

@@ -1,4 +1,6 @@
 export PATH="$(pwd)/node_modules/.bin:$PATH"
+pnpm run check:circular
+pnpm run typecheck
 pnpm run test
 pnpm run schema:validate && git add packages/core/src/schema/papercast.schema.json
 pnpm exec lint-staged

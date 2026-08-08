@@ -6,3 +6,5 @@ CONTEXT.md
 TODO-SNIPPETS.md
 .DS_Store
 .scratch
+.vercel
+.env*

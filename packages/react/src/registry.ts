@@ -13,6 +13,18 @@ export interface ComponentTypeDefinition<
       "data-selected"?: boolean;
     };
   }>;
+  renderPropertyEditor?: React.FC<{
+    node: TNode;
+    handleUpdate: <
+      G extends "layout" | "style" | "props" | "bind" | "config",
+      K extends string,
+    >(
+      group: G,
+      key: K,
+      value: unknown
+    ) => void;
+    dataPaths: string[];
+  }>;
 }
 
 class Registry {

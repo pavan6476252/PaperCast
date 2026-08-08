@@ -180,6 +180,12 @@ export interface TableProps {
 /**
  * The foundational shape of every node in the PaperCast AST.
  */
+export interface NodeConfig {
+  autoDeconstruct?: boolean;
+  lockContent?: boolean;
+  [key: string]: any;
+}
+
 export interface BaseNode<
   TType extends string = string,
   TProps = Record<string, any> | undefined,
@@ -188,6 +194,7 @@ export interface BaseNode<
   type: TType;
   layout: BoxModel;
   style?: TypographyAndColor;
+  config?: NodeConfig;
   bind?: DataBinding;
   children?: AnyNode[];
   overrides?: Record<string, Partial<AnyNode>>;
@@ -337,17 +344,6 @@ export interface PageRegion {
   root: AnyNode;
 }
 
-export interface RichTextPreferences {
-  autoDeconstruct?: boolean;
-  tagStyles?: Record<
-    string,
-    {
-      style?: TypographyAndColor;
-      layout?: BoxModel;
-    }
-  >;
-}
-
 /**
  * Represents the entire state of a PaperCast document, including its hierarchy,
  * widget definitions, theme configuration, static data, and metadata.
@@ -360,7 +356,6 @@ export interface DocumentSchema {
     orientation: "portrait" | "landscape";
     baseUnit: "px";
     dpi: number;
-    richTextPreferences?: RichTextPreferences;
   };
   theme: Theme;
   data: Record<string, any>;

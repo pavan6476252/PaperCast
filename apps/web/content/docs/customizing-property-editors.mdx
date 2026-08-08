@@ -1,0 +1,88 @@
+# Customizing Property Editors
+
+PaperCast's Headless Architecture means you are never locked into a single user interface. While the default property panel provides automatic configuration based on node schemas, you often need to build highly tailored editing experiences for specific nodes.
+
+This is achieved using the `renderPropertyEditor` seam in the Node Registry.
+
+## The `renderPropertyEditor` Seam
+
+When defining a component in the Node Registry (`@papercast/react`), you can optionally provide a `renderPropertyEditor` function. If provided, the standard PaperCast `PropertyPanel` will render your custom React component instead of (or alongside) the default inputs.
+
+```tsx
+import { RegistryComponent } from "@papercast/react";
+
+const MyCustomWidget: RegistryComponent<MyCustomNode> = {
+  render: ({ node }) => <div>{node.props.title}</div>,
+  renderPropertyEditor: ({ node, updateNode }) => (
+    <MyCustomEditor node={node} updateNode={updateNode} />
+  ),
+};
+```
+
+## Example: `TextPropertyEditor`
+
+Let's look at how the built-in `TextPropertyEditor` overrides the default behavior to provide a robust inline editing experience with `InlineRichTextEditor`, data binding resets, and content locking toggles.
+
+### 1. Registering the Editor
+
+In `registry.ts`, the `text` node uses a custom editor:
+
+```tsx
+import { TextPropertyEditor } from "@/components/editor/TextPropertyEditor";
+
+const text: RegistryComponent<TextNode> = {
+  render: TextRenderer,
+  renderPropertyEditor: (props) => <TextPropertyEditor {...props} />,
+};
+```
+
+### 2. Building the Editor Component
+
+The `TextPropertyEditor` component receives the `node` and an `updateNode` callback. It uses shared UI primitives like `PropertyGroup` to maintain visual consistency with the rest of the editor.
+
+```tsx
+import { PropertyGroup } from "@papercast/react";
+import { InlineRichTextEditor } from "./InlineRichTextEditor";
+
+export const TextPropertyEditor = ({ node, updateNode }: EditorProps) => {
+  const handleUpdate = (category, field, value) => {
+    updateNode(node.id, (draft) => {
+      if (!draft[category]) draft[category] = {};
+      draft[category][field] = value;
+    });
+  };
+
+  return (
+    <PropertyGroup title="Text Content">
+      {/* Custom Data Binding Reset Logic */}
+      {node.bind?.path && (
+        <button
+          onClick={() => {
+            // Destructure to safely remove 'bind' without 'any' casting
+            delete draft.bind;
+          }}
+        >
+          Reset to Literal
+        </button>
+      )}
+
+      {/* Advanced Inline Rich Text Integration */}
+      <InlineRichTextEditor
+        value={node.props?.literal || ""}
+        onChange={(v) => handleUpdate("props", "literal", v)}
+        lockContent={node.config?.lockContent}
+      />
+    </PropertyGroup>
+  );
+};
+```
+
+### 3. Integrating Complex Editors (`InlineRichTextEditor`)
+
+The `InlineRichTextEditor` is a TipTap-powered React component. Because we decoupled TipTap from the core `@papercast/react` package, this heavy dependency is localized entirely within the web application.
+
+When the user types, the `onChange` callback fires, updating the `props.literal` property on the AST node. Notice how we also pass `node.config?.lockContent` down to the TipTap editor so that it can disable user input if the node is structurally locked.
+
+## Summary
+
+By leveraging `renderPropertyEditor`, you can replace simple text inputs with complex block editors, custom color pickers, API-driven dropdowns, or entirely bespoke forms, all while safely mutating the underlying JSON AST using the provided `updateNode` dispatcher.

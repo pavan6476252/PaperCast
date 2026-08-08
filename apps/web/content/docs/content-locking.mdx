@@ -1,0 +1,49 @@
+# Content Locking
+
+PaperCast provides a granular **Content Locking** mechanism designed to prevent accidental modifications to the core data (text, URLs) of a node while still permitting layout and stylistic adjustments.
+
+This is extremely useful when building templates (e.g., Invoices or Legal Contracts) where the host application or an AI agent binds specific data to a node, and the end-user should only be allowed to style it, not change the actual data.
+
+## Enabling Content Lock
+
+You can lock any node by setting the `lockContent` flag inside its `config` object:
+
+```json
+{
+  "id": "node_123",
+  "type": "text",
+  "config": {
+    "lockContent": true
+  },
+  "props": {
+    "literal": "Invoice #1024"
+  }
+}
+```
+
+## How It Works
+
+Content Locking is enforced at two distinct layers to ensure both a smooth UX and strict structural integrity.
+
+### 1. Client-Side UX: `ContentLockExtension` (ProseMirror)
+
+For rich text editing, PaperCast uses TipTap (built on ProseMirror). When a node is locked, the `InlineRichTextEditor` component dynamically injects the `ContentLockExtension`.
+
+This custom ProseMirror plugin intercepts user input events at the editor level. It blocks keyboard input and pasting, effectively making the text editor read-only, while still allowing the user to select text and apply inline styles (like bold, italic, or color changes).
+
+### 2. Structural Guardrail: AST Diffing
+
+Because users can edit the JSON directly (or an AI agent might attempt an illegal edit via MCP), client-side UX blocks are not enough.
+
+PaperCast runs a strict AST-diffing guardrail (`contentLockGuardrail.ts`) every time the document state is updated.
+
+1. **Extraction**: The guardrail traverses the incoming AST. When it finds a node with `lockContent: true`, it extracts the "textual content" using a discriminated union:
+   - `text` / `richText`: Compares `props.literal` / `props.htmlLiteral`
+   - `image`: Compares `props.srcLiteral`
+   - **Custom Nodes**: Falls back to comparing `JSON.stringify(node.props)` to ensure no custom properties are maliciously altered.
+2. **Comparison**: It compares the extracted content against the previous, known-good state of the document.
+3. **Enforcement**: If the content or the `bind.path` has been altered, the state update is immediately rejected, and an error is thrown: `Node [...] is content-locked. Textual content cannot be modified.`
+
+## Summary
+
+By combining proactive client-side UX extensions with reactive AST-diffing guardrails, PaperCast guarantees that your protected document data remains pristine, no matter how the user or AI interacts with the builder.

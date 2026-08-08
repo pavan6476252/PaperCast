@@ -6,6 +6,7 @@ import {
   ArrowUpLeft,
   Trash2,
   CornerLeftUp,
+  GripVertical,
 } from "lucide-react";
 import { AnyNode } from "@papercast/core";
 import { usePaperCastEditor } from "../EditorProvider";
@@ -108,6 +109,22 @@ export const HoverToolbar: React.FC<{
     }
   };
 
+  const handleDragStart = (e: React.DragEvent) => {
+    e.stopPropagation();
+    e.dataTransfer.setData("application/papercast-node-id", nodeId);
+    e.dataTransfer.effectAllowed = "move";
+    setSelectedNodeId(nodeId);
+
+    // Set custom drag image to the actual node being dragged
+    const nodeEl =
+      document.querySelector(`.print-page [data-node-id="${nodeId}"]`) ||
+      document.querySelector(`[data-node-id="${nodeId}"]`);
+    if (nodeEl) {
+      // Offset by 10,10 so the cursor is inside the drag preview
+      e.dataTransfer.setDragImage(nodeEl as Element, 10, 10);
+    }
+  };
+
   if (!rect) return null;
 
   const style: React.CSSProperties = {
@@ -127,6 +144,15 @@ export const HoverToolbar: React.FC<{
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
+      <div
+        className="p-1 hover:bg-gray-700 rounded transition-colors cursor-grab active:cursor-grabbing text-gray-400"
+        draggable={true}
+        onDragStart={handleDragStart}
+        onMouseDown={() => setSelectedNodeId(nodeId)}
+        title="Drag to move"
+      >
+        <GripVertical size={14} />
+      </div>
       <button
         className="p-1 hover:bg-gray-700 rounded transition-colors text-blue-300 hover:text-blue-200"
         onClick={handleFocusParent}

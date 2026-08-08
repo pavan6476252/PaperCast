@@ -12,6 +12,7 @@ import {
 } from "@papercast/core";
 import { NodeRenderer } from "../NodeRenderer";
 import { ComponentTypeDefinition } from "../registry";
+import { splitHtmlText } from "../utils/htmlSplitter";
 import { ContainerBehavior } from "@papercast/engine";
 import { useNodeData } from "../headless/useNodeData";
 import { useNodeStyle } from "../headless/useNodeStyle";
@@ -110,6 +111,8 @@ const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({
     }
   }
 
+  const isHtml = /<[a-z][\s\S]*>/i.test(content);
+
   if (isAnchor) {
     if (node.props?.hrefBind) {
       const val = resolve(node.props.hrefBind);
@@ -135,9 +138,20 @@ const TextComponent: React.FC<{ node: TextNode } & BaseProps> = ({
             injectedProps.onClick(e as any);
           }
         }}
+        dangerouslySetInnerHTML={isHtml ? { __html: content } : undefined}
       >
-        {content}
+        {!isHtml && content}
       </a>
+    );
+  }
+
+  if (isHtml) {
+    return (
+      <div
+        {...injectedProps}
+        style={style}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     );
   }
 
@@ -170,7 +184,18 @@ const splitTextNode = (
   let text = node.props?.literal || "";
   // In the split function, we don't have access to the hook, so we use ctx.data manually.
   // The engine passes ctx in for exactly this reason.
-  if (node.bind?.path) {
+  if (node.props?.literal) {
+    text = text.replace(/\{\{\s*([^}]+)\s*\}\}/g, (match, path) => {
+      const trimmed = path.trim();
+      if (trimmed === "pageNumber" || trimmed === "pageCount") return match;
+      const parts = trimmed.split(".");
+      let val: any = ctx.data;
+      for (const p of parts) {
+        if (val) val = val[p];
+      }
+      return val !== undefined ? String(val) : match;
+    });
+  } else if (node.bind?.path) {
     // Basic resolution for split phase
     const parts = node.bind.path.split(".");
     let val: any = ctx.data;
@@ -186,19 +211,30 @@ const splitTextNode = (
   const ratio = (remainingHeight - 12) / totalHeight;
   if (ratio <= 0) return null;
 
-  let splitCharIndex = Math.floor(text.length * ratio);
-  while (
-    splitCharIndex > 0 &&
-    text[splitCharIndex] !== " " &&
-    text[splitCharIndex] !== "\n"
-  ) {
-    splitCharIndex--;
-  }
-  if (splitCharIndex === 0) splitCharIndex = Math.floor(text.length * ratio);
-  if (splitCharIndex === 0) return null;
+  let chunk1Text = "";
+  let chunk2Text = "";
 
-  const chunk1Text = text.substring(0, splitCharIndex);
-  const chunk2Text = text.substring(splitCharIndex).trimStart();
+  const isHtml = /<[a-z][\s\S]*>/i.test(text);
+  if (isHtml) {
+    const splitResult = splitHtmlText(text, ratio);
+    if (!splitResult) return null;
+    [chunk1Text, chunk2Text] = splitResult;
+  } else {
+    let splitCharIndex = Math.floor(text.length * ratio);
+    while (
+      splitCharIndex > 0 &&
+      text[splitCharIndex] !== " " &&
+      text[splitCharIndex] !== "\n"
+    ) {
+      splitCharIndex--;
+    }
+    if (splitCharIndex === 0) splitCharIndex = Math.floor(text.length * ratio);
+    if (splitCharIndex === 0) return null;
+
+    chunk1Text = text.substring(0, splitCharIndex);
+    chunk2Text = text.substring(splitCharIndex).trimStart();
+  }
+
   if (!chunk1Text) return null;
 
   const partNumber = (parseInt(node.id.split("-part")[1]) || 1) + 1;

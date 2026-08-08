@@ -10,6 +10,7 @@ import {
   TableNode,
   TextNode,
   TypographyAndColor,
+  RichTextNode,
 } from "./schema";
 
 export const _TEST_DOCUMENT: DocumentSchema = {
@@ -2000,38 +2001,37 @@ export function createStressTable(rows: number, columns: number): TableNode {
 export function injectTestRichText(doc: DocumentSchema): DocumentSchema {
   const newDoc = structuredClone(doc);
 
-  // Add RichTextPreferences to meta
-  newDoc.meta.richTextPreferences = {
-    autoDeconstruct: true,
-    tagStyles: {
-      h1: { style: { color: "#1e3a8a", fontSizePx: 26 } },
-      h2: {
-        style: { color: "#1e40af", fontSizePx: 20 },
-        layout: { marginTop: 16 },
-      },
-      code: {
-        style: { color: "#991b1b" },
-        layout: { backgroundColor: "#fee2e2" },
-      },
-      blockquote: {
-        style: { fontStyle: "italic" },
-        layout: {
-          backgroundColor: "#f3f4f6",
-          borderLeftWidth: 4,
-          borderLeftColor: "#3b82f6",
-          paddingLeft: 12,
-        },
-      },
-      ul: { layout: { paddingLeft: 24, marginBottom: 16 } },
-      li: { style: { color: "#374151" } },
-    },
-  };
+  // Remove the old global richTextPreferences setup
 
-  // Inject the provided RichText widget
-  const richTextNode: any = {
+  const richTextNode: RichTextNode = {
     id: "node-1785258000135",
     type: "richText",
     layout: { marginBottom: 32 },
+    config: {
+      autoDeconstruct: true,
+      tagStyles: {
+        h1: { style: { color: "#1e3a8a", fontSizePx: 26 } },
+        h2: {
+          style: { color: "#1e40af", fontSizePx: 20 },
+          layout: { marginTop: 16 },
+        },
+        code: {
+          style: { color: "#991b1b" },
+          layout: { backgroundColor: "#fee2e2" },
+        },
+        blockquote: {
+          style: { fontStyle: "italic" },
+          layout: {
+            backgroundColor: "#f3f4f6",
+            borderLeftWidth: 4,
+            borderLeftColor: "#3b82f6",
+            paddingLeft: 12,
+          },
+        },
+        ul: { layout: { paddingLeft: 24, marginBottom: 16 } },
+        li: { style: { color: "#374151" } },
+      },
+    },
     props: {
       htmlLiteral:
         '<article class="content-wrapper">\n  <h1>Mastering Modern Web Architecture</h1>\n  <p class="intro-text">\n    Building fast, scalable web applications requires a deep understanding of frontend optimization, state management, and semantic markup structures. \n  </p>\n\n  <hr />\n\n  <h2>Key Development Pillars</h2>\n  <p>\n    When engineering enterprise-grade user interfaces, teams must balance performance with maintainability. Focus heavily on these three core segments:\n  </p>\n\n  <ul>\n    <li><strong>Component Isolation:</strong> Write modular CSS and scoped logic to prevent global style pollution.</li>\n    <li><strong>State Hydration:</strong> Optimize server-side rendering boundaries to lower Time to Interactive (TTI).</li>\n    <li><strong>Accessibility (a11y):</strong> Utilize ARIA attributes and native interactive elements cleanly.</li>\n  </ul>\n\n  <blockquote>\n    "Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make things worse: complexity sells better."\n    <cite>— Edsger W. Dijkstra</cite>\n  </blockquote>\n\n  <h2>Performance Metrics Comparison</h2>\n  <p>\n    The table below outlines the core web vitals that engineering teams track to evaluate application responsiveness and visual stability.\n  </p>\n\n  <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">\n    <thead>\n      <tr style="background-color: #f2f2f2; text-align: left;">\n        <th>Metric Name</th>\n        <th>Acronym</th>\n        <th>Target Score</th>\n        <th>Impact Level</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>Largest Contentful Paint</td>\n        <td><code>LCP</code></td>\n        <td>&lt; 2.5 seconds</td>\n        <td>High</td>\n      </tr>\n      <tr>\n        <td>Interaction to Next Paint</td>\n        <td><code>INP</code></td>\n        <td>&lt; 200 milliseconds</td>\n        <td>Critical</td>\n      </tr>\n      <tr>\n        <td>Cumulative Layout Shift</td>\n        <td><code>CLS</code></td>\n        <td>&lt; 0.1</td>\n        <td>Medium</td>\n      </tr>\n    </tbody>\n  </table>\n\n  <h2>Next Steps for Implementation</h2>\n  <p>\n    Review your application bundle sizes using a visualizer tool. Next, remove unused dependencies. Finally, test your interface under simulated mobile throttling networks.\n  </p>\n  \n  <p>\n    For more details, consult the internal architecture documentation or reach out via the engineering Slack channel.\n  </p>\n</article>\n',

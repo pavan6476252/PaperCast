@@ -52,10 +52,41 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
 }) => {
   const scrollContainerRef = usePanZoomGesture({ zoom, onZoomChange });
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault(); // necessary to allow dropping
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const SCROLL_SPEED = 15;
+    const EDGE_SIZE = 80;
+
+    const topDist = e.clientY - rect.top;
+    const bottomDist = rect.bottom - e.clientY;
+    const leftDist = e.clientX - rect.left;
+    const rightDist = rect.right - e.clientX;
+
+    if (topDist < EDGE_SIZE) {
+      container.scrollTop -= SCROLL_SPEED;
+    } else if (bottomDist < EDGE_SIZE) {
+      container.scrollTop += SCROLL_SPEED;
+    }
+
+    if (leftDist < EDGE_SIZE) {
+      container.scrollLeft -= SCROLL_SPEED;
+    } else if (rightDist < EDGE_SIZE) {
+      container.scrollLeft += SCROLL_SPEED;
+    }
+  };
+
   return (
     <div
       id="preview-scroll-container"
       ref={scrollContainerRef}
+      onDragOverCapture={handleDragOver}
+      onClick={() => {
+        useDocumentStore.getState().setSelectedNodeId(null);
+      }}
       className="flex-1 overflow-auto p-8 relative flex flex-col print:p-0 print:bg-white print:block"
     >
       {activeTab === "content" && (
