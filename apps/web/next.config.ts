@@ -9,12 +9,6 @@ const nextConfig: NextConfig = {
     "@papercast/engine",
     "@papercast/react",
   ],
-  outputFileTracingIncludes: {
-    "/api/pdf": [
-      "node_modules/@sparticuz/chromium/**",
-      "../../node_modules/.pnpm/@sparticuz+chromium@*/**",
-    ],
-  },
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
   async rewrites() {
     return [
@@ -25,6 +19,7 @@ const nextConfig: NextConfig = {
     ];
   },
   allowedDevOrigins: ["192.168.1.17"],
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;

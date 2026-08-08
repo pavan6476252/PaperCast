@@ -2,6 +2,19 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.3.2" date="2026-08-08">
+
+This release applies further build optimizations to guarantee stable Vercel deployments.
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Vercel Build Crashes**: Fixed a persistent
+  Vercel deployment crash by removing aggressive Next.js file tracing that was
+  copying massive symlink directories from the pnpm store, and added a
+  `.vercelignore` to prevent uploading heavy local cache directories.
+
+</Version>
+
 <Version version="0.3.1" date="2026-08-08">
 
 This release restores Vercel deployments by optimizing the size of our serverless functions!

@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.git/
+.turbo/
+apps/web/.next/
+apps/mcp/dist/
+packages/*/dist/
+.vercel/
