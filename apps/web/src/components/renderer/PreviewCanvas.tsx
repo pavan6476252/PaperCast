@@ -83,7 +83,10 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
     <div
       id="preview-scroll-container"
       ref={scrollContainerRef}
-      onDragOver={handleDragOver}
+      onDragOverCapture={handleDragOver}
+      onClick={() => {
+        useDocumentStore.getState().setSelectedNodeId(null);
+      }}
       className="flex-1 overflow-auto p-8 relative flex flex-col print:p-0 print:bg-white print:block"
     >
       {activeTab === "content" && (
