@@ -2,6 +2,20 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.3.1" date="2026-08-08">
+
+This release restores Vercel deployments by optimizing the size of our serverless functions!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Deployment Failures**: Resolved an issue where
+  deploying the app to Vercel would fail with an "Unexpected error" during
+  output deployment. The rich text editor dependencies are now lazily loaded,
+  significantly reducing the serverless function size and staying within the
+  50MB limit.
+
+</Version>
+
 <Version version="0.3.0" date="2026-08-08">
 
 This release introduces fine-grained Content Locking, shifts Rich Text Preferences to the node level for better control, and significantly hardens our codebase's TypeScript strictness!

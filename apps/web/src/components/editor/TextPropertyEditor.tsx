@@ -4,7 +4,20 @@ import { PropertyGroup, StringProp, CheckboxProp } from "@papercast/react";
 import { usePaperCastEditor } from "@papercast/react/editor";
 import { resolvePath } from "@papercast/engine";
 import { useDocumentStore } from "../../store/documentStore";
-import { InlineRichTextEditor } from "./InlineRichTextEditor";
+import dynamic from "next/dynamic";
+
+const InlineRichTextEditor = dynamic(
+  () =>
+    import("./InlineRichTextEditor").then((mod) => mod.InlineRichTextEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="p-2 text-xs text-foreground/50 border rounded">
+        Loading editor...
+      </div>
+    ),
+  }
+);
 
 export const TextPropertyEditor: React.FC<{
   node: TextNode;
