@@ -110,9 +110,19 @@ export const HoverToolbar: React.FC<{
   };
 
   const handleDragStart = (e: React.DragEvent) => {
+    e.stopPropagation();
     e.dataTransfer.setData("application/papercast-node-id", nodeId);
     e.dataTransfer.effectAllowed = "move";
     setSelectedNodeId(nodeId);
+
+    // Set custom drag image to the actual node being dragged
+    const nodeEl =
+      document.querySelector(`.print-page [data-node-id="${nodeId}"]`) ||
+      document.querySelector(`[data-node-id="${nodeId}"]`);
+    if (nodeEl) {
+      // Offset by 10,10 so the cursor is inside the drag preview
+      e.dataTransfer.setDragImage(nodeEl as Element, 10, 10);
+    }
   };
 
   if (!rect) return null;
