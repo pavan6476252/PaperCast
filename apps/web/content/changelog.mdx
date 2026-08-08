@@ -2,6 +2,44 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.3.3" date="2026-08-08">
+
+This release fixes critical schema validation and Vercel bundling issues to ensure reliable PDF downloads in all environments!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Vercel Chromium Bundling**: Corrected the
+  `outputFileTracingIncludes` path in Next.js config so that
+  `@sparticuz/chromium` binaries are properly hoisted and bundled on Vercel
+  serverless functions, fixing the "Directory not found" 500 error.
+
+</Version>
+
+<Version version="0.3.2" date="2026-08-08">
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Vercel Build Crashes**: Fixed a persistent
+  Vercel deployment crash by removing aggressive Next.js file tracing that was
+  copying massive symlink directories from the pnpm store, and added a
+  `.vercelignore` to prevent uploading heavy local cache directories.
+
+</Version>
+
+<Version version="0.3.1" date="2026-08-08">
+
+This release restores Vercel deployments by optimizing the size of our serverless functions!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Deployment Failures**: Resolved an issue where
+  deploying the app to Vercel would fail with an "Unexpected error" during
+  output deployment. The rich text editor dependencies are now lazily loaded,
+  significantly reducing the serverless function size and staying within the
+  50MB limit.
+
+</Version>
+
 <Version version="0.3.0" date="2026-08-08">
 
 This release introduces fine-grained Content Locking, shifts Rich Text Preferences to the node level for better control, and significantly hardens our codebase's TypeScript strictness!

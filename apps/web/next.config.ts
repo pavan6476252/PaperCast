@@ -11,8 +11,7 @@ const nextConfig: NextConfig = {
   ],
   outputFileTracingIncludes: {
     "/api/pdf": [
-      "node_modules/@sparticuz/chromium/**",
-      "../../node_modules/.pnpm/@sparticuz+chromium@*/**",
+      "node_modules/.pnpm/@sparticuz+chromium@*/node_modules/@sparticuz/chromium/bin/**/*",
     ],
   },
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
@@ -25,6 +24,7 @@ const nextConfig: NextConfig = {
     ];
   },
   allowedDevOrigins: ["192.168.1.17"],
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;
