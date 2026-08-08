@@ -221,7 +221,7 @@ export const EditorNodeWrapper: React.FC<{
     onClick: handleClick,
     onMouseOver: handleMouseOver,
     onMouseOut: handleMouseOut,
-    draggable: isEditable,
+    draggable: isEditable && isSelected,
     onDragStart: handleDragStart,
     onDragOver: handleDragOver,
     onDragLeave: handleDragLeave,

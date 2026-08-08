@@ -6,6 +6,7 @@ import {
   ArrowUpLeft,
   Trash2,
   CornerLeftUp,
+  GripVertical,
 } from "lucide-react";
 import { AnyNode } from "@papercast/core";
 import { usePaperCastEditor } from "../EditorProvider";
@@ -108,6 +109,12 @@ export const HoverToolbar: React.FC<{
     }
   };
 
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData("application/papercast-node-id", nodeId);
+    e.dataTransfer.effectAllowed = "move";
+    setSelectedNodeId(nodeId);
+  };
+
   if (!rect) return null;
 
   const style: React.CSSProperties = {
@@ -127,6 +134,15 @@ export const HoverToolbar: React.FC<{
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
+      <div
+        className="p-1 hover:bg-gray-700 rounded transition-colors cursor-grab active:cursor-grabbing text-gray-400"
+        draggable={true}
+        onDragStart={handleDragStart}
+        onMouseDown={() => setSelectedNodeId(nodeId)}
+        title="Drag to move"
+      >
+        <GripVertical size={14} />
+      </div>
       <button
         className="p-1 hover:bg-gray-700 rounded transition-colors text-blue-300 hover:text-blue-200"
         onClick={handleFocusParent}
