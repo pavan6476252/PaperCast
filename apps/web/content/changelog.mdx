@@ -2,9 +2,20 @@
 
 All notable changes to PaperCast will be documented in this file.
 
-<Version version="0.3.2" date="2026-08-08">
+<Version version="0.3.3" date="2026-08-08">
 
-This release applies further build optimizations to guarantee stable Vercel deployments.
+This release fixes critical schema validation and Vercel bundling issues to ensure reliable PDF downloads in all environments!
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Vercel Chromium Bundling**: Corrected the
+  `outputFileTracingIncludes` path in Next.js config so that
+  `@sparticuz/chromium` binaries are properly hoisted and bundled on Vercel
+  serverless functions, fixing the "Directory not found" 500 error.
+
+</Version>
+
+<Version version="0.3.2" date="2026-08-08">
 
 ### Fixed
 

@@ -31,6 +31,7 @@ export async function POST(req: Request) {
 
     const isValid = validateDocframe(parsedBody);
     if (!isValid) {
+      console.error("PDF API Validation Failed:", validateDocframe.errors);
       return NextResponse.json(
         {
           error: "Document schema validation failed",
