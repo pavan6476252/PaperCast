@@ -23,6 +23,19 @@ jobs:
             echo "deploy=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Install pnpm
+        if: steps.check.outputs.deploy == 'true'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 11
+          
+      - name: Use Node.js
+        if: steps.check.outputs.deploy == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
       - name: Install Vercel CLI
         if: steps.check.outputs.deploy == 'true'
         run: npm install --global vercel@latest
