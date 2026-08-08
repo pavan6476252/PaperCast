@@ -13,6 +13,7 @@ import {
   moveNodeToSibling,
 } from "@papercast/core";
 import { autoDeconstructRichTextAst } from "@papercast/react";
+import { enforceContentLocks } from "../utils/contentLockGuardrail";
 import { temporal } from "zundo";
 
 const INITIAL_DOCUMENT: DocumentSchema = {
@@ -80,27 +81,19 @@ const INITIAL_DOCUMENT: DocumentSchema = {
 };
 
 function applyAutoDeconstruct(doc: DocumentSchema): DocumentSchema {
-  const prefs = doc.meta?.richTextPreferences;
-  if (!prefs?.autoDeconstruct) return doc;
-
   const newDoc = structuredClone(doc);
-  newDoc.document.body = autoDeconstructRichTextAst(
-    newDoc.document.body,
-    prefs
-  ) as any;
+  newDoc.document.body = autoDeconstructRichTextAst(newDoc.document.body);
 
   Object.keys(newDoc.document.headers || {}).forEach((id) => {
     newDoc.document.headers[id].root = autoDeconstructRichTextAst(
-      newDoc.document.headers[id].root,
-      prefs
-    ) as any;
+      newDoc.document.headers[id].root
+    );
   });
 
   Object.keys(newDoc.document.footers || {}).forEach((id) => {
     newDoc.document.footers[id].root = autoDeconstructRichTextAst(
-      newDoc.document.footers[id].root,
-      prefs
-    ) as any;
+      newDoc.document.footers[id].root
+    );
   });
 
   return newDoc;
@@ -132,7 +125,7 @@ interface DocumentStore {
   setSelectedNodeId: (id: string | null) => void;
   setRightPanelMode: (mode: "widgets" | "properties") => void;
   updateNodeProperty: <
-    G extends "layout" | "style" | "props" | "bind",
+    G extends "layout" | "style" | "props" | "bind" | "config",
     K extends string,
   >(
     nodeId: string,
@@ -230,9 +223,14 @@ export const useDocumentStore = create<DocumentStore>()(
 
         try {
           let parsed = JSON.parse(value) as DocumentSchema;
-          if (parsed.meta?.richTextPreferences?.autoDeconstruct) {
-            parsed = applyAutoDeconstruct(parsed);
+
+          // Enforce content locks against the currently parsed document
+          if (get().parsedDocument) {
+            enforceContentLocks(get().parsedDocument!, parsed);
           }
+
+          // Destructively apply autoDeconstruct synchronously for any nodes configured for it
+          parsed = applyAutoDeconstruct(parsed);
           const newJsonString = JSON.stringify(parsed, null, 2);
 
           set({
@@ -259,7 +257,7 @@ export const useDocumentStore = create<DocumentStore>()(
       },
 
       updateNodeProperty: <
-        G extends "layout" | "style" | "props" | "bind",
+        G extends "layout" | "style" | "props" | "bind" | "config",
         K extends string,
       >(
         nodeId: string,
@@ -309,10 +307,8 @@ export const useDocumentStore = create<DocumentStore>()(
         try {
           let parsed = JSON.parse(get().jsonString) as DocumentSchema;
 
-          // Destructively apply autoDeconstruct synchronously
-          if (parsed.meta?.richTextPreferences?.autoDeconstruct) {
-            parsed = applyAutoDeconstruct(parsed);
-          }
+          // Destructively apply autoDeconstruct synchronously for any nodes configured for it
+          parsed = applyAutoDeconstruct(parsed);
 
           const newJsonString = JSON.stringify(parsed, null, 2);
 
@@ -417,27 +413,22 @@ export const useDocumentStore = create<DocumentStore>()(
       deconstructAllRichText: () => {
         const { parsedDocument, setJsonString } = get();
         if (!parsedDocument) return;
-        const prefs = parsedDocument.meta.richTextPreferences;
 
         // Create deep copy
         const newDoc: DocumentSchema = structuredClone(parsedDocument);
 
-        newDoc.document.body = autoDeconstructRichTextAst(
-          newDoc.document.body,
-          prefs
-        );
+        newDoc.document.body = autoDeconstructRichTextAst(newDoc.document.body);
 
         // Also process headers and footers
-        Object.keys(newDoc.document.headers).forEach((id) => {
+        Object.keys(newDoc.document.headers || {}).forEach((id) => {
           newDoc.document.headers[id].root = autoDeconstructRichTextAst(
-            newDoc.document.headers[id].root,
-            prefs
+            newDoc.document.headers[id].root
           );
         });
-        Object.keys(newDoc.document.footers).forEach((id) => {
+
+        Object.keys(newDoc.document.footers || {}).forEach((id) => {
           newDoc.document.footers[id].root = autoDeconstructRichTextAst(
-            newDoc.document.footers[id].root,
-            prefs
+            newDoc.document.footers[id].root
           );
         });
 

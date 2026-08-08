@@ -139,6 +139,7 @@ To ensure code quality and schema validity:
 
 - **Rule**: All modifications to the document schema (AST) must be performed using the pure functions found in `packages/core/src/astManipulators.ts` (e.g., `insertNodeIntoAst`, `replaceNodeInAst`, `deleteNodeFromAst`, `moveNodeInAst`).
 - **Rule**: These functions must always return a deep clone (via `structuredClone`) of the document to ensure Zustand reactivity triggers properly. Direct mutation of the AST is strictly forbidden.
+- **Rule**: Be aware of Content Locking (`config.lockContent`). If a node has `lockContent: true`, do not attempt to programmatically alter its textual data (e.g., `props.literal`, `props.htmlLiteral`, `props.srcLiteral`, or `bind.path`), as the `contentLockGuardrail` will throw an error and reject the state change. You may still safely modify its `style` or `layout`.
 
 ### 2. Node Behaviors & Pagination Engine
 
@@ -162,3 +163,8 @@ To ensure code quality and schema validity:
 - **Trunk-Based Development**: This repository follows a strict Trunk-Based approach. You must NEVER push code directly to the `main` branch or create a `dev` branch. All work happens in feature branches that are merged into `main` via Pull Requests.
 - **Changesets**: The repository uses [Changesets](https://github.com/changesets/changesets) for package versioning. When you make a code change that impacts published packages (like `@papercast/core`), you must run `pnpm changeset` and commit the generated `.changeset` markdown file as part of your Pull Request.
 - **Automated Publishing**: Do NOT attempt to run `pnpm publish` manually or write scripts for publishing. Once a PR is merged, the automated `.github/workflows/release.yml` will create a "Version Packages" PR, which publishes to NPM automatically when merged.
+
+### Strict Typing & Zero Tolerance for Errors
+
+- **Proper Types Used**: Never escape TypeScript type checks by casting to `any` or by casting to a parent/looser type when replacing properties (e.g. `delete (node as any).path`). If a type check fails, rewrite the logic to use proper destructing or type-narrowing to keep the AST 100% type-safe.
+- **Zero Tolerance Policy**: No type errors or warnings should ever be committed. Always run `pnpm run typecheck` which runs `tsc --noEmit` across all workspaces to strictly verify all types.

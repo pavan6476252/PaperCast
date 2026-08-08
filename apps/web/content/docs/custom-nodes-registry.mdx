@@ -1,0 +1,70 @@
+# Custom Nodes Registry
+
+One of the most powerful features of PaperCast is its Headless Architecture, which allows you to define completely custom widgets and nodes that integrate seamlessly into the engine. However, when working in a strictly typed TypeScript environment, adding custom nodes to a pre-compiled package like `@papercast/core` can cause type errors (e.g., `TS2339`) because the core library doesn't know about your custom node shapes.
+
+To solve this, PaperCast uses **TypeScript Module Augmentation** via the `CustomNodesRegistry` interface.
+
+## The Problem
+
+The core engine uses a discriminated union called `AnyNode` for all AST manipulations:
+
+```typescript
+// @papercast/core/src/schema.ts
+export type AnyNode =
+  BuiltInNode | CustomNodesRegistry[keyof CustomNodesRegistry];
+
+export interface CustomNodesRegistry {}
+```
+
+By default, `CustomNodesRegistry` is empty. If you try to pass a `MyChartNode` into a core function like `insertNodeIntoAst()`, TypeScript will throw an error because `MyChartNode` isn't a `BuiltInNode`.
+
+## The Solution: Module Augmentation
+
+You can inject your custom node types directly into `@papercast/core`'s type system by augmenting the module in your host application.
+
+### 1. Define Your Custom Node
+
+First, define the strict type for your custom node. It must extend `BaseNode` and specify a unique `type` literal.
+
+```typescript
+// apps/web/src/types/customNodes.ts
+import { BaseNode } from "@papercast/core";
+
+export interface ChartNode extends BaseNode<"chart"> {
+  props: {
+    datasetId: string;
+    chartType: "bar" | "line" | "pie";
+    showLegend: boolean;
+  };
+}
+```
+
+### 2. Augment the Registry
+
+Create a `.d.ts` declaration file in your project (or add this to your existing types file) to augment the `@papercast/core` module.
+
+```typescript
+// apps/web/src/types/papercast.d.ts
+import { ChartNode } from "./customNodes";
+
+declare module "@papercast/core" {
+  export interface CustomNodesRegistry {
+    chart: ChartNode;
+  }
+}
+```
+
+### 3. Benefit from 100% Type Safety
+
+Once augmented, the `AnyNode` union automatically expands to include `ChartNode`.
+
+This means:
+
+- `node.type === "chart"` will correctly narrow the type to `ChartNode`.
+- Core utilities like `findNodeGlobal` and `insertNodeIntoAst` will accept and return `ChartNode` without any `as any` casting.
+- If you use the Model Context Protocol (MCP) server, it inherits these exact types, meaning LLM agents will have perfect type context for your custom properties.
+
+## Zero Tolerance for `any`
+
+> [!WARNING]
+> **Strict Typing Rule**: Never use `(node as any).props` to bypass type checks for custom nodes. Always use Module Augmentation. This guarantees that your AST mutations are safe and structurally sound.

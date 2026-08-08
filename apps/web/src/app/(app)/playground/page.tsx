@@ -61,8 +61,19 @@ const TemplateGalleryDialog = dynamic(
   { ssr: false }
 );
 
+import { NodeRegistry } from "@papercast/react";
+import { TextPropertyEditor } from "../../../components/editor/TextPropertyEditor";
+
 // Register default PaperCast widgets on client load
 registerDefaultWidgets();
+
+const defaultTextNode = NodeRegistry.get("text");
+if (defaultTextNode) {
+  NodeRegistry.register({
+    ...defaultTextNode,
+    renderPropertyEditor: TextPropertyEditor,
+  });
+}
 
 export function PlaygroundContent() {
   const { showToast } = useToast();

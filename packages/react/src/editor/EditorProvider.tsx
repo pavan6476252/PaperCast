@@ -10,7 +10,7 @@ export interface EditorState {
 export interface EditorActions {
   setSelectedNodeId: (id: string | null) => void;
   updateNodeProperty: <
-    G extends "layout" | "style" | "props" | "bind",
+    G extends "layout" | "style" | "props" | "bind" | "config",
     K extends string,
   >(
     id: string,

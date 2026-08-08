@@ -20,7 +20,9 @@ export async function getLayoutElement(nodeId: string) {
   const result = findNodeGlobal(state.schema, nodeId);
   if (!result) throw new Error(`Node ${nodeId} not found in active schema.`);
   return {
-    content: [{ type: "text", text: JSON.stringify(result.node, null, 2) }],
+    content: [
+      { type: "text" as const, text: JSON.stringify(result.node, null, 2) },
+    ],
   };
 }
 
@@ -40,7 +42,7 @@ export async function getAvailableWidgets() {
   return {
     content: [
       {
-        type: "text",
+        type: "text" as const,
         text: JSON.stringify(WIDGET_DOCUMENTATION, null, 2),
       },
     ],

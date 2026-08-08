@@ -86,7 +86,7 @@ function findInNode(
 export function updateJsonNodeProperty(
   jsonString: string,
   nodePointer: string,
-  propertyGroup: "layout" | "style" | "props" | "bind",
+  propertyGroup: "layout" | "style" | "props" | "bind" | "config",
   propertyKey: string,
   newValue: any
 ): string {

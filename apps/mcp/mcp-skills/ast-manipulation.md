@@ -29,4 +29,12 @@ When adding a basic Text or Table, ALWAYS use the provided MCP tools (`add_text_
 **CRITICAL RULE:** The PaperCast engine does NOT magically scale down elements to fit onto a single page. If an atomic node (like an `image`, a `spacer`, or a massive block of basic `text`) is taller than the physical `pageHeight`, the Pagination Engine will be forced to push it onto the page without splitting it, causing it to violently overflow and clip at the bottom of the PDF.
 
 - Always apply sensible `height` constraints or `fit: "contain"` to images.
-- If you have a massive block of HTML text that must split across pages, you MUST use the `richText` widget instead of standard `text`, and ensure `autoDeconstruct` is enabled.
+- If you have a massive block of HTML text that must split across pages, you MUST use the `richText` widget instead of standard `text`, and ensure it has `"config": { "autoDeconstruct": true }` set on its node level to allow pagination splitting.
+
+## 5. Strict Type Safety (Zero Tolerance)
+
+**CRITICAL RULE:** When writing TypeScript for AST modifications or writing custom node registries, you must never escape TypeScript type checks by casting to `any` or by casting to a parent type.
+
+- Use TypeScript Module Augmentation for custom widgets (via `CustomNodesRegistry`).
+- If you need to access properties conditionally, use properly discriminated unions (e.g., `node.type === "richText"`).
+- Avoid `.props` access on `AnyNode` without first checking the `node.type`.
