@@ -3,7 +3,7 @@ title: "Dogfooding PaperCast: Building a 12-Page Document with AI"
 description: "How we used Model Context Protocol (MCP) and our own strict JSON schema to autonomously generate a complex 12-page document using an AI agent."
 date: "2026-08-16"
 author: "Pavan Kumar"
-coverImage: "/blog/dogfooding-mcp.png"
+coverImage: "/blog/dogfooding-mcp-banner.svg"
 ---
 
 At PaperCast, we believe in **dogfooding** our own tools. When we wanted to test the limits of our framework-agnostic Pagination Engine and strict JSON schema, we decided to let an AI agent build a complex 12-page document entirely on its own.
@@ -48,4 +48,8 @@ If we had allowed the AI to generate raw React code or raw HTML, it would have b
 
 By constraining the AI to our strict `DocumentSchema` (and enforcing updates via our AST manipulation tools), every element remained perfectly measurable by the `OffscreenMeasurer`.
 
-Next up: we're planning a feature to allow third parties to embed the PaperCast playground via an iframe on their own sites, enabling seamless cross-origin schema injection! Stay tuned.
+## Try the Real-Time Embedding Example
+
+We recently launched a powerful new feature that allows third parties to embed the PaperCast playground via an iframe on their own sites, enabling seamless cross-origin schema injection via the `window.postMessage` API.
+
+Want to see it in action? Check out our **[Real-Time Embedding Example](/examples/embed.html)** where you can modify a JSON schema in real-time and watch it instantly update the embedded playground!

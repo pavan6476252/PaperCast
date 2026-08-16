@@ -32,11 +32,11 @@ export default function EngineeringIndexPage() {
             className="group block overflow-hidden rounded-2xl border border-border bg-surface/50 transition-all hover:shadow-lg hover:border-accent/50 focus:outline-none focus:ring-2 focus:ring-accent"
           >
             {post.coverImage && (
-              <div className="aspect-video w-full overflow-hidden border-b border-border bg-black/5">
+              <div className="aspect-video w-full overflow-hidden border-b border-border bg-black/5 dark:bg-white/5 flex items-center justify-center p-4">
                 <img
                   src={post.coverImage}
                   alt={post.title}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
             )}

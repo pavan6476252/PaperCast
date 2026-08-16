@@ -290,11 +290,11 @@ export default async function EngineeringPostPage({
         </div>
 
         {post.coverImage && (
-          <div className="w-full aspect-video md:aspect-[2/1] overflow-hidden rounded-2xl border border-border shadow-md mb-12">
+          <div className="w-full overflow-hidden rounded-2xl border border-border shadow-md mb-12 bg-black/5 dark:bg-white/5">
             <img
               src={post.coverImage}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full h-auto object-contain"
             />
           </div>
         )}
