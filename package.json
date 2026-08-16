@@ -50,5 +50,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/pavan6476252/papercast"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0"
   }
 }

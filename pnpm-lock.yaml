@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      ajv:
+        specifier: ^8.20.0
+        version: 8.20.0
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^0.7.0
@@ -65,6 +69,9 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
+      lucide:
+        specifier: ^1.31.0
+        version: 1.31.0
       ws:
         specifier: ^8.21.1
         version: 8.21.1
@@ -330,7 +337,13 @@ importers:
       '@papercast/core':
         specifier: workspace:*
         version: link:../core
+      jexl:
+        specifier: ^2.3.0
+        version: 2.3.0
     devDependencies:
+      '@types/jexl':
+        specifier: ^2.3.4
+        version: 2.3.4
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -2032,6 +2045,9 @@ packages:
   '@types/hast@3.0.5':
     resolution: {integrity: sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g==}
 
+  '@types/jexl@2.3.4':
+    resolution: {integrity: sha512-3BU5DbkPvwqOeW8kZcB9Bvn5bspTFY3Lo0yBS6ephuI8kVSpCjzbGtRPbWnvdbr67tMvXDxiJRcL3fwbz/6+PQ==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -3667,6 +3683,9 @@ packages:
     resolution: {integrity: sha512-H0dkQoCa3b2VEeKQBOxFph+JAbcrQdE7KC0UkqwpLmv2EC4P41QXP+rqo9wYodACiG5/WM5s9oDApTU8utwj9g==}
     engines: {node: '>= 0.4'}
 
+  jexl@2.3.0:
+    resolution: {integrity: sha512-ecqln4kTWNkMwbFvTukOMDq1jy1GcPzvshhMp/s4pxU86xdLDq7HbDRa87DfMfbSAOS8V6EwvCdfs0S+w/iycA==}
+
   jiti@2.7.0:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
@@ -3957,6 +3976,9 @@ packages:
     resolution: {integrity: sha512-rJicGl/3Fly/E0rOH1YmPZ6e49JCnKknh1ox1vpHnkfjujAkKA6sqUZvH3MTAaXXjgexyUwgNwTJzTtYuAFYJw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  lucide@1.31.0:
+    resolution: {integrity: sha512-iPJC7py8o990ZSmvFZlS+4+bNasP+ANDkD0IeDOGgQZjTm3p85F2Ldut7leM1yhYavr1pmoPfigm9MDHyyCOrw==}
 
   madge@8.0.0:
     resolution: {integrity: sha512-9sSsi3TBPhmkTCIpVQF0SPiChj1L7Rq9kU2KDG1o6v2XH9cCw086MopjVCD+vuoL5v8S77DTbVopTO8OUiQpIw==}
@@ -6968,6 +6990,8 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/jexl@2.3.4': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/json-source-map@0.6.0': {}
@@ -8891,6 +8915,10 @@ snapshots:
       has-symbols: 1.1.0
       set-function-name: 2.0.2
 
+  jexl@2.3.0:
+    dependencies:
+      '@babel/runtime': 7.29.7
+
   jiti@2.7.0: {}
 
   jose@6.2.4: {}
@@ -9108,6 +9136,8 @@ snapshots:
   lucide-react@1.27.0(react@19.2.4):
     dependencies:
       react: 19.2.4
+
+  lucide@1.31.0: {}
 
   madge@8.0.0(typescript@5.9.3):
     dependencies:

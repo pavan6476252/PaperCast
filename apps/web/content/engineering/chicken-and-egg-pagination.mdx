@@ -1,0 +1,46 @@
+---
+title: "The Chicken-and-Egg Problem of Pagination"
+description: "Why you can't conditionally show headers based on the content of the page, and how two-pass pagination solves the total page count mystery."
+date: "2026-08-16"
+author: "Pavan Kumar"
+coverImage: "/blog/chicken-egg-banner.svg"
+---
+
+A common feature request for document builders is to dynamically hide or show headers based on the content of the current page. For example, you might want to hide a specific header if a large table spills over onto the page.
+
+While this sounds like a straightforward logical check, it introduces a classic chicken-and-egg problem in rendering engines.
+
+## Order of operations
+
+To understand why this is impossible in a single pass, we have to look at how a pagination engine calculates page breaks.
+
+1. The engine needs to know how many content blocks (nodes) can fit on the current page.
+2. To figure out how many nodes fit, it must calculate the exact available vertical space.
+3. To calculate the available space, it must subtract the physical heights of the resolved header and footer from the total page height.
+
+Because of this sequence, the engine must resolve and measure the header and footer _before_ it even begins looking at the content blocks. You cannot condition a header on the page content because the page content hasn't been determined yet. If you change the header based on the content, the available space changes, which might push the content to the next page, invalidating the condition entirely.
+
+## Two-pass pagination
+
+Because we cannot inspect the content of a page during header resolution, we rely on structural metadata instead. PaperCast allows you to condition headers and footers on the `pageNumber` and `totalPages` variables.
+
+But this introduces another problem: how do you know the total number of pages before you finish paginating the document?
+
+We solve this using two-pass pagination.
+
+In the first pass, the engine paginates the entire document assuming a generic set of headers and footers to determine the exact `totalPages` count. Once the total page count is known, it runs a second pass. During this second pass, it accurately resolves conditions like `"last"` (or custom expressions like `pageNumber === totalPages`) and injects the correct headers and footers into the final AST.
+
+## Custom conditions
+
+Instead of relying on rigid string conditions, PaperCast now supports sandboxed JavaScript expressions for page regions.
+
+You can define a custom expression to omit a footer from the first and last pages:
+
+```json
+"condition": {
+  "type": "custom",
+  "expression": "pageNumber !== 1 && pageNumber !== totalPages"
+}
+```
+
+By relying on structural variables instead of content inspection, the engine maintains deterministic measurements and guarantees accurate PDF exports without infinite layout loops.

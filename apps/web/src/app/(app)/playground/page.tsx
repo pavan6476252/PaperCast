@@ -124,6 +124,56 @@ export function PlaygroundContent() {
     initWorkspace();
   }, []);
 
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Validate origin securely
+      const urlParams = new URL(window.location.href).searchParams;
+      const allowedOrigin = urlParams.get("allowedOrigin");
+
+      if (event.origin !== window.location.origin) {
+        if (
+          !allowedOrigin ||
+          (allowedOrigin !== "*" && event.origin !== allowedOrigin)
+        ) {
+          console.warn(
+            `Blocked message from unauthorized origin: ${event.origin}. Pass ?allowedOrigin=${event.origin} to allow.`
+          );
+          return;
+        }
+      }
+
+      const data = event.data;
+      if (!data || typeof data !== "object") return;
+
+      if (data.type === "LOAD_SCHEMA") {
+        const payload = data.payload;
+        if (payload) {
+          const schemaString =
+            typeof payload === "string"
+              ? payload
+              : JSON.stringify(payload, null, 2);
+
+          if (schemaString) {
+            useDocumentStore.getState().setJsonString(schemaString);
+            if (
+              event.source &&
+              typeof (event.source as Window).postMessage === "function"
+            ) {
+              (event.source as Window).postMessage(
+                { type: "SCHEMA_LOADED", status: "success" },
+                event.origin
+              );
+            }
+            showToast("Schema loaded via embedding.");
+          }
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [showToast]);
+
   // Map old showEditor to activeLeftPanel for the shortcut hook
   const setShowEditor = useCallback((action: React.SetStateAction<boolean>) => {
     setActiveLeftPanel((prev) => {

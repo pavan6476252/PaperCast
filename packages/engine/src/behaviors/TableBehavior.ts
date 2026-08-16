@@ -2,6 +2,13 @@ import { TableNode } from "@papercast/core";
 import { MeasureContext, SplitContext } from "../registry";
 import { resolvePath } from "../resolver";
 
+function parseSize(val: number | string | undefined): number {
+  if (val === undefined) return 0;
+  if (typeof val === "number") return val;
+  const parsed = parseFloat(val);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
 export const TableBehavior = {
   measure: (node: TableNode, ctx: MeasureContext): number => {
     if (!ctx.measurements) return 0;
@@ -19,10 +26,10 @@ export const TableBehavior = {
       headerHeight = 0;
     }
 
-    const marginTop = node.layout?.marginTop || 0;
-    const marginBottom = node.layout?.marginBottom || 0;
-    const paddingTop = node.layout?.paddingTop || 0;
-    const paddingBottom = node.layout?.paddingBottom || 0;
+    const marginTop = parseSize(node.layout?.marginTop);
+    const marginBottom = parseSize(node.layout?.marginBottom);
+    const paddingTop = parseSize(node.layout?.paddingTop);
+    const paddingBottom = parseSize(node.layout?.paddingBottom);
 
     let rowSum = 0;
     const startIndex = node.props?.splitIndex || 0;
@@ -87,8 +94,8 @@ export const TableBehavior = {
       headerHeight = 0;
     }
 
-    const marginTop = node.layout?.marginTop || 0;
-    const marginBottom = node.layout?.marginBottom || 0;
+    const marginTop = parseSize(node.layout?.marginTop);
+    const marginBottom = parseSize(node.layout?.marginBottom);
     const actualRemaining = remainingHeight - marginTop - marginBottom - 1;
 
     let totalRows = 0;

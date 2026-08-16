@@ -7,6 +7,10 @@ If you see an error like `Schema validation failed`, this means your payload fai
 - **Cause 1:** Missing `layout: {}`. Every node MUST have a layout object.
 - **Cause 2:** Providing `children` to a node that doesn't support it (e.g. `text`).
 - **Cause 3:** Using wrong properties (e.g. using `content` instead of `literal` for `TextNode`).
+- **Cause 4:** Stashing layout properties inside the `style` object. Margins, paddings, width, and height MUST reside in `layout`, while typography and colors belong in `style`.
+- **Cause 5:** Using hallucinated properties like `widthPercent`. Always use valid BoxModel properties like `width: "100%"`.
+
+> **Note**: If you load or create a new schema via the MCP Server and the Playground silently falls back to the default `p1` schema (or the node disappears), your payload was rejected. Review the JSON structure rigorously against these rules.
 
 ## 2. Empty Widgets on Canvas
 

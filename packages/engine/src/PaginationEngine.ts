@@ -1,4 +1,5 @@
 import { DocumentSchema, AnyNode } from "@papercast/core";
+import jexl from "jexl";
 import { resolvePageRegion } from "./resolver";
 import { SchemaRegistry } from "./registry";
 import { Measurements } from "./types";
@@ -16,6 +17,13 @@ export interface PageData {
   bodyNodes: AnyNode[];
 }
 
+function parseSize(val: number | string | undefined): number {
+  if (val === undefined) return 0;
+  if (typeof val === "number") return val;
+  const parsed = parseFloat(val);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
 function getNodeHeight(node: AnyNode, measurements: Measurements): number {
   const def = SchemaRegistry.get(node.type);
   if (def?.measure) {
@@ -28,8 +36,8 @@ function getNodeHeight(node: AnyNode, measurements: Measurements): number {
   }
 
   const layout = node.layout || {};
-  const marginTop = layout.marginTop || 0;
-  const marginBottom = layout.marginBottom || 0;
+  const marginTop = parseSize(layout.marginTop);
+  const marginBottom = parseSize(layout.marginBottom);
   const margins = marginTop + marginBottom;
 
   const nodeId = node.id || "unnamed";
@@ -64,11 +72,11 @@ export function paginateDocument(
   let currentNodes: AnyNode[] = [];
 
   const bodyLayout = doc.document.body.layout || {};
-  const paddingTop = bodyLayout.paddingTop || 0;
-  const paddingBottom = bodyLayout.paddingBottom || 0;
-  const borderTop = bodyLayout.borderTopWidth || 0;
-  const borderBottom = bodyLayout.borderBottomWidth || 0;
-  const rowGap = bodyLayout.rowGap || 0;
+  const paddingTop = parseSize(bodyLayout.paddingTop);
+  const paddingBottom = parseSize(bodyLayout.paddingBottom);
+  const borderTop = parseSize(bodyLayout.borderTopWidth);
+  const borderBottom = parseSize(bodyLayout.borderBottomWidth);
+  const rowGap = parseSize(bodyLayout.rowGap);
 
   let headerKey = resolvePageRegion(
     "header",
@@ -108,6 +116,18 @@ export function paginateDocument(
   while (blocks.length > 0) {
     const block = blocks.shift()!;
     // const blockId = block.id || "unnamed";
+
+    if (block.visibleIf) {
+      try {
+        const isVisible = jexl.evalSync(block.visibleIf, doc.data);
+        if (!isVisible) continue;
+      } catch (e) {
+        console.warn(
+          `Failed to evaluate visibleIf condition for block ${block.id}:`,
+          e
+        );
+      }
+    }
 
     const forcePageBreak =
       block.layout?.pageBreakBefore && currentNodes.length > 0;

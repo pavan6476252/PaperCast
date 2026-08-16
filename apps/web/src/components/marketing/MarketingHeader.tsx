@@ -13,6 +13,7 @@ const navLinks = [
   { label: "Widgets", href: "/widgets" },
   { label: "Snippets", href: "/snippets" },
   { label: "Documentation", href: "/docs" },
+  { label: "Engineering", href: "/engineering" },
   { label: "Changelog", href: "/changelog" },
   { label: "MCP Server", href: "/docs/mcp-introduction" },
 ];

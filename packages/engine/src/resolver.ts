@@ -1,6 +1,8 @@
 import { DocumentSchema, PageRegion, RegionCondition } from "@papercast/core";
 import { DotPaths, DefaultTData } from "./types";
 
+import jexl from "jexl";
+
 export function resolvePath<TData = DefaultTData>(
   obj: TData,
   path: DotPaths<TData> | (string & {})
@@ -27,14 +29,14 @@ const conditionStrategies: Record<string, ConditionEvaluator> = {
   even: (pageNumber) => pageNumber % 2 === 0,
   odd: (pageNumber) => pageNumber % 2 !== 0,
   all: () => true,
-  custom: (_pageNumber, _totalPages, expression) => {
-    // In the future, we could safely evaluate custom expressions here
-    // For now, custom evaluates to false to prevent runtime eval exploits
-    console.warn(
-      "Custom RegionConditions are not yet implemented:",
-      expression
-    );
-    return false;
+  custom: (pageNumber, totalPages, expression) => {
+    if (!expression) return false;
+    try {
+      return Boolean(jexl.evalSync(expression, { pageNumber, totalPages }));
+    } catch (e) {
+      console.warn("Error evaluating custom condition:", expression, e);
+      return false;
+    }
   },
 };
 

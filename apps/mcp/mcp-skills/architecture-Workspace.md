@@ -16,6 +16,7 @@ When remote-controlling the website, you can use the following tools to manage t
 4. **`workspace_create_schema`**: Create a brand new schema in the user's browser and immediately switch to it.
    - **Duplicating**: If you provide a `name` without providing a `schema` payload, it will duplicate the current editor contents into the new schema.
    - **Fresh Start**: If you provide both `name` and a `schema` payload, it will initialize the new schema with your data.
+   > 🚨 **CRITICAL**: The `schema` parameter MUST be a valid JSON **Object**, NOT a stringified JSON string! If you pass a stringified JSON payload (e.g. `"{\"version\":1}"`), it will be double-stringified during synchronization, severely corrupting the editor state. Always construct and pass an unescaped object.
 5. **`workspace_delete_schema`**: Delete a schema from the user's workspace by `id`.
 
 ## Usage Workflow

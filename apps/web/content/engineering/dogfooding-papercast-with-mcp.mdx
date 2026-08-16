@@ -1,0 +1,55 @@
+---
+title: "Dogfooding PaperCast: Building a 12-Page Document with AI"
+description: "How we used Model Context Protocol (MCP) and our own strict JSON schema to autonomously generate a complex 12-page document using an AI agent."
+date: "2026-08-16"
+author: "Pavan Kumar"
+coverImage: "/blog/dogfooding-mcp-banner.svg"
+---
+
+At PaperCast, we believe in **dogfooding** our own tools. When we wanted to test the limits of our framework-agnostic Pagination Engine and strict JSON schema, we decided to let an AI agent build a complex 12-page document entirely on its own.
+
+By exposing our builder through the Model Context Protocol (MCP), we gave the AI agent safe, surgical tools to manipulate the AST without ever touching the raw JSON file directly.
+
+## The Process
+
+Instead of writing a massive JSON payload by hand, we provided the AI agent with a series of conversational prompts. The strict typing of our schema meant the AI couldn't hallucinate invalid properties.
+
+Here are some examples of the prompts we used:
+
+> **Prompt 1:** "Add a cover page with a large title 'Annual Report 2026', a subtitle, and a full-width hero image."
+
+> **Prompt 2:** "Create a complex Table of Contents with dotted leaders connecting the chapter titles to the page numbers. Use a `Row` with `justifyContent: 'space-between'`."
+
+> **Prompt 10:** "Add a dynamic Table footer that calculates the sum of the 'amount' column, and merge the cells to display 'Grand Total'."
+
+> **Prompt 12:** "Create a new page detailing a fun fact about this capability: these pages are built entirely with the MCP tool and playground."
+
+Because the AI agent had access to tools like `insert_layout_element`, `add_text_widget`, and `search_icons`, it constructed the document iteratively, measuring and paginating in real-time.
+
+## The Result
+
+The result is a beautifully formatted, auto-paginated 12-page document. Our Pagination Engine handled all the complex page breaks, header injections, and footer calculations automatically.
+
+Below is a lightweight preview of the document, powered by our `WidgetCard` component (which uses `shiki` for syntax highlighting, rather than a heavy Monaco editor).
+
+<details>
+  <summary>View the Document Preview & Schema</summary>
+
+  <WidgetCard
+    title="Generated 12-Page Document"
+    description="The final result of our agentic building session."
+    schemaName="dogfooding_example"
+  />
+</details>
+
+## Why Strict Schemas Matter
+
+If we had allowed the AI to generate raw React code or raw HTML, it would have been impossible to guarantee that the document could be paginated accurately for PDF export.
+
+By constraining the AI to our strict `DocumentSchema` (and enforcing updates via our AST manipulation tools), every element remained perfectly measurable by the `OffscreenMeasurer`.
+
+## Try the Real-Time Embedding Example
+
+We recently launched a powerful new feature that allows third parties to embed the PaperCast playground via an iframe on their own sites, enabling seamless cross-origin schema injection via the `window.postMessage` API.
+
+Want to see it in action? Check out our **[Real-Time Embedding Example](/examples/embed.html)** where you can modify a JSON schema in real-time and watch it instantly update the embedded playground!

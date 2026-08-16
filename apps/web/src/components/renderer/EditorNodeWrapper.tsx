@@ -142,10 +142,26 @@ export const EditorNodeWrapper: React.FC<{
     );
 
     if (widgetType) {
-      const newNode = NodeRegistry.createDefaultNode(
-        widgetType,
-        `node-${generateId()}`
-      );
+      let newNode: AnyNode;
+      if (widgetType === "pageBreak") {
+        newNode = {
+          id: `page-${generateId()}`,
+          type: "column",
+          layout: {
+            pageBreakBefore: true,
+            height: "100%",
+            flexGrow: 1,
+            padding: 64,
+            direction: "column",
+          },
+          children: [],
+        };
+      } else {
+        newNode = NodeRegistry.createDefaultNode(
+          widgetType,
+          `node-${generateId()}`
+        );
+      }
 
       if (currentDropPosition === "inside") {
         insertNode(node.id, undefined, newNode);

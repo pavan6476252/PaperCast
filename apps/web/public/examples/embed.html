@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaperCast Embedding Example - Realtime</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      box-sizing: border-box;
+      background: #f8fafc;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 16px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      z-index: 10;
+    }
+    .header h1 {
+      margin: 0 0 4px 0;
+      font-size: 20px;
+      color: #0f172a;
+    }
+    .header p {
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+    }
+    .sidebar-header {
+      padding: 12px 16px;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #error-msg {
+      color: #ef4444;
+      font-weight: normal;
+      font-size: 12px;
+    }
+    textarea {
+      flex: 1;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      resize: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      outline: none;
+      background: #fafafa;
+      color: #334155;
+      box-sizing: border-box;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      background: #e2e8f0;
+      padding: 20px;
+    }
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>Third-Party App Integration</h1>
+      <p>This demonstrates real-time schema injection into the PaperCast playground via window.postMessage.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>Dynamic JSON Source</span>
+        <span id="error-msg"></span>
+      </div>
+      <textarea id="jsonEditor" spellcheck="false"></textarea>
+    </div>
+    
+    <div class="main-content">
+      <!-- We pass ?allowedOrigin=* for this example to work from anywhere (like localhost) -->
+      <iframe id="papercast" src="/playground?allowedOrigin=*"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const iframe = document.getElementById('papercast');
+    const editor = document.getElementById('jsonEditor');
+    const errorMsg = document.getElementById('error-msg');
+
+    // Set initial value to loading state
+    editor.value = "// Loading example schema...";
+
+    let debounceTimeout;
+
+    // Fetch the sample schema from the public folder
+    fetch('/blog/dogfooding_example.json')
+      .then(res => res.json())
+      .then(data => {
+        editor.value = JSON.stringify(data, null, 2);
+        // Wait for the iframe to load before pushing the initial state
+        if (iframe.contentWindow) {
+           updatePlayground(editor.value);
+        }
+      })
+      .catch(err => {
+        errorMsg.textContent = 'Failed to load example schema';
+        editor.value = "{\n  // Failed to load schema\n}";
+      });
+
+    // Push the schema to the iframe
+    function updatePlayground(jsonString) {
+      try {
+        const payload = JSON.parse(jsonString);
+        errorMsg.textContent = '';
+        
+        // Ensure iframe is loaded before posting message
+        const targetWindow = iframe.contentWindow;
+        if (targetWindow) {
+          targetWindow.postMessage({
+            type: 'LOAD_SCHEMA',
+            payload: payload
+          }, '*'); // In production, replace '*' with the actual playground origin
+        }
+      } catch (e) {
+        errorMsg.textContent = 'Invalid JSON';
+      }
+    }
+
+    // Listen to changes in the textarea
+    editor.addEventListener('input', (e) => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        updatePlayground(e.target.value);
+      }, 300); // 300ms debounce
+    });
+
+    iframe.addEventListener('load', () => {
+      if (editor.value && !editor.value.includes('Loading')) {
+         updatePlayground(editor.value);
+      }
+    });
+
+    // Optional: listen for acknowledgements
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'SCHEMA_LOADED') {
+        // You could show a subtle saved indicator here
+        console.log("Schema accepted by playground");
+      }
+    });
+  </script>
+</body>
+</html>

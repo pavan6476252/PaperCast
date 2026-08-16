@@ -94,3 +94,32 @@ Images in PaperCast will attempt to respect their container's bounds. It is high
   }
 }
 ```
+
+## Icon Node
+
+The `Icon` widget allows you to seamlessly embed vector icons into your document using the `lucide-react` library.
+
+### Icon Names
+
+- **Icon Name**: The exact PascalCase export name of the icon from the Lucide library (e.g., `ArrowRight`, `Search`, `FileText`).
+- **MCP Tool Integration**: Because there are over 1,400 icons in the library, AI agents should use the `search_icons` MCP tool to query semantic terms and find the exact PascalCase `iconName` to use in the schema.
+
+### Styling
+
+Icons inherit standard CSS properties just like text. You can use the `style` object to control their size and color:
+
+- `fontSizePx`: Controls the square size of the SVG.
+- `color`: Controls the stroke color of the icon.
+
+```json
+{
+  "type": "icon",
+  "props": {
+    "iconName": "ArrowRight"
+  },
+  "style": {
+    "fontSizePx": 24,
+    "color": "#4F46E5"
+  }
+}
+```

@@ -42,8 +42,11 @@ export type DotPaths<T, D extends number = 5> = [D] extends [never]
 // By default it is loosely typed as Record<string, unknown> to support dynamic builders
 export type DefaultTData = Record<string, unknown>;
 
+import { Theme } from "@papercast/core";
+
 export interface PaperCastContext<TData = DefaultTData> {
   data: TData;
+  theme?: Theme;
 }
 
 /**
