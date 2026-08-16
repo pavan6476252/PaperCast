@@ -61,6 +61,11 @@ export const DOC_CATEGORIES: DocCategory[] = [
         description: "Injecting dynamic JSON data into your templates.",
       },
       {
+        id: "embedding-playground",
+        title: "Embedding the Playground",
+        description: "Embedding the visual editor via iframes and postMessage.",
+      },
+      {
         id: "headers-and-footers-usage",
         title: "Headers & Footers",
         description: "Setting up recurring and cover-page headers.",

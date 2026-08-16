@@ -2356,8 +2356,8 @@
               "classNames": ["primaryText"],
               "id": "p8-headline",
               "layout": {
-                "marginBottom": 64,
-                "width": "80%"
+                "width": "80%",
+                "marginBottom": 20
               },
               "props": {
                 "literal": "<p>One  &lt; iframe&gt;.</p><p>That's the whole integration.</p>"
@@ -2377,7 +2377,7 @@
                     "marginBottom": 16
                   },
                   "props": {
-                    "literal": "your product"
+                    "literal": "<p><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://paper-cast-web.vercel.app/examples/embed.html\"><span style=\"color: rgb(0, 85, 255);\"><strong>Live Link</strong></span></a></p>"
                   },
                   "style": {
                     "color": "#64748B",
@@ -2389,31 +2389,75 @@
                 {
                   "children": [
                     {
-                      "id": "p8-g-img-icon",
+                      "type": "row",
+                      "id": "browser-header",
                       "layout": {
-                        "marginBottom": 16
+                        "alignItems": "center",
+                        "direction": "row",
+                        "height": 24,
+                        "marginBottom": 4,
+                        "width": "100%"
                       },
-                      "props": {
-                        "iconName": "image"
-                      },
-                      "style": {
-                        "color": "#94A3B8",
-                        "fontSizePx": 64
-                      },
-                      "type": "icon"
+                      "children": [
+                        {
+                          "type": "row",
+                          "id": "row-3gx2s28",
+                          "layout": {
+                            "backgroundColor": "#EF4444",
+                            "borderRadius": 4,
+                            "height": 8,
+                            "marginLeft": 8,
+                            "width": 8
+                          },
+                          "children": []
+                        },
+                        {
+                          "type": "row",
+                          "id": "row-xzbn6zo",
+                          "layout": {
+                            "backgroundColor": "#34D399",
+                            "borderRadius": 4,
+                            "height": 8,
+                            "marginLeft": 8,
+                            "width": 8
+                          },
+                          "children": []
+                        },
+                        {
+                          "type": "row",
+                          "id": "row-hhrq0b7",
+                          "layout": {
+                            "backgroundColor": "#475569",
+                            "borderRadius": 4,
+                            "flexGrow": 1,
+                            "height": 12,
+                            "marginLeft": 16,
+                            "marginRight": 16
+                          },
+                          "children": []
+                        }
+                      ]
                     },
                     {
-                      "id": "p8-g-img-label",
-                      "layout": {},
-                      "props": {
-                        "literal": "screenshot / gif: embedded editor"
+                      "type": "column",
+                      "id": "browser-iframe",
+                      "layout": {
+                        "alignItems": "center",
+                        "backgroundColor": "#FFFFFF",
+                        "borderRadius": 4,
+                        "flexGrow": 1,
+                        "justifyContent": "center"
                       },
-                      "style": {
-                        "color": "#64748B",
-                        "fontSizePx": 12,
-                        "fontStyle": "italic"
-                      },
-                      "type": "text"
+                      "children": [
+                        {
+                          "id": "node-tafs33op",
+                          "type": "image",
+                          "layout": {},
+                          "props": {
+                            "srcLiteral": "/examples/playground_integration.png"
+                          }
+                        }
+                      ]
                     }
                   ],
                   "id": "p8-g-inner",
@@ -2424,8 +2468,7 @@
                     "borderRadius": 4,
                     "borderStyle": "dashed",
                     "borderWidth": 1,
-                    "justifyContent": "center",
-                    "padding": 48
+                    "justifyContent": "center"
                   },
                   "type": "column"
                 }

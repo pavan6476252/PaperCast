@@ -1,0 +1,99 @@
+---
+title: "Embedding the Playground"
+description: "How to embed the PaperCast Playground into your own web applications using iframes and the postMessage API."
+---
+
+# Embedding the Playground
+
+PaperCast allows third parties to embed the Playground interface directly into their own web applications using an `<iframe>`. This is perfect for building custom document generators, CMS integrations, or providing a seamless template builder experience to your users.
+
+Through the secure `window.postMessage` API, you can programmatically inject dynamic schemas and data into the embedded playground.
+
+## Basic Setup
+
+To embed the playground, create an `<iframe>` pointing to the PaperCast playground URL. For security reasons, the playground requires you to explicitly allow your origin by passing the `?allowedOrigin=` query parameter.
+
+```html
+<iframe
+  id="papercast-iframe"
+  src="https://papercast.app/playground?allowedOrigin=https://your-website.com"
+  width="100%"
+  height="800px"
+  style="border: 1px solid #e2e8f0; border-radius: 8px;"
+>
+</iframe>
+```
+
+> **Warning**: If you omit the `?allowedOrigin=` parameter, or if the origin of your website does not match the parameter, the playground will **block** all incoming `postMessage` requests. For unrestricted access during development, you can use `?allowedOrigin=*`.
+
+## Injecting Schemas via postMessage
+
+Once the iframe has loaded, you can push a JSON schema into the playground.
+
+The payload must be an object with the following structure:
+
+```json
+{
+  "type": "LOAD_SCHEMA",
+  "payload": {
+    "type": "document",
+    "children": []
+    // ... rest of the document schema
+  }
+}
+```
+
+### Example Usage
+
+You can view a complete, interactive, real-time example of this in action by visiting the **[Live Example](/examples/embed.html)**.
+
+Here is a JavaScript snippet demonstrating how to send a schema to the embedded iframe:
+
+```javascript
+// 1. Get a reference to the iframe window
+const iframe = document.getElementById("papercast-iframe");
+const iframeWindow = iframe.contentWindow;
+
+// 2. Define your schema
+const mySchema = {
+  type: "document",
+  style: {
+    padding: "40px",
+  },
+  children: [
+    {
+      type: "text",
+      props: {
+        literal: "Hello from the host application!",
+      },
+    },
+  ],
+};
+
+// 3. Send the message
+// Ensure the targetOrigin matches where the iframe is hosted
+iframeWindow.postMessage(
+  {
+    type: "LOAD_SCHEMA",
+    payload: mySchema,
+  },
+  "https://papercast.app"
+);
+```
+
+### Listening for Acknowledgement
+
+When the playground successfully parses and loads your schema, it will dispatch an acknowledgement message back to the parent window.
+
+You can listen for this to confirm the schema was loaded:
+
+```javascript
+window.addEventListener("message", (event) => {
+  // Always verify the sender's origin
+  if (event.origin !== "https://papercast.app") return;
+
+  if (event.data && event.data.type === "SCHEMA_LOADED") {
+    console.log("Playground successfully loaded the schema!");
+  }
+});
+```
