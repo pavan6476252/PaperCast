@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { AnyNode } from "@papercast/core";
 import { getStyle } from "../utils/styleUtils";
 import React from "react";
+import { useNodeData } from "./useNodeData";
 
 export function useNodeStyle(
   node: AnyNode,
@@ -9,6 +10,8 @@ export function useNodeStyle(
     "data-selected"?: boolean;
   }
 ) {
+  const { theme } = useNodeData();
+
   return useMemo(() => {
     const layout = node.layout || {};
     const s: React.CSSProperties = {
@@ -21,7 +24,7 @@ export function useNodeStyle(
       width: layout.width,
       height: layout.height,
       minHeight: layout.minHeight,
-      ...getStyle(node),
+      ...getStyle(node, theme),
       ...(injectedProps?.style || {}),
     };
 
@@ -31,5 +34,5 @@ export function useNodeStyle(
       }
     });
     return s;
-  }, [node, injectedProps]);
+  }, [node, injectedProps, theme]);
 }

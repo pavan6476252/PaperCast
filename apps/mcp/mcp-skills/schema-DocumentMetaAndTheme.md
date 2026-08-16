@@ -7,6 +7,7 @@ The PaperCast engine allows controlling global page settings via `document.meta`
 `document.meta` controls the physical canvas size, print DPI, and base units.
 
 - `pageSize`: `"A4" | "A3" | "Letter" | { widthPx: number; heightPx: number }`
+  > **Note**: Custom page sizes must use the exact properties `widthPx` and `heightPx` (e.g., `{ "widthPx": 768, "heightPx": 960 }`). Do NOT use plain `width` or `height` keys, as they will fail validation.
 - `orientation`: `"portrait" | "landscape"`
 - `baseUnit`: `"px"`
 - `dpi`: `number` (typically 96)

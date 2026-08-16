@@ -16,6 +16,8 @@ import {
   CircleDot,
   ListChecks,
   Focus,
+  Smile,
+  FilePlus,
 } from "lucide-react";
 
 export const WIDGETS = [
@@ -32,6 +34,8 @@ export const WIDGETS = [
   { type: "checkbox", label: "Checkbox", icon: CheckSquare },
   { type: "radio", label: "Radio", icon: CircleDot },
   { type: "radioGroup", label: "Radio Group", icon: ListChecks },
+  { type: "icon", label: "Icon", icon: Smile },
+  { type: "pageBreak", label: "Page Break", icon: FilePlus },
 ];
 
 export const WidgetsPanel: React.FC<{ onSettingsClick?: () => void }> = ({

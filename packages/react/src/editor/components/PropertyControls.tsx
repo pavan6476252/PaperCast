@@ -286,11 +286,13 @@ export const ColorProp: React.FC<{
   value: any;
   onChange: (val: string | undefined) => void;
   labelWidth?: string;
-}> = ({ label, value, onChange, labelWidth = "w-24" }) => {
+  suggestions?: string[];
+}> = ({ label, value, onChange, labelWidth = "w-24", suggestions }) => {
   const { localValue, setLocalValue, handleClear } = useDebouncedInput<
     string | undefined
   >(value, onChange, 100);
   const isInherited = localValue === undefined || localValue === null;
+  const listId = `color-suggestions-${label.replace(/\s+/g, "-")}`;
 
   return (
     <div className="flex items-center text-sm group">
@@ -310,6 +312,7 @@ export const ColorProp: React.FC<{
         <div className="flex-1 relative flex items-center min-w-0">
           <input
             type="text"
+            list={suggestions?.length ? listId : undefined}
             value={isInherited ? "" : localValue}
             onChange={(e) =>
               setLocalValue(e.target.value === "" ? undefined : e.target.value)
@@ -317,6 +320,13 @@ export const ColorProp: React.FC<{
             className={`w-full min-w-0 border rounded px-2 py-1 pr-6 focus:outline-none focus:ring-1 focus:ring-accent font-mono text-xs text-foreground bg-background ${isInherited ? "border-dashed border-border/80 text-foreground/40 italic" : "border-border/80"}`}
             placeholder="inherited"
           />
+          {suggestions?.length ? (
+            <datalist id={listId}>
+              {suggestions.map((s, idx) => (
+                <option key={idx} value={s} />
+              ))}
+            </datalist>
+          ) : null}
           {!isInherited && (
             <button
               onClick={handleClear}
@@ -326,6 +336,100 @@ export const ColorProp: React.FC<{
             </button>
           )}
         </div>
+      </div>
+    </div>
+  );
+};
+
+import * as LucideIcons from "lucide-react";
+const iconNames = Object.keys(LucideIcons).filter(
+  (k) => k !== "createLucideIcon" && k !== "default" && !k.startsWith("Lucide")
+);
+
+export const IconSelectProp: React.FC<{
+  label: string;
+  value: any;
+  onChange: (val: string | undefined) => void;
+  labelWidth?: string;
+}> = ({ label, value, onChange, labelWidth = "w-24" }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+
+  const filtered = React.useMemo(() => {
+    if (!search) return iconNames.slice(0, 100);
+    const lower = search.toLowerCase();
+    return iconNames
+      .filter((n) => n.toLowerCase().includes(lower))
+      .slice(0, 100);
+  }, [search]);
+
+  return (
+    <div className="flex items-center text-sm group relative">
+      <label
+        className={`${labelWidth} text-foreground/70 truncate mr-2 text-xs shrink-0`}
+        title={label}
+      >
+        {label}
+      </label>
+      <div className="flex-1 relative flex items-center min-w-0">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-full flex items-center justify-between border border-border/80 rounded px-2 py-1 bg-background text-foreground text-xs min-h-[26px] truncate ${!value ? "text-foreground/50 italic border-dashed" : ""}`}
+        >
+          <span className="truncate">{value || "Select icon..."}</span>
+          {value && (
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange(undefined);
+              }}
+              className="text-foreground/40 hover:text-red-500 ml-2"
+            >
+              ×
+            </span>
+          )}
+        </button>
+        {isOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setIsOpen(false)}
+            />
+            <div className="absolute top-full left-0 mt-1 w-64 bg-surface border border-border rounded-md shadow-xl z-50 flex flex-col overflow-hidden">
+              <div className="p-2 border-b border-border bg-surface">
+                <input
+                  type="text"
+                  placeholder="Search icons..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
+                  className="w-full border border-border/80 rounded px-2 py-1 text-xs bg-background text-foreground outline-none focus:border-accent"
+                />
+              </div>
+              <div className="flex-1 overflow-y-auto max-h-48 p-1 grid grid-cols-5 gap-1 bg-background">
+                {filtered.map((name) => {
+                  const IconComp = (
+                    LucideIcons as unknown as Record<string, React.ElementType>
+                  )[name];
+                  return (
+                    <button
+                      key={name}
+                      title={name}
+                      onClick={() => {
+                        onChange(name);
+                        setIsOpen(false);
+                        setSearch("");
+                      }}
+                      className="p-2 hover:bg-accent/10 rounded flex items-center justify-center text-foreground hover:text-accent transition-colors"
+                    >
+                      <IconComp size={16} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

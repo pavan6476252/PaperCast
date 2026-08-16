@@ -1,6 +1,6 @@
 import { getBrowser } from "@/libs/getBrowser";
 import { NextResponse } from "next/server";
-import type { PaperFormat } from "puppeteer-core";
+import type { PaperFormat, PDFOptions } from "puppeteer-core";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import docframeSchema from "@papercast/core/schema.json";
@@ -71,17 +71,32 @@ export async function POST(req: Request) {
     await page.waitForSelector(".print-page", { timeout: 15000 });
 
     const pageSize = parsedBody.meta?.pageSize;
-    const format =
-      typeof pageSize === "string" && pageSize !== "custom"
-        ? (pageSize as PaperFormat)
-        : undefined;
+    let format: PaperFormat | undefined = undefined;
+    let width: string | number | undefined = undefined;
+    let height: string | number | undefined = undefined;
+
+    if (typeof pageSize === "string") {
+      format = pageSize as PaperFormat;
+    } else if (pageSize && typeof pageSize === "object") {
+      width = pageSize.widthPx;
+      height = pageSize.heightPx;
+    }
+
     const landscape = parsedBody.meta?.orientation === "landscape";
 
-    const pdf = await page.pdf({
+    const pdfOptions: PDFOptions = {
       printBackground: true,
-      format: format ?? "A4",
       landscape,
-    });
+    };
+
+    if (width && height) {
+      pdfOptions.width = width;
+      pdfOptions.height = height;
+    } else {
+      pdfOptions.format = format ?? "A4";
+    }
+
+    const pdf = await page.pdf(pdfOptions);
     await browser.close();
 
     return new NextResponse(Buffer.from(pdf), {

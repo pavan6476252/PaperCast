@@ -13,6 +13,7 @@ import {
   SaveAll,
   Save,
   Folder,
+  FilePlus,
 } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 import {
@@ -68,6 +69,8 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
     (state) => state.setAllowHeaderFooterEditing
   );
   const storeJsonString = useDocumentStore((state) => state.jsonString);
+  const insertNode = useDocumentStore((state) => state.insertNode);
+  const parsedDocument = useDocumentStore((state) => state.parsedDocument);
   const { undo, redo, pastStates, futureStates } = useDocumentTemporalStore(
     (state) => state
   );
@@ -102,6 +105,24 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
+  const handleAddPage = React.useCallback(() => {
+    if (!parsedDocument) return;
+    const bodyId = parsedDocument.document.body.id;
+    const newPageId = `page-${Date.now()}`;
+    insertNode(bodyId, undefined, {
+      id: newPageId,
+      type: "column",
+      layout: {
+        pageBreakBefore: true,
+        height: "100%",
+        flexGrow: 1,
+        padding: 64,
+        direction: "column",
+      },
+      children: [],
+    });
+  }, [parsedDocument, insertNode]);
 
   const handleSaveAs = React.useCallback(async () => {
     const name = window.prompt("Enter template name:", "Untitled Schema");
@@ -226,6 +247,20 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
 
         {/* Right: Actions, Zoom & Settings Popover */}
         <div className="flex items-center space-x-2.5 shrink-0">
+          {/* Add Page */}
+          {!isReadOnly && (
+            <div className="flex items-center border-r border-border pr-2 mr-0.5">
+              <button
+                onClick={handleAddPage}
+                className="flex items-center space-x-1 px-2.5 py-1.5 text-xs font-medium text-foreground bg-surface border border-border rounded-lg hover:bg-surface/80 hover:text-foreground focus:outline-none transition-colors cursor-pointer"
+                title="Add a new empty page"
+              >
+                <FilePlus size={14} />
+                <span className="hidden sm:inline">Add Page</span>
+              </button>
+            </div>
+          )}
+
           {/* Undo/Redo */}
           <div className="flex items-center space-x-0.5 border-r border-border pr-2 mr-0.5">
             <button
@@ -282,16 +317,20 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
                           }
                           onChange={(e) => {
                             const val = e.target.value;
-                            if (val !== "custom") updateMeta({ pageSize: val });
+                            if (val === "custom") {
+                              updateMeta({
+                                pageSize: { widthPx: 794, heightPx: 1123 },
+                              });
+                            } else {
+                              updateMeta({ pageSize: val });
+                            }
                           }}
                           className="text-xs bg-background border border-border/80 rounded-md p-1 outline-none focus:ring-1 focus:ring-accent text-foreground font-medium cursor-pointer"
                         >
                           <option value="A4">A4</option>
                           <option value="A3">A3</option>
                           <option value="Letter">Letter</option>
-                          <option value="custom" disabled>
-                            Custom
-                          </option>
+                          <option value="custom">Custom</option>
                         </select>
                       </div>
                       <div className="flex flex-col space-y-1">
@@ -314,6 +353,46 @@ export const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
                         </select>
                       </div>
                     </div>
+                    {typeof pageSize === "object" && (
+                      <div className="grid grid-cols-2 gap-2 mt-1">
+                        <div className="flex flex-col space-y-1">
+                          <label className="text-[10px] font-medium text-foreground/70">
+                            Width (px)
+                          </label>
+                          <input
+                            type="number"
+                            value={pageSize.widthPx || 0}
+                            onChange={(e) =>
+                              updateMeta({
+                                pageSize: {
+                                  ...pageSize,
+                                  widthPx: parseInt(e.target.value) || 0,
+                                },
+                              })
+                            }
+                            className="text-xs bg-background border border-border/80 rounded-md p-1 outline-none focus:ring-1 focus:ring-accent text-foreground"
+                          />
+                        </div>
+                        <div className="flex flex-col space-y-1">
+                          <label className="text-[10px] font-medium text-foreground/70">
+                            Height (px)
+                          </label>
+                          <input
+                            type="number"
+                            value={pageSize.heightPx || 0}
+                            onChange={(e) =>
+                              updateMeta({
+                                pageSize: {
+                                  ...pageSize,
+                                  heightPx: parseInt(e.target.value) || 0,
+                                },
+                              })
+                            }
+                            className="text-xs bg-background border border-border/80 rounded-md p-1 outline-none focus:ring-1 focus:ring-accent text-foreground"
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div className="border-t border-border my-2 pt-2" />
                     <div className="flex flex-col space-y-3">
                       <div className="flex items-center justify-between">

@@ -58,6 +58,7 @@ export function PaperCastProvider<TData = DefaultTData>(
     () => ({
       data:
         props.data !== undefined ? props.data : parent?.data || ({} as TData),
+      theme: props.theme !== undefined ? props.theme : parent?.theme,
       pageContext:
         props.pageContext !== undefined
           ? props.pageContext
@@ -73,6 +74,7 @@ export function PaperCastProvider<TData = DefaultTData>(
     }),
     [
       props.data,
+      props.theme,
       props.pageContext,
       props.activeTab,
       props.location,

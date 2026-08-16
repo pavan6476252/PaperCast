@@ -18,9 +18,11 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@papercast/core": "workspace:*"
+    "@papercast/core": "workspace:*",
+    "jexl": "^2.3.0"
   },
   "devDependencies": {
+    "@types/jexl": "^2.3.4",
     "typescript": "^5.0.0"
   },
   "repository": {

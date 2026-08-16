@@ -151,6 +151,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                       {/* Body */}
                       <PaperCastProvider
                         data={parsedDocument.data}
+                        theme={parsedDocument.theme}
                         pageContext={{
                           pageNumber: page.pageNumber,
                           pageCount: pages.length,
@@ -181,10 +182,26 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                                 "application/papercast-widget"
                               );
                               if (widgetType) {
-                                const newNode = NodeRegistry.createDefaultNode(
-                                  widgetType,
-                                  `node-${generateId()}`
-                                );
+                                let newNode: AnyNode;
+                                if (widgetType === "pageBreak") {
+                                  newNode = {
+                                    id: `page-${generateId()}`,
+                                    type: "column",
+                                    layout: {
+                                      pageBreakBefore: true,
+                                      height: "100%",
+                                      flexGrow: 1,
+                                      padding: 64,
+                                      direction: "column",
+                                    },
+                                    children: [],
+                                  };
+                                } else {
+                                  newNode = NodeRegistry.createDefaultNode(
+                                    widgetType,
+                                    `node-${generateId()}`
+                                  );
+                                }
 
                                 useDocumentStore
                                   .getState()
@@ -216,6 +233,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                       {footer && footer.root && (
                         <PaperCastProvider
                           data={parsedDocument.data}
+                          theme={parsedDocument.theme}
                           pageContext={{
                             pageNumber: page.pageNumber,
                             pageCount: pages.length,
@@ -302,6 +320,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                   {header.root ? (
                     <PaperCastProvider
                       data={parsedDocument.data}
+                      theme={parsedDocument.theme}
                       activeTab="headers"
                       location="header"
                       NodeWrapper={nodeWrapper}
@@ -378,6 +397,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
                   {footer.root ? (
                     <PaperCastProvider
                       data={parsedDocument.data}
+                      theme={parsedDocument.theme}
                       activeTab="footers"
                       location="footer"
                       NodeWrapper={nodeWrapper}

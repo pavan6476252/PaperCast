@@ -15,6 +15,7 @@ import {
   SizeProp,
   StaticRowsEditor,
   StringProp,
+  IconSelectProp,
 } from "./PropertyControls";
 
 export const PropertyPanel: React.FC = () => {
@@ -610,6 +611,33 @@ export const PropertyPanel: React.FC = () => {
               </PropertyGroup>
             )}
 
+            {selectedNode.type === "icon" && (
+              <PropertyGroup title="Icon Properties">
+                <IconSelectProp
+                  label="iconName"
+                  value={selectedNode.props?.iconName}
+                  onChange={(v) => handleUpdate("props", "iconName", v)}
+                />
+                <NumberProp
+                  label="sizePx"
+                  value={selectedNode.props?.sizePx}
+                  onChange={(v) => handleUpdate("props", "sizePx", v)}
+                />
+                <ColorProp
+                  label="color"
+                  value={selectedNode.props?.color}
+                  suggestions={[
+                    "currentColor",
+                    "transparent",
+                    "var(--foreground)",
+                    "var(--background)",
+                    "var(--primary)",
+                  ]}
+                  onChange={(v) => handleUpdate("props", "color", v)}
+                />
+              </PropertyGroup>
+            )}
+
             {selectedNode.type === "richText" && (
               <PropertyGroup title="Rich Text Editor">
                 <StringProp
@@ -773,13 +801,27 @@ export const PropertyPanel: React.FC = () => {
               <ColorProp
                 label="backgroundColor"
                 value={layout.backgroundColor}
+                suggestions={[
+                  "transparent",
+                  "var(--foreground)",
+                  "var(--background)",
+                  "var(--surface)",
+                  "var(--accent)",
+                  "var(--border)",
+                ]}
                 onChange={(v) => handleUpdate("layout", "backgroundColor", v)}
               />
 
-              <div className="text-xs font-medium text-foreground/50 mb-1 mt-4">
+              <div className="text-xs font-medium text-foreground/50 mb-1 mt-4 flex items-center justify-between">
                 Margins
               </div>
-              <div className="grid grid-cols-2 gap-2 mb-3">
+              <SizeProp
+                label="All"
+                labelWidth="w-12"
+                value={layout.margin}
+                onChange={(v) => handleUpdate("layout", "margin", v)}
+              />
+              <div className="grid grid-cols-2 gap-2 mb-3 mt-1">
                 <NumberProp
                   label="Top"
                   labelWidth="w-12"
@@ -809,7 +851,13 @@ export const PropertyPanel: React.FC = () => {
               <div className="text-xs font-medium text-foreground/50 mb-1">
                 Padding
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <SizeProp
+                label="All"
+                labelWidth="w-12"
+                value={layout.padding}
+                onChange={(v) => handleUpdate("layout", "padding", v)}
+              />
+              <div className="grid grid-cols-2 gap-2 mt-1">
                 <NumberProp
                   label="Top"
                   labelWidth="w-12"
@@ -1200,44 +1248,67 @@ export const PropertyPanel: React.FC = () => {
 
             <PropertyGroup title="Borders">
               <div className="space-y-4">
-                {["Top", "Right", "Bottom", "Left"].map((side) => (
-                  <div
-                    key={side}
-                    className="p-2 border border-gray-100 rounded bg-surface"
-                  >
-                    <div className="text-xs font-medium text-foreground/50 mb-2">
-                      {side}
+                {["All", "Top", "Right", "Bottom", "Left"].map((side) => {
+                  const prefix = side === "All" ? "border" : `border${side}`;
+                  return (
+                    <div
+                      key={side}
+                      className="p-2 border border-gray-100 rounded bg-surface"
+                    >
+                      <div className="text-xs font-medium text-foreground/50 mb-2">
+                        {side}
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <SizeProp
+                          label="width"
+                          labelWidth="w-10"
+                          value={
+                            (layout as Record<string, unknown>)[
+                              `${prefix}Width`
+                            ] as number | string | undefined
+                          }
+                          onChange={(v) =>
+                            handleUpdate("layout", `${prefix}Width`, v)
+                          }
+                        />
+                        <SelectProp
+                          label="style"
+                          labelWidth="w-10"
+                          value={
+                            (layout as Record<string, unknown>)[
+                              `${prefix}Style`
+                            ] as "solid" | "dashed" | "none" | undefined
+                          }
+                          options={["solid", "dashed", "none"]}
+                          onChange={(v) =>
+                            handleUpdate("layout", `${prefix}Style`, v)
+                          }
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <ColorProp
+                          label="color"
+                          value={
+                            (layout as Record<string, unknown>)[
+                              `${prefix}Color`
+                            ] as string | undefined
+                          }
+                          suggestions={[
+                            "transparent",
+                            "var(--foreground)",
+                            "var(--background)",
+                            "var(--surface)",
+                            "var(--accent)",
+                            "var(--border)",
+                          ]}
+                          onChange={(v) =>
+                            handleUpdate("layout", `${prefix}Color`, v)
+                          }
+                        />
+                      </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <NumberProp
-                        label="width"
-                        labelWidth="w-10"
-                        value={(layout as any)[`border${side}Width`]}
-                        onChange={(v) =>
-                          handleUpdate("layout", `border${side}Width`, v)
-                        }
-                      />
-                      <SelectProp
-                        label="style"
-                        labelWidth="w-10"
-                        value={(layout as any)[`border${side}Style`]}
-                        options={["solid", "dashed", "none"]}
-                        onChange={(v) =>
-                          handleUpdate("layout", `border${side}Style`, v)
-                        }
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <ColorProp
-                        label="color"
-                        value={(layout as any)[`border${side}Color`]}
-                        onChange={(v) =>
-                          handleUpdate("layout", `border${side}Color`, v)
-                        }
-                      />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
@@ -1286,6 +1357,18 @@ export const PropertyPanel: React.FC = () => {
                     }
                   />
                 </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
+                <div className="text-xs font-medium text-foreground/50">
+                  Box Shadow
+                </div>
+                <StringProp
+                  label="boxShadow"
+                  labelWidth="w-20"
+                  value={layout.boxShadow}
+                  onChange={(v) => handleUpdate("layout", "boxShadow", v)}
+                />
               </div>
             </PropertyGroup>
 

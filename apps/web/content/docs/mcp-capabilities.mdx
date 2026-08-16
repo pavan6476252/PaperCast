@@ -13,15 +13,27 @@ Session tools manage the WebSocket connection between the AI agent and the brows
 - **`get_active_sessions`**: Retrieves a list of all currently connected browser tabs.
 - **`select_active_session`**: Binds the agent to a specific browser tab so mutations broadcast to the correct window.
 
+## Workspace tools
+
+Workspace tools manage the storage and lifecycle of schemas directly in the user's local indexed DB environment.
+
+- **`workspace_list_schemas`**: Lists all locally saved schemas.
+- **`workspace_load_schema`**: Loads a specific schema from local storage.
+- **`workspace_save_schema`**: Saves the current active schema to local storage.
+- **`workspace_create_schema`**: Creates a new blank schema file.
+- **`workspace_delete_schema`**: Deletes a saved schema from local storage.
+
 ## Document tools
 
 Document tools handle the global document schema, metadata, and structural headers.
 
 - **`get_document_state`**: Retrieves the current JSON schema from the browser.
 - **`set_document_state`**: Replaces the entire schema (rarely used, prefer surgical edits).
+- **`replace_document_body`**: Replaces the entire array of children in the document body.
+- **`update_document_data`**: Modifies the root JSON data object used for resolving `bind` variables.
 - **`update_document_meta`**: Modifies the document metadata (title, author, paper size).
 - **`update_document_theme`**: Adjusts global typography and color variables.
-- **`set_document_section`**: Creates or updates page regions (headers and footers).
+- **`set_document_section`**: Creates or updates page regions (headers and footers). You can assign standard string conditions like `"first"`, `"last"`, `"even"`, `"odd"`, `"all"`, or use complex object conditions like `{"type": "custom", "expression": "pageNumber !== 1"}`.
 - **`delete_document_section`**: Removes a header or footer definition.
 - **`set_page_override`**: Assigns a specific header or footer to a specific page number.
 
@@ -39,6 +51,12 @@ Layout tools provide safe, surgical AST manipulation for the main document body.
 - **`patch_element_properties`**: Applies a partial update to a node's properties.
 - **`set_table_footer_rows`**: Configures calculation rows at the bottom of a data table.
 - **`add_node_to_table_footer_cell`**: Injects widgets into specific table footer cells.
+
+## Utility tools
+
+Utility tools provide auxiliary logic and lookup functions that don't directly modify the AST.
+
+- **`search_icons`**: Performs a semantic search against the 1,400+ icon names in the `lucide-react` library. Use this to determine exactly which PascalCase name to pass to the `IconNode` `iconName` property.
 
 ## PDF tools
 

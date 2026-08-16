@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "papercast": {
+      "command": "node",
+      "args": ["./apps/mcp/dist/index.js"],
+      "cwd": "/Users/pavankumar/Documents/formcast/"
+    }
+  }
+}

@@ -37,3 +37,13 @@ PaperCast translates layout directions directly into CSS flexbox behaviors.
 - `breakInside`: `"auto" | "avoid"`
 - `keepWithNext`: `boolean`
 - `pageBreakBefore`: `boolean`
+
+> [!NOTE]
+> The `PaginationEngine` actively evaluates `pageBreakBefore` during pagination. If a block has `"pageBreakBefore": true`, the engine will seamlessly finalize the current page and forcefully place the block at the top of a new page.
+
+## 🚨 Strict Schema Guardrails
+
+PaperCast rigorously enforces the schema structure. If a layout block violates these rules, the backend engine or visual editor will instantly reject the payload or silently strip the invalid configuration.
+
+1. **No Hallucinated Properties**: Do **NOT** use non-existent properties (e.g., `widthPercent: 100`). Instead, use the officially supported properties (e.g., `width: "100%"`).
+2. **Separation of Concerns (Layout vs Style)**: All Box Model dimensions, spacing (margins and padding), and flexbox behaviors MUST reside strictly inside the `layout: {}` object. Do **NOT** mistakenly place layout properties (like `marginTop` or `paddingLeft`) inside the `style: {}` object, as they will be rejected by the type validator.

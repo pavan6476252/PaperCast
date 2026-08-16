@@ -16,11 +16,29 @@ import { splitHtmlText } from "../utils/htmlSplitter";
 import { ContainerBehavior } from "@papercast/engine";
 import { useNodeData } from "../headless/useNodeData";
 import { useNodeStyle } from "../headless/useNodeStyle";
+import { IconNode as IconNodeComponent } from "./IconNode";
 
 const renderChildren = (node: AnyNode) => {
   return node.children?.map((child, index) => (
     <NodeRenderer key={child.id || index} node={child} />
   ));
+};
+
+const isEmptyWidget = (node: AnyNode) => {
+  if (node.children && node.children.length > 0) return false;
+  if (
+    node.layout?.height ||
+    node.layout?.minHeight ||
+    node.layout?.backgroundColor ||
+    node.layout?.borderWidth ||
+    node.layout?.borderTopWidth ||
+    node.layout?.borderBottomWidth ||
+    node.layout?.borderLeftWidth ||
+    node.layout?.borderRightWidth
+  ) {
+    return false;
+  }
+  return true;
 };
 
 interface BaseProps {
@@ -52,7 +70,7 @@ const RowComponent: React.FC<{ node: RowNode } & BaseProps> = ({
   return (
     <div
       {...injectedProps}
-      className={`${injectedProps?.className || ""} ${!node.children || node.children.length === 0 ? "empty-widget" : ""}`}
+      className={`${injectedProps?.className || ""} ${isEmptyWidget(node) ? "empty-widget" : ""}`}
       style={{ ...style, flexDirection: "row" }}
     >
       {renderChildren(node)}
@@ -69,7 +87,7 @@ const ColumnComponent: React.FC<{ node: ColumnNode } & BaseProps> = ({
   return (
     <div
       {...injectedProps}
-      className={`${injectedProps?.className || ""} ${!node.children || node.children.length === 0 ? "empty-widget" : ""}`}
+      className={`${injectedProps?.className || ""} ${isEmptyWidget(node) ? "empty-widget" : ""}`}
       style={{ ...style, flexDirection: "column" }}
     >
       {renderChildren(node)}
@@ -497,6 +515,17 @@ export const basicNodes: ComponentTypeDefinition<any>[] = [
       type: "spacer",
       layout: {},
       props: { sizePx: 16 },
+    }),
+  },
+  {
+    type: "icon",
+    measure: () => 0,
+    render: IconNodeComponent,
+    createDefaultNode: (id) => ({
+      id,
+      type: "icon",
+      layout: {},
+      props: { iconName: "HelpCircle", sizePx: 24, color: "currentColor" },
     }),
   },
   {

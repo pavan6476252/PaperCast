@@ -2,6 +2,57 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.3.5" date="2026-08-16">
+
+This release introduces comprehensive updates to the documentation and brings highly requested tools to the AI agent ecosystem!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Page Break Widget**: Added a dedicated
+  `pageBreak` widget to manually force pagination boundaries where the
+  auto-pagination engine needs a hint.
+- <Badge type="feature">Feature</Badge> **Search Icons Tool**: Introduced a new
+  `search_icons` MCP tool to help agents seamlessly navigate the massive 1,400+
+  `lucide-react` icon library.
+- <Badge type="feature">Feature</Badge> **Workspace MCP Tools**: Agents can now
+  directly manage saved workspaces using the new `workspace_*` tools, allowing
+  AI to scaffold entire environments for users.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Capabilities Documentation**:
+  Comprehensively updated the `mcp-capabilities.mdx` documentation to reflect
+  the full breadth of the current system, ensuring no gaps between the agent's
+  toolset and public docs.
+- <Badge type="improvement">Improvement</Badge> **Conditional Rendering Docs**:
+  Better explanations of the powerful new `visibleIf` feature and how to use
+  data-driven conditionals for widgets.
+
+</Version>
+
+<Version version="0.3.4" date="2026-08-15">
+
+This release introduces native icons, fine-grained visibility controls, and a smarter property editor!
+
+### Added
+
+- <Badge type="feature">Feature</Badge> **Icon Node**: A new native `IconNode`
+  powered by Lucide React, fully integrated into the document schema.
+- <Badge type="feature">Feature</Badge> **Conditional Visibility**: Added a new
+  `visibleIf` property that uses expressions to intelligently prune nodes before
+  pagination based on your data.
+- <Badge type="feature">Feature</Badge> **Native Color Picker**: Enhanced the
+  Property Panel's color inputs to include a native color picker that
+  auto-completes theme variables.
+
+### Improved
+
+- <Badge type="improvement">Improvement</Badge> **Icon Dropdown**: Added a
+  searchable dropdown in the Properties panel for selecting `lucide-react` icons
+  instantly.
+
+</Version>
+
 <Version version="0.3.3" date="2026-08-08">
 
 This release fixes critical schema validation and Vercel bundling issues to ensure reliable PDF downloads in all environments!

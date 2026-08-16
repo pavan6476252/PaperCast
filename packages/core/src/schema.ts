@@ -9,21 +9,26 @@ export interface BoxModel {
   minHeight?: number;
 
   // margin
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
+  margin?: number | string;
+  marginTop?: number | string;
+  marginRight?: number | string;
+  marginBottom?: number | string;
+  marginLeft?: number | string;
 
   // padding
-  paddingTop?: number;
-  paddingRight?: number;
-  paddingBottom?: number;
-  paddingLeft?: number;
+  padding?: number | string;
+  paddingTop?: number | string;
+  paddingRight?: number | string;
+  paddingBottom?: number | string;
+  paddingLeft?: number | string;
 
   // background
   backgroundColor?: string;
 
   // border
+  borderWidth?: number | string;
+  borderStyle?: "solid" | "dashed" | "none";
+  borderColor?: string;
   borderTopWidth?: number;
   borderTopStyle?: "solid" | "dashed" | "none";
   borderTopColor?: string;
@@ -42,6 +47,8 @@ export interface BoxModel {
   borderBottomRightRadius?: number;
   borderBottomLeftRadius?: number;
 
+  boxShadow?: string;
+
   // flex/flow controls
   direction?: "row" | "column";
   wrap?: boolean;
@@ -51,6 +58,7 @@ export interface BoxModel {
   alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
   rowGap?: number;
   columnGap?: number;
+  gap?: number;
   flexGrow?: number;
   flexShrink?: number;
   flexBasis?: number | string;
@@ -199,6 +207,8 @@ export interface BaseNode<
   children?: AnyNode[];
   overrides?: Record<string, Partial<AnyNode>>;
   props?: TProps;
+  visibleIf?: string;
+  classNames?: string[];
 }
 
 export type RootNode = BaseNode<"root", undefined>;
@@ -226,6 +236,15 @@ export type TableNode = BaseNode<"table", TableProps>;
 export type WidgetInstanceNode = BaseNode<
   "widgetInstance",
   { definitionId: string }
+>;
+
+export type IconNode = BaseNode<
+  "icon",
+  {
+    iconName?: string;
+    sizePx?: number;
+    color?: string;
+  }
 >;
 
 export type ListTileNode = BaseNode<
@@ -300,6 +319,7 @@ export type BuiltInNode =
   | SpacerNode
   | TableNode
   | WidgetInstanceNode
+  | IconNode
   | ListTileNode
   | RichTextNode
   | UnorderedListNode
@@ -315,6 +335,8 @@ export type AnyNode =
   BuiltInNode | CustomNodesRegistry[keyof CustomNodesRegistry];
 
 export interface Theme {
+  classes?: Record<string, TypographyAndColor & BoxModel>;
+  page?: { backgroundColor?: string };
   defaults: {
     base?: TypographyAndColor & BoxModel;
     [nodeType: string]: (TypographyAndColor & BoxModel) | undefined;

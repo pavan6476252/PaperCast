@@ -3,7 +3,7 @@ import { resolvePath, DotPaths, DefaultTData } from "@papercast/engine";
 import { usePaperCastContext } from "../PaperCastProvider";
 
 export function useNodeData<TData = DefaultTData>() {
-  const { data, pageContext } = usePaperCastContext<TData>();
+  const { data, pageContext, theme } = usePaperCastContext<TData>();
 
   const resolve = useMemo(() => {
     return (path: DotPaths<TData> | string) => {
@@ -11,5 +11,5 @@ export function useNodeData<TData = DefaultTData>() {
     };
   }, [data]);
 
-  return { data, pageContext, resolve };
+  return { data, pageContext, theme, resolve };
 }

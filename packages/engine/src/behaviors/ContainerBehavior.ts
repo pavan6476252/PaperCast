@@ -1,17 +1,24 @@
 import { AnyNode } from "@papercast/core";
 import { SchemaRegistry, MeasureContext, SplitContext } from "../registry";
 
+function parseSize(val: number | string | undefined): number {
+  if (val === undefined) return 0;
+  if (typeof val === "number") return val;
+  const parsed = parseFloat(val);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
 export const ContainerBehavior = {
   measure: <T extends AnyNode>(node: T, ctx: MeasureContext): number => {
     if (!node.children || node.children.length === 0) return 0;
     if (!ctx.measurements || !ctx.getNodeHeight) return 0;
 
     const layout = node.layout || {};
-    const rowGap = layout.rowGap || 0;
-    const marginTop = layout.marginTop || 0;
-    const marginBottom = layout.marginBottom || 0;
-    const paddingTop = layout.paddingTop || 0;
-    const paddingBottom = layout.paddingBottom || 0;
+    const rowGap = parseSize(layout.rowGap);
+    const marginTop = parseSize(layout.marginTop);
+    const marginBottom = parseSize(layout.marginBottom);
+    const paddingTop = parseSize(layout.paddingTop);
+    const paddingBottom = parseSize(layout.paddingBottom);
 
     const isHorizontal = node.type === "row";
 

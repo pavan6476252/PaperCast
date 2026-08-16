@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Copy, Check, ZoomIn, ZoomOut } from "lucide-react";
+import { Copy, Check, ZoomIn, ZoomOut, ExternalLink } from "lucide-react";
 import { codeToHtml } from "shiki";
 import { useTheme } from "next-themes";
 import { DocumentPreview } from "../renderer/DocumentPreview";
@@ -23,6 +23,7 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
   schema,
   zoom,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
   const [currentZoom, setCurrentZoom] = useState<number | undefined>(zoom);
   const [copied, setCopied] = useState(false);
@@ -33,7 +34,12 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
   const jsonString = JSON.stringify(schema, null, 2);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     async function highlight() {
+      if (!jsonString) return;
       const html = await codeToHtml(jsonString, {
         lang: "json",
         theme: isDark ? "github-dark" : "github-light",
@@ -111,6 +117,18 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
               Code
             </button>
           </div>
+
+          <button
+            onClick={() => {
+              sessionStorage.setItem("papercast_schema", jsonString);
+              window.open("/playground", "_blank");
+            }}
+            className="flex items-center justify-center p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-200/50 dark:hover:bg-surface/50 rounded-lg transition-colors border border-transparent hover:border-slate-200 dark:hover:border-border"
+            title="Open in Playground"
+          >
+            <ExternalLink size={16} />
+          </button>
+
           <button
             onClick={handleCopy}
             className="flex items-center justify-center p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-foreground hover:bg-slate-200/50 dark:hover:bg-surface/50 rounded-lg transition-colors border border-transparent hover:border-slate-200 dark:hover:border-border"
@@ -131,11 +149,17 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
           <div className="relative flex-1 w-full max-h-[600px] overflow-hidden flex flex-col p-4 bg-slate-100 dark:bg-surface items-center justify-center">
             {/* We constrain the preview so it acts like a neat component frame */}
             <div className="w-full h-full border border-slate-200 dark:border-border shadow-xl overflow-hidden rounded-md flex flex-col">
-              <DocumentPreview
-                schemaData={schema}
-                hideToolbar={true}
-                zoom={currentZoom}
-              />
+              {mounted ? (
+                <DocumentPreview
+                  schemaData={schema}
+                  hideToolbar={true}
+                  zoom={currentZoom}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
+                  Loading preview...
+                </div>
+              )}
             </div>
           </div>
         ) : (

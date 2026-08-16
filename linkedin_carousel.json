@@ -1,0 +1,551 @@
+{
+  "meta": {
+    "pageSize": {
+      "width": 794,
+      "height": 992
+    },
+    "orientation": "portrait"
+  },
+  "theme": {
+    "page": {
+      "backgroundColor": "#171717"
+    },
+    "classes": {
+      "primaryAccent": {
+        "backgroundColor": "#4F46E5",
+        "color": "#FFFFFF"
+      },
+      "secondaryAccent": {
+        "backgroundColor": "#C084FC",
+        "color": "#FFFFFF"
+      },
+      "darkSurface": {
+        "backgroundColor": "#1E293B"
+      },
+      "mutedText": {
+        "color": "#64748B"
+      },
+      "lightMutedText": {
+        "color": "#94A3B8"
+      },
+      "borderLight": {
+        "borderColor": "#E2E8F0",
+        "borderWidth": 1
+      }
+    },
+    "defaults": {
+      "base": {
+        "fontFamily": "Inter, sans-serif"
+      },
+      "text": {
+        "fontSizePx": 14,
+        "color": "#171717"
+      }
+    }
+  },
+  "data": {},
+  "pageOverrides": {
+    "1": {
+      "footerId": null
+    },
+    "11": {
+      "footerId": null
+    }
+  },
+  "headers": {},
+  "footers": {
+    "all": {
+      "condition": "all",
+      "root": {
+        "type": "row",
+        "id": "footer-row",
+        "classNames": ["borderLight"],
+        "layout": {
+          "padding": 10,
+          "justifyContent": "space-between"
+        },
+        "props": {},
+        "children": [
+          {
+            "type": "text",
+            "id": "footer-text-1",
+            "classNames": ["mutedText"],
+            "props": {
+              "literal": "PaperCast"
+            }
+          },
+          {
+            "type": "text",
+            "id": "footer-text-2",
+            "classNames": ["mutedText"],
+            "props": {
+              "literal": "Page {currentPage} of {totalPages}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "document": {
+    "id": "doc-root",
+    "type": "column",
+    "props": {},
+    "children": [
+      {
+        "type": "column",
+        "id": "page-1",
+        "layout": {
+          "widthPercent": 100,
+          "flex": 1,
+          "alignItems": "center",
+          "justifyContent": "center",
+          "backgroundColor": "#171717",
+          "padding": 40
+        },
+        "props": {},
+        "children": [
+          {
+            "type": "column",
+            "id": "cover-mock-page",
+            "layout": {
+              "width": 220,
+              "height": 264,
+              "borderWidth": 1,
+              "borderColor": "#E2E8F0",
+              "borderRadius": 8,
+              "backgroundColor": "#FFFFFF",
+              "padding": 10,
+              "alignItems": "center"
+            },
+            "props": {},
+            "children": [
+              {
+                "type": "row",
+                "id": "cover-header",
+                "classNames": ["primaryAccent"],
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 20,
+                  "marginBottom": 10,
+                  "borderRadius": 4
+                },
+                "props": {}
+              },
+              {
+                "type": "row",
+                "id": "cover-body-0",
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 8,
+                  "backgroundColor": "#E2E8F0",
+                  "marginBottom": 6,
+                  "borderRadius": 2
+                },
+                "props": {}
+              },
+              {
+                "type": "row",
+                "id": "cover-body-1",
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 8,
+                  "backgroundColor": "#E2E8F0",
+                  "marginBottom": 6,
+                  "borderRadius": 2
+                },
+                "props": {}
+              },
+              {
+                "type": "row",
+                "id": "cover-body-2",
+                "layout": {
+                  "widthPercent": 60,
+                  "height": 8,
+                  "backgroundColor": "#E2E8F0",
+                  "marginBottom": 6,
+                  "borderRadius": 2
+                },
+                "props": {}
+              },
+              {
+                "type": "spacer",
+                "id": "cover-spacer",
+                "props": {
+                  "flex": 1
+                }
+              },
+              {
+                "type": "row",
+                "id": "cover-footer",
+                "classNames": ["secondaryAccent"],
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 20,
+                  "marginTop": 10,
+                  "borderRadius": 4
+                },
+                "props": {}
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "cover-title",
+            "style": {
+              "fontSizePx": 48,
+              "fontWeight": "bold",
+              "fontFamily": "serif",
+              "color": "#FFFFFF",
+              "marginTop": 40
+            },
+            "props": {
+              "literal": "PaperCast"
+            }
+          },
+          {
+            "type": "text",
+            "id": "cover-subtitle",
+            "classNames": ["lightMutedText"],
+            "style": {
+              "fontSizePx": 20,
+              "fontStyle": "italic",
+              "textAlign": "center",
+              "marginTop": 16
+            },
+            "props": {
+              "literal": "A little tool I built because I was tired of fighting with PDF headers and footers."
+            }
+          },
+          {
+            "type": "spacer",
+            "id": "cover-spacer",
+            "props": {
+              "flex": 1
+            }
+          },
+          {
+            "type": "text",
+            "id": "cover-free",
+            "style": {
+              "color": "#C084FC",
+              "fontSizePx": 14
+            },
+            "props": {
+              "literal": "Free to use. Not planning to monetise it."
+            }
+          }
+        ]
+      },
+      {
+        "type": "column",
+        "id": "page-10",
+        "layout": {
+          "widthPercent": 100,
+          "flex": 1,
+          "backgroundColor": "#FFFFFF",
+          "padding": 40
+        },
+        "props": {},
+        "children": [
+          {
+            "type": "text",
+            "id": "p10-label",
+            "style": {
+              "color": "#4F46E5",
+              "fontStyle": "italic",
+              "fontSizePx": 14
+            },
+            "props": {
+              "literal": "What's next"
+            }
+          },
+          {
+            "type": "text",
+            "id": "p10-title",
+            "style": {
+              "fontSizePx": 36,
+              "fontWeight": "bold",
+              "marginTop": 10,
+              "marginBottom": 30
+            },
+            "props": {
+              "literal": "Still early days, honestly."
+            }
+          },
+          {
+            "type": "table",
+            "id": "p10-table",
+            "props": {
+              "hideHeader": true,
+              "columns": [
+                {
+                  "headerText": "No",
+                  "bindPath": "no",
+                  "flex": 1,
+                  "align": "left"
+                },
+                {
+                  "headerText": "Item",
+                  "bindPath": "item",
+                  "flex": 3,
+                  "align": "left"
+                },
+                {
+                  "headerText": "Note",
+                  "bindPath": "note",
+                  "flex": 4,
+                  "align": "left"
+                }
+              ],
+              "data": [
+                {
+                  "no": "01",
+                  "item": "Conditional expressions",
+                  "note": "Something like 'hide this if total > 0' — beyond the built-in page conditions."
+                },
+                {
+                  "no": "02",
+                  "item": "Plainer validation errors",
+                  "note": "Right now a schema mistake throws a raw Ajv error. Wants to read like plain English instead."
+                },
+                {
+                  "no": "03",
+                  "item": "A sturdier PDF export",
+                  "note": "Most of my recent releases were deployment fixes, not features — want that to stop being true."
+                },
+                {
+                  "no": "04",
+                  "item": "A proper contribution guide",
+                  "note": "As more people start using this, I'd like a clear way for folks to pitch in."
+                }
+              ],
+              "styleConfig": {
+                "gridLines": "none",
+                "headerBackgroundColor": "#FFF",
+                "alternateRowColor": "#FFF"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "column",
+        "id": "page-11",
+        "layout": {
+          "widthPercent": 100,
+          "flex": 1,
+          "alignItems": "center",
+          "justifyContent": "center",
+          "backgroundColor": "#171717",
+          "padding": 40
+        },
+        "props": {},
+        "children": [
+          {
+            "type": "column",
+            "id": "closing-mock-page",
+            "layout": {
+              "width": 220,
+              "height": 264,
+              "borderWidth": 1,
+              "borderColor": "#E2E8F0",
+              "borderRadius": 8,
+              "backgroundColor": "#FFFFFF",
+              "padding": 10,
+              "alignItems": "center"
+            },
+            "props": {},
+            "children": [
+              {
+                "type": "row",
+                "id": "closing-header",
+                "classNames": ["primaryAccent"],
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 20,
+                  "marginBottom": 10,
+                  "borderRadius": 4
+                },
+                "props": {}
+              },
+              {
+                "type": "row",
+                "id": "closing-body-0",
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 8,
+                  "backgroundColor": "#E2E8F0",
+                  "marginBottom": 6,
+                  "borderRadius": 2
+                },
+                "props": {}
+              },
+              {
+                "type": "row",
+                "id": "closing-body-1",
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 8,
+                  "backgroundColor": "#E2E8F0",
+                  "marginBottom": 6,
+                  "borderRadius": 2
+                },
+                "props": {}
+              },
+              {
+                "type": "row",
+                "id": "closing-body-2",
+                "layout": {
+                  "widthPercent": 60,
+                  "height": 8,
+                  "backgroundColor": "#E2E8F0",
+                  "marginBottom": 6,
+                  "borderRadius": 2
+                },
+                "props": {}
+              },
+              {
+                "type": "spacer",
+                "id": "closing-spacer",
+                "props": {
+                  "flex": 1
+                }
+              },
+              {
+                "type": "row",
+                "id": "closing-footer",
+                "classNames": ["secondaryAccent"],
+                "layout": {
+                  "widthPercent": 100,
+                  "height": 20,
+                  "marginTop": 10,
+                  "borderRadius": 4
+                },
+                "props": {}
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "closing-title",
+            "style": {
+              "fontSizePx": 48,
+              "fontWeight": "bold",
+              "fontFamily": "serif",
+              "color": "#FFFFFF",
+              "marginTop": 40
+            },
+            "props": {
+              "literal": "Give it a try"
+            }
+          },
+          {
+            "type": "text",
+            "id": "closing-subtitle",
+            "classNames": ["lightMutedText"],
+            "style": {
+              "fontSizePx": 20,
+              "fontStyle": "italic",
+              "textAlign": "center",
+              "marginTop": 16
+            },
+            "props": {
+              "literal": "It's free, it's open, and I'm not planning to charge for it. Would genuinely love to know what you think."
+            }
+          },
+          {
+            "type": "column",
+            "id": "closing-links",
+            "layout": {
+              "marginTop": 40,
+              "alignItems": "flex-start"
+            },
+            "props": {},
+            "children": [
+              {
+                "type": "row",
+                "id": "link-1",
+                "props": {},
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "l1-a",
+                    "style": {
+                      "color": "#C084FC",
+                      "fontWeight": "bold",
+                      "width": 120
+                    },
+                    "props": {
+                      "literal": "Playground"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "l1-b",
+                    "style": {
+                      "color": "#FFF"
+                    },
+                    "props": {
+                      "literal": "paper-cast-web.vercel.app/playground"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "row",
+                "id": "link-3",
+                "layout": {
+                  "marginTop": 10
+                },
+                "props": {},
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "l3-a",
+                    "style": {
+                      "color": "#C084FC",
+                      "fontWeight": "bold",
+                      "width": 120
+                    },
+                    "props": {
+                      "literal": "GitHub"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "l3-b",
+                    "style": {
+                      "color": "#FFF"
+                    },
+                    "props": {
+                      "literal": "github.com/pavan6476252/PaperCast"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "spacer",
+            "id": "closing-spacer",
+            "props": {
+              "flex": 1
+            }
+          },
+          {
+            "type": "text",
+            "id": "closing-signoff",
+            "classNames": ["lightMutedText"],
+            "style": {
+              "fontStyle": "italic",
+              "fontSizePx": 14
+            },
+            "props": {
+              "literal": "— Pavan Kumar"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -101,3 +101,20 @@ By default, a Divider is a 1px solid black line with some vertical margin. You c
   }
 }
 ```
+
+## Page Break Node
+
+A `PageBreak` node forces the Pagination Engine to immediately slice the page at its current vertical position and push all subsequent siblings to a brand new page.
+
+### Usage
+
+While PaperCast automatically paginates content that overflows, there are times when you semantically want a new section (like a new chapter or an appendix) to start at the very top of a fresh page, regardless of how much space was left on the previous one.
+
+- Insert a `pageBreak` node directly into a `column` (or the `body`).
+- The engine will treat it as a hard split boundary.
+
+```json
+{
+  "type": "pageBreak"
+}
+```
