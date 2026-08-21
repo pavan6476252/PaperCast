@@ -56,7 +56,7 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col border border-slate-200 dark:border-border rounded-xl overflow-hidden bg-white dark:bg-background shadow-sm my-8">
+    <div className="print:hidden flex flex-col border border-slate-200 dark:border-border rounded-xl overflow-hidden bg-white dark:bg-background shadow-sm my-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-border bg-slate-50 dark:bg-surface/50 p-4">
         <div>
@@ -118,16 +118,18 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
             </button>
           </div>
 
-          <button
+          <a
+            href="/playground"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => {
-              sessionStorage.setItem("papercast_schema", jsonString);
-              window.open("/playground", "_blank");
+              localStorage.setItem("papercast_schema", jsonString);
             }}
             className="flex items-center justify-center p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-200/50 dark:hover:bg-surface/50 rounded-lg transition-colors border border-transparent hover:border-slate-200 dark:hover:border-border"
             title="Open in Playground"
           >
             <ExternalLink size={16} />
-          </button>
+          </a>
 
           <button
             onClick={handleCopy}
@@ -153,6 +155,7 @@ export const WidgetCard: React.FC<WidgetCardProps> = ({
                 <DocumentPreview
                   schemaData={schema}
                   hideToolbar={true}
+                  disablePrintStyles={true}
                   zoom={currentZoom}
                 />
               ) : (

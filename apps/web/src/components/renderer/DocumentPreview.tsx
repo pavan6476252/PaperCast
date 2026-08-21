@@ -14,6 +14,7 @@ interface DocumentPreviewProps {
   schemaData?: DocumentSchema | null;
   hideToolbar?: boolean;
   zoom?: number;
+  disablePrintStyles?: boolean;
 }
 
 export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
@@ -22,6 +23,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   onToggleWorkspace,
   schemaData,
   hideToolbar = false,
+  disablePrintStyles = false,
   zoom: controlledZoom,
 }) => {
   const isReadOnly = !!schemaData;
@@ -86,24 +88,26 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
   return (
     <div className="flex flex-col h-full bg-surface overflow-hidden">
-      <style>
-        {`
-          @media print {
-            @page {
-              size: ${
-                typeof pageSize === "object"
-                  ? `${width}px ${height}px`
-                  : `${pageSize} ${orientation === "landscape" ? "landscape" : "portrait"}`
-              };
-              margin: 0;
+      {!disablePrintStyles && (
+        <style>
+          {`
+            @media print {
+              @page {
+                size: ${
+                  typeof pageSize === "object"
+                    ? `${width}px ${height}px`
+                    : `${pageSize} ${orientation === "landscape" ? "landscape" : "portrait"}`
+                };
+                margin: 0;
+              }
+              .print-scale-none {
+                zoom: 1 !important;
+                transform: scale(1) !important;
+              }
             }
-            .print-scale-none {
-              zoom: 1 !important;
-              transform: scale(1) !important;
-            }
-          }
-        `}
-      </style>
+          `}
+        </style>
+      )}
       <OffscreenMeasurer
         document={parsedDocument}
         pageWidth={width}
@@ -138,6 +142,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         nodeWrapper={nodeWrapper}
         addHeader={addHeader}
         addFooter={addFooter}
+        disablePrintStyles={disablePrintStyles}
         onZoomChange={controlledZoom === undefined ? setZoom : undefined}
       />
     </div>
