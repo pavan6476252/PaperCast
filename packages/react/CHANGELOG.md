@@ -1,5 +1,11 @@
 # @papercast/react
 
+## 0.2.1
+
+### Patch Changes
+
+- [#50](https://github.com/pavan6476252/PaperCast/pull/50) [`c8e8abe`](https://github.com/pavan6476252/PaperCast/commit/c8e8abe58063d59d264de61de2317e51fba62d2f) Thanks [@pavan6476252](https://github.com/pavan6476252)! - Fix layout scaling bug when printing documents with embedded preview components
+
 ## 0.2.0
 
 ### Minor Changes
