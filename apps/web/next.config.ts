@@ -10,9 +10,7 @@ const nextConfig: NextConfig = {
     "@papercast/react",
   ],
   outputFileTracingIncludes: {
-    "/api/pdf": [
-      "node_modules/.pnpm/@sparticuz+chromium@*/node_modules/@sparticuz/chromium/bin/**/*",
-    ],
+    "/api/pdf": ["../../node_modules/**/@sparticuz/chromium/bin/**/*"],
   },
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
   async rewrites() {

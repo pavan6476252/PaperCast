@@ -106,6 +106,7 @@ export const OffscreenMeasurer: React.FC<OffscreenMeasurerProps> = ({
     <PaperCastProvider data={doc.data}>
       <div
         ref={containerRef}
+        className="print:hidden"
         style={{
           position: "absolute",
           left: -9999,

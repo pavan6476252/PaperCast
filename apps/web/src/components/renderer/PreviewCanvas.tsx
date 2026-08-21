@@ -35,6 +35,7 @@ interface PreviewCanvasProps {
     | undefined;
   addHeader: (id: string, header: PageRegion) => void;
   addFooter: (id: string, footer: PageRegion) => void;
+  disablePrintStyles?: boolean;
   onZoomChange?: (zoom: number) => void;
 }
 
@@ -48,6 +49,7 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
   nodeWrapper,
   addHeader,
   addFooter,
+  disablePrintStyles = false,
   onZoomChange,
 }) => {
   const scrollContainerRef = usePanZoomGesture({ zoom, onZoomChange });
@@ -87,12 +89,12 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
       onClick={() => {
         useDocumentStore.getState().setSelectedNodeId(null);
       }}
-      className="flex-1 overflow-auto p-8 relative flex flex-col print:p-0 print:bg-white print:block"
+      className={`flex-1 overflow-auto p-8 relative flex flex-col ${disablePrintStyles ? "" : "print:p-0 print:bg-white print:block"}`}
     >
       {activeTab === "content" && (
         <div
           id="preview-zoom-container"
-          className="flex flex-col items-center mx-auto gap-8 transition-all print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"
+          className={`flex flex-col items-center mx-auto gap-8 transition-all ${disablePrintStyles ? "" : "print-scale-none print:block print:w-full print:h-auto print:m-0 print:p-0"}`}
           style={{ zoom }}
         >
           {pages &&
@@ -107,11 +109,11 @@ export const PreviewCanvas: React.FC<PreviewCanvasProps> = ({
               return (
                 <div
                   key={idx}
-                  className={`print:m-0 print:p-0 ${idx < pages.length - 1 ? "print:break-after-page" : ""}`}
+                  className={`${disablePrintStyles ? "" : "print:m-0 print:p-0"} ${idx < pages.length - 1 && !disablePrintStyles ? "print:break-after-page" : ""}`}
                 >
                   <div
                     key={`page-${idx}`}
-                    className="bg-white text-black shadow-xl flex flex-col relative shrink-0 overflow-hidden print-page"
+                    className={`bg-white text-black shadow-xl flex flex-col relative shrink-0 overflow-hidden ${disablePrintStyles ? "" : "print-page"}`}
                     style={{ width, height }}
                   >
                     <PaperCastProvider

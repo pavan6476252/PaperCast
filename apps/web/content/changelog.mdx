@@ -2,6 +2,31 @@
 
 All notable changes to PaperCast will be documented in this file.
 
+<Version version="0.3.8" date="2026-08-21">
+
+This release fixes a printing bug that caused an extra blank page to appear when printing directly from the browser.
+
+### Fixed
+
+- <Badge type="fix">Fix</Badge> **Browser Printing Extra Pages**: Resolved an
+  issue where pressing `CTRL + P` or using the browser's native print
+  functionality in the Playground would inadvertently render the offscreen
+  measurement engine and the mobile widgets toolbar, resulting in extra blank
+  pages and UI elements being added to the printed document.
+- <Badge type="fix">Fix</Badge> **Vercel PDF Generation**: Fixed a 500 error
+  during PDF generation on Vercel deployments caused by the Chromium binaries
+  being pruned from the serverless function.
+- <Badge type="fix">Fix</Badge> **WidgetCard Print Hijacking**: Fixed an issue
+  where printing a webpage containing a `WidgetCard` (like our documentation)
+  would accidentally trigger the internal document preview print styles,
+  hijacking the browser's layout.
+- <Badge type="fix">Fix</Badge> **Playground Template Transfer**: Resolved a bug
+  where clicking "Open in Playground" on a `WidgetCard` failed to transfer the
+  schema in production environments by switching from `sessionStorage` to a
+  short-lived `localStorage` mechanism.
+
+</Version>
+
 <Version version="0.3.7" date="2026-08-16">
 
 This release improves the visual polish of our engineering blogs with crisp, scalable vector banners!

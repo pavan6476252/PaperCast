@@ -88,14 +88,17 @@ export function PlaygroundContent() {
   useEffect(() => {
     const initWorkspace = async () => {
       let loadedFromSession = false;
-      // Load schema from session storage if available
+      // Load schema from session storage or local storage if available
       try {
-        const storedSchema = sessionStorage.getItem("papercast_schema");
+        const storedSchema =
+          sessionStorage.getItem("papercast_schema") ||
+          localStorage.getItem("papercast_schema");
         if (storedSchema) {
           JSON.parse(storedSchema); // Validate JSON
           useDocumentStore.getState().setJsonString(storedSchema);
           // Clear it so it doesn't persist across fresh navigations later
           sessionStorage.removeItem("papercast_schema");
+          localStorage.removeItem("papercast_schema");
           loadedFromSession = true;
         }
       } catch (e) {

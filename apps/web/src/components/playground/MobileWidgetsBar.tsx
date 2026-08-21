@@ -50,7 +50,7 @@ export const MobileWidgetsBar = ({
   }, [selectedNodeId, parsedDocument]);
 
   return (
-    <div className="flex md:hidden items-center w-full bg-surface border-t border-border shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.1)] z-30 relative shrink-0 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2">
+    <div className="print:hidden flex md:hidden items-center w-full bg-surface border-t border-border shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.1)] z-30 relative shrink-0 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2">
       <div className="flex-1 flex items-center overflow-x-auto px-2 gap-2 hide-scrollbar">
         {WIDGETS.map((widget) => {
           const isSelected = selectedNodeType === widget.type;
