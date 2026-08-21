@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 export async function GET() {
-  const baseUrl = "https://papercast.dev";
+  const baseUrl = "https://paper-cast-web.vercel.app";
 
   let content = `# PaperCast Documentation for AI Agents
 

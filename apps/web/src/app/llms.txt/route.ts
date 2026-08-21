@@ -1,7 +1,7 @@
 import { DOC_CATEGORIES } from "../(marketing)/docs/config";
 
 export async function GET() {
-  const baseUrl = "https://papercast.dev";
+  const baseUrl = "https://paper-cast-web.vercel.app";
 
   let content = `# PaperCast Documentation for AI Agents
 
@@ -13,7 +13,7 @@ Here is the documentation structure:
   DOC_CATEGORIES.forEach((category) => {
     content += `\n## ${category.title}\n`;
     category.pages.forEach((page) => {
-      content += `- [${page.title}](${baseUrl}/docs/${page.id}): ${page.description}\n`;
+      content += `- [${page.title}](${baseUrl}/api/docs/${page.id}): ${page.description}\n`;
     });
   });
 
