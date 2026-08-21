@@ -212,12 +212,12 @@ export async function generateMetadata({
     openGraph: {
       title: `${docPage.title} | PaperCast Documentation`,
       description: docPage.description,
-      url: `https://papercast.dev/docs/${slug}`,
+      url: `https://paper-cast-web.vercel.app/docs/${slug}`,
       siteName: "PaperCast",
       type: "article",
     },
     alternates: {
-      canonical: `https://papercast.dev/docs/${slug}`,
+      canonical: `https://paper-cast-web.vercel.app/docs/${slug}`,
     },
     twitter: {
       card: "summary_large_image",
@@ -253,7 +253,7 @@ export default async function DocPage({
     "@type": "TechArticle",
     headline: docPage.title,
     description: docPage.description,
-    url: `https://papercast.dev/docs/${slug}`,
+    url: `https://paper-cast-web.vercel.app/docs/${slug}`,
     author: {
       "@type": "Organization",
       name: "PaperCast",

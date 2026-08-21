@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Documentation | PaperCast",
     description:
       "Learn how to build, validate, and render complex documents and PDFs with PaperCast.",
-    url: "https://papercast.dev/docs",
+    url: "https://paper-cast-web.vercel.app/docs",
     siteName: "PaperCast",
     type: "website",
   },
